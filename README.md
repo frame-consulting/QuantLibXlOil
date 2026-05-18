@@ -62,5 +62,5 @@ Restart Excel and open a blank Workbook.
 
 Now, the QuantLibXlOil functions should be available in Excel.
 
-Test the QuantLibXlOil functions by typing `=qlVersion()` in an empty cell. This should give the QuantLib version number.
+Test the QuantLibXlOil functions by typing `=qlVersion()` in an empty cell. This should give the QuantLib version number. Make sure that QuantLib-Excel-AddIn is deactivated.
 
