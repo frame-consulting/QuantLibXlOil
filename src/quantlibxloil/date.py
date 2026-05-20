@@ -117,7 +117,9 @@ def qlPeriodNormalized(period : qPeriod, Trigger = None) -> qPeriod:
 
 
 @xlo.converter()
-def qDate(serialnumber : float) -> ql.Date:
+def qDate(serialnumber) -> ql.Date:
+    if serialnumber is None or (isinstance(serialnumber, str) and not serialnumber.strip()):
+        return None
     return ql.Date(round(serialnumber))  # Excel dates are floats, but QuantLib Date expects an integer serial number.
 
 @xlo.returner(target=ql.Date, register=True)
