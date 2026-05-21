@@ -2,9 +2,10 @@ import QuantLib as ql
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
-from .date import qDate, qWeekday
+from .date import qDate, qPeriod, qWeekday, qTimeUnit
 from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE
 
+# Todo BespokeCalendars, explicit JointCalendars, JointCalenders and USCalenders
 
 QL_CALENDAR= {
     "ARGENTINA": ql.Argentina,
@@ -51,7 +52,7 @@ QL_CALENDAR= {
     "THAILAND": ql.Thailand,
     "TURKEY": ql.Turkey,
     "UKRAINE": ql.Ukraine,
-    "UNITEDSTATES": ql.UnitedStates,
+    "UNITEDSTATES": ql.UnitedStates(ql.UnitedStates.NYSE),
     "UNITEDKINGDOM": ql.UnitedKingdom,
     #"UZBEKISTAN": ql.Uzbekistan,
     "NULLCALENDAR": ql.NullCalendar,
@@ -61,29 +62,18 @@ QL_CALENDAR= {
 }
 
 QL_BUSINESSDAYCONVENTION = {
-    "Following": ql.Following,
-    "Preceding": ql.Preceding,
-    "ModifiedFollowing": ql.ModifiedFollowing,
-    "ModifiedPreceding": ql.ModifiedPreceding,
-    "Unadjusted": ql.Unadjusted,
-    "HalfMonthModifiedFollowing": ql.HalfMonthModifiedFollowing,
-    "Nearest": ql.Nearest,
-}
-
-QL_MARKET = {
-    "NYSE": ql.NYSE,
-    "LSE": ql.LSE,
-    "TSE": ql.TSE,
-    "HKEX": ql.HKEX,
-    "SSE": ql.SSE,
-    "BSE": ql.BSE,
-    "NSE": ql.NSE,
-    UNKNOWN_KEY: UNKNOWN_VALUE,
+    "FOLLOWING": ql.Following,
+    "PRECEDING": ql.Preceding,
+    "MODIFIEDFOLLOWING": ql.ModifiedFollowing,
+    "MODIFIEDPRECEDING": ql.ModifiedPreceding,
+    "UNADJUSTED": ql.Unadjusted,
+    "HALFMONTHMODIFIEDFOLLOWING": ql.HalfMonthModifiedFollowing,
+    "NEAREST": ql.Nearest,
 }
 
 QL_JOINTCALENDARRULE = {
-    "JoinHolidays": ql.JoinHolidays,
-    "JoinBusinessDays": ql.JoinBusinessDays,
+    "JOINHOLIDAYS": ql.JoinHolidays,
+    "JOINBUSINESSDAYS": ql.JoinBusinessDays,
 }
 
 def _calendars_by_name(name: str) -> ql.Calendar:
@@ -105,6 +95,13 @@ def qCalendar(calendarname : str) -> ql.Calendar:
 def xCalendar(calendar : ql.Calendar):
     return calendar.name()
 
+@xlo.converter()
+def qConvention(conventionname : str) -> ql.BusinessDayConvention:
+    return QL_BUSINESSDAYCONVENTION.get(conventionname.upper())
+
+@xlo.converter()
+def qJointCalendarRule(rule_name : str) -> ql.JointCalendarRule:
+    return QL_JOINTCALENDARRULE.get(rule_name.upper())
 
 @xlo.func(
     help='Return a QuantLib Calendar object given its name.',
@@ -123,7 +120,7 @@ def qlCalendar(calendar_name: str, Trigger = None) -> ql.Calendar:
         'Weekday': 'The day of the week (0=Sunday, 1=Monday, ..., 6=Saturday).',
     },
     group=EXCEL_GROUP_NAME,
-)   
+)  
 def qlCalendarisWeekend(calendar: qCalendar, weekday: qWeekday, Trigger = None) -> bool:
     return calendar.isWeekend(weekday)
 #weekday in (ql.Saturday, ql.Sunday)
@@ -219,7 +216,7 @@ def qlCalendarRemoveHoliday(calendar :qCalendar, date : qDate, Trigger = None) -
 def qlCalendarResetAddedAndRemovedHolidays(calendar : qCalendar, Trigger = None) -> None:
     calendar.resetAddedAndRemovedHolidays()
 
-"""
+
 @xlo.func(
     help='Adjust a date according to the calendar and business day convention.',
     args={
@@ -230,24 +227,24 @@ def qlCalendarResetAddedAndRemovedHolidays(calendar : qCalendar, Trigger = None)
     group=EXCEL_GROUP_NAME,
 )
 
-def qlCalendarAdjust(date : ql.Date, calendar : ql.Calendar, convention : ql.BusinessDayConvention, Trigger = None) -> ql.Date:
-    return calendar.adjust(date, convention)
+def qlCalendarAdjust(calendar : qCalendar, date : qDate,  convention : qConvention = "Following", Trigger = None) -> ql.Date:
+    return  calendar.adjust(date, convention)
 
 @xlo.func(
     help='Advance a date by a given number of time units according to the calendar and business day convention.',
     args={
         'Date': 'The date to advance.',
         'Calendar': 'The calendar to use for advancement.',
-        'N': 'The number of time units to advance.',
-        'Unit': 'The time unit for advancement.',
+        'n': 'The number of time units to advance',
+        'unit': 'The time unit to advance (e.g. "DAYS", "MONTHS", "YEARS").',
         'Convention': 'The business day convention to apply.',
         'EndOfMonth': 'Whether to adjust to the end of the month.',
     },
     group=EXCEL_GROUP_NAME,
 )   
-def qlCalendarAdvance(calendar : ql.Calendar, date : ql.Date, n : int, unit : qTimeUnit, convention : ql.BusinessDayConvention, end_of_month : bool, Trigger = None) -> ql.Date:
-    return calendar.advance(date, n, unit, convention, end_of_month)   
-
+def qlCalendarAdvance(calendar : qCalendar, date : qDate, n : int, unit : qTimeUnit, convention : qConvention = "Following", end_of_month : bool = False, Trigger = None) -> ql.Date:
+    return calendar.advance(date, n, unit, convention, end_of_month)
+   
 @xlo.func(
     help='Advance a date by a given period according to the calendar and business day convention.',
     args={
@@ -259,10 +256,10 @@ def qlCalendarAdvance(calendar : ql.Calendar, date : ql.Date, n : int, unit : qT
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarAdvance(calendar : ql.Calendar, date : ql.Date, period : ql.Period, convention : ql.BusinessDayConvention, end_of_month : bool, Trigger = None) -> ql.Date:
+def qlCalendarAdvance2(calendar : qCalendar, date : qDate, period : qPeriod, convention : qConvention = "Following", end_of_month : bool = False, Trigger = None) -> ql.Date:
     return calendar.advance(date, period, convention, end_of_month)
 
-        """
+
 @xlo.func(
     help='Return the number of business days between two QuantLib Dates according to the calendar.',
     args={
@@ -317,4 +314,33 @@ def qlCalendarName(calendar : qCalendar, Trigger = None) -> str:
 )
 def qlCalendarEmpty(calendar : qCalendar, Trigger = None) -> bool:
     return calendar.empty()
+
+@xlo.func(
+    help='Return a calendar that represents the union of two calendars.',
+    args={
+        'Calendar1': 'The first calendar.',
+        'Calendar2': 'The second calendar.',
+        'Rule': 'The rule for combining the calendars.',
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCalendarJointCalendar(calendar1 : qCalendar, calendar2 : qCalendar, rule : qJointCalendarRule =  "JOINHOLIDAYS") -> ql.Calendar:
+    return ql.JointCalendar(calendar1, calendar2, rule)
+
+@xlo.func(
+    help='Return a calendar that represents the union of three calendars.',
+    args={
+        'Calendar1': 'The first calendar.',
+        'Calendar2': 'The second calendar.',
+        'Calendar3': 'The third calendar.',
+        'Rule': 'The rule for combining the calendars.',
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCalendarJointCalendar2(calendar1 : qCalendar, calendar2 : qCalendar, calendar3 : qCalendar, rule : qJointCalendarRule =  "JOINHOLIDAYS", Trigger = None) -> ql.Calendar:
+    return ql.JointCalendar(calendar1, calendar2, calendar3, rule)
+
+
+
+
 

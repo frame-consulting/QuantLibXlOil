@@ -1,3 +1,6 @@
+from quantlibxloil.date import qPeriod, qlPeriod
+
+
 def test_qlCalenndar_Argentina():
     from quantlibxloil.calendars import qlCalendar
     calendar = qlCalendar("Argentina")
@@ -196,7 +199,7 @@ def test_qlCalendar_Ukraine():
 '''
 def test_qlCalendar_UnitedStates():
     from quantlibxloil.calendars import qlCalendar
-    calendar = qlCalendar("UnitedStates")
+    calendar = qlCalendar("UNITEDSTATES")
     assert calendar is not None
 '''
     
@@ -214,12 +217,6 @@ def test_qlCalendar_Weekendsonly():
     from quantlibxloil.calendars import qlCalendar
     calendar = qlCalendar("Weekendsonly")
     assert calendar is not None 
-'''
-def test_qlCalendar_JointCalendar():
-    from quantlibxloil.calendars import qlCalendar
-    calendar = qlCalendar("JointCalendar")
-    assert calendar is not None
-'''
 
 def test_qlCalendarisWeekend():
     from quantlibxloil.calendars import qlCalendar, qlCalendarisWeekend
@@ -270,25 +267,6 @@ def test_qlCalendarIsStartOfMonth():
     calendar = qlCalendar("TARGET")
     date = qlDate(2026,5,29) 
     assert qlCalendarIsStartOfMonth(calendar, date) == False
-
-def test_qlCalendarBusinessDaysBetween():
-    from quantlibxloil.calendars import qlCalendar, qlCalendarBusinessDaysBetween
-    from quantlibxloil.date import qlDate
-    calendar = qlCalendar("TARGET")
-    from_date = qlDate(2026,1,1) 
-    to_date = qlDate(2026,1,5) 
-    assert qlCalendarBusinessDaysBetween(calendar, from_date, to_date) == 1
-    assert qlCalendarBusinessDaysBetween(calendar, from_date, to_date, True, True) == 2
-
-def test_qlCalendarName():
-    from quantlibxloil.calendars import qlCalendar, qlCalendarName
-    calendar = qlCalendar("TARGET")
-    assert qlCalendarName(calendar) == "TARGET"
-
-def test_qlCalendarEmpty():
-    from quantlibxloil.calendars import qlCalendar, qlCalendarEmpty
-    calendar = qlCalendar("TARGET")
-    assert qlCalendarEmpty(calendar) == False
 
 def test_qlCalendarHolidayList():
     from quantlibxloil.calendars import qlCalendar, qlCalendarHolidayList
@@ -343,3 +321,70 @@ def test_qlCalendarResetAddedAndRemovedHolidays():
     qlCalendarResetAddedAndRemovedHolidays(calendar)
     assert qlCalendarIsHoliday(calendar, date_added) == False
     assert qlCalendarIsHoliday(calendar, date_removed) == True
+
+
+def test_qlCalendarAdjust():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarAdjust, qConvention
+    from quantlibxloil.date import qlDate
+    calendar = qlCalendar("TARGET")
+    date = qlDate(2026,1,31) #This is a Saturday
+    convention = qConvention.__wrapped__("Following")
+    adjusted_date = qlCalendarAdjust(calendar, date, convention)
+    assert adjusted_date == qlDate(2026,2,2) #This is the following Monday
+
+def test_qlCalendarAdvance():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarAdvance, qConvention, qTimeUnit
+    from quantlibxloil.date import qlDate
+    calendar = qlCalendar("TARGET")
+    date = qlDate(2026,1,31) #This is a Saturday
+    n = 10
+    unit = qTimeUnit.__wrapped__("DAYS")
+    convention = qConvention.__wrapped__("Following")
+    advanced_date = qlCalendarAdvance(calendar, date, n, unit, convention)
+    assert advanced_date == qlDate(2026,2,13)
+
+def test_qlCalendarAdvance2():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarAdvance2, qConvention
+    from quantlibxloil.date import qlDate, qlPeriod
+    import QuantLib as ql
+    calendar = qlCalendar("TARGET")
+    date = qlDate(2026,1,31) #This is a Saturday
+    period = qlPeriod(3, ql.Months)
+    convention = qConvention.__wrapped__("Following")
+    advanced_date = qlCalendarAdvance2(calendar, date, period, convention)
+    assert advanced_date == qlDate(2026,4,30)
+
+def test_qlCalendarBusinessDaysBetween():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarBusinessDaysBetween
+    from quantlibxloil.date import qlDate
+    calendar = qlCalendar("TARGET")
+    from_date = qlDate(2026,1,1) 
+    to_date = qlDate(2026,1,5) 
+    assert qlCalendarBusinessDaysBetween(calendar, from_date, to_date) == 1
+    assert qlCalendarBusinessDaysBetween(calendar, from_date, to_date, True, True) == 2
+
+def test_qlCalendarName():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarName
+    calendar = qlCalendar("TARGET")
+    assert qlCalendarName(calendar) == "TARGET"
+
+def test_qlCalendarEmpty():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarEmpty
+    calendar = qlCalendar("TARGET")
+    assert qlCalendarEmpty(calendar) == False
+
+def test_qlCalendarJointCalendar():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarJointCalendar, qJointCalendarRule
+    calendar1 = qlCalendar("TARGET")
+    calendar2 = qlCalendar("UnitedKingdom")
+    rule = qJointCalendarRule.__wrapped__("JOINHOLIDAYS")
+    joint_calendar = qlCalendarJointCalendar(calendar1, calendar2, rule)
+    assert joint_calendar is not None
+
+def test_qlCalendarJointCalendar2():
+    from quantlibxloil.calendars import qlCalendar, qlCalendarJointCalendar
+    calendar1 = qlCalendar("TARGET")
+    calendar2 = qlCalendar("UnitedKingdom")
+    calendar3 = qlCalendar("Sweden")
+    joint_calendar = qlCalendarJointCalendar(calendar1, calendar2, calendar3)
+    assert joint_calendar is not None
