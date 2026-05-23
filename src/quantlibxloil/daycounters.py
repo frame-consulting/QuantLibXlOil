@@ -22,7 +22,7 @@ QL_DAYCOUNTER = {
 
 def _qDayCounter(name: str) -> ql.DayCounter:
     daycounter = QL_DAYCOUNTER.get(name.upper())
-    if daycounter is UNKNOWN_VALUE:
+    if daycounter is None:
         raise ValueError(f"Unknown day counter: {name}")
     return daycounter
 
