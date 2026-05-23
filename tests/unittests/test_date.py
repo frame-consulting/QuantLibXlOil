@@ -1,4 +1,34 @@
 
+def test_qWeekday():
+    from quantlibxloil.date import _qWeekday
+    import QuantLib as ql
+    assert _qWeekday("Monday") == ql.Monday
+
+def test_qFrequency():
+    from quantlibxloil.date import _qFrequency
+    import QuantLib as ql
+    assert _qFrequency("Annual") == ql.Annual
+
+def test_qTimeUnit():
+    from quantlibxloil.date import _qTimeUnit
+    import QuantLib as ql
+    assert _qTimeUnit("Months") == ql.Months
+
+def test_qPeriod():
+    from quantlibxloil.date import _qPeriod
+    import QuantLib as ql
+    period = _qPeriod("3M")
+    assert isinstance(period, ql.Period)
+    assert period.length() == 3
+    assert period.units() == ql.Months
+
+def test_qDate():
+    from quantlibxloil.date import _qDate
+    import QuantLib as ql
+    date = _qDate(43845)  # Excel serial number for 2020-01-15
+    assert date == ql.Date(15, 1, 2020)
+    assert _qDate(date) == date  # If it's already a QuantLib Date, it should return the same date
+    assert _qDate("invalid") == ql.Date()  # Invalid input should return default empty date value
 
 def test_qlPeriod():
     from quantlibxloil import qlPeriod

@@ -108,8 +108,37 @@ Several identifiers may point to the same QuantLib object, e.g. `MODIFIEDFOLLOWI
 
 Text identifiers follow the [QuantLibXL enumerations specification](https://github.com/eehlers/QuantLibAddin-Old/tree/master/QuantLibAddin/gensrc/metadata/enumerations).
 
+### Argument Converter Functions
 
-### Testing
+[Argument converters](https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#custom-type-conversion) are specified by `@xlo.converter()` decorator.
+
+Argument converter functions typically take an input string (from Excel) and convert it into a QuantLib class object or QuantLib enumeration (int) object.
+
+Argument converters also need to handle default values for QuantLib wrapper functions. Default values typically are QuantLib class object or QuantLib enumeration
+
+We use the following pattern and naming conventions for argument converters.
+
+```
+def _qSomeQuantLibType(s : string) -> ql.SomeQuantLibType
+    if isinstance(s, ql.SomeQuantLibType):
+        return s
+    [do actual conversion]
+    return quantlib_object
+
+@xlo.converter()
+def qSomeQuantLibType(s : string) -> ql.SomeQuantLibType
+    return _qSomeQuantLibType(s)
+
+def qlSomeQuantLibFunction(arg : qSomeQuantLibType = ql.SomeDefault())
+    ...
+    return
+```
+
+The similarities in prefixes `_q`, `q` and `ql.` and the common use of `SomeQuantLibType` naming aims at improving AI coding support.
+
+Note that the decorated functions `qSomeQuantLibType` are not accessible in Python. As a consequence, conversion implementation is delegated to separate functions `_qSomeQuantLibType`. The separate functions allow for testing conversions and manually calling conversions (if necessary).
+
+## Testing
 
 Each function should be covered by a test [here](../../tests/).
 

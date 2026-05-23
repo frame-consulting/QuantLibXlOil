@@ -20,7 +20,7 @@ QL_DAYCOUNTER = {
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
-def _day_counter_by_name(name: str) -> ql.DayCounter:
+def _qDayCounter(name: str) -> ql.DayCounter:
     daycounter = QL_DAYCOUNTER.get(name.upper())
     if daycounter is UNKNOWN_VALUE:
         raise ValueError(f"Unknown day counter: {name}")
@@ -28,7 +28,7 @@ def _day_counter_by_name(name: str) -> ql.DayCounter:
 
 @xlo.converter()
 def qDayCounter(s : str) -> ql.DayCounter:
-    return _day_counter_by_name(s)
+    return _qDayCounter(s)
 
 @xlo.returner(target=ql.DayCounter, register=True)
 def xDayCounter(daycounter : ql.DayCounter):
@@ -42,7 +42,7 @@ def xDayCounter(daycounter : ql.DayCounter):
     group=EXCEL_GROUP_NAME,
 )
 def qlDayCounter(daycounter_name : str, Trigger = None) -> ql.DayCounter:
-    return _day_counter_by_name(daycounter_name)
+    return _qDayCounter(daycounter_name)
 
 @xlo.func(
     help='Return the day count between two dates using the given day counter.',
@@ -68,9 +68,7 @@ def qlDayCounterDayCount(daycounter : qDayCounter, start_date : qDate, end_date 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDayCounterYearFraction(daycounter : qDayCounter, start_date : qDate, end_date : qDate, ref_start_date : qDate = None, ref_end_date : qDate = None, Trigger = None) -> float:
-    if ref_start_date is None or ref_end_date is None:
-        return daycounter.yearFraction(start_date, end_date)
+def qlDayCounterYearFraction(daycounter : qDayCounter, start_date : qDate, end_date : qDate, ref_start_date : qDate = ql.Date(), ref_end_date : qDate = ql.Date(), Trigger = None) -> float:
     return daycounter.yearFraction(start_date, end_date, ref_start_date, ref_end_date)
 
 @xlo.func(

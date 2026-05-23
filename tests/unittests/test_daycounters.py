@@ -68,10 +68,10 @@ def test_qlDayCounter_Thirty365():
 
 def test_qlDayCounter_CaseInsensitive():
     """Test that day counter names are case-insensitive."""
-    from quantlibxloil.daycounters import _day_counter_by_name
-    dc1 = _day_counter_by_name("ACTUAL360")
-    dc2 = _day_counter_by_name("actual360")
-    dc3 = _day_counter_by_name("Actual360")
+    from quantlibxloil.daycounters import _qDayCounter
+    dc1 = _qDayCounter("ACTUAL360")
+    dc2 = _qDayCounter("actual360")
+    dc3 = _qDayCounter("Actual360")
     assert dc1 is not None
     assert dc2 is not None
     assert dc3 is not None

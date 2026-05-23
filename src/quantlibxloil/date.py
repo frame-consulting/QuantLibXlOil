@@ -44,21 +44,33 @@ QL_TIMEUNIT = {
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
+def _qWeekday(s : str) -> int:
+    return QL_WEEKDAY.get(s.upper())
+
+def _qFrequency(s : str) -> int:
+    return QL_FREQUENCY.get(s.upper())
+
+def _qTimeUnit(s : str) -> int:
+    return QL_TIMEUNIT.get(s.upper())
+
+def _qPeriod(s : str) -> ql.Period:
+    return ql.Period(s)
+
 @xlo.converter()
 def qWeekday(s : str) -> int:
-    return QL_WEEKDAY.get(s.upper())
+    return _qWeekday(s)
 
 @xlo.converter()
 def qFrequency(s : str) -> int:
-    return QL_FREQUENCY.get(s.upper())
+    return _qFrequency(s)
 
 @xlo.converter()
 def qTimeUnit(s : str) -> int:
-    return QL_TIMEUNIT.get(s.upper())
+    return _qTimeUnit(s)
 
 @xlo.converter()
 def qPeriod(s : str) -> ql.Period:
-    return ql.Period(s)
+    return _qPeriod(s)
 
 @xlo.returner(target=ql.Period, register=True)
 def xPeriod(period : ql.Period):
@@ -115,12 +127,17 @@ def qlPeriodFrequency(period : qPeriod, Trigger = None) -> qFrequency:
 def qlPeriodNormalized(period : qPeriod, Trigger = None) -> qPeriod:
     return period.normalized()
 
+def _qDate(serialnumber) -> ql.Date:
+    if isinstance(serialnumber, ql.Date):
+        return serialnumber  # If it's already a QuantLib Date, return it as is.
+    if isinstance(serialnumber, (int, float)):
+        return ql.Date(round(serialnumber))  # Excel dates are floats, but QuantLib Date expects an integer serial number.
+    return ql.Date()  # default empty date value
 
 @xlo.converter()
 def qDate(serialnumber) -> ql.Date:
-    if serialnumber is None or (isinstance(serialnumber, str) and not serialnumber.strip()):
-        return None
-    return ql.Date(round(serialnumber))  # Excel dates are floats, but QuantLib Date expects an integer serial number.
+    return _qDate(serialnumber)
+
 
 @xlo.returner(target=ql.Date, register=True)
 def xDate(date : ql.Date):

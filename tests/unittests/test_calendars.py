@@ -1,6 +1,21 @@
 from quantlibxloil.date import qPeriod, qlPeriod
 
 
+def test_qCalendar():
+    from quantlibxloil.calendars import _qCalendar
+    calendar = _qCalendar("TARGET")
+    assert calendar is not None
+
+def test_qBusinessDayConvention():
+    from quantlibxloil.calendars import _qBusinessDayConvention
+    convention = _qBusinessDayConvention("Following")
+    assert convention is not None
+
+def test_qJointCalendarRule():
+    from quantlibxloil.calendars import _qJointCalendarRule
+    rule = _qJointCalendarRule("JOINHOLIDAYS")
+    assert rule is not None
+
 def test_qlCalenndar_Argentina():
     from quantlibxloil.calendars import qlCalendar
     calendar = qlCalendar("Argentina")
@@ -324,33 +339,33 @@ def test_qlCalendarResetAddedAndRemovedHolidays():
 
 
 def test_qlCalendarAdjust():
-    from quantlibxloil.calendars import qlCalendar, qlCalendarAdjust, qConvention
+    from quantlibxloil.calendars import qlCalendar, qlCalendarAdjust, qBusinessDayConvention
     from quantlibxloil.date import qlDate
     calendar = qlCalendar("TARGET")
     date = qlDate(2026,1,31) #This is a Saturday
-    convention = qConvention.__wrapped__("Following")
+    convention = qBusinessDayConvention.__wrapped__("Following")
     adjusted_date = qlCalendarAdjust(calendar, date, convention)
     assert adjusted_date == qlDate(2026,2,2) #This is the following Monday
 
 def test_qlCalendarAdvance():
-    from quantlibxloil.calendars import qlCalendar, qlCalendarAdvance, qConvention, qTimeUnit
+    from quantlibxloil.calendars import qlCalendar, qlCalendarAdvance, qBusinessDayConvention, qTimeUnit
     from quantlibxloil.date import qlDate
     calendar = qlCalendar("TARGET")
     date = qlDate(2026,1,31) #This is a Saturday
     n = 10
     unit = qTimeUnit.__wrapped__("DAYS")
-    convention = qConvention.__wrapped__("Following")
+    convention = qBusinessDayConvention.__wrapped__("Following")
     advanced_date = qlCalendarAdvance(calendar, date, n, unit, convention)
     assert advanced_date == qlDate(2026,2,13)
 
 def test_qlCalendarAdvance2():
-    from quantlibxloil.calendars import qlCalendar, qlCalendarAdvance2, qConvention
+    from quantlibxloil.calendars import qlCalendar, qlCalendarAdvance2, qBusinessDayConvention
     from quantlibxloil.date import qlDate, qlPeriod
     import QuantLib as ql
     calendar = qlCalendar("TARGET")
     date = qlDate(2026,1,31) #This is a Saturday
     period = qlPeriod(3, ql.Months)
-    convention = qConvention.__wrapped__("Following")
+    convention = qBusinessDayConvention.__wrapped__("Following")
     advanced_date = qlCalendarAdvance2(calendar, date, period, convention)
     assert advanced_date == qlDate(2026,4,30)
 
