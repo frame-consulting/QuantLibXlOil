@@ -103,8 +103,8 @@ def qlInterpolatedYieldCurve(
 def qlDiscountCurve(
         dates : xlo.Array(dims=1),
         discounts : xlo.Array(dims=1),
-        daycounter : qDayCounter,
-        calendar : qCalendar,
+        daycounter : qDayCounter = ql.Actual365Fixed(),
+        calendar : qCalendar = ql.NullCalendar(),
         Trigger = None,
     ) -> ql.YieldTermStructureHandle:
     _dates = [_qDate(d) for d in dates]
@@ -125,8 +125,8 @@ def qlDiscountCurve(
 def qlForwardCurve(
         dates : xlo.Array(dims=1),
         forwards : xlo.Array(dims=1),
-        daycounter : qDayCounter,
-        calendar : qCalendar,
+        daycounter : qDayCounter = ql.Actual365Fixed(),
+        calendar : qCalendar = ql.NullCalendar(),
         Trigger = None,
     ) -> ql.YieldTermStructureHandle:
     _dates = [_qDate(d) for d in dates]
@@ -147,8 +147,8 @@ def qlForwardCurve(
 def qlZeroCurve(
         dates : xlo.Array(dims=1),
         zerorates : xlo.Array(dims=1),
-        daycounter : qDayCounter,
-        calendar : qCalendar,
+        daycounter : qDayCounter = ql.Actual365Fixed(),
+        calendar : qCalendar = ql.NullCalendar(),
         Trigger = None,
     ) -> ql.YieldTermStructureHandle:
     _dates = [_qDate(d) for d in dates]

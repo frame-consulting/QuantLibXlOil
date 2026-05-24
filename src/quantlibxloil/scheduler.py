@@ -2,7 +2,7 @@ import QuantLib as ql
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
-from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE
+from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE, enum_value
 from .date import qDate, qPeriod, _qDate, _qPeriod, _qFrequency
 from .calendars import (
     qCalendar,
@@ -27,7 +27,7 @@ QL_DATEGENERATION_RULE = {
 }
 
 def _qDateGenerationRule(rule : str) -> ql.DateGeneration:
-    return QL_DATEGENERATION_RULE.get(rule.upper())
+    return enum_value(rule, QL_DATEGENERATION_RULE)
 
 @xlo.converter()
 def qDateGenerationRule(rule : str) -> ql.DateGeneration:

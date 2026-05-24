@@ -2,7 +2,7 @@ import QuantLib as ql
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
-from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE
+from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE, enum_value
 
 QL_WEEKDAY = {
     "MONDAY": ql.Monday,
@@ -45,15 +45,17 @@ QL_TIMEUNIT = {
 }
 
 def _qWeekday(s : str) -> int:
-    return QL_WEEKDAY.get(s.upper())
+    return enum_value(s, QL_WEEKDAY)
 
 def _qFrequency(s : str) -> int:
-    return QL_FREQUENCY.get(s.upper())
+    return enum_value(s, QL_FREQUENCY)
 
 def _qTimeUnit(s : str) -> int:
-    return QL_TIMEUNIT.get(s.upper())
+    return enum_value(s, QL_TIMEUNIT)
 
 def _qPeriod(s : str) -> ql.Period:
+    if isinstance(s, ql.Period):  # handle default values
+        return s
     return ql.Period(s)
 
 @xlo.converter()

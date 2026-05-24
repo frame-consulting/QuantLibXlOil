@@ -6,25 +6,28 @@ from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE
 from .date import qDate
 
 QL_DAYCOUNTER = {
-    "ACTUAL360": ql.Actual360(),
-    "ACTUAL364": ql.Actual364(),
-    "ACTUAL36525": ql.Actual36525(),
-    "ACTUAL365FIXED": ql.Actual365Fixed(),
-    "ACTUAL366": ql.Actual366(),
-    "ACTUALACTUAL": ql.ActualActual(ql.ActualActual.ISMA),
-    "BUSINESS252": ql.Business252(),
-    "ONEDAYCOUNTER": ql.OneDayCounter(),
-    "SIMPLEDAYCOUNTER": ql.SimpleDayCounter(),
-    "THIRTY360": ql.Thirty360(ql.Thirty360.ISMA),
-    "THIRTY365": ql.Thirty365(),
+    "ACTUAL360": ql.Actual360,
+    "ACTUAL364": ql.Actual364,
+    "ACTUAL36525": ql.Actual36525,
+    "ACTUAL365FIXED": ql.Actual365Fixed,
+    "ACTUAL366": ql.Actual366,
+    "ACTUALACTUAL": lambda : ql.ActualActual(ql.ActualActual.ISMA),
+    "BUSINESS252": ql.Business252,
+    "ONEDAYCOUNTER": ql.OneDayCounter,
+    "SIMPLEDAYCOUNTER": ql.SimpleDayCounter,
+    "THIRTY360": lambda :ql.Thirty360(ql.Thirty360.ISMA),
+    "THIRTY365": ql.Thirty365,
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
 def _qDayCounter(name: str) -> ql.DayCounter:
-    daycounter = QL_DAYCOUNTER.get(name.upper())
-    if daycounter is None:
-        raise ValueError(f"Unknown day counter: {name}")
-    return daycounter
+    if isinstance(name, ql.DayCounter):  # capture default argument values
+        return name
+    if isinstance(name, str):
+        name = name.strip().upper()
+        if name in QL_DAYCOUNTER:
+            return QL_DAYCOUNTER[name]()
+    raise ValueError(f"Unknown day counter: {name}")
 
 @xlo.converter()
 def qDayCounter(s : str) -> ql.DayCounter:

@@ -3,7 +3,7 @@ import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, qPeriod, qWeekday, qTimeUnit
-from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE
+from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE, enum_value
 
 # Todo BespokeCalendars, explicit JointCalendars, JointCalenders and USCalenders
 
@@ -76,18 +76,14 @@ QL_JOINTCALENDARRULE = {
     "JOINBUSINESSDAYS": ql.JoinBusinessDays,
 }
 
-def _qCalendar(name) -> ql.Calendar:
+def _qCalendar(name : str) -> ql.Calendar:
     if isinstance(name, ql.Calendar): # capture default argument values
         return name
-    if name is None:
-        return ql.NullCalendar()
-    name = str(name).strip()
-    if not name:
-        return ql.NullCalendar()
-    calendar = QL_CALENDAR.get(name.upper())
-    if calendar is UNKNOWN_VALUE or calendar is None:
-        raise ValueError(f"Unknown calendar: {name}")
-    return calendar()
+    if isinstance(name, str):
+        name = name.strip().upper()
+        if name in QL_CALENDAR:
+            return QL_CALENDAR[name]()
+    raise ValueError(f"Unknown calendar: {name}")
 
 @xlo.converter()
 def qCalendar(calendarname : str) -> ql.Calendar:
@@ -98,11 +94,7 @@ def xCalendar(calendar : ql.Calendar):
     return calendar.name()
 
 def _qBusinessDayConvention(conventionname : str):
-    if isinstance(conventionname, int): # capture default argument values
-        return conventionname
-    if isinstance(conventionname, str) and conventionname.strip():
-        return QL_BUSINESSDAYCONVENTION.get(conventionname.upper())
-    raise ValueError(f"Unknown business day convention: {conventionname}")
+    return enum_value(conventionname, QL_BUSINESSDAYCONVENTION)
 
 @xlo.converter()
 def qBusinessDayConvention(conventionname : str):
@@ -110,7 +102,7 @@ def qBusinessDayConvention(conventionname : str):
 
 
 def _qJointCalendarRule(rule_name : str):
-    return QL_JOINTCALENDARRULE.get(rule_name.upper())
+    return enum_value(rule_name, QL_JOINTCALENDARRULE)
 
 @xlo.converter()
 def qJointCalendarRule(rule_name : str):
