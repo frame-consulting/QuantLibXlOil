@@ -1,4 +1,5 @@
 from quantlibxloil.calendars import *
+from quantlibxloil.cashflows import *
 from quantlibxloil.currencies import *
 from quantlibxloil.date import *
 from quantlibxloil.daycounters import *
