@@ -34,7 +34,7 @@ def qRoundingMethod(method : str):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlRounding(method : qRoundingMethod, precision : int, digit : int = 5, Trigger = None) -> ql.Rounding:
+def qlRounding(method : qRoundingMethod, precision : int, digit : int = 5, trigger = None) -> ql.Rounding:
     return method(precision, digit)
 
 
@@ -46,5 +46,5 @@ def qlRounding(method : qRoundingMethod, precision : int, digit : int = 5, Trigg
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlRoundingApply(rounding : ql.Rounding, value : float, Trigger = None) -> float:
+def qlRoundingApply(rounding : ql.Rounding, value : float, trigger = None) -> float:
     return rounding(value)

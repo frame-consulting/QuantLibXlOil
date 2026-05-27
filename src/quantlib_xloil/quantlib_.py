@@ -9,7 +9,7 @@ from .config import EXCEL_GROUP_NAME
     help='Return the QuantLib version as a string.',
     group=EXCEL_GROUP_NAME,
 )
-def qlVersion(Trigger = None):
+def qlVersion(trigger = None):
     return ql.__version__
 
 
@@ -17,5 +17,5 @@ def qlVersion(Trigger = None):
     help='Return the QuantLib hex version as an integer.',
     group=EXCEL_GROUP_NAME,
 )
-def qlHexVersion(Trigger = None):
+def qlHexVersion(trigger = None):
     return ql.__hexversion__

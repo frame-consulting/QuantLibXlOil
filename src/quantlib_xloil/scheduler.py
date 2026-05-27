@@ -51,29 +51,29 @@ def qDateGenerationRule(rule : str) -> ql.DateGeneration:
     group=EXCEL_GROUP_NAME,
 )
 def qlSchedule(
-    effectiveDate: qDate,
-    terminationDate: qDate,
+    effective_date: qDate,
+    termination_date: qDate,
     tenor: qPeriod,
     calendar: qCalendar,
     convention: qBusinessDayConvention,
-    terminationDateConvention: qBusinessDayConvention,
-    dateGenerationRule: qDateGenerationRule,
-    endOfMonth: bool,
-    firstDate : qDate = ql.Date(),
-    lastDate : qDate = ql.Date(),
-    Trigger = None,
+    termination_date_convention: qBusinessDayConvention,
+    date_generation_rule: qDateGenerationRule,
+    end_of_month: bool,
+    first_date : qDate = ql.Date(),
+    last_date : qDate = ql.Date(),
+    trigger = None,
     ) -> ql.Schedule:
     return ql.Schedule(
-        effectiveDate,
-        terminationDate,
+        effective_date,
+        termination_date,
         tenor,
         calendar,
         convention,
-        terminationDateConvention,
-        dateGenerationRule,
-        endOfMonth,
-        firstDate,
-        lastDate,
+        termination_date_convention,
+        date_generation_rule,
+        end_of_month,
+        first_date,
+        last_date,
     )
 
 
@@ -90,7 +90,7 @@ def qlScheduleFromDates(
         dates : xlo.Array(dims=1),
         calendar: qCalendar = ql.NullCalendar(),
         convention: qBusinessDayConvention = ql.Unadjusted,
-        Trigger = None,
+        trigger = None,
     ) -> ql.Schedule:
     _dates = [ ql.Date(round(d)) for d in dates ]
     _dates
@@ -107,7 +107,7 @@ def qlScheduleFromDates(
      },
      group=EXCEL_GROUP_NAME,
 )
-def qlScheduleDates(schedule : ql.Schedule, Trigger = None) -> list:
+def qlScheduleDates(schedule : ql.Schedule, trigger = None) -> list:
     return [ d for d in schedule.dates() ]
 
 
@@ -115,24 +115,24 @@ def qlScheduleDates(schedule : ql.Schedule, Trigger = None) -> list:
     help='Return the schedule date before a reference date.',
     args={
         'Schedule': 'QuantLib Schedule.',
-        'RefDate': 'Reference date.',
+        'ref_date': 'Reference date.',
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSchedulePreviousDate(schedule : ql.Schedule, refDate : qDate, Trigger = None) -> qDate:
-    return schedule.previousDate(refDate)
+def qlSchedulePreviousDate(schedule : ql.Schedule, ref_date : qDate, trigger = None) -> qDate:
+    return schedule.previousDate(ref_date)
 
 
 @xlo.func(
     help='Return the schedule date at or after a reference date.',
     args={
         'Schedule': 'QuantLib Schedule.',
-        'RefDate': 'Reference date.',
+        'ref_date': 'Reference date.',
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleNextDate(schedule : ql.Schedule, refDate : qDate, Trigger = None) -> qDate:
-    return schedule.nextDate(refDate)
+def qlScheduleNextDate(schedule : ql.Schedule, ref_date : qDate, trigger = None) -> qDate:
+    return schedule.nextDate(ref_date)
 
 
 @xlo.func(
@@ -142,7 +142,7 @@ def qlScheduleNextDate(schedule : ql.Schedule, refDate : qDate, Trigger = None) 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleHasIsRegular(schedule : ql.Schedule, Trigger = None) -> bool:
+def qlScheduleHasIsRegular(schedule : ql.Schedule, trigger = None) -> bool:
     return schedule.hasIsRegular()
 
 
@@ -154,7 +154,7 @@ def qlScheduleHasIsRegular(schedule : ql.Schedule, Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleIsRegular(schedule : ql.Schedule, i : int, Trigger = None) -> bool:
+def qlScheduleIsRegular(schedule : ql.Schedule, i : int, trigger = None) -> bool:
     return schedule.isRegular(i)
 
 
@@ -165,7 +165,7 @@ def qlScheduleIsRegular(schedule : ql.Schedule, i : int, Trigger = None) -> bool
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleIsRegular2(schedule : ql.Schedule, Trigger = None) -> list:
+def qlScheduleIsRegular2(schedule : ql.Schedule, trigger = None) -> list:
     return list(schedule.isRegular())
 
 
@@ -176,7 +176,7 @@ def qlScheduleIsRegular2(schedule : ql.Schedule, Trigger = None) -> list:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleCalendar(schedule : ql.Schedule, Trigger = None) -> qCalendar:
+def qlScheduleCalendar(schedule : ql.Schedule, trigger = None) -> qCalendar:
     return schedule.calendar()
 
 
@@ -187,7 +187,7 @@ def qlScheduleCalendar(schedule : ql.Schedule, Trigger = None) -> qCalendar:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleStartDate(schedule : ql.Schedule, Trigger = None) -> qDate:
+def qlScheduleStartDate(schedule : ql.Schedule, trigger = None) -> qDate:
     return schedule.startDate()
 
 
@@ -198,7 +198,7 @@ def qlScheduleStartDate(schedule : ql.Schedule, Trigger = None) -> qDate:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleEndDate(schedule : ql.Schedule, Trigger = None) -> qDate:
+def qlScheduleEndDate(schedule : ql.Schedule, trigger = None) -> qDate:
     return schedule.endDate()
 
 
@@ -209,7 +209,7 @@ def qlScheduleEndDate(schedule : ql.Schedule, Trigger = None) -> qDate:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleHasTenor(schedule : ql.Schedule, Trigger = None) -> bool:
+def qlScheduleHasTenor(schedule : ql.Schedule, trigger = None) -> bool:
     return schedule.hasTenor()
 
 
@@ -220,7 +220,7 @@ def qlScheduleHasTenor(schedule : ql.Schedule, Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleTenor(schedule : ql.Schedule, Trigger = None) -> qPeriod:
+def qlScheduleTenor(schedule : ql.Schedule, trigger = None) -> qPeriod:
     return schedule.tenor()
 
 
@@ -231,7 +231,7 @@ def qlScheduleTenor(schedule : ql.Schedule, Trigger = None) -> qPeriod:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleBusinessDayConvention(schedule : ql.Schedule, Trigger = None) -> str:
+def qlScheduleBusinessDayConvention(schedule : ql.Schedule, trigger = None) -> str:
     return first_key(QL_BUSINESSDAYCONVENTION, schedule.businessDayConvention(), UNKNOWN_VALUE)
 
 
@@ -242,7 +242,7 @@ def qlScheduleBusinessDayConvention(schedule : ql.Schedule, Trigger = None) -> s
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleHasTerminationDateBusinessDayConvention(schedule : ql.Schedule, Trigger = None) -> bool:
+def qlScheduleHasTerminationDateBusinessDayConvention(schedule : ql.Schedule, trigger = None) -> bool:
     return schedule.hasTerminationDateBusinessDayConvention()
 
 
@@ -253,7 +253,7 @@ def qlScheduleHasTerminationDateBusinessDayConvention(schedule : ql.Schedule, Tr
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleTerminationDateBusinessDayConvention(schedule : ql.Schedule, Trigger = None) -> str:
+def qlScheduleTerminationDateBusinessDayConvention(schedule : ql.Schedule, trigger = None) -> str:
     return first_key(QL_BUSINESSDAYCONVENTION, schedule.terminationDateBusinessDayConvention(), UNKNOWN_VALUE)
 
 
@@ -264,7 +264,7 @@ def qlScheduleTerminationDateBusinessDayConvention(schedule : ql.Schedule, Trigg
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleHasRule(schedule : ql.Schedule, Trigger = None) -> bool:
+def qlScheduleHasRule(schedule : ql.Schedule, trigger = None) -> bool:
     return schedule.hasRule()
 
 
@@ -275,7 +275,7 @@ def qlScheduleHasRule(schedule : ql.Schedule, Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleRule(schedule : ql.Schedule, Trigger = None) -> str:
+def qlScheduleRule(schedule : ql.Schedule, trigger = None) -> str:
     return first_key(QL_DATEGENERATION_RULE, schedule.rule(), UNKNOWN_VALUE)
 
 
@@ -286,7 +286,7 @@ def qlScheduleRule(schedule : ql.Schedule, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleHasEndOfMonth(schedule : ql.Schedule, Trigger = None) -> bool:
+def qlScheduleHasEndOfMonth(schedule : ql.Schedule, trigger = None) -> bool:
     return schedule.hasEndOfMonth()
 
 
@@ -297,7 +297,7 @@ def qlScheduleHasEndOfMonth(schedule : ql.Schedule, Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleEndOfMonth(schedule : ql.Schedule, Trigger = None) -> bool:
+def qlScheduleEndOfMonth(schedule : ql.Schedule, trigger = None) -> bool:
     return schedule.endOfMonth()
 
 
@@ -309,8 +309,8 @@ def qlScheduleEndOfMonth(schedule : ql.Schedule, Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleAfter(schedule : ql.Schedule, truncationDate : qDate, Trigger = None) -> ql.Schedule:
-    return schedule.after(truncationDate)
+def qlScheduleAfter(schedule : ql.Schedule, truncation_date : qDate, trigger = None) -> ql.Schedule:
+    return schedule.after(truncation_date)
 
 
 @xlo.func(
@@ -321,8 +321,8 @@ def qlScheduleAfter(schedule : ql.Schedule, truncationDate : qDate, Trigger = No
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlScheduleUntil(schedule : ql.Schedule, truncationDate : qDate, Trigger = None) -> ql.Schedule:
-    return schedule.until(truncationDate)
+def qlScheduleUntil(schedule : ql.Schedule, truncation_date : qDate, trigger = None) -> ql.Schedule:
+    return schedule.until(truncation_date)
 
 
 @xlo.func(
@@ -345,26 +345,26 @@ def qlScheduleUntil(schedule : ql.Schedule, truncationDate : qDate, Trigger = No
     group=EXCEL_GROUP_NAME,
 )
 def qlMakeSchedule(
-    effectiveDate=None,
-    terminationDate=None,
+    effective_date=None,
+    termination_date=None,
     tenor=None,
     frequency=None,
     calendar=None,
     convention=None,
-    terminalDateConvention=None,
+    terminal_date_convention=None,
     rule=None,
     forwards=False,
     backwards=False,
-    endOfMonth=None,
-    firstDate=None,
-    nextToLastDate=None,
-    Trigger = None,
+    end_of_month=None,
+    first_date=None,
+    next_to_last_date=None,
+    trigger = None,
 ) -> ql.Schedule:
     # we cannot use converters for None defaults
-    if effectiveDate is not None:
-        effectiveDate = _qDate(effectiveDate)
-    if terminationDate is not None:
-        terminationDate = _qDate(terminationDate)
+    if effective_date is not None:
+        effective_date = _qDate(effective_date)
+    if termination_date is not None:
+        termination_date = _qDate(termination_date)
     if tenor is not None:
         tenor = _qPeriod(tenor)
     if frequency is not None:
@@ -373,33 +373,33 @@ def qlMakeSchedule(
         calendar = _qCalendar(calendar)
     if convention is not None:
         convention = _qBusinessDayConvention(convention)
-    if terminalDateConvention is not None:
-        terminalDateConvention = _qBusinessDayConvention(terminalDateConvention)
+    if terminal_date_convention is not None:
+        terminal_date_convention = _qBusinessDayConvention(terminal_date_convention)
     if rule is not None:
         rule = _qDateGenerationRule(rule)
     if forwards:
         forwards = bool(forwards)
     if backwards:
         backwards = bool(backwards)
-    if endOfMonth is not None:
-        endOfMonth = bool(endOfMonth)
-    if firstDate is not None:
-        firstDate = _qDate(firstDate)
-    if nextToLastDate is not None:
-        nextToLastDate = _qDate(nextToLastDate)
+    if end_of_month is not None:
+        end_of_month = bool(end_of_month)
+    if first_date is not None:
+        first_date = _qDate(first_date)
+    if next_to_last_date is not None:
+        next_to_last_date = _qDate(next_to_last_date)
     return ql.MakeSchedule(
-        effectiveDate,
-        terminationDate,
+        effective_date,
+        termination_date,
         tenor,
         frequency,
         calendar,
         convention,
-        terminalDateConvention,
+        terminal_date_convention,
         rule,
         forwards,
         backwards,
-        endOfMonth,
-        firstDate,
-        nextToLastDate,
+        end_of_month,
+        first_date,
+        next_to_last_date,
     )
 

@@ -44,7 +44,7 @@ def xDayCounter(daycounter : ql.DayCounter):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDayCounter(daycounter_name : str, Trigger = None) -> ql.DayCounter:
+def qlDayCounter(daycounter_name : str, trigger = None) -> ql.DayCounter:
     return _qDayCounter(daycounter_name)
 
 @xlo.func(
@@ -56,7 +56,7 @@ def qlDayCounter(daycounter_name : str, Trigger = None) -> ql.DayCounter:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDayCounterDayCount(daycounter : qDayCounter, start_date : qDate, end_date : qDate, Trigger = None) -> int:
+def qlDayCounterDayCount(daycounter : qDayCounter, start_date : qDate, end_date : qDate, trigger = None) -> int:
     return daycounter.dayCount(start_date, end_date)
 
 
@@ -71,7 +71,7 @@ def qlDayCounterDayCount(daycounter : qDayCounter, start_date : qDate, end_date 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDayCounterYearFraction(daycounter : qDayCounter, start_date : qDate, end_date : qDate, ref_start_date : qDate = ql.Date(), ref_end_date : qDate = ql.Date(), Trigger = None) -> float:
+def qlDayCounterYearFraction(daycounter : qDayCounter, start_date : qDate, end_date : qDate, ref_start_date : qDate = ql.Date(), ref_end_date : qDate = ql.Date(), trigger = None) -> float:
     return daycounter.yearFraction(start_date, end_date, ref_start_date, ref_end_date)
 
 @xlo.func(
@@ -81,7 +81,7 @@ def qlDayCounterYearFraction(daycounter : qDayCounter, start_date : qDate, end_d
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDayCounterName(daycounter : qDayCounter, Trigger = None) -> str:
+def qlDayCounterName(daycounter : qDayCounter, trigger = None) -> str:
     return daycounter.name()
 
 
@@ -90,7 +90,7 @@ def qlDayCounterName(daycounter : qDayCounter, Trigger = None) -> str:
     args={      'DayCounter': 'QuantLib DayCounter.',   },
     group=EXCEL_GROUP_NAME,
 )
-def qlDayCounterEmpty(daycounter : qDayCounter, Trigger = None) -> bool:
+def qlDayCounterEmpty(daycounter : qDayCounter, trigger = None) -> bool:
     return daycounter.empty()
 
 
@@ -98,10 +98,10 @@ def qlDayCounterEmpty(daycounter : qDayCounter, Trigger = None) -> bool:
     help='Return the date corresponding to a given year fraction from a reference date using the specified day counter.',
     args={
         'DayCounter': 'QuantLib DayCounter.',
-        'RefDate': 'Reference date.',
-        'YearFraction': 'Year fraction to convert to a date.',
+        'ref_date': 'Reference date.',
+        'year_fraction': 'Year fraction to convert to a date.',
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDayCounterYearFractionToDate(daycounter : qDayCounter, RefDate : qDate, YearFraction : float, Trigger = None) -> qDate:
-    return ql.yearFractionToDate(daycounter, RefDate, YearFraction)
+def qlDayCounterYearFractionToDate(daycounter : qDayCounter, ref_date : qDate, year_fraction : float, trigger = None) -> qDate:
+    return ql.yearFractionToDate(daycounter, ref_date, year_fraction)

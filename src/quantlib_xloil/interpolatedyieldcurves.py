@@ -68,7 +68,7 @@ def qlInterpolatedYieldCurve(
         interpolator : str,
         mixed_interpolation_behavior : str = None,
         mixed_interpolation_n : int = None,
-        Trigger = None,
+        trigger = None,
     ) -> ql.YieldTermStructureHandle:
     if mixed_interpolation_behavior or mixed_interpolation_n:
         raise ValueError("Mixed interpolation not implemented.")
@@ -105,7 +105,7 @@ def qlDiscountCurve(
         discounts : xlo.Array(dims=1),
         daycounter : qDayCounter = ql.Actual365Fixed(),
         calendar : qCalendar = ql.NullCalendar(),
-        Trigger = None,
+        trigger = None,
     ) -> ql.YieldTermStructureHandle:
     _dates = [_qDate(d) for d in dates]
     _discounts = [float(d) for d in discounts]
@@ -127,7 +127,7 @@ def qlForwardCurve(
         forwards : xlo.Array(dims=1),
         daycounter : qDayCounter = ql.Actual365Fixed(),
         calendar : qCalendar = ql.NullCalendar(),
-        Trigger = None,
+        trigger = None,
     ) -> ql.YieldTermStructureHandle:
     _dates = [_qDate(d) for d in dates]
     _forwards = [float(f) for f in forwards]
@@ -149,7 +149,7 @@ def qlZeroCurve(
         zerorates : xlo.Array(dims=1),
         daycounter : qDayCounter = ql.Actual365Fixed(),
         calendar : qCalendar = ql.NullCalendar(),
-        Trigger = None,
+        trigger = None,
     ) -> ql.YieldTermStructureHandle:
     _dates = [_qDate(d) for d in dates]
     _zerorates = [float(z) for z in zerorates]

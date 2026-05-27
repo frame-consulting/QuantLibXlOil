@@ -152,7 +152,7 @@ def qlCurrency(
     fraction_symbol : str,
     fractions_per_unit : int,
     rounding : ql.Rounding,
-    Trigger = None,    
+    trigger = None,
     ) -> ql.Currency:
     # Triangulation currency is not implemented yet.
     return ql.Currency(
@@ -173,7 +173,7 @@ def qlCurrency(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencyName(currency : qCurrency, Trigger = None) -> str:
+def qlCurrencyName(currency : qCurrency, trigger = None) -> str:
     return currency.name()
 
 @xlo.func(
@@ -183,7 +183,7 @@ def qlCurrencyName(currency : qCurrency, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencyCode(currency : qCurrency, Trigger = None) -> str:
+def qlCurrencyCode(currency : qCurrency, trigger = None) -> str:
     return currency.code()
 
 @xlo.func(
@@ -193,7 +193,7 @@ def qlCurrencyCode(currency : qCurrency, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencyNumericalCode(currency : qCurrency, Trigger = None) -> int:
+def qlCurrencyNumericalCode(currency : qCurrency, trigger = None) -> int:
     return currency.numericCode()
 
 @xlo.func(
@@ -203,7 +203,7 @@ def qlCurrencyNumericalCode(currency : qCurrency, Trigger = None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencySymbol(currency : qCurrency, Trigger = None) -> str:
+def qlCurrencySymbol(currency : qCurrency, trigger = None) -> str:
     return currency.symbol()
 
 @xlo.func(
@@ -213,7 +213,7 @@ def qlCurrencySymbol(currency : qCurrency, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencyFractionSymbol(currency : qCurrency, Trigger = None) -> str:
+def qlCurrencyFractionSymbol(currency : qCurrency, trigger = None) -> str:
     return currency.fractionSymbol()
 
 @xlo.func(
@@ -223,7 +223,7 @@ def qlCurrencyFractionSymbol(currency : qCurrency, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencyFractionsPerUnit(currency : qCurrency, Trigger = None) -> int:
+def qlCurrencyFractionsPerUnit(currency : qCurrency, trigger = None) -> int:
     return currency.fractionsPerUnit()
 
 @xlo.func(
@@ -233,7 +233,7 @@ def qlCurrencyFractionsPerUnit(currency : qCurrency, Trigger = None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencyRounding(currency : qCurrency, Trigger = None) -> ql.Rounding:
+def qlCurrencyRounding(currency : qCurrency, trigger = None) -> ql.Rounding:
     return currency.rounding()
 
 @xlo.func(
@@ -243,5 +243,5 @@ def qlCurrencyRounding(currency : qCurrency, Trigger = None) -> ql.Rounding:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCurrencyTriangulationCurrency(currency : qCurrency, Trigger = None) -> ql.Currency:
+def qlCurrencyTriangulationCurrency(currency : qCurrency, trigger = None) -> ql.Currency:
     return currency.triangulationCurrency()

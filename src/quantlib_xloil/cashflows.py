@@ -89,7 +89,7 @@ def qRateAveragingType(averaging_type: str) -> int:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlSimpleCashFlow(amount: float, date: qDate, Trigger=None) -> ql.SimpleCashFlow:
+def qlSimpleCashFlow(amount: float, date: qDate, trigger=None) -> ql.SimpleCashFlow:
 	return ql.SimpleCashFlow(amount, date)
 
 
@@ -101,7 +101,7 @@ def qlSimpleCashFlow(amount: float, date: qDate, Trigger=None) -> ql.SimpleCashF
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlRedemption(amount: float, date: qDate, Trigger=None) -> ql.Redemption:
+def qlRedemption(amount: float, date: qDate, trigger=None) -> ql.Redemption:
 	return ql.Redemption(amount, date)
 
 
@@ -113,7 +113,7 @@ def qlRedemption(amount: float, date: qDate, Trigger=None) -> ql.Redemption:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAmortizingPayment(amount: float, date: qDate, Trigger=None) -> ql.AmortizingPayment:
+def qlAmortizingPayment(amount: float, date: qDate, trigger=None) -> ql.AmortizingPayment:
 	return ql.AmortizingPayment(amount, date)
 
 
@@ -136,7 +136,7 @@ def qlIndexedCashFlow(
 	fixing_date: qDate,
 	payment_date: qDate,
 	growth_only: bool = False,
-	Trigger=None,
+	trigger=None,
 ) -> ql.IndexedCashFlow:
 	return ql.IndexedCashFlow(notional, index, base_date, fixing_date, payment_date, growth_only)
 
@@ -148,7 +148,7 @@ def qlIndexedCashFlow(
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCashFlowAmount(cashflow: ql.CashFlow, Trigger=None) -> float:
+def qlCashFlowAmount(cashflow: ql.CashFlow, trigger=None) -> float:
 	return cashflow.amount()
 
 
@@ -159,7 +159,7 @@ def qlCashFlowAmount(cashflow: ql.CashFlow, Trigger=None) -> float:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCashFlowDate(cashflow: ql.CashFlow, Trigger=None) -> qDate:
+def qlCashFlowDate(cashflow: ql.CashFlow, trigger=None) -> qDate:
 	return cashflow.date()
 
 
@@ -167,11 +167,11 @@ def qlCashFlowDate(cashflow: ql.CashFlow, Trigger=None) -> qDate:
 	help="Check whether the cash flow has occurred.",
 	args={
 		"CashFlow": "QuantLib CashFlow.",
-		"RefDate": "Reference date.",
+		"ref_date": "Reference date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCashFlowHasOccurred(cashflow: ql.CashFlow, ref_date: qDate = ql.Date(), Trigger=None) -> bool:
+def qlCashFlowHasOccurred(cashflow: ql.CashFlow, ref_date: qDate = ql.Date(), trigger=None) -> bool:
 	return cashflow.hasOccurred(ref_date)
 
 
@@ -182,7 +182,7 @@ def qlCashFlowHasOccurred(cashflow: ql.CashFlow, ref_date: qDate = ql.Date(), Tr
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAsIndexedCashFlow(cashflow: ql.CashFlow, Trigger=None) -> ql.IndexedCashFlow:
+def qlAsIndexedCashFlow(cashflow: ql.CashFlow, trigger=None) -> ql.IndexedCashFlow:
 	return ql.as_indexed_cashflow(cashflow)
 
 
@@ -193,7 +193,7 @@ def qlAsIndexedCashFlow(cashflow: ql.CashFlow, Trigger=None) -> ql.IndexedCashFl
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAsCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.Coupon:
+def qlAsCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.Coupon:
 	return ql.as_coupon(cashflow)
 
 
@@ -204,7 +204,7 @@ def qlAsCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.Coupon:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponNominal(coupon: ql.Coupon, Trigger=None) -> float:
+def qlCouponNominal(coupon: ql.Coupon, trigger=None) -> float:
 	return coupon.nominal()
 
 
@@ -215,7 +215,7 @@ def qlCouponNominal(coupon: ql.Coupon, Trigger=None) -> float:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponAccrualStartDate(coupon: ql.Coupon, Trigger=None) -> qDate:
+def qlCouponAccrualStartDate(coupon: ql.Coupon, trigger=None) -> qDate:
 	return coupon.accrualStartDate()
 
 
@@ -226,7 +226,7 @@ def qlCouponAccrualStartDate(coupon: ql.Coupon, Trigger=None) -> qDate:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponAccrualEndDate(coupon: ql.Coupon, Trigger=None) -> qDate:
+def qlCouponAccrualEndDate(coupon: ql.Coupon, trigger=None) -> qDate:
 	return coupon.accrualEndDate()
 
 
@@ -237,7 +237,7 @@ def qlCouponAccrualEndDate(coupon: ql.Coupon, Trigger=None) -> qDate:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponReferencePeriodStart(coupon: ql.Coupon, Trigger=None) -> qDate:
+def qlCouponReferencePeriodStart(coupon: ql.Coupon, trigger=None) -> qDate:
 	return coupon.referencePeriodStart()
 
 
@@ -248,7 +248,7 @@ def qlCouponReferencePeriodStart(coupon: ql.Coupon, Trigger=None) -> qDate:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponReferencePeriodEnd(coupon: ql.Coupon, Trigger=None) -> qDate:
+def qlCouponReferencePeriodEnd(coupon: ql.Coupon, trigger=None) -> qDate:
 	return coupon.referencePeriodEnd()
 
 
@@ -259,7 +259,7 @@ def qlCouponReferencePeriodEnd(coupon: ql.Coupon, Trigger=None) -> qDate:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponExCouponDate(coupon: ql.Coupon, Trigger=None) -> qDate:
+def qlCouponExCouponDate(coupon: ql.Coupon, trigger=None) -> qDate:
 	return coupon.exCouponDate()
 
 
@@ -270,7 +270,7 @@ def qlCouponExCouponDate(coupon: ql.Coupon, Trigger=None) -> qDate:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponRate(coupon: ql.Coupon, Trigger=None) -> float:
+def qlCouponRate(coupon: ql.Coupon, trigger=None) -> float:
 	return coupon.rate()
 
 
@@ -281,7 +281,7 @@ def qlCouponRate(coupon: ql.Coupon, Trigger=None) -> float:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponAccrualPeriod(coupon: ql.Coupon, Trigger=None) -> float:
+def qlCouponAccrualPeriod(coupon: ql.Coupon, trigger=None) -> float:
 	return coupon.accrualPeriod()
 
 
@@ -292,7 +292,7 @@ def qlCouponAccrualPeriod(coupon: ql.Coupon, Trigger=None) -> float:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponAccrualDays(coupon: ql.Coupon, Trigger=None) -> int:
+def qlCouponAccrualDays(coupon: ql.Coupon, trigger=None) -> int:
 	return coupon.accrualDays()
 
 
@@ -303,7 +303,7 @@ def qlCouponAccrualDays(coupon: ql.Coupon, Trigger=None) -> int:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponDayCounter(coupon: ql.Coupon, Trigger=None) -> ql.DayCounter:
+def qlCouponDayCounter(coupon: ql.Coupon, trigger=None) -> ql.DayCounter:
 	return coupon.dayCounter()
 
 
@@ -315,7 +315,7 @@ def qlCouponDayCounter(coupon: ql.Coupon, Trigger=None) -> ql.DayCounter:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCouponAccruedAmount(coupon: ql.Coupon, date: qDate, Trigger=None) -> float:
+def qlCouponAccruedAmount(coupon: ql.Coupon, date: qDate, trigger=None) -> float:
 	return coupon.accruedAmount(date)
 
 
@@ -326,7 +326,7 @@ def qlCouponAccruedAmount(coupon: ql.Coupon, date: qDate, Trigger=None) -> float
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAsFixedRateCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.FixedRateCoupon:
+def qlAsFixedRateCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.FixedRateCoupon:
 	return ql.as_fixed_rate_coupon(cashflow)
 
 
@@ -337,7 +337,7 @@ def qlAsFixedRateCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.FixedRateCoup
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAsFloatingRateCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.FloatingRateCoupon:
+def qlAsFloatingRateCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.FloatingRateCoupon:
 	return ql.as_floating_rate_coupon(cashflow)
 
 
@@ -348,7 +348,7 @@ def qlAsFloatingRateCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.FloatingRa
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponFixingDate(coupon: ql.FloatingRateCoupon, Trigger=None) -> qDate:
+def qlFloatingRateCouponFixingDate(coupon: ql.FloatingRateCoupon, trigger=None) -> qDate:
 	return coupon.fixingDate()
 
 
@@ -359,7 +359,7 @@ def qlFloatingRateCouponFixingDate(coupon: ql.FloatingRateCoupon, Trigger=None) 
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponFixingDays(coupon: ql.FloatingRateCoupon, Trigger=None) -> int:
+def qlFloatingRateCouponFixingDays(coupon: ql.FloatingRateCoupon, trigger=None) -> int:
 	return coupon.fixingDays()
 
 
@@ -370,7 +370,7 @@ def qlFloatingRateCouponFixingDays(coupon: ql.FloatingRateCoupon, Trigger=None) 
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponIsInArrears(coupon: ql.FloatingRateCoupon, Trigger=None) -> bool:
+def qlFloatingRateCouponIsInArrears(coupon: ql.FloatingRateCoupon, trigger=None) -> bool:
 	return coupon.isInArrears()
 
 
@@ -381,7 +381,7 @@ def qlFloatingRateCouponIsInArrears(coupon: ql.FloatingRateCoupon, Trigger=None)
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponGearing(coupon: ql.FloatingRateCoupon, Trigger=None) -> float:
+def qlFloatingRateCouponGearing(coupon: ql.FloatingRateCoupon, trigger=None) -> float:
 	return coupon.gearing()
 
 
@@ -392,7 +392,7 @@ def qlFloatingRateCouponGearing(coupon: ql.FloatingRateCoupon, Trigger=None) -> 
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponSpread(coupon: ql.FloatingRateCoupon, Trigger=None) -> float:
+def qlFloatingRateCouponSpread(coupon: ql.FloatingRateCoupon, trigger=None) -> float:
 	return coupon.spread()
 
 
@@ -403,7 +403,7 @@ def qlFloatingRateCouponSpread(coupon: ql.FloatingRateCoupon, Trigger=None) -> f
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponIndexFixing(coupon: ql.FloatingRateCoupon, Trigger=None) -> float:
+def qlFloatingRateCouponIndexFixing(coupon: ql.FloatingRateCoupon, trigger=None) -> float:
 	return coupon.indexFixing()
 
 
@@ -414,7 +414,7 @@ def qlFloatingRateCouponIndexFixing(coupon: ql.FloatingRateCoupon, Trigger=None)
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponAdjustedFixing(coupon: ql.FloatingRateCoupon, Trigger=None) -> float:
+def qlFloatingRateCouponAdjustedFixing(coupon: ql.FloatingRateCoupon, trigger=None) -> float:
 	return coupon.adjustedFixing()
 
 
@@ -425,7 +425,7 @@ def qlFloatingRateCouponAdjustedFixing(coupon: ql.FloatingRateCoupon, Trigger=No
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponConvexityAdjustment(coupon: ql.FloatingRateCoupon, Trigger=None) -> float:
+def qlFloatingRateCouponConvexityAdjustment(coupon: ql.FloatingRateCoupon, trigger=None) -> float:
 	return coupon.convexityAdjustment()
 
 
@@ -440,7 +440,7 @@ def qlFloatingRateCouponConvexityAdjustment(coupon: ql.FloatingRateCoupon, Trigg
 def qlFloatingRateCouponPrice(
 	coupon: ql.FloatingRateCoupon,
 	discount_curve: ql.YieldTermStructureHandle,
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return coupon.price(discount_curve)
 
@@ -452,7 +452,7 @@ def qlFloatingRateCouponPrice(
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlFloatingRateCouponIndex(coupon: ql.FloatingRateCoupon, Trigger=None) -> ql.InterestRateIndex:
+def qlFloatingRateCouponIndex(coupon: ql.FloatingRateCoupon, trigger=None) -> ql.InterestRateIndex:
 	return coupon.index()
 
 
@@ -467,7 +467,7 @@ def qlFloatingRateCouponIndex(coupon: ql.FloatingRateCoupon, Trigger=None) -> ql
 def qlFloatingRateCouponSetPricer(
 	coupon: ql.FloatingRateCoupon,
 	pricer: ql.FloatingRateCouponPricer,
-	Trigger=None,
+	trigger=None,
 ) -> bool:
 	coupon.setPricer(pricer)
 	return True
@@ -480,7 +480,7 @@ def qlFloatingRateCouponSetPricer(
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCappedFlooredCouponIsCapped(coupon: ql.CappedFlooredCoupon, Trigger=None) -> bool:
+def qlCappedFlooredCouponIsCapped(coupon: ql.CappedFlooredCoupon, trigger=None) -> bool:
 	return coupon.isCapped()
 
 
@@ -491,7 +491,7 @@ def qlCappedFlooredCouponIsCapped(coupon: ql.CappedFlooredCoupon, Trigger=None) 
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCappedFlooredCouponIsFloored(coupon: ql.CappedFlooredCoupon, Trigger=None) -> bool:
+def qlCappedFlooredCouponIsFloored(coupon: ql.CappedFlooredCoupon, trigger=None) -> bool:
 	return coupon.isFloored()
 
 
@@ -502,7 +502,7 @@ def qlCappedFlooredCouponIsFloored(coupon: ql.CappedFlooredCoupon, Trigger=None)
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCappedFlooredCouponCap(coupon: ql.CappedFlooredCoupon, Trigger=None) -> float:
+def qlCappedFlooredCouponCap(coupon: ql.CappedFlooredCoupon, trigger=None) -> float:
 	return coupon.cap()
 
 
@@ -513,7 +513,7 @@ def qlCappedFlooredCouponCap(coupon: ql.CappedFlooredCoupon, Trigger=None) -> fl
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCappedFlooredCouponFloor(coupon: ql.CappedFlooredCoupon, Trigger=None) -> float:
+def qlCappedFlooredCouponFloor(coupon: ql.CappedFlooredCoupon, trigger=None) -> float:
 	return coupon.floor()
 
 
@@ -524,7 +524,7 @@ def qlCappedFlooredCouponFloor(coupon: ql.CappedFlooredCoupon, Trigger=None) -> 
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCappedFlooredCouponEffectiveCap(coupon: ql.CappedFlooredCoupon, Trigger=None) -> float:
+def qlCappedFlooredCouponEffectiveCap(coupon: ql.CappedFlooredCoupon, trigger=None) -> float:
 	return coupon.effectiveCap()
 
 
@@ -535,7 +535,7 @@ def qlCappedFlooredCouponEffectiveCap(coupon: ql.CappedFlooredCoupon, Trigger=No
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCappedFlooredCouponEffectiveFloor(coupon: ql.CappedFlooredCoupon, Trigger=None) -> float:
+def qlCappedFlooredCouponEffectiveFloor(coupon: ql.CappedFlooredCoupon, trigger=None) -> float:
 	return coupon.effectiveFloor()
 
 
@@ -546,7 +546,7 @@ def qlCappedFlooredCouponEffectiveFloor(coupon: ql.CappedFlooredCoupon, Trigger=
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponAveragingMethod(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> qRateAveragingType:
+def qlOvernightIndexedCouponAveragingMethod(coupon: ql.OvernightIndexedCoupon, trigger=None) -> qRateAveragingType:
 	return first_key(QL_RATE_AVERAGING_TYPE, coupon.averagingMethod(), UNKNOWN_KEY)
 
 
@@ -557,7 +557,7 @@ def qlOvernightIndexedCouponAveragingMethod(coupon: ql.OvernightIndexedCoupon, T
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponCanApplyTelescopicFormula(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> bool:
+def qlOvernightIndexedCouponCanApplyTelescopicFormula(coupon: ql.OvernightIndexedCoupon, trigger=None) -> bool:
 	return coupon.canApplyTelescopicFormula()
 
 
@@ -568,7 +568,7 @@ def qlOvernightIndexedCouponCanApplyTelescopicFormula(coupon: ql.OvernightIndexe
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponApplyObservationShift(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> bool:
+def qlOvernightIndexedCouponApplyObservationShift(coupon: ql.OvernightIndexedCoupon, trigger=None) -> bool:
 	return coupon.applyObservationShift()
 
 
@@ -579,7 +579,7 @@ def qlOvernightIndexedCouponApplyObservationShift(coupon: ql.OvernightIndexedCou
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponCompoundSpreadDaily(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> bool:
+def qlOvernightIndexedCouponCompoundSpreadDaily(coupon: ql.OvernightIndexedCoupon, trigger=None) -> bool:
 	return coupon.compoundSpreadDaily()
 
 
@@ -590,7 +590,7 @@ def qlOvernightIndexedCouponCompoundSpreadDaily(coupon: ql.OvernightIndexedCoupo
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponLockoutDays(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> int:
+def qlOvernightIndexedCouponLockoutDays(coupon: ql.OvernightIndexedCoupon, trigger=None) -> int:
 	return coupon.lockoutDays()
 
 
@@ -601,7 +601,7 @@ def qlOvernightIndexedCouponLockoutDays(coupon: ql.OvernightIndexedCoupon, Trigg
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponRateComputationStartDate(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> qDate:
+def qlOvernightIndexedCouponRateComputationStartDate(coupon: ql.OvernightIndexedCoupon, trigger=None) -> qDate:
 	return coupon.rateComputationStartDate()
 
 
@@ -612,7 +612,7 @@ def qlOvernightIndexedCouponRateComputationStartDate(coupon: ql.OvernightIndexed
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponRateComputationEndDate(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> qDate:
+def qlOvernightIndexedCouponRateComputationEndDate(coupon: ql.OvernightIndexedCoupon, trigger=None) -> qDate:
 	return coupon.rateComputationEndDate()
 
 
@@ -623,7 +623,7 @@ def qlOvernightIndexedCouponRateComputationEndDate(coupon: ql.OvernightIndexedCo
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponValueDates(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> tuple[ql.Date, ...]:
+def qlOvernightIndexedCouponValueDates(coupon: ql.OvernightIndexedCoupon, trigger=None) -> tuple[ql.Date, ...]:
 	return tuple(coupon.valueDates())
 
 
@@ -634,7 +634,7 @@ def qlOvernightIndexedCouponValueDates(coupon: ql.OvernightIndexedCoupon, Trigge
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponFixingDates(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> tuple[ql.Date, ...]:
+def qlOvernightIndexedCouponFixingDates(coupon: ql.OvernightIndexedCoupon, trigger=None) -> tuple[ql.Date, ...]:
 	return tuple(coupon.fixingDates())
 
 
@@ -645,7 +645,7 @@ def qlOvernightIndexedCouponFixingDates(coupon: ql.OvernightIndexedCoupon, Trigg
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponInterestDates(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> tuple[ql.Date, ...]:
+def qlOvernightIndexedCouponInterestDates(coupon: ql.OvernightIndexedCoupon, trigger=None) -> tuple[ql.Date, ...]:
 	return tuple(coupon.interestDates())
 
 
@@ -656,7 +656,7 @@ def qlOvernightIndexedCouponInterestDates(coupon: ql.OvernightIndexedCoupon, Tri
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponDt(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> tuple[float, ...]:
+def qlOvernightIndexedCouponDt(coupon: ql.OvernightIndexedCoupon, trigger=None) -> tuple[float, ...]:
 	return tuple(coupon.dt())
 
 
@@ -667,7 +667,7 @@ def qlOvernightIndexedCouponDt(coupon: ql.OvernightIndexedCoupon, Trigger=None) 
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponIndexFixings(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> tuple[float, ...]:
+def qlOvernightIndexedCouponIndexFixings(coupon: ql.OvernightIndexedCoupon, trigger=None) -> tuple[float, ...]:
 	return tuple(coupon.indexFixings())
 
 
@@ -678,7 +678,7 @@ def qlOvernightIndexedCouponIndexFixings(coupon: ql.OvernightIndexedCoupon, Trig
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponEffectiveIndexFixing(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> float:
+def qlOvernightIndexedCouponEffectiveIndexFixing(coupon: ql.OvernightIndexedCoupon, trigger=None) -> float:
 	return coupon.effectiveIndexFixing()
 
 
@@ -689,7 +689,7 @@ def qlOvernightIndexedCouponEffectiveIndexFixing(coupon: ql.OvernightIndexedCoup
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlOvernightIndexedCouponEffectiveSpread(coupon: ql.OvernightIndexedCoupon, Trigger=None) -> float:
+def qlOvernightIndexedCouponEffectiveSpread(coupon: ql.OvernightIndexedCoupon, trigger=None) -> float:
 	return coupon.effectiveSpread()
 
 
@@ -702,7 +702,7 @@ def qlOvernightIndexedCouponEffectiveSpread(coupon: ql.OvernightIndexedCoupon, T
 )
 def qlCappedFlooredOvernightIndexedCouponUnderlying(
 	coupon: ql.CappedFlooredOvernightIndexedCoupon,
-	Trigger=None,
+	trigger=None,
 ) -> ql.OvernightIndexedCoupon:
 	return coupon.underlying()
 
@@ -716,7 +716,7 @@ def qlCappedFlooredOvernightIndexedCouponUnderlying(
 )
 def qlCappedFlooredOvernightIndexedCouponNakedOption(
 	coupon: ql.CappedFlooredOvernightIndexedCoupon,
-	Trigger=None,
+	trigger=None,
 ) -> bool:
 	return coupon.nakedOption()
 
@@ -730,7 +730,7 @@ def qlCappedFlooredOvernightIndexedCouponNakedOption(
 )
 def qlCappedFlooredOvernightIndexedCouponDailyCapFloor(
 	coupon: ql.CappedFlooredOvernightIndexedCoupon,
-	Trigger=None,
+	trigger=None,
 ) -> bool:
 	return coupon.dailyCapFloor()
 
@@ -744,7 +744,7 @@ def qlCappedFlooredOvernightIndexedCouponDailyCapFloor(
 )
 def qlCappedFlooredOvernightIndexedCouponAveragingMethod(
 	coupon: ql.CappedFlooredOvernightIndexedCoupon,
-	Trigger=None,
+	trigger=None,
 ) -> str:
 	return first_key(QL_RATE_AVERAGING_TYPE, coupon.averagingMethod(), UNKNOWN_KEY)
 
@@ -758,7 +758,7 @@ def qlCappedFlooredOvernightIndexedCouponAveragingMethod(
 )
 def qlCappedFlooredOvernightIndexedCouponCompoundSpreadDaily(
 	coupon: ql.CappedFlooredOvernightIndexedCoupon,
-	Trigger=None,
+	trigger=None,
 ) -> bool:
 	return coupon.compoundSpreadDaily()
 
@@ -772,7 +772,7 @@ def qlCappedFlooredOvernightIndexedCouponCompoundSpreadDaily(
 )
 def qlCappedFlooredOvernightIndexedCouponEffectiveCapletVolatility(
 	coupon: ql.CappedFlooredOvernightIndexedCoupon,
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return coupon.effectiveCapletVolatility()
 
@@ -786,7 +786,7 @@ def qlCappedFlooredOvernightIndexedCouponEffectiveCapletVolatility(
 )
 def qlCappedFlooredOvernightIndexedCouponEffectiveFloorletVolatility(
 	coupon: ql.CappedFlooredOvernightIndexedCoupon,
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return coupon.effectiveFloorletVolatility()
 
@@ -798,7 +798,7 @@ def qlCappedFlooredOvernightIndexedCouponEffectiveFloorletVolatility(
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAsOvernightIndexedCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.OvernightIndexedCoupon:
+def qlAsOvernightIndexedCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.OvernightIndexedCoupon:
 	return ql.as_overnight_indexed_coupon(cashflow)
 
 
@@ -809,7 +809,7 @@ def qlAsOvernightIndexedCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.Overni
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAsCappedFlooredOvernightIndexedCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.CappedFlooredOvernightIndexedCoupon:
+def qlAsCappedFlooredOvernightIndexedCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.CappedFlooredOvernightIndexedCoupon:
 	return ql.as_capped_floored_overnight_indexed_coupon(cashflow)
 
 
@@ -820,7 +820,7 @@ def qlAsCappedFlooredOvernightIndexedCoupon(cashflow: ql.CashFlow, Trigger=None)
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlAsMultipleResetsCoupon(cashflow: ql.CashFlow, Trigger=None) -> ql.SubPeriodsCoupon:
+def qlAsMultipleResetsCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.SubPeriodsCoupon:
 	return ql.as_multiple_resets_coupon(cashflow)
 
 
@@ -849,7 +849,7 @@ def qlFixedRateCoupon(
 	ref_period_start: qDate = ql.Date(),
 	ref_period_end: qDate = ql.Date(),
 	ex_coupon_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.FixedRateCoupon:
 	return ql.FixedRateCoupon(
 		payment_date,
@@ -897,7 +897,7 @@ def qlIborCoupon(
 	day_counter: qDayCounter = ql.Actual365Fixed(),
 	is_in_arrears: bool = False,
 	ex_coupon_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.IborCoupon:
 	cpn = ql.IborCoupon(
 		payment_date,
@@ -955,7 +955,7 @@ def qlCappedFlooredIborCoupon(
 	day_counter: qDayCounter = ql.Actual365Fixed(),
 	is_in_arrears: bool = False,
 	ex_coupon_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.CappedFlooredIborCoupon:
 	return ql.CappedFlooredIborCoupon(
 		payment_date,
@@ -1015,7 +1015,7 @@ def qlOvernightIndexedCoupon(
 	lockout_days: int = 0,
 	apply_observation_shift: bool = False,
 	compound_spread: bool = False,
-	Trigger=None,
+	trigger=None,
 ) -> ql.OvernightIndexedCoupon:
 	return ql.OvernightIndexedCoupon(
 		payment_date,
@@ -1054,7 +1054,7 @@ def qlCappedFlooredOvernightIndexedCoupon(
 	floor: float = ql.nullDouble(),
 	naked_option: bool = False,
 	daily_cap_floor: bool = False,
-	Trigger=None,
+	trigger=None,
 ) -> ql.CappedFlooredOvernightIndexedCoupon:
 	return ql.CappedFlooredOvernightIndexedCoupon(underlying, cap, floor, naked_option, daily_cap_floor)
 
@@ -1092,7 +1092,7 @@ def qlCmsCoupon(
 	day_counter: qDayCounter = ql.Actual365Fixed(),
 	is_in_arrears: bool = False,
 	ex_coupon_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.CmsCoupon:
 	return ql.CmsCoupon(
 		payment_date,
@@ -1144,7 +1144,7 @@ def qlCmsSpreadCoupon(
 	day_counter: qDayCounter = ql.Actual365Fixed(),
 	is_in_arrears: bool = False,
 	ex_coupon_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.CmsSpreadCoupon:
 	return ql.CmsSpreadCoupon(
 		payment_date,
@@ -1198,7 +1198,7 @@ def qlRangeAccrualFloatersCoupon(
 	observations_schedule: ql.Schedule,
 	lower_trigger: float,
 	upper_trigger: float,
-	Trigger=None,
+	trigger=None,
 ) -> ql.RangeAccrualFloatersCoupon:
 	return ql.RangeAccrualFloatersCoupon(
 		payment_date,
@@ -1249,7 +1249,7 @@ def qlMultipleResetsCoupon(
 	ref_period_end: qDate = ql.Date(),
 	day_counter: qDayCounter = ql.Actual365Fixed(),
 	ex_coupon_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.MultipleResetsCoupon:
 	cpn = ql.MultipleResetsCoupon(
 		payment_date,
@@ -1278,7 +1278,7 @@ def qlMultipleResetsCoupon(
 )
 def qlBlackIborCouponPricer(
 	volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.BlackIborCouponPricer:
 	return ql.BlackIborCouponPricer(volatility)
 
@@ -1287,7 +1287,7 @@ def qlBlackIborCouponPricer(
 	help="Create a QuantLib CompoundingOvernightIndexedCouponPricer.",
 	group=EXCEL_GROUP_NAME,
 )
-def qlCompoundingOvernightIndexedCouponPricer(Trigger=None) -> ql.CompoundingOvernightIndexedCouponPricer:
+def qlCompoundingOvernightIndexedCouponPricer(trigger=None) -> ql.CompoundingOvernightIndexedCouponPricer:
 	return ql.CompoundingOvernightIndexedCouponPricer()
 
 
@@ -1304,7 +1304,7 @@ def qlArithmeticAveragedOvernightIndexedCouponPricer(
 	mean_reversion: float = 0.03,
 	volatility: float = 0.0,
 	by_approx: bool = False,
-	Trigger=None,
+	trigger=None,
 ) -> ql.ArithmeticAveragedOvernightIndexedCouponPricer:
 	return ql.ArithmeticAveragedOvernightIndexedCouponPricer(mean_reversion, volatility, by_approx)
 
@@ -1320,7 +1320,7 @@ def qlArithmeticAveragedOvernightIndexedCouponPricer(
 def qlBlackCompoundingOvernightIndexedCouponPricer(
 	volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(),
 	effective_volatility_input: bool = False,
-	Trigger=None,
+	trigger=None,
 ) -> ql.BlackCompoundingOvernightIndexedCouponPricer:
 	return ql.BlackCompoundingOvernightIndexedCouponPricer(volatility, effective_volatility_input)
 
@@ -1336,7 +1336,7 @@ def qlBlackCompoundingOvernightIndexedCouponPricer(
 def qlBlackAveragingOvernightIndexedCouponPricer(
 	volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(),
 	effective_volatility_input: bool = False,
-	Trigger=None,
+	trigger=None,
 ) -> ql.BlackAveragingOvernightIndexedCouponPricer:
 	return ql.BlackAveragingOvernightIndexedCouponPricer(volatility, effective_volatility_input)
 
@@ -1345,7 +1345,7 @@ def qlBlackAveragingOvernightIndexedCouponPricer(
 	help="Create a QuantLib CompoundingMultipleResetsPricer.",
 	group=EXCEL_GROUP_NAME,
 )
-def qlCompoundingMultipleResetsPricer(Trigger=None) -> ql.CompoundingMultipleResetsPricer:
+def qlCompoundingMultipleResetsPricer(trigger=None) -> ql.CompoundingMultipleResetsPricer:
 	return ql.CompoundingMultipleResetsPricer()
 
 
@@ -1353,7 +1353,7 @@ def qlCompoundingMultipleResetsPricer(Trigger=None) -> ql.CompoundingMultipleRes
 	help="Create a QuantLib AveragingMultipleResetsPricer.",
 	group=EXCEL_GROUP_NAME,
 )
-def qlAveragingMultipleResetsPricer(Trigger=None) -> ql.AveragingMultipleResetsPricer:
+def qlAveragingMultipleResetsPricer(trigger=None) -> ql.AveragingMultipleResetsPricer:
 	return ql.AveragingMultipleResetsPricer()
 
 
@@ -1365,7 +1365,7 @@ def qlAveragingMultipleResetsPricer(Trigger=None) -> ql.AveragingMultipleResetsP
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlSetCouponPricer(leg : xlo.Array(dims=1), pricer: ql.FloatingRateCouponPricer, Trigger=None) -> bool:
+def qlSetCouponPricer(leg : xlo.Array(dims=1), pricer: ql.FloatingRateCouponPricer, trigger=None) -> bool:
 	ql.setCouponPricer(_to_ql_leg(leg), pricer)
 	return True
 
@@ -1387,7 +1387,7 @@ def qlFixedRateLeg(
 	nominals,
 	coupon_rates,
 	payment_adjustment: qBusinessDayConvention = ql.Following,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.FixedRateLeg(schedule, day_counter, _to_float_list(nominals), _to_float_list(coupon_rates), payment_adjustment)
 
@@ -1421,7 +1421,7 @@ def qlIborLeg(
 	caps=(),
 	floors=(),
 	is_in_arrears: bool = False,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.IborLeg(
 		_to_float_list(nominals),
@@ -1463,7 +1463,7 @@ def qlOvernightLeg(
 	spreads=(),
 	telescopic_value_dates: bool = False,
 	averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.OvernightLeg(
 		_to_float_list(nominals),
@@ -1495,7 +1495,7 @@ def qlCmsLeg(
 	index: ql.SwapIndex,
 	payment_day_counter: qDayCounter = ql.Actual365Fixed(),
 	payment_convention: qBusinessDayConvention = ql.Following,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.CmsLeg(_to_float_list(nominals), schedule, index, payment_day_counter, payment_convention)
 
@@ -1517,7 +1517,7 @@ def qlCmsZeroLeg(
 	index: ql.SwapIndex,
 	payment_day_counter: qDayCounter = ql.Actual365Fixed(),
 	payment_convention: qBusinessDayConvention = ql.Following,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.CmsZeroLeg(_to_float_list(nominals), schedule, index, payment_day_counter, payment_convention)
 
@@ -1539,7 +1539,7 @@ def qlCmsSpreadLeg(
 	index: ql.SwapSpreadIndex,
 	payment_day_counter: qDayCounter = ql.Actual365Fixed(),
 	payment_convention: qBusinessDayConvention = ql.Following,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.CmsSpreadLeg(_to_float_list(nominals), schedule, index, payment_day_counter, payment_convention)
 
@@ -1559,7 +1559,7 @@ def qlMultipleResetsLeg(
 	index: ql.IborIndex,
 	resets_per_coupon: int,
 	nominals,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.MultipleResetsLeg(full_reset_schedule, index, resets_per_coupon, _to_float_list(nominals))
 
@@ -1581,7 +1581,7 @@ def qlRangeAccrualLeg(
 	index: ql.IborIndex,
 	payment_day_counter: qDayCounter = ql.Actual360(),
 	payment_convention: qBusinessDayConvention = ql.Following,
-	Trigger=None,
+	trigger=None,
 ):
 	return ql.RangeAccrualLeg(_to_float_list(nominals), schedule, index, payment_day_counter, payment_convention)
 
@@ -1593,7 +1593,7 @@ def qlRangeAccrualLeg(
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCashFlowsStartDate(leg : xlo.Array(dims=1), Trigger=None) -> qDate:
+def qlCashFlowsStartDate(leg : xlo.Array(dims=1), trigger=None) -> qDate:
 	return ql.CashFlows.startDate(_to_ql_leg(leg))
 
 
@@ -1604,7 +1604,7 @@ def qlCashFlowsStartDate(leg : xlo.Array(dims=1), Trigger=None) -> qDate:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlCashFlowsMaturityDate(leg : xlo.Array(dims=1), Trigger=None) -> qDate:
+def qlCashFlowsMaturityDate(leg : xlo.Array(dims=1), trigger=None) -> qDate:
 	return ql.CashFlows.maturityDate(_to_ql_leg(leg))
 
 
@@ -1621,7 +1621,7 @@ def qlCashFlowsPreviousCashFlowDate(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> qDate:
 	return ql.CashFlows.previousCashFlowDate(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1639,7 +1639,7 @@ def qlCashFlowsNextCashFlowDate(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> qDate:
 	return ql.CashFlows.nextCashFlowDate(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1657,7 +1657,7 @@ def qlCashFlowsPreviousCashFlowAmount(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.previousCashFlowAmount(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1675,7 +1675,7 @@ def qlCashFlowsNextCashFlowAmount(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.nextCashFlowAmount(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1693,7 +1693,7 @@ def qlCashFlowsPreviousCashFlow(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.CashFlow:
 	return ql.CashFlows.previousCashFlow(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1711,7 +1711,7 @@ def qlCashFlowsNextCashFlow(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> ql.CashFlow:
 	return ql.CashFlows.nextCashFlow(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1729,7 +1729,7 @@ def qlCashFlowsAccrualPeriod(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.accrualPeriod(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1747,7 +1747,7 @@ def qlCashFlowsAccrualDays(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> int:
 	return ql.CashFlows.accrualDays(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1765,7 +1765,7 @@ def qlCashFlowsAccruedPeriod(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.accruedPeriod(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1783,7 +1783,7 @@ def qlCashFlowsAccruedDays(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> int:
 	return ql.CashFlows.accruedDays(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1801,7 +1801,7 @@ def qlCashFlowsAccruedAmount(
 	leg : xlo.Array(dims=1),
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.accruedAmount(_to_ql_leg(leg), include_settlement_date_flows, settlement_date)
 
@@ -1823,7 +1823,7 @@ def qlCashFlowsNpv(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.npv(_to_ql_leg(leg), discount_curve, include_settlement_date_flows, settlement_date, npv_date)
 
@@ -1845,7 +1845,7 @@ def qlCashFlowsNpvFromInterestRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.npv(_to_ql_leg(leg), interest_rate, include_settlement_date_flows, settlement_date, npv_date)
 
@@ -1873,7 +1873,7 @@ def qlCashFlowsNpvFromRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.npv(
 		_to_ql_leg(leg),
@@ -1912,7 +1912,7 @@ def qlCashFlowsNpvFromZSpread(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.npv(
 		_to_ql_leg(leg),
@@ -1944,7 +1944,7 @@ def qlCashFlowsBps(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.bps(_to_ql_leg(leg), discount_curve, include_settlement_date_flows, settlement_date, npv_date)
 
@@ -1965,7 +1965,7 @@ def qlCashFlowsBpsFromInterestRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.bps(_to_ql_leg(leg), interest_rate, include_settlement_date_flows, settlement_date, npv_date)
 
@@ -1993,7 +1993,7 @@ def qlCashFlowsBpsFromRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.bps(
 		_to_ql_leg(leg),
@@ -2024,7 +2024,7 @@ def qlCashFlowsNpvBps(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> tuple[float, float]:
 	npv, bps = ql.CashFlows.npvbps(_to_ql_leg(leg), discount_curve, include_settlement_date_flows, settlement_date, npv_date)
 	return float(npv), float(bps)
@@ -2049,7 +2049,7 @@ def qlCashFlowsAtmRate(
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
 	npv: float = ql.nullDouble(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.atmRate(_to_ql_leg(leg), discount_curve.currentLink(), include_settlement_date_flows, settlement_date, npv_date, npv)
 
@@ -2080,7 +2080,7 @@ def qlCashFlowsYieldRate(
 	accuracy: float = 1.0e-10,
 	max_iterations: int = 10000,
 	guess: float = 0.05,
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.yieldRate(
 		_to_ql_leg(leg),
@@ -2114,7 +2114,7 @@ def qlCashFlowsDurationFromInterestRate(
 	duration_type: qDurationType,
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.duration(_to_ql_leg(leg), interest_rate, duration_type, include_settlement_date_flows, settlement_date)
 
@@ -2142,7 +2142,7 @@ def qlCashFlowsDurationFromRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.duration(
 		_to_ql_leg(leg),
@@ -2178,7 +2178,7 @@ def qlCashFlowsConvexityFromRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.convexity(
 		_to_ql_leg(leg),
@@ -2209,7 +2209,7 @@ def qlCashFlowsConvexityFromInterestRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.convexity(_to_ql_leg(leg), interest_rate, include_settlement_date_flows, settlement_date, npv_date)
 
@@ -2235,7 +2235,7 @@ def qlCashFlowsBasisPointValueFromRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.basisPointValue(
 		_to_ql_leg(leg),
@@ -2266,7 +2266,7 @@ def qlCashFlowsBasisPointValueFromInterestRate(
 	include_settlement_date_flows: bool,
 	settlement_date: qDate = ql.Date(),
 	npv_date: qDate = ql.Date(),
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.basisPointValue(_to_ql_leg(leg), interest_rate, include_settlement_date_flows, settlement_date, npv_date)
 
@@ -2297,7 +2297,7 @@ def qlCashFlowsZSpread(
 	accuracy: float = 1.0e-10,
 	max_iterations: int = 100,
 	guess: float = 0.0,
-	Trigger=None,
+	trigger=None,
 ) -> float:
 	return ql.CashFlows.zSpread(
 		_to_ql_leg(leg),
@@ -2322,7 +2322,7 @@ def qlCashFlowsZSpread(
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlDurationTypeName(duration_type: qDurationType, Trigger=None) -> str:
+def qlDurationTypeName(duration_type: qDurationType, trigger=None) -> str:
 	return first_key(QL_DURATION_TYPE, duration_type, UNKNOWN_VALUE)
 
 
@@ -2333,5 +2333,5 @@ def qlDurationTypeName(duration_type: qDurationType, Trigger=None) -> str:
 	},
 	group=EXCEL_GROUP_NAME,
 )
-def qlRateAveragingTypeName(averaging_type: qRateAveragingType, Trigger=None) -> str:
+def qlRateAveragingTypeName(averaging_type: qRateAveragingType, trigger=None) -> str:
 	return first_key(QL_RATE_AVERAGING_TYPE, averaging_type, UNKNOWN_VALUE)

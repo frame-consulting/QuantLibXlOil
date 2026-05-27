@@ -8,7 +8,7 @@ from .date import qDate
     help="Get the current evaluation date from QuantLib settings.",
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsGetEvaluationDate(Trigger = None) -> ql.Date:
+def qlSettingsGetEvaluationDate(trigger = None) -> ql.Date:
     return ql.Settings.instance().evaluationDate
 
 @xlo.func(
@@ -18,7 +18,7 @@ def qlSettingsGetEvaluationDate(Trigger = None) -> ql.Date:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsSetEvaluationDate(date: qDate, Trigger = None) -> ql.Date:
+def qlSettingsSetEvaluationDate(date: qDate, trigger = None) -> ql.Date:
     ql.Settings.instance().evaluationDate = date
     return ql.Settings.instance().evaluationDate
 
@@ -26,7 +26,7 @@ def qlSettingsSetEvaluationDate(date: qDate, Trigger = None) -> ql.Date:
     help="Get whether QuantLib settings enforces today's historic fixings.",
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsGetEnforcesTodaysHistoricFixings(Trigger = None) -> bool:
+def qlSettingsGetEnforcesTodaysHistoricFixings(trigger = None) -> bool:
     return ql.Settings.instance().enforcesTodaysHistoricFixings
 
 @xlo.func(
@@ -36,7 +36,7 @@ def qlSettingsGetEnforcesTodaysHistoricFixings(Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsSetEnforcesTodaysHistoricFixings(enforces: bool, Trigger = None) -> bool:
+def qlSettingsSetEnforcesTodaysHistoricFixings(enforces: bool, trigger = None) -> bool:
     ql.Settings.instance().enforcesTodaysHistoricFixings = enforces
     return ql.Settings.instance().enforcesTodaysHistoricFixings
 
@@ -44,7 +44,7 @@ def qlSettingsSetEnforcesTodaysHistoricFixings(enforces: bool, Trigger = None) -
     help="Get whether QuantLib settings include reference date events.",
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsGetIncludeReferenceDateEvents(Trigger = None) -> bool:
+def qlSettingsGetIncludeReferenceDateEvents(trigger = None) -> bool:
     return ql.Settings.instance().includeReferenceDateEvents
 
 @xlo.func(
@@ -54,7 +54,7 @@ def qlSettingsGetIncludeReferenceDateEvents(Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsSetIncludeReferenceDateEvents(include: bool, Trigger = None) -> bool:
+def qlSettingsSetIncludeReferenceDateEvents(include: bool, trigger = None) -> bool:
     ql.Settings.instance().includeReferenceDateEvents = include
     return ql.Settings.instance().includeReferenceDateEvents
 
@@ -62,7 +62,7 @@ def qlSettingsSetIncludeReferenceDateEvents(include: bool, Trigger = None) -> bo
     help="Get whether QuantLib settings include today's cash flows.",
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsGetIncludeTodaysCashFlows(Trigger = None) -> bool:
+def qlSettingsGetIncludeTodaysCashFlows(trigger = None) -> bool:
     return ql.Settings.instance().includeTodaysCashFlows
 
 @xlo.func(
@@ -72,7 +72,7 @@ def qlSettingsGetIncludeTodaysCashFlows(Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsSetIncludeTodaysCashFlows(include: bool, Trigger = None) -> bool:
+def qlSettingsSetIncludeTodaysCashFlows(include: bool, trigger = None) -> bool:
     ql.Settings.instance().includeTodaysCashFlows = include
     return ql.Settings.instance().includeTodaysCashFlows
 
@@ -80,7 +80,7 @@ def qlSettingsSetIncludeTodaysCashFlows(include: bool, Trigger = None) -> bool:
     help="Prevent the evaluation date to change at midnight. Useful when running calculations overnight and you want to keep the same evaluation date.",
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsAnchorEvaluationDate(Trigger = None) -> ql.Date:
+def qlSettingsAnchorEvaluationDate(trigger = None) -> ql.Date:
     ql.Settings.instance().anchorEvaluationDate()
     return ql.Settings.instance().evaluationDate
 
@@ -88,6 +88,6 @@ def qlSettingsAnchorEvaluationDate(Trigger = None) -> ql.Date:
     help="Reset the evaluation date to today\s Date and allow it to change at midnight.",
     group=EXCEL_GROUP_NAME,
 )
-def qlSettingsResetEvaluationDate(Trigger = None) -> ql.Date:
+def qlSettingsResetEvaluationDate(trigger = None) -> ql.Date:
     ql.Settings.instance().resetEvaluationDate()
     return ql.Settings.instance().evaluationDate

@@ -86,7 +86,7 @@ def xPeriod(period : ql.Period):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlPeriod(n : int, unit : qTimeUnit, Trigger = None) -> ql.Period:
+def qlPeriod(n : int, unit : qTimeUnit, trigger = None) -> ql.Period:
     return ql.Period(n, unit)
 
 @xlo.func(
@@ -96,7 +96,7 @@ def qlPeriod(n : int, unit : qTimeUnit, Trigger = None) -> ql.Period:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlPeriodLength(period : qPeriod, Trigger = None) -> int:
+def qlPeriodLength(period : qPeriod, trigger = None) -> int:
     return period.length()
 
 @xlo.func(
@@ -106,7 +106,7 @@ def qlPeriodLength(period : qPeriod, Trigger = None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlPeriodUnits(period : qPeriod, Trigger = None) -> qTimeUnit:
+def qlPeriodUnits(period : qPeriod, trigger = None) -> qTimeUnit:
     return first_key(QL_TIMEUNIT, period.units(), UNKNOWN_VALUE)
 
 @xlo.func(
@@ -116,7 +116,7 @@ def qlPeriodUnits(period : qPeriod, Trigger = None) -> qTimeUnit:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlPeriodFrequency(period : qPeriod, Trigger = None) -> qFrequency:
+def qlPeriodFrequency(period : qPeriod, trigger = None) -> qFrequency:
     return first_key(QL_FREQUENCY, period.frequency(), ql.NoFrequency)
 
 @xlo.func(
@@ -126,7 +126,7 @@ def qlPeriodFrequency(period : qPeriod, Trigger = None) -> qFrequency:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlPeriodNormalized(period : qPeriod, Trigger = None) -> qPeriod:
+def qlPeriodNormalized(period : qPeriod, trigger = None) -> qPeriod:
     return period.normalized()
 
 def _qDate(serialnumber) -> ql.Date:
@@ -154,7 +154,7 @@ def xDate(date : ql.Date):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDate(year : int, month : int, day : int, Trigger = None) -> ql.Date:
+def qlDate(year : int, month : int, day : int, trigger = None) -> ql.Date:
     return ql.Date(day, month, year)
 
 @xlo.func(
@@ -164,7 +164,7 @@ def qlDate(year : int, month : int, day : int, Trigger = None) -> ql.Date:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDateWeekday(date : qDate, Trigger = None) -> str:
+def qlDateWeekday(date : qDate, trigger = None) -> str:
     return first_key(QL_WEEKDAY, date.weekday(), UNKNOWN_VALUE)
 
 @xlo.func(
@@ -174,7 +174,7 @@ def qlDateWeekday(date : qDate, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDateDayOfMonth(date : qDate, Trigger = None) -> int:
+def qlDateDayOfMonth(date : qDate, trigger = None) -> int:
     return date.dayOfMonth()
 
 @xlo.func(
@@ -184,7 +184,7 @@ def qlDateDayOfMonth(date : qDate, Trigger = None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDateDayOfYear(date : qDate, Trigger = None) -> int:
+def qlDateDayOfYear(date : qDate, trigger = None) -> int:
     return date.dayOfYear()
 
 @xlo.func(
@@ -194,7 +194,7 @@ def qlDateDayOfYear(date : qDate, Trigger = None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDateMonth(date : qDate, Trigger = None) -> int:
+def qlDateMonth(date : qDate, trigger = None) -> int:
     return date.month()
 
 @xlo.func(
@@ -204,7 +204,7 @@ def qlDateMonth(date : qDate, Trigger = None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDateYear(date : qDate, Trigger = None) -> int:
+def qlDateYear(date : qDate, trigger = None) -> int:
     return date.year()
 
 @xlo.func(
@@ -214,28 +214,28 @@ def qlDateYear(date : qDate, Trigger = None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDateIsLeap(year : int, Trigger = None) -> bool:
+def qlDateIsLeap(year : int, trigger = None) -> bool:
     return ql.Date.isLeap(year)
 
 @xlo.func(
     help='Return the QuantLib\'s minimum date.',
     group=EXCEL_GROUP_NAME,
 )
-def qlDateMinDate(Trigger = None) -> ql.Date:
+def qlDateMinDate(trigger = None) -> ql.Date:
     return ql.Date.minDate()
 
 @xlo.func(
     help='Return the QuantLib\'s maximum date.',
     group=EXCEL_GROUP_NAME,
 )
-def qlDateMaxDate(Trigger = None) -> ql.Date:
+def qlDateMaxDate(trigger = None) -> ql.Date:
     return ql.Date.maxDate()
 
 @xlo.func(
     help='Return the QuantLib\'s today\'s date.',
     group=EXCEL_GROUP_NAME,
 )
-def qlDateTodaysDate(Trigger = None) -> ql.Date:
+def qlDateTodaysDate(trigger = None) -> ql.Date:
     return ql.Date.todaysDate()
 
 @xlo.func(
@@ -244,7 +244,7 @@ def qlDateTodaysDate(Trigger = None) -> ql.Date:
         'Date': 'QuantLib Date.',
     },
 )
-def qlDateStartOfMonth(date : qDate, Trigger = None) -> ql.Date:
+def qlDateStartOfMonth(date : qDate, trigger = None) -> ql.Date:
     return ql.Date.startOfMonth(date)
 
 @xlo.func(
@@ -253,7 +253,7 @@ def qlDateStartOfMonth(date : qDate, Trigger = None) -> ql.Date:
         'Date': 'QuantLib Date.',
     },
 )
-def qlDateEndOfMonth(date : qDate, Trigger = None) -> ql.Date:
+def qlDateEndOfMonth(date : qDate, trigger = None) -> ql.Date:
     return ql.Date.endOfMonth(date)
 
 @xlo.func(
@@ -262,7 +262,7 @@ def qlDateEndOfMonth(date : qDate, Trigger = None) -> ql.Date:
         'Date': 'QuantLib Date.',
     },
 )
-def qlDateIsStartOfMonth(date : qDate, Trigger = None) -> bool:
+def qlDateIsStartOfMonth(date : qDate, trigger = None) -> bool:
     return ql.Date.isStartOfMonth(date)
 
 @xlo.func(
@@ -271,7 +271,7 @@ def qlDateIsStartOfMonth(date : qDate, Trigger = None) -> bool:
         'Date': 'QuantLib Date.',
     },
 )
-def qlDateIsEndOfMonth(date : qDate, Trigger = None) -> bool:
+def qlDateIsEndOfMonth(date : qDate, trigger = None) -> bool:
     return ql.Date.isEndOfMonth(date)
 
 @xlo.func(
@@ -281,7 +281,7 @@ def qlDateIsEndOfMonth(date : qDate, Trigger = None) -> bool:
         'Weekday': 'The weekday.',
     },
 )
-def qlDateNextWeekday(date : qDate, weekday : qWeekday, Trigger = None) -> ql.Date:
+def qlDateNextWeekday(date : qDate, weekday : qWeekday, trigger = None) -> ql.Date:
     return ql.Date.nextWeekday(date, weekday)
 
 @xlo.func(
@@ -293,7 +293,7 @@ def qlDateNextWeekday(date : qDate, weekday : qWeekday, Trigger = None) -> ql.Da
         'Year': 'The year.',
     },
 )
-def qlDateNthWeekday(n : int, weekday : qWeekday, month : int, year : int, Trigger = None) -> ql.Date:
+def qlDateNthWeekday(n : int, weekday : qWeekday, month : int, year : int, trigger = None) -> ql.Date:
     return ql.Date.nthWeekday(n, weekday, month, year)
 
 
@@ -304,7 +304,7 @@ def qlDateNthWeekday(n : int, weekday : qWeekday, month : int, year : int, Trigg
         'FormatString': 'The format string (e.g. "YYYY-MM-DD").',
     },
 )
-def qlDateParserParseFormatted(date_string : str, format_string : str, Trigger = None) -> ql.Date:
+def qlDateParserParseFormatted(date_string : str, format_string : str, trigger = None) -> ql.Date:
     return ql.DateParser.parseFormatted(date_string, format_string)
 
 @xlo.func(
@@ -313,7 +313,7 @@ def qlDateParserParseFormatted(date_string : str, format_string : str, Trigger =
         'DateString': 'The date string to parse.',
     },
 )
-def qlDateParserParseISO(date_string : str, Trigger = None) -> ql.Date:
+def qlDateParserParseISO(date_string : str, trigger = None) -> ql.Date:
     return ql.DateParser.parseISO(date_string)
 
 @xlo.func(
@@ -322,5 +322,5 @@ def qlDateParserParseISO(date_string : str, Trigger = None) -> ql.Date:
         'PeriodString': 'The period string to parse.',
     },
 )
-def qlPeriodParserParse(period_string : str, Trigger = None) -> ql.Period:
+def qlPeriodParserParse(period_string : str, trigger = None) -> ql.Period:
     return ql.PeriodParser.parse(period_string)

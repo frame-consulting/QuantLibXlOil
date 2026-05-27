@@ -18,7 +18,7 @@ from .utilities import enum_value
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureDayCounter(ytsh : ql.YieldTermStructureHandle, Trigger = None) -> ql.DayCounter:
+def qlTermStructureDayCounter(ytsh : ql.YieldTermStructureHandle, trigger = None) -> ql.DayCounter:
     return ytsh.dayCounter()
 
 @xlo.func(
@@ -29,7 +29,7 @@ def qlTermStructureDayCounter(ytsh : ql.YieldTermStructureHandle, Trigger = None
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureTimeFromReference(ytsh : ql.YieldTermStructureHandle, date : qDate, Trigger = None) -> float:
+def qlTermStructureTimeFromReference(ytsh : ql.YieldTermStructureHandle, date : qDate, trigger = None) -> float:
     return ytsh.timeFromReference(date)
 
 @xlo.func(
@@ -39,7 +39,7 @@ def qlTermStructureTimeFromReference(ytsh : ql.YieldTermStructureHandle, date : 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureCalendar(ytsh : ql.YieldTermStructureHandle, Trigger = None) -> ql.Calendar:
+def qlTermStructureCalendar(ytsh : ql.YieldTermStructureHandle, trigger = None) -> ql.Calendar:
     return ytsh.calendar()
 
 @xlo.func(
@@ -49,7 +49,7 @@ def qlTermStructureCalendar(ytsh : ql.YieldTermStructureHandle, Trigger = None) 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureReferenceDate(ytsh : ql.YieldTermStructureHandle, Trigger = None) -> qDate:
+def qlTermStructureReferenceDate(ytsh : ql.YieldTermStructureHandle, trigger = None) -> qDate:
     return ytsh.referenceDate()
 
 @xlo.func(
@@ -59,7 +59,7 @@ def qlTermStructureReferenceDate(ytsh : ql.YieldTermStructureHandle, Trigger = N
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureMaxDate(ytsh : ql.YieldTermStructureHandle, Trigger = None) -> qDate:
+def qlTermStructureMaxDate(ytsh : ql.YieldTermStructureHandle, trigger = None) -> qDate:
     return ytsh.maxDate()
 
 @xlo.func(
@@ -79,7 +79,7 @@ def qlTermStructureMaxTime(ytsh : ql.YieldTermStructureHandle) -> float:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureEnableExrapolation(ytsh : ql.YieldTermStructureHandle, Trigger = None):
+def qlTermStructureEnableExrapolation(ytsh : ql.YieldTermStructureHandle, trigger = None):
     ytsh.enableExtrapolation()
     return True
 
@@ -90,7 +90,7 @@ def qlTermStructureEnableExrapolation(ytsh : ql.YieldTermStructureHandle, Trigge
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureDisableExrapolation(ytsh : ql.YieldTermStructureHandle, Trigger = None):
+def qlTermStructureDisableExrapolation(ytsh : ql.YieldTermStructureHandle, trigger = None):
     ytsh.disableExtrapolation()
     return True
 
@@ -101,7 +101,7 @@ def qlTermStructureDisableExrapolation(ytsh : ql.YieldTermStructureHandle, Trigg
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTermStructureAllowsExtrapolation(ytsh : ql.YieldTermStructureHandle, Trigger = None) -> bool:
+def qlTermStructureAllowsExtrapolation(ytsh : ql.YieldTermStructureHandle, trigger = None) -> bool:
     return ytsh.allowsExtrapolation()
 
 
@@ -137,7 +137,7 @@ def qlYieldTermStructureDiscount(
     ytsh : ql.YieldTermStructureHandle,
     date : qDate,
     extrapolate : bool = False,
-    Trigger = None,
+    trigger = None,
     ) -> float:
     return ytsh.discount(date, extrapolate)
 
@@ -154,7 +154,7 @@ def qlYieldTermStructureDiscountFromTime(
     ytsh : ql.YieldTermStructureHandle,
     time : float,
     extrapolate : bool = False,
-    Trigger = None,
+    trigger = None,
     ) -> float:
     return ytsh.discount(time, extrapolate)
 
@@ -177,7 +177,7 @@ def qlYieldTermStructureZeroRate(
     compounding : qCompounding,
     frequency : qFrequency,
     extrapolate : bool = False,
-    Trigger = None,
+    trigger = None,
     ) -> float:
     return ytsh.zeroRate(date, daycounter, compounding, frequency, extrapolate).rate()
 
@@ -198,7 +198,7 @@ def qlYieldTermStructureZeroRateFromTime(
     compounding : qCompounding,
     frequency : qFrequency,
     extrapolate : bool = False,
-    Trigger = None,
+    trigger = None,
     ) -> float:
     return ytsh.zeroRate(time, compounding, frequency, extrapolate).rate()
 
@@ -223,7 +223,7 @@ def qlYieldTermStructureForwardRate(
     compounding : qCompounding,
     frequency : qFrequency,
     extrapolate : bool = False,
-    Trigger = None,
+    trigger = None,
     ) -> float:
     return ytsh.forwardRate(date1, date2, daycounter, compounding, frequency, extrapolate).rate()
 
@@ -246,7 +246,7 @@ def qlYieldTermStructureForwardRateFromTime(
     compounding : qCompounding,
     frequency : qFrequency,
     extrapolate : bool = False,
-    Trigger = None,
+    trigger = None,
     ) -> float:
     return ytsh.forwardRate(time1, time2, compounding, frequency, extrapolate).rate()
 
@@ -266,15 +266,15 @@ def qlYieldTermStructureForwardRateFromTime(
     group=EXCEL_GROUP_NAME,
 )
 def qlFlatForward(
-    referenceDate : qDate,
-    forwardRate : float,
+    reference_date : qDate,
+    forward_rate : float,
     daycounter : qDayCounter = ql.Actual365Fixed(),
     compounding : qCompounding = ql.Compounded,
     frequency : qFrequency = ql.NoFrequency,
     calendar : qCalendar = ql.NullCalendar(),
-    Trigger = None,
+    trigger = None,
     ) -> ql.YieldTermStructureHandle:
-    yts = ql.FlatForward(referenceDate, forwardRate, daycounter, compounding, frequency)
+    yts = ql.FlatForward(reference_date, forward_rate, daycounter, compounding, frequency)
     return ql.YieldTermStructureHandle(yts)
 
 
@@ -290,10 +290,10 @@ def qlFlatForward(
 )
 def qlImpliedTermStructure(
     ytsh : ql.YieldTermStructureHandle,
-    referenceDate : qDate,
-    Trigger = None,
+    reference_date : qDate,
+    trigger = None,
     ) -> ql.YieldTermStructureHandle:
-    yts = ql.ImpliedTermStructure(ytsh, referenceDate)
+    yts = ql.ImpliedTermStructure(ytsh, reference_date)
     return ql.YieldTermStructureHandle(yts)
 
 ## Spreaded term structures
@@ -315,7 +315,7 @@ def qlZeroSpreadedTermStructure(
     compounding : qCompounding = ql.Compounded,
     frequency : qFrequency = ql.NoFrequency,
     daycounter : qDayCounter = ql.Actual365Fixed(),
-    Trigger = None,
+    trigger = None,
     ) -> ql.YieldTermStructureHandle:
     sprad_qh = ql.QuoteHandle(ql.SimpleQuote(spread))
     yts = ql.ZeroSpreadedTermStructure(base, sprad_qh, compounding, frequency, daycounter)
@@ -333,7 +333,7 @@ def qlZeroSpreadedTermStructure(
 def qlForwardSpreadedTermStructure(
     base : ql.YieldTermStructureHandle,
     spread : float,
-    Trigger = None,
+    trigger = None,
     ) -> ql.YieldTermStructureHandle:
     sprad_qh = ql.QuoteHandle(ql.SimpleQuote(spread))
     yts = ql.ForwardSpreadedTermStructure(base, sprad_qh)
@@ -358,7 +358,7 @@ def qlCompositeZeroYieldStructure(
     curve1 : ql.YieldTermStructureHandle,
     curve2 : ql.YieldTermStructureHandle,
     operator : str,
-    Trigger = None,
+    trigger = None,
     ) -> ql.YieldTermStructureHandle:
     if operator in QL_COMPOSITE_OPERATORS:
         yts = ql.CompositeZeroYieldStructure(curve1, curve2, QL_COMPOSITE_OPERATORS[operator])

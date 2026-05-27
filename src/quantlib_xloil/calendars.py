@@ -116,7 +116,7 @@ def qJointCalendarRule(rule_name : str):
     group=EXCEL_GROUP_NAME,
 )
 
-def qlCalendar(calendar_name: str, Trigger = None) -> ql.Calendar:
+def qlCalendar(calendar_name: str, trigger = None) -> ql.Calendar:
     return _qCalendar(calendar_name)
 
 @xlo.func(
@@ -126,7 +126,7 @@ def qlCalendar(calendar_name: str, Trigger = None) -> ql.Calendar:
     },
     group=EXCEL_GROUP_NAME,
 )  
-def qlCalendarisWeekend(calendar: qCalendar, weekday: qWeekday, Trigger = None) -> bool:
+def qlCalendarisWeekend(calendar: qCalendar, weekday: qWeekday, trigger = None) -> bool:
     return calendar.isWeekend(weekday)
 #weekday in (ql.Saturday, ql.Sunday)
 
@@ -138,7 +138,7 @@ def qlCalendarisWeekend(calendar: qCalendar, weekday: qWeekday, Trigger = None) 
     group=EXCEL_GROUP_NAME,
 )
 
-def qlCalendarStartOfMonth(calendar : qCalendar, date : qDate, Trigger = None) -> ql.Date:
+def qlCalendarStartOfMonth(calendar : qCalendar, date : qDate, trigger = None) -> ql.Date:
     return calendar.startOfMonth(date) 
 #l.Date(ql.startOfMonth(date))
 
@@ -149,7 +149,7 @@ def qlCalendarStartOfMonth(calendar : qCalendar, date : qDate, Trigger = None) -
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarEndOfMonth(calendar : qCalendar, date : qDate, Trigger = None) -> ql.Date:
+def qlCalendarEndOfMonth(calendar : qCalendar, date : qDate, trigger = None) -> ql.Date:
     return calendar.endOfMonth(date) 
 #ql.Date(ql.endOfMonth(date))
 
@@ -160,7 +160,7 @@ def qlCalendarEndOfMonth(calendar : qCalendar, date : qDate, Trigger = None) -> 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarIsBusinessDay(calendar : qCalendar, date : qDate, Trigger = None) -> bool:
+def qlCalendarIsBusinessDay(calendar : qCalendar, date : qDate, trigger = None) -> bool:
     return calendar.isBusinessDay(date)
 
 @xlo.func(
@@ -170,7 +170,7 @@ def qlCalendarIsBusinessDay(calendar : qCalendar, date : qDate, Trigger = None) 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarIsHoliday(calendar : qCalendar, date : qDate, Trigger = None) -> bool:
+def qlCalendarIsHoliday(calendar : qCalendar, date : qDate, trigger = None) -> bool:
     return calendar.isHoliday(date) 
 
 @xlo.func(
@@ -180,7 +180,7 @@ def qlCalendarIsHoliday(calendar : qCalendar, date : qDate, Trigger = None) -> b
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarIsEndOfMonth(calendar : qCalendar, date : qDate, Trigger = None) -> bool:
+def qlCalendarIsEndOfMonth(calendar : qCalendar, date : qDate, trigger = None) -> bool:
     return calendar.isEndOfMonth(date)
 
 @xlo.func(
@@ -190,7 +190,7 @@ def qlCalendarIsEndOfMonth(calendar : qCalendar, date : qDate, Trigger = None) -
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarIsStartOfMonth(calendar : qCalendar, date : qDate, Trigger = None) -> bool:
+def qlCalendarIsStartOfMonth(calendar : qCalendar, date : qDate, trigger = None) -> bool:
     return calendar.isStartOfMonth(date)
 
 @xlo.func(
@@ -200,7 +200,7 @@ def qlCalendarIsStartOfMonth(calendar : qCalendar, date : qDate, Trigger = None)
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarAddHoliday(calendar : qCalendar, date : qDate, Trigger = None) -> None:
+def qlCalendarAddHoliday(calendar : qCalendar, date : qDate, trigger = None) -> None:
     calendar.addHoliday(date)
 
 @xlo.func(
@@ -210,7 +210,7 @@ def qlCalendarAddHoliday(calendar : qCalendar, date : qDate, Trigger = None) -> 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarRemoveHoliday(calendar :qCalendar, date : qDate, Trigger = None) -> None:
+def qlCalendarRemoveHoliday(calendar :qCalendar, date : qDate, trigger = None) -> None:
     calendar.removeHoliday(date)
 
 @xlo.func(
@@ -218,7 +218,7 @@ def qlCalendarRemoveHoliday(calendar :qCalendar, date : qDate, Trigger = None) -
     args={},
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarResetAddedAndRemovedHolidays(calendar : qCalendar, Trigger = None) -> None:
+def qlCalendarResetAddedAndRemovedHolidays(calendar : qCalendar, trigger = None) -> None:
     calendar.resetAddedAndRemovedHolidays()
 
 
@@ -232,7 +232,7 @@ def qlCalendarResetAddedAndRemovedHolidays(calendar : qCalendar, Trigger = None)
     group=EXCEL_GROUP_NAME,
 )
 
-def qlCalendarAdjust(calendar : qCalendar, date : qDate,  convention : qBusinessDayConvention = "Following", Trigger = None) -> ql.Date:
+def qlCalendarAdjust(calendar : qCalendar, date : qDate,  convention : qBusinessDayConvention = "Following", trigger = None) -> ql.Date:
     return  calendar.adjust(date, convention)
 
 @xlo.func(
@@ -247,7 +247,7 @@ def qlCalendarAdjust(calendar : qCalendar, date : qDate,  convention : qBusiness
     },
     group=EXCEL_GROUP_NAME,
 )   
-def qlCalendarAdvance(calendar : qCalendar, date : qDate, n : int, unit : qTimeUnit, convention : qBusinessDayConvention = "Following", end_of_month : bool = False, Trigger = None) -> ql.Date:
+def qlCalendarAdvance(calendar : qCalendar, date : qDate, n : int, unit : qTimeUnit, convention : qBusinessDayConvention = "Following", end_of_month : bool = False, trigger = None) -> ql.Date:
     return calendar.advance(date, n, unit, convention, end_of_month)
    
 @xlo.func(
@@ -261,7 +261,7 @@ def qlCalendarAdvance(calendar : qCalendar, date : qDate, n : int, unit : qTimeU
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarAdvance2(calendar : qCalendar, date : qDate, period : qPeriod, convention : qBusinessDayConvention = "Following", end_of_month : bool = False, Trigger = None) -> ql.Date:
+def qlCalendarAdvance2(calendar : qCalendar, date : qDate, period : qPeriod, convention : qBusinessDayConvention = "Following", end_of_month : bool = False, trigger = None) -> ql.Date:
     return calendar.advance(date, period, convention, end_of_month)
 
 
@@ -276,8 +276,8 @@ def qlCalendarAdvance2(calendar : qCalendar, date : qDate, period : qPeriod, con
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarBusinessDaysBetween(calendar : qCalendar, from_date : qDate, to_date : qDate, includeFirst : bool = True, includeLast : bool = False, Trigger = None) -> int:
-    return calendar.businessDaysBetween(from_date, to_date, includeFirst, includeLast)
+def qlCalendarBusinessDaysBetween(calendar : qCalendar, from_date : qDate, to_date : qDate, include_first : bool = True, include_last : bool = False, trigger = None) -> int:
+    return calendar.businessDaysBetween(from_date, to_date, include_first, include_last)
 
 @xlo.func(
     help='Return the list of holidays in the calendar.',
@@ -286,7 +286,7 @@ def qlCalendarBusinessDaysBetween(calendar : qCalendar, from_date : qDate, to_da
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarHolidayList(calendar : qCalendar, from_date : qDate, to_date : qDate,Trigger = None) -> list:
+def qlCalendarHolidayList(calendar : qCalendar, from_date : qDate, to_date : qDate,trigger = None) -> list:
     return list(calendar.holidayList(from_date, to_date)) 
 
 
@@ -297,7 +297,7 @@ def qlCalendarHolidayList(calendar : qCalendar, from_date : qDate, to_date : qDa
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarBusinessDayList(calendar : qCalendar, from_date : qDate, to_date : qDate, Trigger = None) -> list:
+def qlCalendarBusinessDayList(calendar : qCalendar, from_date : qDate, to_date : qDate, trigger = None) -> list:
     return list(calendar.businessDayList(from_date, to_date))
 
 @xlo.func(
@@ -307,7 +307,7 @@ def qlCalendarBusinessDayList(calendar : qCalendar, from_date : qDate, to_date :
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarName(calendar : qCalendar, Trigger = None) -> str:
+def qlCalendarName(calendar : qCalendar, trigger = None) -> str:
     return calendar.name()
 
 @xlo.func(
@@ -317,7 +317,7 @@ def qlCalendarName(calendar : qCalendar, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarEmpty(calendar : qCalendar, Trigger = None) -> bool:
+def qlCalendarEmpty(calendar : qCalendar, trigger = None) -> bool:
     return calendar.empty()
 
 @xlo.func(
@@ -342,7 +342,7 @@ def qlCalendarJointCalendar(calendar1 : qCalendar, calendar2 : qCalendar, rule :
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarJointCalendar2(calendar1 : qCalendar, calendar2 : qCalendar, calendar3 : qCalendar, rule : qJointCalendarRule =  "JOINHOLIDAYS", Trigger = None) -> ql.Calendar:
+def qlCalendarJointCalendar2(calendar1 : qCalendar, calendar2 : qCalendar, calendar3 : qCalendar, rule : qJointCalendarRule =  "JOINHOLIDAYS", trigger = None) -> ql.Calendar:
     return ql.JointCalendar(calendar1, calendar2, calendar3, rule)
 
 

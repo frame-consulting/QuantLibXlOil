@@ -146,14 +146,14 @@ def test_qlScheduleAfter_and_qlScheduleUntil():
 
 def test_qlMakeSchedule_with_string_inputs():
 	schedule = qlMakeSchedule(
-		effectiveDate=ql.Date(1, 1, 2024).serialNumber(),
-		terminationDate=ql.Date(1, 1, 2025).serialNumber(),
+		effective_date=ql.Date(1, 1, 2024).serialNumber(),
+		termination_date=ql.Date(1, 1, 2025).serialNumber(),
 		tenor="3M",
 		calendar="TARGET",
 		convention="FOLLOWING",
-		terminalDateConvention="PRECEDING",
+		terminal_date_convention="PRECEDING",
 		rule="FORWARD",
-		endOfMonth=False,
+		end_of_month=False,
 	)
 
 	assert isinstance(schedule, ql.Schedule)

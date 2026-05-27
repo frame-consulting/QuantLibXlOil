@@ -13,14 +13,14 @@ from .daycounters import qDayCounter
     help="Get the histories of all indices in the IndexManager.",
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexManagerHistories(Trigger = None):
+def qlIndexManagerHistories(trigger = None):
     return ql.IndexManager.instance().histories()
 
 @xlo.func(
     help="Clear the histories of all indices in the IndexManager.",
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexManagerClearHistories(Trigger = None):
+def qlIndexManagerClearHistories(trigger = None):
     ql.IndexManager.instance().clearHistories()
     return True
 
@@ -33,7 +33,7 @@ def qlIndexManagerClearHistories(Trigger = None):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexName(index : ql.Index, Trigger = None) -> str:
+def qlIndexName(index : ql.Index, trigger = None) -> str:
     return index.name()
 
 
@@ -44,7 +44,7 @@ def qlIndexName(index : ql.Index, Trigger = None) -> str:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexFixingCalendar(index : ql.Index, Trigger = None) -> ql.Calendar:
+def qlIndexFixingCalendar(index : ql.Index, trigger = None) -> ql.Calendar:
     return index.fixingCalendar()
 
 
@@ -56,7 +56,7 @@ def qlIndexFixingCalendar(index : ql.Index, Trigger = None) -> ql.Calendar:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexIsValidFixingDate(index : ql.Index, date : qDate, Trigger = None) -> bool:
+def qlIndexIsValidFixingDate(index : ql.Index, date : qDate, trigger = None) -> bool:
     return index.isValidFixingDate(date)
 
 
@@ -68,7 +68,7 @@ def qlIndexIsValidFixingDate(index : ql.Index, date : qDate, Trigger = None) -> 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexHasHistoricalFixing(index : ql.Index, date : qDate, Trigger = None) -> bool:
+def qlIndexHasHistoricalFixing(index : ql.Index, date : qDate, trigger = None) -> bool:
     return index.hasHistoricalFixing(date)
 
 
@@ -81,8 +81,8 @@ def qlIndexHasHistoricalFixing(index : ql.Index, date : qDate, Trigger = None) -
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexFixing(index : ql.Index, date : qDate, forecastTodaysFixing = False, Trigger = None) -> float:
-    return index.fixing(date, forecastTodaysFixing)
+def qlIndexFixing(index : ql.Index, date : qDate, forecast_todays_fixing = False, trigger = None) -> float:
+    return index.fixing(date, forecast_todays_fixing)
 
 
 @xlo.func(
@@ -93,7 +93,7 @@ def qlIndexFixing(index : ql.Index, date : qDate, forecastTodaysFixing = False, 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexPastFixing(index : ql.Index, date : qDate, Trigger = None) -> float:
+def qlIndexPastFixing(index : ql.Index, date : qDate, trigger = None) -> float:
     return index.pastFixing(date)
 
 
@@ -107,8 +107,8 @@ def qlIndexPastFixing(index : ql.Index, date : qDate, Trigger = None) -> float:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexAddFixing(index : ql.Index, date : qDate, value : float, forceOverwrite : bool = False, Trigger = None) -> bool:
-    index.addFixing(date, value, forceOverwrite)
+def qlIndexAddFixing(index : ql.Index, date : qDate, value : float, force_overwrite : bool = False, trigger = None) -> bool:
+    index.addFixing(date, value, force_overwrite)
     return index.fixing(date) == value
 
 
@@ -126,12 +126,12 @@ def qlIndexAddFixings(
         index : ql.Index,
         dates : xlo.Array(dims=1),
         values : xlo.Array(dims=1),
-        forceOverwrite : bool = False,
-        Trigger = None
+        force_overwrite : bool = False,
+        trigger = None
     ) -> bool:
     _dates = [_qDate(d) for d in dates]
     _values = [float(v) for v in values]
-    index.addFixings(_dates, _values, forceOverwrite)
+    index.addFixings(_dates, _values, force_overwrite)
     return all(index.fixing(d) == v for d, v in zip(_dates, _values))
 
 
@@ -142,7 +142,7 @@ def qlIndexAddFixings(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexTimeSeries(index : ql.Index, Trigger = None):
+def qlIndexTimeSeries(index : ql.Index, trigger = None):
     return index.timeSeries()
 
 
@@ -153,7 +153,7 @@ def qlIndexTimeSeries(index : ql.Index, Trigger = None):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlIndexClearFixings(index : ql.Index, Trigger = None) -> bool:
+def qlIndexClearFixings(index : ql.Index, trigger = None) -> bool:
     index.clearFixings()
     return True
 
@@ -167,7 +167,7 @@ def qlIndexClearFixings(index : ql.Index, Trigger = None) -> bool:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexFamilyName(index : ql.InterestRateIndex, Trigger = None) -> str:
+def qlInterestRateIndexFamilyName(index : ql.InterestRateIndex, trigger = None) -> str:
     return index.familyName()
 
 
@@ -178,7 +178,7 @@ def qlInterestRateIndexFamilyName(index : ql.InterestRateIndex, Trigger = None) 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexTenor(index : ql.InterestRateIndex, Trigger = None) -> ql.Period:
+def qlInterestRateIndexTenor(index : ql.InterestRateIndex, trigger = None) -> ql.Period:
     return index.tenor()
 
 
@@ -189,7 +189,7 @@ def qlInterestRateIndexTenor(index : ql.InterestRateIndex, Trigger = None) -> ql
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexFixingDays(index : ql.InterestRateIndex, Trigger = None) -> int:
+def qlInterestRateIndexFixingDays(index : ql.InterestRateIndex, trigger = None) -> int:
     return index.fixingDays()
 
 
@@ -201,8 +201,8 @@ def qlInterestRateIndexFixingDays(index : ql.InterestRateIndex, Trigger = None) 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexFixingDate(index : ql.InterestRateIndex, valueDate : qDate, Trigger = None) -> ql.Date:
-    return index.fixingDate(valueDate)
+def qlInterestRateIndexFixingDate(index : ql.InterestRateIndex, value_date : qDate, trigger = None) -> ql.Date:
+    return index.fixingDate(value_date)
 
 
 @xlo.func(
@@ -212,7 +212,7 @@ def qlInterestRateIndexFixingDate(index : ql.InterestRateIndex, valueDate : qDat
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexCurrency(index : ql.InterestRateIndex, Trigger = None) -> ql.Currency:
+def qlInterestRateIndexCurrency(index : ql.InterestRateIndex, trigger = None) -> ql.Currency:
     return index.currency()
 
 
@@ -223,7 +223,7 @@ def qlInterestRateIndexCurrency(index : ql.InterestRateIndex, Trigger = None) ->
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexDayCounter(index : ql.InterestRateIndex, Trigger = None) -> ql.DayCounter:
+def qlInterestRateIndexDayCounter(index : ql.InterestRateIndex, trigger = None) -> ql.DayCounter:
     return index.dayCounter()
 
 
@@ -235,8 +235,8 @@ def qlInterestRateIndexDayCounter(index : ql.InterestRateIndex, Trigger = None) 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexMaturityDate(index : ql.InterestRateIndex, valueDate : qDate, Trigger = None) -> ql.Date:
-    return index.maturityDate(valueDate)
+def qlInterestRateIndexMaturityDate(index : ql.InterestRateIndex, value_date : qDate, trigger = None) -> ql.Date:
+    return index.maturityDate(value_date)
 
 
 @xlo.func(
@@ -247,8 +247,8 @@ def qlInterestRateIndexMaturityDate(index : ql.InterestRateIndex, valueDate : qD
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlInterestRateIndexValueDate(index : ql.InterestRateIndex, fixingDate : qDate, Trigger = None) -> ql.Date:
-    return index.valueDate(fixingDate)
+def qlInterestRateIndexValueDate(index : ql.InterestRateIndex, fixing_date : qDate, trigger = None) -> ql.Date:
+    return index.valueDate(fixing_date)
 
 
 ## Ibor index
@@ -270,27 +270,27 @@ def qlInterestRateIndexValueDate(index : ql.InterestRateIndex, fixingDate : qDat
     group=EXCEL_GROUP_NAME,
 )
 def qlIborIndex(
-    familyName : str,
+    family_name : str,
     tenor : qPeriod,
-    settlementDays : int,
+    settlement_days : int,
     currency : qCurrency,
     calendar : qCalendar,
     convention : qBusinessDayConvention,
-    endOfMonth : bool,
-    dayCounter : qDayCounter,
-    projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
-    Trigger = None
+    end_of_month : bool,
+    day_counter : qDayCounter,
+    projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger = None
 ) -> ql.IborIndex:
     return ql.IborIndex(
-        familyName,
+        family_name,
         tenor,
-        settlementDays,
+        settlement_days,
         currency,
         calendar,
         convention,
-        endOfMonth,
-        dayCounter,
-        projectionCurve
+        end_of_month,
+        day_counter,
+        projection_curve
     )
 
 
@@ -302,8 +302,8 @@ def qlIborIndex(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCdor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Cdor(tenor, projectionCurve)
+def qlCdor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Cdor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib BBSW index object.",
@@ -313,8 +313,8 @@ def qlCdor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.Y
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBbsw(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Bbsw(tenor, projectionCurve)
+def qlBbsw(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Bbsw(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Bkbm index object.",
@@ -324,8 +324,8 @@ def qlBbsw(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.Y
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBkbm(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Bkbm(tenor, projectionCurve)
+def qlBkbm(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Bkbm(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Euribor index object.",
@@ -335,8 +335,8 @@ def qlBkbm(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.Y
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEuribor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Euribor(tenor, projectionCurve)
+def qlEuribor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Euribor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Euribor365 index object.",
@@ -346,8 +346,8 @@ def qlEuribor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = q
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEuribor365(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Euribor365(tenor, projectionCurve)
+def qlEuribor365(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Euribor365(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Jibar index object.",
@@ -357,8 +357,8 @@ def qlEuribor365(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlJibar(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Jibar(tenor, projectionCurve)
+def qlJibar(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Jibar(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Mosprime index object.",
@@ -368,8 +368,8 @@ def qlJibar(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlMosprime(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Mosprime(tenor, projectionCurve)
+def qlMosprime(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Mosprime(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib NZDLibor index object.",
@@ -379,8 +379,8 @@ def qlMosprime(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlNZDLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.NZDLibor(tenor, projectionCurve)
+def qlNZDLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.NZDLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Pribor index object.",
@@ -390,8 +390,8 @@ def qlNZDLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlPribor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Pribor(tenor, projectionCurve)
+def qlPribor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Pribor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Robor index object.",
@@ -401,8 +401,8 @@ def qlPribor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlRobor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Robor(tenor, projectionCurve)
+def qlRobor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Robor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Shibor index object.",
@@ -412,8 +412,8 @@ def qlRobor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlShibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Shibor(tenor, projectionCurve)
+def qlShibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Shibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Tibor index object.",
@@ -423,8 +423,8 @@ def qlShibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Tibor(tenor, projectionCurve)
+def qlTibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Tibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib THBFIX index object.",
@@ -434,8 +434,8 @@ def qlTibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTHBFIX(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.THBFIX(tenor, projectionCurve)
+def qlTHBFIX(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.THBFIX(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Wibor index object.",
@@ -445,8 +445,8 @@ def qlTHBFIX(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlWibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Wibor(tenor, projectionCurve)
+def qlWibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Wibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Zibor index object.",
@@ -456,8 +456,8 @@ def qlWibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlZibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Zibor(tenor, projectionCurve)
+def qlZibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Zibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib AUDLibor index object.",
@@ -467,8 +467,8 @@ def qlZibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlAUDLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.AUDLibor(tenor, projectionCurve)
+def qlAUDLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.AUDLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib CADLibor index object.",
@@ -478,8 +478,8 @@ def qlAUDLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCADLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.CADLibor(tenor, projectionCurve)
+def qlCADLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.CADLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib CHFLibor index object.",
@@ -489,8 +489,8 @@ def qlCADLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCHFLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.CHFLibor(tenor, projectionCurve)
+def qlCHFLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.CHFLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib DKKLibor index object.",
@@ -500,8 +500,8 @@ def qlCHFLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDKKLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.DKKLibor(tenor, projectionCurve)
+def qlDKKLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.DKKLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib EURLibor index object.",
@@ -511,8 +511,8 @@ def qlDKKLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEURLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.EURLibor(tenor, projectionCurve)
+def qlEURLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.EURLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib GBPLibor index object.",
@@ -522,8 +522,8 @@ def qlEURLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlGBPLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.GBPLibor(tenor, projectionCurve)
+def qlGBPLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.GBPLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib JPYLibor index object.",
@@ -533,8 +533,8 @@ def qlGBPLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlJPYLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.JPYLibor(tenor, projectionCurve)
+def qlJPYLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.JPYLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib SEKLibor index object.",
@@ -544,8 +544,8 @@ def qlJPYLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSEKLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.SEKLibor(tenor, projectionCurve)
+def qlSEKLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.SEKLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib TRLibor index object.",
@@ -555,8 +555,8 @@ def qlSEKLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTRLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.TRLibor(tenor, projectionCurve)
+def qlTRLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.TRLibor(tenor, projection_curve)
 
 @xlo.func(
     help="Create a QuantLib USDLibor index object.",
@@ -566,8 +566,8 @@ def qlTRLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = q
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlUSDLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.USDLibor(tenor, projectionCurve)
+def qlUSDLibor(tenor : qPeriod, projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.USDLibor(tenor, projection_curve)
 
 
 ## Overnight index
@@ -585,21 +585,21 @@ def qlUSDLibor(tenor : qPeriod, projectionCurve : ql.YieldTermStructureHandle = 
     group=EXCEL_GROUP_NAME,
 )
 def qlOvernightIndex(
-    familyName : str,
-    settlementDays : int,
+    family_name : str,
+    settlement_days : int,
     currency : qCurrency,
     calendar : qCalendar,
-    dayCounter : qDayCounter,
-    projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
-    Trigger = None
+    day_counter : qDayCounter,
+    projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger = None
 ) -> ql.OvernightIndex:
     return ql.OvernightIndex(
-        familyName,
-        settlementDays,
+        family_name,
+        settlement_days,
         currency,
         calendar,
-        dayCounter,
-        projectionCurve
+        day_counter,
+        projection_curve
     )
 
 @xlo.func(
@@ -609,8 +609,8 @@ def qlOvernightIndex(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlAonia(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Aonia(projectionCurve)
+def qlAonia(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Aonia(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Cdi index object.",
@@ -619,8 +619,8 @@ def qlAonia(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCdi(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Cdi(projectionCurve)
+def qlCdi(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Cdi(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Corra index object.",
@@ -629,8 +629,8 @@ def qlCdi(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureH
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCorra(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Corra(projectionCurve)
+def qlCorra(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Corra(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Destr index object.",
@@ -639,8 +639,8 @@ def qlCorra(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDestr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Destr(projectionCurve)
+def qlDestr(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Destr(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Eonia index object.",
@@ -649,8 +649,8 @@ def qlDestr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEonia(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Eonia(projectionCurve)
+def qlEonia(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Eonia(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Estr index object.",
@@ -659,8 +659,8 @@ def qlEonia(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEstr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Estr(projectionCurve)
+def qlEstr(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Estr(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib FedFunds index object.",
@@ -669,8 +669,8 @@ def qlEstr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructure
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlFedFunds(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.FedFunds(projectionCurve)
+def qlFedFunds(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.FedFunds(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Kofr index object.",
@@ -679,8 +679,8 @@ def qlFedFunds(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStruc
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlKofr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Kofr(projectionCurve)
+def qlKofr(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Kofr(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Nzocr index object.",
@@ -689,8 +689,8 @@ def qlKofr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructure
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlNzocr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Nzocr(projectionCurve)
+def qlNzocr(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Nzocr(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Saron index object.",
@@ -699,8 +699,8 @@ def qlNzocr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSaron(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Saron(projectionCurve)
+def qlSaron(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Saron(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Sofr index object.",
@@ -709,8 +709,8 @@ def qlSaron(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSofr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Sofr(projectionCurve)
+def qlSofr(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Sofr(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Sonia index object.",
@@ -719,8 +719,8 @@ def qlSofr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructure
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSonia(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Sonia(projectionCurve)
+def qlSonia(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Sonia(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Swestr index object.",
@@ -729,8 +729,8 @@ def qlSonia(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSwestr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Swestr(projectionCurve)
+def qlSwestr(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Swestr(projection_curve)
 
 @xlo.func(
     help="Create a QuantLib Tonar index object.",
@@ -739,8 +739,8 @@ def qlSwestr(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructu
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlTonar(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.IborIndex:
-    return ql.Tonar(projectionCurve)
+def qlTonar(projection_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.IborIndex:
+    return ql.Tonar(projection_curve)
 
 
 ## Swap index
@@ -762,42 +762,42 @@ def qlTonar(projectionCurve : ql.YieldTermStructureHandle = ql.YieldTermStructur
     group=EXCEL_GROUP_NAME,
 )
 def qlSwapIndex(
-    familyName : str,
+    family_name : str,
     tenor : qPeriod,
-    settlementDays : int,
+    settlement_days : int,
     currency : qCurrency,
     calendar : qCalendar,
-    fixedLegTenor : qPeriod,
-    fixedLegConvention : qBusinessDayConvention,
-    fixedLegDayCounter : qDayCounter,
-    iborIndex : ql.IborIndex,
-    discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
-    Trigger = None
+    fixed_leg_tenor : qPeriod,
+    fixed_leg_convention : qBusinessDayConvention,
+    fixed_leg_day_counter : qDayCounter,
+    ibor_index : ql.IborIndex,
+    discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger = None
 ) -> ql.SwapIndex:
-    if discountCurve:
+    if discount_curve:
         return ql.SwapIndex(
-            familyName,
+            family_name,
             tenor,
-            settlementDays,
+            settlement_days,
             currency,
             calendar,
-            fixedLegTenor,
-            fixedLegConvention,
-            fixedLegDayCounter,
-            iborIndex,
-            discountCurve,
+            fixed_leg_tenor,
+            fixed_leg_convention,
+            fixed_leg_day_counter,
+            ibor_index,
+            discount_curve,
         )
     else:
         return ql.SwapIndex(
-            familyName,
+            family_name,
             tenor,
-            settlementDays,
+            settlement_days,
             currency,
             calendar,
-            fixedLegTenor,
-            fixedLegConvention,
-            fixedLegDayCounter,
-            iborIndex,
+            fixed_leg_tenor,
+            fixed_leg_convention,
+            fixed_leg_day_counter,
+            ibor_index,
         )
 
 @xlo.func(
@@ -809,11 +809,11 @@ def qlSwapIndex(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEuriborSwapIsdaFixA(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.EuriborSwapIsdaFixA(swapTenor, projCurve, discountCurve)
+def qlEuriborSwapIsdaFixA(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.EuriborSwapIsdaFixA(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.EuriborSwapIsdaFixA(swapTenor, projCurve)
+        return ql.EuriborSwapIsdaFixA(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib EuriborSwapIsdaFixB index object.",
@@ -824,11 +824,11 @@ def qlEuriborSwapIsdaFixA(swapTenor : qPeriod, projCurve : ql.YieldTermStructure
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEuriborSwapIsdaFixB(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.EuriborSwapIsdaFixB(swapTenor, projCurve, discountCurve)
+def qlEuriborSwapIsdaFixB(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.EuriborSwapIsdaFixB(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.EuriborSwapIsdaFixB(swapTenor, projCurve)
+        return ql.EuriborSwapIsdaFixB(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib EuriborSwapIfrFix index object.",
@@ -839,11 +839,11 @@ def qlEuriborSwapIsdaFixB(swapTenor : qPeriod, projCurve : ql.YieldTermStructure
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEuriborSwapIfrFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.EuriborSwapIfrFix(swapTenor, projCurve, discountCurve)
+def qlEuriborSwapIfrFix(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.EuriborSwapIfrFix(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.EuriborSwapIfrFix(swapTenor, projCurve)
+        return ql.EuriborSwapIfrFix(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib EurLiborSwapIsdaFixA index object.",
@@ -854,11 +854,11 @@ def qlEuriborSwapIfrFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHa
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEurLiborSwapIsdaFixA(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.EurLiborSwapIsdaFixA(swapTenor, projCurve, discountCurve)
+def qlEurLiborSwapIsdaFixA(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.EurLiborSwapIsdaFixA(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.EurLiborSwapIsdaFixA(swapTenor, projCurve)
+        return ql.EurLiborSwapIsdaFixA(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib EurLiborSwapIsdaFixB index object.",
@@ -869,11 +869,11 @@ def qlEurLiborSwapIsdaFixA(swapTenor : qPeriod, projCurve : ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEurLiborSwapIsdaFixB(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.EurLiborSwapIsdaFixB(swapTenor, projCurve, discountCurve)
+def qlEurLiborSwapIsdaFixB(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.EurLiborSwapIsdaFixB(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.EurLiborSwapIsdaFixB(swapTenor, projCurve)
+        return ql.EurLiborSwapIsdaFixB(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib EurLiborSwapIfrFix index object.",
@@ -884,11 +884,11 @@ def qlEurLiborSwapIsdaFixB(swapTenor : qPeriod, projCurve : ql.YieldTermStructur
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlEurLiborSwapIfrFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.EurLiborSwapIfrFix(swapTenor, projCurve, discountCurve)
+def qlEurLiborSwapIfrFix(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.EurLiborSwapIfrFix(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.EurLiborSwapIfrFix(swapTenor, projCurve)
+        return ql.EurLiborSwapIfrFix(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib ChfLiborSwapIsdaFix index object.",
@@ -899,11 +899,11 @@ def qlEurLiborSwapIfrFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructureH
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlChfLiborSwapIsdaFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.ChfLiborSwapIsdaFix(swapTenor, projCurve, discountCurve)
+def qlChfLiborSwapIsdaFix(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.ChfLiborSwapIsdaFix(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.ChfLiborSwapIsdaFix(swapTenor, projCurve)
+        return ql.ChfLiborSwapIsdaFix(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib GbpLiborSwapIsdaFix index object.",
@@ -914,11 +914,11 @@ def qlChfLiborSwapIsdaFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructure
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlGbpLiborSwapIsdaFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.GbpLiborSwapIsdaFix(swapTenor, projCurve, discountCurve)
+def qlGbpLiborSwapIsdaFix(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.GbpLiborSwapIsdaFix(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.GbpLiborSwapIsdaFix(swapTenor, projCurve)
+        return ql.GbpLiborSwapIsdaFix(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib JpyLiborSwapIsdaFixAm index object.",
@@ -929,11 +929,11 @@ def qlGbpLiborSwapIsdaFix(swapTenor : qPeriod, projCurve : ql.YieldTermStructure
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlJpyLiborSwapIsdaFixAm(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.JpyLiborSwapIsdaFixAm(swapTenor, projCurve, discountCurve)
+def qlJpyLiborSwapIsdaFixAm(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.JpyLiborSwapIsdaFixAm(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.JpyLiborSwapIsdaFixAm(swapTenor, projCurve)
+        return ql.JpyLiborSwapIsdaFixAm(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib JpyLiborSwapIsdaFixPm index object.",
@@ -944,11 +944,11 @@ def qlJpyLiborSwapIsdaFixAm(swapTenor : qPeriod, projCurve : ql.YieldTermStructu
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlJpyLiborSwapIsdaFixPm(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.JpyLiborSwapIsdaFixPm(swapTenor, projCurve, discountCurve)
+def qlJpyLiborSwapIsdaFixPm(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.JpyLiborSwapIsdaFixPm(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.JpyLiborSwapIsdaFixPm(swapTenor, projCurve)
+        return ql.JpyLiborSwapIsdaFixPm(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib UsdLiborSwapIsdaFixAm index object.",
@@ -959,11 +959,11 @@ def qlJpyLiborSwapIsdaFixPm(swapTenor : qPeriod, projCurve : ql.YieldTermStructu
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlUsdLiborSwapIsdaFixAm(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.UsdLiborSwapIsdaFixAm(swapTenor, projCurve, discountCurve)
+def qlUsdLiborSwapIsdaFixAm(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.UsdLiborSwapIsdaFixAm(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.UsdLiborSwapIsdaFixAm(swapTenor, projCurve)
+        return ql.UsdLiborSwapIsdaFixAm(swap_tenor, proj_curve)
 
 @xlo.func(
     help="Create a QuantLib UsdLiborSwapIsdaFixPm index object.",
@@ -974,11 +974,11 @@ def qlUsdLiborSwapIsdaFixAm(swapTenor : qPeriod, projCurve : ql.YieldTermStructu
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlUsdLiborSwapIsdaFixPm(swapTenor : qPeriod, projCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discountCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), Trigger = None) -> ql.SwapIndex:
-    if projCurve and discountCurve:
-        return ql.UsdLiborSwapIsdaFixPm(swapTenor, projCurve, discountCurve)
+def qlUsdLiborSwapIsdaFixPm(swap_tenor : qPeriod, proj_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), discount_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None) -> ql.SwapIndex:
+    if proj_curve and discount_curve:
+        return ql.UsdLiborSwapIsdaFixPm(swap_tenor, proj_curve, discount_curve)
     else:
-        return ql.UsdLiborSwapIsdaFixPm(swapTenor, projCurve)
+        return ql.UsdLiborSwapIsdaFixPm(swap_tenor, proj_curve)
 
 
 ## Swapspread index
@@ -995,13 +995,13 @@ def qlUsdLiborSwapIsdaFixPm(swapTenor : qPeriod, projCurve : ql.YieldTermStructu
     group=EXCEL_GROUP_NAME,
 )
 def qlSwapSpreadIndex(
-    familyName : str,
-    swapIndex1 : ql.SwapIndex,
-    swapIndex2 : ql.SwapIndex,
+    family_name : str,
+    swap_index1 : ql.SwapIndex,
+    swap_index2 : ql.SwapIndex,
     gearing1 : float = 1.0,
     gearing2 : float = -1.0,
-    Trigger = None) -> ql.SwapSpreadIndex:
-    return ql.SwapSpreadIndex(familyName, swapIndex1, swapIndex2, gearing1, gearing2)
+    trigger = None) -> ql.SwapSpreadIndex:
+    return ql.SwapSpreadIndex(family_name, swap_index1, swap_index2, gearing1, gearing2)
 
 
 @xlo.func(
@@ -1012,8 +1012,8 @@ def qlSwapSpreadIndex(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlSwapIndexForecastFixing(swapIndex : ql.SwapIndex, fixingDate : qDate) -> ql.Swap:
-    return swapIndex.forecastFixing(fixingDate)
+def qlSwapIndexForecastFixing(swap_index : ql.SwapIndex, fixing_date : qDate) -> ql.Swap:
+    return swap_index.forecastFixing(fixing_date)
 
 
 # Equity index
@@ -1032,12 +1032,12 @@ def qlSwapIndexForecastFixing(swapIndex : ql.SwapIndex, fixingDate : qDate) -> q
 )
 def qlEquityIndex(
         name : str,
-        fixingCalendar : qCalendar,
+        fixing_calendar : qCalendar,
         currency : qCurrency,
-        spotPrice : float,
-        discCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
-        divCurve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
-        Trigger = None
+        spot_price : float,
+        disc_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+        div_curve : ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+        trigger = None
     ) -> ql.EquityIndex:
-    qpotprice_qh = ql.QuoteHandle(ql.SimpleQuote(spotPrice))
-    return ql.EquityIndex(name, fixingCalendar, currency, discCurve, divCurve, qpotprice_qh)
+    qpotprice_qh = ql.QuoteHandle(ql.SimpleQuote(spot_price))
+    return ql.EquityIndex(name, fixing_calendar, currency, disc_curve, div_curve, qpotprice_qh)
