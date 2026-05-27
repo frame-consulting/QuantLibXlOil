@@ -20,7 +20,7 @@ Class member functions are identified by the class name concatenated with member
 
 ### Function Argument Names and Types
 
-Function argument names follow the names of the SWIG interface names.
+Function argument names follow the names of the SWIG interface names. All function argument names are snake_case.
 
 Argument types are specified as type annotations. Build-in types (`str`, `int`, `float`, `bool`) are used directly.
 
@@ -36,7 +36,7 @@ Lists of inputs are specified as `xlo.Array(dims=1)`. This is applied for any un
 
 Function results are returned as is.
 
-If the result type has a custom argument converter then a corresponding custom return [type conversion] (https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#custom-return-conversion) should be implemented as well.
+If the result type has a custom argument converter then a corresponding custom return [type conversion](https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#custom-return-conversion) should be implemented as well.
 
 Return type converters are use the function name prefix `x`, e.g., `xDate(...)` for conversion from `ql.Date` to excel serial number.
 
@@ -48,14 +48,14 @@ xlOil function annotations are specified as follows:
 @xlo.func(
     help='One-line docstring.',
     args={
-        'Arg1': 'Help on Arg1 parameter.',
-        'Arg1': 'Help on Arg1 parameter.',
+        'arg_one': 'Help on argument one parameter.',
+        'arg_two': 'Help on argument two parameter.',
     },
     group=EXCEL_GROUP_NAME,
     )
-def qlFunctionName(arg1 : Type1, arg2 : Type2, Trigger = None):
+def qlFunctionName(arg_one : Type1, arg_two : Type2, trigger = None):
     ...
-    return someThing
+    return some_thing
 ```
 
 The arguments `help` and `args` are shown in Excel in the *Insert Function* (*fx*) dialog.
@@ -64,13 +64,13 @@ Use Excel help strings for function and arguments equal/similar as in the classi
 
 Help string is a capitalised sentence finished with punctuation.
 
-Excel argument names `Arg1` and `Arg2` equal function argument names but with starting capital letter.
+Excel argument names `arg_one` and `arg_two` equal function argument names. This is required to populate the help string to Excel.
 
 No Python docstring or Python docstring equals the Excel help string.
 
 ### Additional Trigger Function Argument
 
-Functions should include an additional `Trigger` argument as specified in the section above. We use a capitalized variable (only) here, because optional parameters are not picked up in the Excel help strings. 
+Functions should include an additional `trigger` argument as specified in the section above.
 
 QuantLib functions (may) depend on session data and QuantLib's internal state. As a consequence, updates may not be propagated through Excel's dependency tree.
 
@@ -78,7 +78,7 @@ For example, the `Index.fixing(...)` method depends on the session-specific `eva
 
 Another example is the method `Instrument.NPV()`. This method requires a preceding call of `Instrument.setPricingEngine(engine)`. However, Excel on its own cannot determine that the pricing engine needs to be linked to the instrument before an NPV can be calculated. 
 
-To mitigate above limitation, the `Trigger` argument allows specifying additional input cells. That way, the QuantLib dependencies can be reflected in Excel's dependency graph by the user.
+To mitigate above limitation, the `trigger` argument allows specifying additional input cells. That way, the QuantLib dependencies can be reflected in Excel's dependency graph by the user.
 
 ### Enumerations and Enumerated Classes
 
