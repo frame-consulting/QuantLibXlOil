@@ -1,6 +1,6 @@
 import QuantLib as ql
 
-from quantlibxloil.scheduler import (
+from quantlib_xloil.scheduler import (
 	_qDateGenerationRule,
 	qDateGenerationRule,
 	qlMakeSchedule,

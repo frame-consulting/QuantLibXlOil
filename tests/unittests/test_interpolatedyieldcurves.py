@@ -1,7 +1,7 @@
 import QuantLib as ql
 import pytest
 
-from quantlibxloil import (
+from quantlib_xloil import (
 	qlCalendar,
 	qlDayCounter,
 	qlDate,

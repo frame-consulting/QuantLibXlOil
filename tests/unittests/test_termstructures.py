@@ -1,10 +1,10 @@
 import QuantLib as ql
 import pytest
 
-from quantlibxloil.date import _qFrequency
-from quantlibxloil.termstructures import _qCompounding
+from quantlib_xloil.date import _qFrequency
+from quantlib_xloil.termstructures import _qCompounding
 
-from quantlibxloil import (
+from quantlib_xloil import (
 	qlCalendar,
 	qlDate,
 	qlDayCounter,

@@ -1,8 +1,8 @@
 import QuantLib as ql
 import pytest
 
-from quantlibxloil import qlRounding, qlRoundingApply
-from quantlibxloil.rounding import _qRoundingMethod
+from quantlib_xloil import qlRounding, qlRoundingApply
+from quantlib_xloil.rounding import _qRoundingMethod
 
 
 def test_qRoundingMethod_case_insensitive_and_passthrough():

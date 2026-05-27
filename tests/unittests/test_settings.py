@@ -1,6 +1,6 @@
 import QuantLib as ql
 
-from quantlibxloil.settings import (
+from quantlib_xloil.settings import (
 	qlSettingsAnchorEvaluationDate,
 	qlSettingsGetEnforcesTodaysHistoricFixings,
 	qlSettingsGetEvaluationDate,

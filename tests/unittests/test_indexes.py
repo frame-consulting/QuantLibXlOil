@@ -1,11 +1,11 @@
 import QuantLib as ql
 import pytest
-import quantlibxloil as qlx
+import quantlib_xloil as qlx
 
-from quantlibxloil.calendars import _qBusinessDayConvention
-from quantlibxloil.currencies import _qCurrency
+from quantlib_xloil.calendars import _qBusinessDayConvention
+from quantlib_xloil.currencies import _qCurrency
 
-from quantlibxloil import (
+from quantlib_xloil import (
 	qlCalendar,
 	qlDate,
 	qlDayCounter,

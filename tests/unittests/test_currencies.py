@@ -1,10 +1,10 @@
 import QuantLib as ql
 import pytest
 
-from quantlibxloil.rounding import _qRoundingMethod
-from quantlibxloil.currencies import _qCurrency
+from quantlib_xloil.rounding import _qRoundingMethod
+from quantlib_xloil.currencies import _qCurrency
 
-from quantlibxloil import (
+from quantlib_xloil import (
 	qlCurrency,
 	qlCurrencyCode,
 	qlCurrencyFractionSymbol,

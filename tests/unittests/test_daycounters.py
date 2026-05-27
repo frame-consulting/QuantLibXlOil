@@ -2,73 +2,73 @@
 
 def test_qlDayCounter_Actual360():
     """Test creation of ACTUAL360 day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("ACTUAL360")
     assert daycounter is not None
 
 def test_qlDayCounter_Actual365Fixed():
     """Test creation of ACTUAL365FIXED day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("ACTUAL365FIXED")
     assert daycounter is not None
 
 def test_qlDayCounter_Actual364():
     """Test creation of ACTUAL364 day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("ACTUAL364")
     assert daycounter is not None
 
 def test_qlDayCounter_Actual36525():
     """Test creation of ACTUAL36525 day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("ACTUAL36525")
     assert daycounter is not None
 
 def test_qlDayCounter_Actual366():
     """Test creation of ACTUAL366 day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("ACTUAL366")
     assert daycounter is not None
 
 def test_qlDayCounter_ActualActual():
     """Test creation of ACTUALACTUAL day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("ACTUALACTUAL")
     assert daycounter is not None
 
 def test_qlDayCounter_Business252():
     """Test creation of BUSINESS252 day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("BUSINESS252")
     assert daycounter is not None
 
 def test_qlDayCounter_OneDayCounter():
     """Test creation of ONEDAYCOUNTER day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("ONEDAYCOUNTER")
     assert daycounter is not None
 
 def test_qlDayCounter_SimpleDayCounter():
     """Test creation of SIMPLEDAYCOUNTER day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("SIMPLEDAYCOUNTER")
     assert daycounter is not None
 
 def test_qlDayCounter_Thirty360():
     """Test creation of THIRTY360 day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("THIRTY360")
     assert daycounter is not None
 
 def test_qlDayCounter_Thirty365():
     """Test creation of THIRTY365 day counter."""
-    from quantlibxloil import qlDayCounter
+    from quantlib_xloil import qlDayCounter
     daycounter = qlDayCounter("THIRTY365")
     assert daycounter is not None
 
 def test_qlDayCounter_CaseInsensitive():
     """Test that day counter names are case-insensitive."""
-    from quantlibxloil.daycounters import _qDayCounter
+    from quantlib_xloil.daycounters import _qDayCounter
     dc1 = _qDayCounter("ACTUAL360")
     dc2 = _qDayCounter("actual360")
     dc3 = _qDayCounter("Actual360")
@@ -79,14 +79,14 @@ def test_qlDayCounter_CaseInsensitive():
 
 def test_qlDayCounterDayCount_SameDate():
     """Test day count between same dates."""
-    from quantlibxloil import qDayCounter, qlDayCounterDayCount, qlDate
+    from quantlib_xloil import qDayCounter, qlDayCounterDayCount, qlDate
     daycounter = qDayCounter.__wrapped__("ACTUAL360")
     date = qlDate(2024, 1, 1)
     assert qlDayCounterDayCount(daycounter, date, date) == 0
 
 def test_qlDayCounterDayCount_OneDay():
     """Test day count for one day."""
-    from quantlibxloil import qlDayCounter, qlDayCounterDayCount, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterDayCount, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 1, 2)
@@ -94,7 +94,7 @@ def test_qlDayCounterDayCount_OneDay():
 
 def test_qlDayCounterDayCount_HalfYear():
     """Test day count between 2024-01-01 and 2024-07-01 (ACTUAL360)."""
-    from quantlibxloil import qlDayCounter, qlDayCounterDayCount, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterDayCount, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 7, 1)
@@ -102,7 +102,7 @@ def test_qlDayCounterDayCount_HalfYear():
 
 def test_qlDayCounterDayCount_BackwardDates():
     """Test day count with end date before start date."""
-    from quantlibxloil import qlDayCounter, qlDayCounterDayCount, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterDayCount, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date1 = qlDate(2024, 7, 1)
     date2 = qlDate(2024, 1, 1)
@@ -110,28 +110,28 @@ def test_qlDayCounterDayCount_BackwardDates():
 
 def test_qlDayCounterName_Actual360():
     """Test name of ACTUAL360 day counter."""
-    from quantlibxloil import qlDayCounter, qlDayCounterName
+    from quantlib_xloil import qlDayCounter, qlDayCounterName
     daycounter = qlDayCounter("ACTUAL360")
     assert qlDayCounterName(daycounter) == "Actual/360"
 
 
 def test_qlDayCounterEmpty_False():
     """Test that created day counters are not empty."""
-    from quantlibxloil import qlDayCounter, qlDayCounterEmpty
+    from quantlib_xloil import qlDayCounter, qlDayCounterEmpty
     daycounter = qlDayCounter("ACTUAL360")
     assert qlDayCounterEmpty(daycounter) is False
 
 
 def test_qlDayCounterYearFraction_SameDate():
     """Test year fraction for same dates."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date = qlDate(2024, 1, 1)
     assert qlDayCounterYearFraction(daycounter, date, date) == 0.0
 
 def test_qlDayCounterYearFraction_HalfYear():
     """Test year fraction for half year."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 7, 1)
@@ -140,7 +140,7 @@ def test_qlDayCounterYearFraction_HalfYear():
 
 def test_qlDayCounterYearFraction_OneYear():
     """Test year fraction for one year."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUAL365FIXED")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2025, 1, 1)
@@ -149,7 +149,7 @@ def test_qlDayCounterYearFraction_OneYear():
 
 def test_qlDayCounterYearFraction_WithoutRefDates():
     """Test year fraction without reference dates."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 7, 1)
@@ -159,7 +159,7 @@ def test_qlDayCounterYearFraction_WithoutRefDates():
 
 def test_qlDayCounterYearFraction_WithRefDates():
     """Test year fraction with reference dates."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUALACTUAL")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 7, 1)
@@ -171,7 +171,7 @@ def test_qlDayCounterYearFraction_WithRefDates():
 
 def test_qlDayCounterYearFraction_BackwardDates():
     """Test year fraction with end date before start date."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date1 = qlDate(2024, 7, 1)
     date2 = qlDate(2024, 1, 1)
@@ -180,7 +180,7 @@ def test_qlDayCounterYearFraction_BackwardDates():
 
 def test_qlDayCounterYearFraction_Actual360Full():
     """Test year fraction calculation for ACTUAL360."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 12, 31)
@@ -190,7 +190,7 @@ def test_qlDayCounterYearFraction_Actual360Full():
 
 def test_qlDayCounterYearFraction_Actual365Full():
     """Test year fraction calculation for ACTUAL365FIXED."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     daycounter = qlDayCounter("ACTUAL365FIXED")
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 12, 31)
@@ -201,7 +201,7 @@ def test_qlDayCounterYearFraction_Actual365Full():
 
 def test_qlDayCounterYearFractionToDate_ZeroFraction():
     """Test conversion of zero year fraction."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     ref_date = qlDate(2024, 1, 1)
     result = qlDayCounterYearFractionToDate(daycounter, ref_date, 0.0)
@@ -209,7 +209,7 @@ def test_qlDayCounterYearFractionToDate_ZeroFraction():
 
 def test_qlDayCounterYearFractionToDate_HalfYear():
     """Test conversion of half year fraction."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     ref_date = qlDate(2024, 1, 1)
     result = qlDayCounterYearFractionToDate(daycounter, ref_date, 0.5)
@@ -218,7 +218,7 @@ def test_qlDayCounterYearFractionToDate_HalfYear():
 
 def test_qlDayCounterYearFractionToDate_OneYear():
     """Test conversion of one year fraction."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
     daycounter = qlDayCounter("ACTUAL365FIXED")
     ref_date = qlDate(2025, 1, 1)
     result = qlDayCounterYearFractionToDate(daycounter, ref_date, 1.0)
@@ -226,7 +226,7 @@ def test_qlDayCounterYearFractionToDate_OneYear():
 
 def test_qlDayCounterYearFractionToDate_NegativeFraction():
     """Test conversion of negative year fraction."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFractionToDate, qlDate
     daycounter = qlDayCounter("ACTUAL360")
     ref_date = qlDate(2024, 7, 1)
     result = qlDayCounterYearFractionToDate(daycounter, ref_date, -0.5)
@@ -236,7 +236,7 @@ def test_qlDayCounterYearFractionToDate_NegativeFraction():
 
 def test_qlDayCounterDifferentCounters():
     """Test that different counters give different results."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     date1 = qlDate(2024, 1, 1)
     date2 = qlDate(2024, 12, 31)
     dc_360 = qlDayCounter("ACTUAL360")
@@ -251,7 +251,7 @@ def test_qlDayCounterDifferentCounters():
 
 def test_qlDayCounterLeapYearHandling():
     """Test day counting across leap year boundary."""
-    from quantlibxloil import qlDayCounter, qlDayCounterDayCount, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterDayCount, qlDate
     date1 = qlDate(2024, 2, 28)
     date2 = qlDate(2024, 3, 1)
     daycounter = qlDayCounter("ACTUAL360")
@@ -261,7 +261,7 @@ def test_qlDayCounterLeapYearHandling():
 
 def test_qlDayCounterYearEndBoundary():
     """Test day counting at year end."""
-    from quantlibxloil import qlDayCounter, qlDayCounterDayCount, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterDayCount, qlDate
     date1 = qlDate(2024, 12, 31)
     date2 = qlDate(2025, 1, 1)
     daycounter = qlDayCounter("ACTUAL360")
@@ -271,7 +271,7 @@ def test_qlDayCounterYearEndBoundary():
 
 def test_qlDayCounterCenturyBoundary():
     """Test day counting at century boundary."""
-    from quantlibxloil import qlDayCounter, qlDayCounterDayCount, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterDayCount, qlDate
     date1 = qlDate(2000, 12, 31)
     date2 = qlDate(2001, 1, 1)
     daycounter = qlDayCounter("ACTUAL360")
@@ -281,7 +281,7 @@ def test_qlDayCounterCenturyBoundary():
 
 def test_qlDayCounterLongPeriod():
     """Test year fraction for long period."""
-    from quantlibxloil import qlDayCounter, qlDayCounterYearFraction, qlDate
+    from quantlib_xloil import qlDayCounter, qlDayCounterYearFraction, qlDate
     date1 = qlDate(2000, 1, 1)
     date2 = qlDate(2025, 1, 1)
     daycounter = qlDayCounter("ACTUAL360")
