@@ -1,0 +1,33 @@
+[project]
+name = "quantlib_xloil"
+dynamic = ["version"]
+authors = [
+  { name="Sebastian Schlenkrich", email="sebastian.schlenkrich@frame-consult.de" },
+]
+description = "Interface package to make QuantLib pricing library functions available in Excel."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: Microsoft :: Windows",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+  "QuantLib==1.41",
+  "xloil",
+]
+
+[project.urls]
+Homepage = "https://github.com/frame-consulting/QuantLibXlOil"
+Issues = "https://github.com/frame-consulting/QuantLibXlOil/issues"
+
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/quantlib_xloil/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/quantlib_xloil"]

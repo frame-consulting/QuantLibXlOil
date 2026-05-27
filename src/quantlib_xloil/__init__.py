@@ -1,3 +1,5 @@
+from quantlib_xloil.__about__ import __version__
+
 from quantlib_xloil.calendars import *
 from quantlib_xloil.cashflows import *
 from quantlib_xloil.currencies import *

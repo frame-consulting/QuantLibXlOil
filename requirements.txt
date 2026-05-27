@@ -1,7 +1,12 @@
 
-# Conda environment dependencies
+# May come from Conda
 pytest
 QuantLib-Python
 
 # pip dependencies
 xloil
+
+hatch  # For packaging
+build  # Build wheel
+twine  # Uploading to PyPI
+
