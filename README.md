@@ -52,10 +52,10 @@ Clone the QuantLibXlOil repository.
 
 Add the complete path to `C:\...\QuantLibXlOil\src\` in the *Search Path* tet field.
 
-Add `quantlibxloil` to the *Load Modules* text field. Use comma separator and *no* blanks. The resulting input of the *Load Modules* text field should then be:
+Add `quantlib_xloil` to the *Load Modules* text field. Use comma separator and *no* blanks. The resulting input of the *Load Modules* text field should then be:
 
 ```
-xloil.xloil_ribbon,quantlibxloil
+xloil.xloil_ribbon,quantlib_xloil
 ```
 
 Restart Excel and open a blank Workbook.
