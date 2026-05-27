@@ -28,9 +28,9 @@ def qRoundingMethod(method : str):
 @xlo.func(
     help="Create a QuantLib Rounding object based on the specified method and precision.",
     args={
-        "Method" : "The rounding method to use: 'UP', 'DOWN', 'CLOSEST', 'CEILING', 'FLOOR'.",
-        "Precision" : "The number of decimal places to round to.",
-        "Digit" : "The digit to use for rounding (default is 5).",
+        "method" : "The rounding method to use: 'UP', 'DOWN', 'CLOSEST', 'CEILING', 'FLOOR'.",
+        "precision" : "The number of decimal places to round to.",
+        "digit" : "The digit to use for rounding (default is 5).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -41,8 +41,8 @@ def qlRounding(method : qRoundingMethod, precision : int, digit : int = 5, trigg
 @xlo.func(
     help="Apply a QuantLib Rounding object to a value.",
     args={
-        "Rounding" : "The QuantLib Rounding object to apply.",
-        "Value" : "The value to round.",
+        "rounding" : "The QuantLib Rounding object to apply.",
+        "value" : "The value to round.",
     },
     group=EXCEL_GROUP_NAME,
 )

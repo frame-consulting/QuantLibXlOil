@@ -111,7 +111,7 @@ def qJointCalendarRule(rule_name : str):
 @xlo.func(
     help='Return a QuantLib Calendar object given its name.',
     args={
-        'CalendarName': 'The name of the calendar.',
+        'calendar_name': 'The name of the calendar.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -122,7 +122,7 @@ def qlCalendar(calendar_name: str, trigger = None) -> ql.Calendar:
 @xlo.func(
     help='Check if a day is a weekend day.',
     args={
-        'Weekday': 'The day of the week (0=Sunday, 1=Monday, ..., 6=Saturday).',
+        'weekday': 'The day of the week (0=Sunday, 1=Monday, ..., 6=Saturday).',
     },
     group=EXCEL_GROUP_NAME,
 )  
@@ -133,7 +133,7 @@ def qlCalendarisWeekend(calendar: qCalendar, weekday: qWeekday, trigger = None) 
 @xlo.func(
     help='Return the first day of the month for a given date.',
     args={
-        'Date': 'The date for which to find the start of the month.',
+        'date': 'The date for which to find the start of the month.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -145,7 +145,7 @@ def qlCalendarStartOfMonth(calendar : qCalendar, date : qDate, trigger = None) -
 @xlo.func(
     help='Return the last day of the month for a given date.',
     args={
-        'Date': 'The date for which to find the end of the month.',
+        'date': 'The date for which to find the end of the month.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -156,7 +156,7 @@ def qlCalendarEndOfMonth(calendar : qCalendar, date : qDate, trigger = None) -> 
 @xlo.func(
     help='Check if a date is a business day.',
     args={
-        'Date': 'The date to check.',
+        'date': 'The date to check.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -166,7 +166,7 @@ def qlCalendarIsBusinessDay(calendar : qCalendar, date : qDate, trigger = None) 
 @xlo.func(
     help='Check if a date is a holiday.',
     args={
-        'Date': 'The date to check.',
+        'date': 'The date to check.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -176,7 +176,7 @@ def qlCalendarIsHoliday(calendar : qCalendar, date : qDate, trigger = None) -> b
 @xlo.func(
     help='Check if a date is the end of the month.',
     args={
-        'Date': 'The date to check.',
+        'date': 'The date to check.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -186,7 +186,7 @@ def qlCalendarIsEndOfMonth(calendar : qCalendar, date : qDate, trigger = None) -
 @xlo.func(
     help='Check if a date is the start of the month.',
     args={
-        'Date': 'The date to check.',
+        'date': 'The date to check.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -196,7 +196,7 @@ def qlCalendarIsStartOfMonth(calendar : qCalendar, date : qDate, trigger = None)
 @xlo.func(
     help='Add a holiday to the calendar.',
     args={
-        'Date': 'The date to add as a holiday.',
+        'date': 'The date to add as a holiday.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -206,7 +206,7 @@ def qlCalendarAddHoliday(calendar : qCalendar, date : qDate, trigger = None) -> 
 @xlo.func(
     help='Remove a holiday from the calendar.',
     args={
-        'Date': 'The date to remove as a holiday.',
+        'date': 'The date to remove as a holiday.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -225,9 +225,9 @@ def qlCalendarResetAddedAndRemovedHolidays(calendar : qCalendar, trigger = None)
 @xlo.func(
     help='Adjust a date according to the calendar and business day convention.',
     args={
-        'Date': 'The date to adjust.',
-        'Calendar': 'The calendar to use for adjustment.',
-        'Convention': 'The business day convention to apply.',
+        'date': 'The date to adjust.',
+        'calendar': 'The calendar to use for adjustment.',
+        'convention': 'The business day convention to apply.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -238,12 +238,12 @@ def qlCalendarAdjust(calendar : qCalendar, date : qDate,  convention : qBusiness
 @xlo.func(
     help='Advance a date by a given number of time units according to the calendar and business day convention.',
     args={
-        'Date': 'The date to advance.',
-        'Calendar': 'The calendar to use for advancement.',
+        'date': 'The date to advance.',
+        'calendar': 'The calendar to use for advancement.',
         'n': 'The number of time units to advance',
         'unit': 'The time unit to advance (e.g. "DAYS", "MONTHS", "YEARS").',
-        'Convention': 'The business day convention to apply.',
-        'EndOfMonth': 'Whether to adjust to the end of the month.',
+        'convention': 'The business day convention to apply.',
+        'end_of_month': 'Whether to adjust to the end of the month.',
     },
     group=EXCEL_GROUP_NAME,
 )   
@@ -253,11 +253,11 @@ def qlCalendarAdvance(calendar : qCalendar, date : qDate, n : int, unit : qTimeU
 @xlo.func(
     help='Advance a date by a given period according to the calendar and business day convention.',
     args={
-        'Date': 'The date to advance.',
-        'Calendar': 'The calendar to use for advancement.',
-        'Period': 'The period by which to advance.',
-        'Convention': 'The business day convention to apply.',
-        'EndOfMonth': 'Whether to adjust to the end of the month.',
+        'date': 'The date to advance.',
+        'calendar': 'The calendar to use for advancement.',
+        'period': 'The period by which to advance.',
+        'convention': 'The business day convention to apply.',
+        'end_of_month': 'Whether to adjust to the end of the month.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -268,11 +268,11 @@ def qlCalendarAdvance2(calendar : qCalendar, date : qDate, period : qPeriod, con
 @xlo.func(
     help='Return the number of business days between two QuantLib Dates according to the calendar.',
     args={
-        'Calendar': 'The calendar to use.',
-        'FromDate': 'The starting date.',
-        'ToDate': 'The ending date.',
-        'IncludeFirst': 'Whether to include the first date.',
-        'IncludeLast': 'Whether to include the last date.',
+        'calendar': 'The calendar to use.',
+        'from_date': 'The starting date.',
+        'to_date': 'The ending date.',
+        'include_first': 'Whether to include the first date.',
+        'include_last': 'Whether to include the last date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -282,7 +282,7 @@ def qlCalendarBusinessDaysBetween(calendar : qCalendar, from_date : qDate, to_da
 @xlo.func(
     help='Return the list of holidays in the calendar.',
     args={
-        'Calendar': 'The calendar for which to list holidays.',
+        'calendar': 'The calendar for which to list holidays.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -293,7 +293,7 @@ def qlCalendarHolidayList(calendar : qCalendar, from_date : qDate, to_date : qDa
 @xlo.func(
     help='Return the list of business days in the calendar.',
     args={
-        'Calendar': 'The calendar for which to list business days.',
+        'calendar': 'The calendar for which to list business days.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -303,7 +303,7 @@ def qlCalendarBusinessDayList(calendar : qCalendar, from_date : qDate, to_date :
 @xlo.func(
     help='Return the name of the calendar.',
     args={
-        'Calendar': 'The calendar for which to get the name.',
+        'calendar': 'The calendar for which to get the name.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -313,7 +313,7 @@ def qlCalendarName(calendar : qCalendar, trigger = None) -> str:
 @xlo.func(
     help='Check if the calendar is empty.',
     args={
-        'Calendar': 'The calendar to check.',
+        'calendar': 'The calendar to check.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -323,9 +323,9 @@ def qlCalendarEmpty(calendar : qCalendar, trigger = None) -> bool:
 @xlo.func(
     help='Return a calendar that represents the union of two calendars.',
     args={
-        'Calendar1': 'The first calendar.',
-        'Calendar2': 'The second calendar.',
-        'Rule': 'The rule for combining the calendars.',
+        'calendar1': 'The first calendar.',
+        'calendar2': 'The second calendar.',
+        'rule': 'The rule for combining the calendars.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -335,10 +335,10 @@ def qlCalendarJointCalendar(calendar1 : qCalendar, calendar2 : qCalendar, rule :
 @xlo.func(
     help='Return a calendar that represents the union of three calendars.',
     args={
-        'Calendar1': 'The first calendar.',
-        'Calendar2': 'The second calendar.',
-        'Calendar3': 'The third calendar.',
-        'Rule': 'The rule for combining the calendars.',
+        'calendar1': 'The first calendar.',
+        'calendar2': 'The second calendar.',
+        'calendar3': 'The third calendar.',
+        'rule': 'The rule for combining the calendars.',
     },
     group=EXCEL_GROUP_NAME,
 )

@@ -14,7 +14,7 @@ from .utilities import enum_value
 @xlo.func(
     help="Get the day counter of a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -24,8 +24,8 @@ def qlTermStructureDayCounter(ytsh : ql.YieldTermStructureHandle, trigger = None
 @xlo.func(
     help="Get the reference date of a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
-        "Date" : "The date for which to calculate the time from reference.",
+        "ytsh" : "The yield term structure handle to query.",
+        "date" : "The date for which to calculate the time from reference.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -35,7 +35,7 @@ def qlTermStructureTimeFromReference(ytsh : ql.YieldTermStructureHandle, date : 
 @xlo.func(
     help="Get the calendar of a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -45,7 +45,7 @@ def qlTermStructureCalendar(ytsh : ql.YieldTermStructureHandle, trigger = None) 
 @xlo.func(
     help="Get the reference date of a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -55,7 +55,7 @@ def qlTermStructureReferenceDate(ytsh : ql.YieldTermStructureHandle, trigger = N
 @xlo.func(
     help="Get the maximum date of a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -65,7 +65,7 @@ def qlTermStructureMaxDate(ytsh : ql.YieldTermStructureHandle, trigger = None) -
 @xlo.func(
     help="Get the maximum time of a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -75,7 +75,7 @@ def qlTermStructureMaxTime(ytsh : ql.YieldTermStructureHandle) -> float:
 @xlo.func(
     help="Allow extrapolation for a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -86,7 +86,7 @@ def qlTermStructureEnableExrapolation(ytsh : ql.YieldTermStructureHandle, trigge
 @xlo.func(
     help="Disallow extrapolation for a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -97,7 +97,7 @@ def qlTermStructureDisableExrapolation(ytsh : ql.YieldTermStructureHandle, trigg
 @xlo.func(
     help="Check if extrapolation is allowed for a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
+        "ytsh" : "The yield term structure handle to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -127,9 +127,9 @@ def qCompounding(compounding : str):
 @xlo.func(
     help="Get the discount factor for a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
-        "Date" : "The date for which to calculate the discount factor.",
-        "Extrapolate" : "Whether to extrapolate if the date is outside the term structure range.",
+        "ytsh" : "The yield term structure handle to query.",
+        "date" : "The date for which to calculate the discount factor.",
+        "extrapolate" : "Whether to extrapolate if the date is outside the term structure range.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -144,9 +144,9 @@ def qlYieldTermStructureDiscount(
 @xlo.func(
     help="Get the discount factor for a yield term structure from a time.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
-        "Time" : "The time for which to calculate the discount factor.",
-        "Extrapolate" : "Whether to extrapolate if the time is outside the term structure range.",
+        "ytsh" : "The yield term structure handle to query.",
+        "time" : "The time for which to calculate the discount factor.",
+        "extrapolate" : "Whether to extrapolate if the time is outside the term structure range.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -161,12 +161,12 @@ def qlYieldTermStructureDiscountFromTime(
 @xlo.func(
     help="Get the zero rate for a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
-        "Date" : "The date for which to calculate the zero rate.",
-        "DayCounter" : "The day count convention to use for the calculation.",
-        "Compounding" : "The compounding convention to use for the calculation.",
-        "Frequency" : "The frequency to use for the calculation.",
-        "Extrapolate" : "Whether to extrapolate if the date is outside the term structure range.",
+        "ytsh" : "The yield term structure handle to query.",
+        "date" : "The date for which to calculate the zero rate.",
+        "daycounter" : "The day count convention to use for the calculation.",
+        "compounding" : "The compounding convention to use for the calculation.",
+        "frequency" : "The frequency to use for the calculation.",
+        "extrapolate" : "Whether to extrapolate if the date is outside the term structure range.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -184,11 +184,11 @@ def qlYieldTermStructureZeroRate(
 @xlo.func(
     help="Get the zero rate for a yield term structure from a time.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
-        "Time" : "The time for which to calculate the zero rate.",
-        "Compounding" : "The compounding convention to use for the calculation.",
-        "Frequency" : "The frequency to use for the calculation.",
-        "Extrapolate" : "Whether to extrapolate if the time is outside the term structure range.",
+        "ytsh" : "The yield term structure handle to query.",
+        "time" : "The time for which to calculate the zero rate.",
+        "compounding" : "The compounding convention to use for the calculation.",
+        "frequency" : "The frequency to use for the calculation.",
+        "extrapolate" : "Whether to extrapolate if the time is outside the term structure range.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -205,13 +205,13 @@ def qlYieldTermStructureZeroRateFromTime(
 @xlo.func(
     help="Get the forward rate for a yield term structure.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
-        "Date1" : "The start date for the forward rate calculation.",
-        "Date2" : "The end date for the forward rate calculation.",
-        "DayCounter" : "The day count convention to use for the calculation.",
-        "Compounding" : "The compounding convention to use for the calculation.",
-        "Frequency" : "The frequency to use for the calculation.",
-        "Extrapolate" : "Whether to extrapolate if the dates are outside the term structure range.",
+        "ytsh" : "The yield term structure handle to query.",
+        "date1" : "The start date for the forward rate calculation.",
+        "date2" : "The end date for the forward rate calculation.",
+        "daycounter" : "The day count convention to use for the calculation.",
+        "compounding" : "The compounding convention to use for the calculation.",
+        "frequency" : "The frequency to use for the calculation.",
+        "extrapolate" : "Whether to extrapolate if the dates are outside the term structure range.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -230,12 +230,12 @@ def qlYieldTermStructureForwardRate(
 @xlo.func(
     help="Get the forward rate for a yield term structure from times.",
     args={
-        "YieldTermStructureHandle" : "The yield term structure handle to query.",
-        "Time1" : "The start time for the forward rate calculation.",
-        "Time2" : "The end time for the forward rate calculation.",
-        "Compounding" : "The compounding convention to use for the calculation.",
-        "Frequency" : "The frequency to use for the calculation.",
-        "Extrapolate" : "Whether to extrapolate if the times are outside the term structure range.",
+        "ytsh" : "The yield term structure handle to query.",
+        "time1" : "The start time for the forward rate calculation.",
+        "time2" : "The end time for the forward rate calculation.",
+        "compounding" : "The compounding convention to use for the calculation.",
+        "frequency" : "The frequency to use for the calculation.",
+        "extrapolate" : "Whether to extrapolate if the times are outside the term structure range.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -256,12 +256,12 @@ def qlYieldTermStructureForwardRateFromTime(
 @xlo.func(
     help="Construct a flat forward curve from a reference date and a forward rate.",
     args={
-        "ReferenceDate" : "The reference date for the curve.",
-        "ForwardRate" : "The forward rate for the curve.",
-        "DayCounter" : "The day count convention to use for the curve.",
-        "Compounding" : "The compounding convention to use for the curve.",
-        "Frequency" : "The frequency to use for the curve.",
-        "Calendar" : "The calendar to use for the curve.",
+        "reference_date" : "The reference date for the curve.",
+        "forward_rate" : "The forward rate for the curve.",
+        "daycounter" : "The day count convention to use for the curve.",
+        "compounding" : "The compounding convention to use for the curve.",
+        "frequency" : "The frequency to use for the curve.",
+        "calendar" : "The calendar to use for the curve.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -283,8 +283,8 @@ def qlFlatForward(
 @xlo.func(
     help="Construct an implied term structure from a base term structure and a reference date.",
     args={
-        "YieldTermStructureHandle" : "The base yield term structure handle.",
-        "ReferenceDate" : "The reference date for the implied term structure.",
+        "ytsh" : "The base yield term structure handle.",
+        "reference_date" : "The reference date for the implied term structure.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -301,11 +301,11 @@ def qlImpliedTermStructure(
 @xlo.func(
     help="Construct a zero spreaded term structure from a base term structure and a spread.",
     args={
-        "YieldTermStructureHandle" : "The base yield term structure handle.",
-        "Spread" : "The spread to add to the zero rates of the base term structure.",
-        "Compounding" : "The compounding convention to use for the spread.",
-        "Frequency" : "The frequency to use for the spread.",
-        "DayCounter" : "The day count convention to use for the spread.",
+        "base" : "The base yield term structure handle.",
+        "spread" : "The spread to add to the zero rates of the base term structure.",
+        "compounding" : "The compounding convention to use for the spread.",
+        "frequency" : "The frequency to use for the spread.",
+        "daycounter" : "The day count convention to use for the spread.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -325,8 +325,8 @@ def qlZeroSpreadedTermStructure(
 @xlo.func(
     help="Construct a forward spreaded term structure from a base term structure and a spread.",
     args={
-        "YieldTermStructureHandle" : "The base yield term structure handle.",
-        "Spread" : "The spread to add to the forward rates of the base term structure.",
+        "base" : "The base yield term structure handle.",
+        "spread" : "The spread to add to the forward rates of the base term structure.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -348,9 +348,9 @@ QL_COMPOSITE_OPERATORS = {
 @xlo.func(
     help="Construct a composite zero yield structure from two base term structures and an operator.",
     args={
-        "Curve1" : "The first yield term structure handle.",
-        "Curve2" : "The second yield term structure handle.",
-        "Operator" : "The operator to combine the curves. Valid values are: +, -",
+        "curve1" : "The first yield term structure handle.",
+        "curve2" : "The second yield term structure handle.",
+        "operator" : "The operator to combine the curves. Valid values are: +, -",
     },
     group=EXCEL_GROUP_NAME,
 )

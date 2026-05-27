@@ -84,8 +84,8 @@ def qRateAveragingType(averaging_type: str) -> int:
 @xlo.func(
 	help="Create a QuantLib SimpleCashFlow object.",
 	args={
-		"Amount": "Cash-flow amount.",
-		"Date": "Payment date.",
+		"amount": "Cash-flow amount.",
+		"date": "Payment date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -96,8 +96,8 @@ def qlSimpleCashFlow(amount: float, date: qDate, trigger=None) -> ql.SimpleCashF
 @xlo.func(
 	help="Create a QuantLib Redemption cash flow.",
 	args={
-		"Amount": "Cash-flow amount.",
-		"Date": "Payment date.",
+		"amount": "Cash-flow amount.",
+		"date": "Payment date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -108,8 +108,8 @@ def qlRedemption(amount: float, date: qDate, trigger=None) -> ql.Redemption:
 @xlo.func(
 	help="Create a QuantLib AmortizingPayment cash flow.",
 	args={
-		"Amount": "Cash-flow amount.",
-		"Date": "Payment date.",
+		"amount": "Cash-flow amount.",
+		"date": "Payment date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -120,12 +120,12 @@ def qlAmortizingPayment(amount: float, date: qDate, trigger=None) -> ql.Amortizi
 @xlo.func(
 	help="Create a QuantLib IndexedCashFlow object.",
 	args={
-		"Notional": "Notional amount.",
-		"Index": "Index used for fixing.",
-		"BaseDate": "Base fixing date.",
-		"FixingDate": "Current fixing date.",
-		"PaymentDate": "Payment date.",
-		"GrowthOnly": "Whether to pay growth only.",
+		"notional": "Notional amount.",
+		"index": "Index used for fixing.",
+		"base_date": "Base fixing date.",
+		"fixing_date": "Current fixing date.",
+		"payment_date": "Payment date.",
+		"growth_only": "Whether to pay growth only.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -144,7 +144,7 @@ def qlIndexedCashFlow(
 @xlo.func(
 	help="Return cash-flow amount.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -155,7 +155,7 @@ def qlCashFlowAmount(cashflow: ql.CashFlow, trigger=None) -> float:
 @xlo.func(
 	help="Return cash-flow payment date.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -166,7 +166,7 @@ def qlCashFlowDate(cashflow: ql.CashFlow, trigger=None) -> qDate:
 @xlo.func(
 	help="Check whether the cash flow has occurred.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 		"ref_date": "Reference date.",
 	},
 	group=EXCEL_GROUP_NAME,
@@ -178,7 +178,7 @@ def qlCashFlowHasOccurred(cashflow: ql.CashFlow, ref_date: qDate = ql.Date(), tr
 @xlo.func(
 	help="Cast a CashFlow to IndexedCashFlow if possible.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -189,7 +189,7 @@ def qlAsIndexedCashFlow(cashflow: ql.CashFlow, trigger=None) -> ql.IndexedCashFl
 @xlo.func(
 	help="Cast a CashFlow to Coupon if possible.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -200,7 +200,7 @@ def qlAsCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.Coupon:
 @xlo.func(
 	help="Return coupon nominal.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -211,7 +211,7 @@ def qlCouponNominal(coupon: ql.Coupon, trigger=None) -> float:
 @xlo.func(
 	help="Return coupon accrual start date.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -222,7 +222,7 @@ def qlCouponAccrualStartDate(coupon: ql.Coupon, trigger=None) -> qDate:
 @xlo.func(
 	help="Return coupon accrual end date.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -233,7 +233,7 @@ def qlCouponAccrualEndDate(coupon: ql.Coupon, trigger=None) -> qDate:
 @xlo.func(
 	help="Return coupon reference period start date.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -244,7 +244,7 @@ def qlCouponReferencePeriodStart(coupon: ql.Coupon, trigger=None) -> qDate:
 @xlo.func(
 	help="Return coupon reference period end date.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -255,7 +255,7 @@ def qlCouponReferencePeriodEnd(coupon: ql.Coupon, trigger=None) -> qDate:
 @xlo.func(
 	help="Return coupon ex-coupon date.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -266,7 +266,7 @@ def qlCouponExCouponDate(coupon: ql.Coupon, trigger=None) -> qDate:
 @xlo.func(
 	help="Return coupon rate.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -277,7 +277,7 @@ def qlCouponRate(coupon: ql.Coupon, trigger=None) -> float:
 @xlo.func(
 	help="Return coupon accrual period.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -288,7 +288,7 @@ def qlCouponAccrualPeriod(coupon: ql.Coupon, trigger=None) -> float:
 @xlo.func(
 	help="Return coupon accrual days.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -299,7 +299,7 @@ def qlCouponAccrualDays(coupon: ql.Coupon, trigger=None) -> int:
 @xlo.func(
 	help="Return coupon day counter.",
 	args={
-		"Coupon": "QuantLib Coupon.",
+		"coupon": "QuantLib Coupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -310,8 +310,8 @@ def qlCouponDayCounter(coupon: ql.Coupon, trigger=None) -> ql.DayCounter:
 @xlo.func(
 	help="Return coupon accrued amount at a given date.",
 	args={
-		"Coupon": "QuantLib Coupon.",
-		"Date": "Accrual date.",
+		"coupon": "QuantLib Coupon.",
+		"date": "Accrual date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -322,7 +322,7 @@ def qlCouponAccruedAmount(coupon: ql.Coupon, date: qDate, trigger=None) -> float
 @xlo.func(
 	help="Cast a CashFlow to FixedRateCoupon if possible.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -333,7 +333,7 @@ def qlAsFixedRateCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.FixedRateCoup
 @xlo.func(
 	help="Cast a CashFlow to FloatingRateCoupon if possible.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -344,7 +344,7 @@ def qlAsFloatingRateCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.FloatingRa
 @xlo.func(
 	help="Return floating-rate coupon fixing date.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -355,7 +355,7 @@ def qlFloatingRateCouponFixingDate(coupon: ql.FloatingRateCoupon, trigger=None) 
 @xlo.func(
 	help="Return floating-rate coupon fixing days.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -366,7 +366,7 @@ def qlFloatingRateCouponFixingDays(coupon: ql.FloatingRateCoupon, trigger=None) 
 @xlo.func(
 	help="Return whether the floating-rate coupon is in arrears.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -377,7 +377,7 @@ def qlFloatingRateCouponIsInArrears(coupon: ql.FloatingRateCoupon, trigger=None)
 @xlo.func(
 	help="Return floating-rate coupon gearing.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -388,7 +388,7 @@ def qlFloatingRateCouponGearing(coupon: ql.FloatingRateCoupon, trigger=None) -> 
 @xlo.func(
 	help="Return floating-rate coupon spread.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -399,7 +399,7 @@ def qlFloatingRateCouponSpread(coupon: ql.FloatingRateCoupon, trigger=None) -> f
 @xlo.func(
 	help="Return floating-rate coupon index fixing.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -410,7 +410,7 @@ def qlFloatingRateCouponIndexFixing(coupon: ql.FloatingRateCoupon, trigger=None)
 @xlo.func(
 	help="Return floating-rate coupon adjusted fixing.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -421,7 +421,7 @@ def qlFloatingRateCouponAdjustedFixing(coupon: ql.FloatingRateCoupon, trigger=No
 @xlo.func(
 	help="Return floating-rate coupon convexity adjustment.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -432,8 +432,8 @@ def qlFloatingRateCouponConvexityAdjustment(coupon: ql.FloatingRateCoupon, trigg
 @xlo.func(
 	help="Return floating-rate coupon price from a discount curve handle.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
-		"DiscountCurve": "Discount curve handle.",
+		"coupon": "QuantLib FloatingRateCoupon.",
+		"discount_curve": "Discount curve handle.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -448,7 +448,7 @@ def qlFloatingRateCouponPrice(
 @xlo.func(
 	help="Return floating-rate coupon index.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
+		"coupon": "QuantLib FloatingRateCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -459,8 +459,8 @@ def qlFloatingRateCouponIndex(coupon: ql.FloatingRateCoupon, trigger=None) -> ql
 @xlo.func(
 	help="Set floating-rate coupon pricer.",
 	args={
-		"Coupon": "QuantLib FloatingRateCoupon.",
-		"Pricer": "Floating-rate coupon pricer.",
+		"coupon": "QuantLib FloatingRateCoupon.",
+		"pricer": "Floating-rate coupon pricer.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -476,7 +476,7 @@ def qlFloatingRateCouponSetPricer(
 @xlo.func(
 	help="Return whether the capped/floored coupon has a cap.",
 	args={
-		"Coupon": "QuantLib CappedFlooredCoupon.",
+		"coupon": "QuantLib CappedFlooredCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -487,7 +487,7 @@ def qlCappedFlooredCouponIsCapped(coupon: ql.CappedFlooredCoupon, trigger=None) 
 @xlo.func(
 	help="Return whether the capped/floored coupon has a floor.",
 	args={
-		"Coupon": "QuantLib CappedFlooredCoupon.",
+		"coupon": "QuantLib CappedFlooredCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -498,7 +498,7 @@ def qlCappedFlooredCouponIsFloored(coupon: ql.CappedFlooredCoupon, trigger=None)
 @xlo.func(
 	help="Return capped/floored coupon cap.",
 	args={
-		"Coupon": "QuantLib CappedFlooredCoupon.",
+		"coupon": "QuantLib CappedFlooredCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -509,7 +509,7 @@ def qlCappedFlooredCouponCap(coupon: ql.CappedFlooredCoupon, trigger=None) -> fl
 @xlo.func(
 	help="Return capped/floored coupon floor.",
 	args={
-		"Coupon": "QuantLib CappedFlooredCoupon.",
+		"coupon": "QuantLib CappedFlooredCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -520,7 +520,7 @@ def qlCappedFlooredCouponFloor(coupon: ql.CappedFlooredCoupon, trigger=None) -> 
 @xlo.func(
 	help="Return capped/floored coupon effective cap.",
 	args={
-		"Coupon": "QuantLib CappedFlooredCoupon.",
+		"coupon": "QuantLib CappedFlooredCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -531,7 +531,7 @@ def qlCappedFlooredCouponEffectiveCap(coupon: ql.CappedFlooredCoupon, trigger=No
 @xlo.func(
 	help="Return capped/floored coupon effective floor.",
 	args={
-		"Coupon": "QuantLib CappedFlooredCoupon.",
+		"coupon": "QuantLib CappedFlooredCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -542,7 +542,7 @@ def qlCappedFlooredCouponEffectiveFloor(coupon: ql.CappedFlooredCoupon, trigger=
 @xlo.func(
 	help="Return overnight coupon averaging method.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -553,7 +553,7 @@ def qlOvernightIndexedCouponAveragingMethod(coupon: ql.OvernightIndexedCoupon, t
 @xlo.func(
 	help="Return whether telescopic formula can be applied.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -564,7 +564,7 @@ def qlOvernightIndexedCouponCanApplyTelescopicFormula(coupon: ql.OvernightIndexe
 @xlo.func(
 	help="Return whether observation shift is applied.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -575,7 +575,7 @@ def qlOvernightIndexedCouponApplyObservationShift(coupon: ql.OvernightIndexedCou
 @xlo.func(
 	help="Return whether spread is compounded daily.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -586,7 +586,7 @@ def qlOvernightIndexedCouponCompoundSpreadDaily(coupon: ql.OvernightIndexedCoupo
 @xlo.func(
 	help="Return overnight coupon lockout days.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -597,7 +597,7 @@ def qlOvernightIndexedCouponLockoutDays(coupon: ql.OvernightIndexedCoupon, trigg
 @xlo.func(
 	help="Return overnight coupon rate-computation start date.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -608,7 +608,7 @@ def qlOvernightIndexedCouponRateComputationStartDate(coupon: ql.OvernightIndexed
 @xlo.func(
 	help="Return overnight coupon rate-computation end date.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -619,7 +619,7 @@ def qlOvernightIndexedCouponRateComputationEndDate(coupon: ql.OvernightIndexedCo
 @xlo.func(
 	help="Return overnight coupon value dates.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -630,7 +630,7 @@ def qlOvernightIndexedCouponValueDates(coupon: ql.OvernightIndexedCoupon, trigge
 @xlo.func(
 	help="Return overnight coupon fixing dates.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -641,7 +641,7 @@ def qlOvernightIndexedCouponFixingDates(coupon: ql.OvernightIndexedCoupon, trigg
 @xlo.func(
 	help="Return overnight coupon interest dates.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -652,7 +652,7 @@ def qlOvernightIndexedCouponInterestDates(coupon: ql.OvernightIndexedCoupon, tri
 @xlo.func(
 	help="Return overnight coupon day-fraction steps.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -663,7 +663,7 @@ def qlOvernightIndexedCouponDt(coupon: ql.OvernightIndexedCoupon, trigger=None) 
 @xlo.func(
 	help="Return overnight coupon index fixings.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -674,7 +674,7 @@ def qlOvernightIndexedCouponIndexFixings(coupon: ql.OvernightIndexedCoupon, trig
 @xlo.func(
 	help="Return overnight coupon effective index fixing.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -685,7 +685,7 @@ def qlOvernightIndexedCouponEffectiveIndexFixing(coupon: ql.OvernightIndexedCoup
 @xlo.func(
 	help="Return overnight coupon effective spread.",
 	args={
-		"Coupon": "QuantLib OvernightIndexedCoupon.",
+		"coupon": "QuantLib OvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -696,7 +696,7 @@ def qlOvernightIndexedCouponEffectiveSpread(coupon: ql.OvernightIndexedCoupon, t
 @xlo.func(
 	help="Return capped/floored overnight coupon underlying coupon.",
 	args={
-		"Coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
+		"coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -710,7 +710,7 @@ def qlCappedFlooredOvernightIndexedCouponUnderlying(
 @xlo.func(
 	help="Return whether capped/floored overnight coupon uses naked option payoff.",
 	args={
-		"Coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
+		"coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -724,7 +724,7 @@ def qlCappedFlooredOvernightIndexedCouponNakedOption(
 @xlo.func(
 	help="Return whether cap/floor is applied daily for capped/floored overnight coupon.",
 	args={
-		"Coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
+		"coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -738,7 +738,7 @@ def qlCappedFlooredOvernightIndexedCouponDailyCapFloor(
 @xlo.func(
 	help="Return capped/floored overnight coupon averaging method label.",
 	args={
-		"Coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
+		"coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -752,7 +752,7 @@ def qlCappedFlooredOvernightIndexedCouponAveragingMethod(
 @xlo.func(
 	help="Return whether spread is compounded daily for capped/floored overnight coupon.",
 	args={
-		"Coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
+		"coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -766,7 +766,7 @@ def qlCappedFlooredOvernightIndexedCouponCompoundSpreadDaily(
 @xlo.func(
 	help="Return capped/floored overnight coupon effective caplet volatility.",
 	args={
-		"Coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
+		"coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -780,7 +780,7 @@ def qlCappedFlooredOvernightIndexedCouponEffectiveCapletVolatility(
 @xlo.func(
 	help="Return capped/floored overnight coupon effective floorlet volatility.",
 	args={
-		"Coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
+		"coupon": "QuantLib CappedFlooredOvernightIndexedCoupon.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -794,7 +794,7 @@ def qlCappedFlooredOvernightIndexedCouponEffectiveFloorletVolatility(
 @xlo.func(
 	help="Cast a CashFlow to OvernightIndexedCoupon if possible.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -805,7 +805,7 @@ def qlAsOvernightIndexedCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.Overni
 @xlo.func(
 	help="Cast a CashFlow to CappedFlooredOvernightIndexedCoupon if possible.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -816,7 +816,7 @@ def qlAsCappedFlooredOvernightIndexedCoupon(cashflow: ql.CashFlow, trigger=None)
 @xlo.func(
 	help="Cast a CashFlow to SubPeriodsCoupon if possible.",
 	args={
-		"CashFlow": "QuantLib CashFlow.",
+		"cashflow": "QuantLib CashFlow.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -827,15 +827,15 @@ def qlAsMultipleResetsCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.SubPerio
 @xlo.func(
 	help="Create a QuantLib FixedRateCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"Rate": "Coupon rate.",
-		"DayCounter": "Day count convention.",
-		"StartDate": "Accrual start date.",
-		"EndDate": "Accrual end date.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"ExCouponDate": "Ex-coupon date.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"rate": "Coupon rate.",
+		"day_counter": "Day count convention.",
+		"start_date": "Accrual start date.",
+		"end_date": "Accrual end date.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"ex_coupon_date": "Ex-coupon date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -867,19 +867,19 @@ def qlFixedRateCoupon(
 @xlo.func(
 	help="Create a QuantLib IborCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"StartDate": "Accrual start date.",
-		"EndDate": "Accrual end date.",
-		"FixingDays": "Fixing days.",
-		"Index": "Ibor index.",
-		"Gearing": "Coupon gearing.",
-		"Spread": "Coupon spread.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"DayCounter": "Day count convention.",
-		"IsInArrears": "Whether fixing is in arrears.",
-		"ExCouponDate": "Ex-coupon date.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"start_date": "Accrual start date.",
+		"end_date": "Accrual end date.",
+		"fixing_days": "Fixing days.",
+		"index": "Ibor index.",
+		"gearing": "Coupon gearing.",
+		"spread": "Coupon spread.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"day_counter": "Day count convention.",
+		"is_in_arrears": "Whether fixing is in arrears.",
+		"ex_coupon_date": "Ex-coupon date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -921,21 +921,21 @@ def qlIborCoupon(
 @xlo.func(
 	help="Create a QuantLib CappedFlooredIborCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"StartDate": "Accrual start date.",
-		"EndDate": "Accrual end date.",
-		"FixingDays": "Fixing days.",
-		"Index": "Ibor index.",
-		"Gearing": "Coupon gearing.",
-		"Spread": "Coupon spread.",
-		"Cap": "Cap rate.",
-		"Floor": "Floor rate.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"DayCounter": "Day count convention.",
-		"IsInArrears": "Whether fixing is in arrears.",
-		"ExCouponDate": "Ex-coupon date.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"start_date": "Accrual start date.",
+		"end_date": "Accrual end date.",
+		"fixing_days": "Fixing days.",
+		"index": "Ibor index.",
+		"gearing": "Coupon gearing.",
+		"spread": "Coupon spread.",
+		"cap": "Cap rate.",
+		"floor": "Floor rate.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"day_counter": "Day count convention.",
+		"is_in_arrears": "Whether fixing is in arrears.",
+		"ex_coupon_date": "Ex-coupon date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -979,22 +979,22 @@ def qlCappedFlooredIborCoupon(
 @xlo.func(
 	help="Create a QuantLib OvernightIndexedCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"StartDate": "Accrual start date.",
-		"EndDate": "Accrual end date.",
-		"OvernightIndex": "Overnight index.",
-		"Gearing": "Coupon gearing.",
-		"Spread": "Coupon spread.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"DayCounter": "Day count convention.",
-		"TelescopicValueDates": "Use telescopic dates.",
-		"AveragingMethod": "Rate averaging method.",
-		"LookbackDays": "Lookback days.",
-		"LockoutDays": "Lockout days.",
-		"ApplyObservationShift": "Apply observation shift.",
-		"CompoundSpread": "Compound spread daily.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"start_date": "Accrual start date.",
+		"end_date": "Accrual end date.",
+		"overnight_index": "Overnight index.",
+		"gearing": "Coupon gearing.",
+		"spread": "Coupon spread.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"day_counter": "Day count convention.",
+		"telescopic_value_dates": "Use telescopic dates.",
+		"averaging_method": "Rate averaging method.",
+		"lookback_days": "Lookback days.",
+		"lockout_days": "Lockout days.",
+		"apply_observation_shift": "Apply observation shift.",
+		"compound_spread": "Compound spread daily.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1040,11 +1040,11 @@ def qlOvernightIndexedCoupon(
 @xlo.func(
 	help="Create a QuantLib CappedFlooredOvernightIndexedCoupon object.",
 	args={
-		"Underlying": "Underlying overnight indexed coupon.",
-		"Cap": "Cap rate.",
-		"Floor": "Floor rate.",
-		"NakedOption": "Whether to use naked option payoff.",
-		"DailyCapFloor": "Whether cap/floor is applied daily.",
+		"underlying": "Underlying overnight indexed coupon.",
+		"cap": "Cap rate.",
+		"floor": "Floor rate.",
+		"naked_option": "Whether to use naked option payoff.",
+		"daily_cap_floor": "Whether cap/floor is applied daily.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1062,19 +1062,19 @@ def qlCappedFlooredOvernightIndexedCoupon(
 @xlo.func(
 	help="Create a QuantLib CmsCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"StartDate": "Accrual start date.",
-		"EndDate": "Accrual end date.",
-		"FixingDays": "Fixing days.",
-		"Index": "Swap index.",
-		"Gearing": "Coupon gearing.",
-		"Spread": "Coupon spread.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"DayCounter": "Day count convention.",
-		"IsInArrears": "Whether fixing is in arrears.",
-		"ExCouponDate": "Ex-coupon date.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"start_date": "Accrual start date.",
+		"end_date": "Accrual end date.",
+		"fixing_days": "Fixing days.",
+		"index": "Swap index.",
+		"gearing": "Coupon gearing.",
+		"spread": "Coupon spread.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"day_counter": "Day count convention.",
+		"is_in_arrears": "Whether fixing is in arrears.",
+		"ex_coupon_date": "Ex-coupon date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1114,19 +1114,19 @@ def qlCmsCoupon(
 @xlo.func(
 	help="Create a QuantLib CmsSpreadCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"StartDate": "Accrual start date.",
-		"EndDate": "Accrual end date.",
-		"FixingDays": "Fixing days.",
-		"Index": "Swap spread index.",
-		"Gearing": "Coupon gearing.",
-		"Spread": "Coupon spread.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"DayCounter": "Day count convention.",
-		"IsInArrears": "Whether fixing is in arrears.",
-		"ExCouponDate": "Ex-coupon date.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"start_date": "Accrual start date.",
+		"end_date": "Accrual end date.",
+		"fixing_days": "Fixing days.",
+		"index": "Swap spread index.",
+		"gearing": "Coupon gearing.",
+		"spread": "Coupon spread.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"day_counter": "Day count convention.",
+		"is_in_arrears": "Whether fixing is in arrears.",
+		"ex_coupon_date": "Ex-coupon date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1166,20 +1166,20 @@ def qlCmsSpreadCoupon(
 @xlo.func(
 	help="Create a QuantLib RangeAccrualFloatersCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"Index": "Ibor index.",
-		"StartDate": "Accrual start date.",
-		"EndDate": "Accrual end date.",
-		"FixingDays": "Fixing days.",
-		"DayCounter": "Day count convention.",
-		"Gearing": "Coupon gearing.",
-		"Spread": "Coupon spread.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"ObservationsSchedule": "Observations schedule.",
-		"LowerTrigger": "Lower trigger.",
-		"UpperTrigger": "Upper trigger.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"index": "Ibor index.",
+		"start_date": "Accrual start date.",
+		"end_date": "Accrual end date.",
+		"fixing_days": "Fixing days.",
+		"day_counter": "Day count convention.",
+		"gearing": "Coupon gearing.",
+		"spread": "Coupon spread.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"observations_schedule": "Observations schedule.",
+		"lower_trigger": "Lower trigger.",
+		"upper_trigger": "Upper trigger.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1221,18 +1221,18 @@ def qlRangeAccrualFloatersCoupon(
 @xlo.func(
 	help="Create a QuantLib MultipleResetsCoupon object.",
 	args={
-		"PaymentDate": "Payment date.",
-		"Nominal": "Nominal amount.",
-		"ResetSchedule": "Reset schedule.",
-		"FixingDays": "Fixing days.",
-		"Index": "Ibor index.",
-		"Gearing": "Coupon gearing.",
-		"CouponSpread": "Coupon spread.",
-		"RateSpread": "Rate spread.",
-		"RefPeriodStart": "Reference period start date.",
-		"RefPeriodEnd": "Reference period end date.",
-		"DayCounter": "Day count convention.",
-		"ExCouponDate": "Ex-coupon date.",
+		"payment_date": "Payment date.",
+		"nominal": "Nominal amount.",
+		"reset_schedule": "Reset schedule.",
+		"fixing_days": "Fixing days.",
+		"index": "Ibor index.",
+		"gearing": "Coupon gearing.",
+		"coupon_spread": "Coupon spread.",
+		"rate_spread": "Rate spread.",
+		"ref_period_start": "Reference period start date.",
+		"ref_period_end": "Reference period end date.",
+		"day_counter": "Day count convention.",
+		"ex_coupon_date": "Ex-coupon date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1272,7 +1272,7 @@ def qlMultipleResetsCoupon(
 @xlo.func(
 	help="Create a QuantLib BlackIborCouponPricer.",
 	args={
-		"Volatility": "Optionlet volatility handle.",
+		"volatility": "Optionlet volatility handle.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1294,9 +1294,9 @@ def qlCompoundingOvernightIndexedCouponPricer(trigger=None) -> ql.CompoundingOve
 @xlo.func(
 	help="Create a QuantLib ArithmeticAveragedOvernightIndexedCouponPricer.",
 	args={
-		"MeanReversion": "Mean reversion parameter.",
-		"Volatility": "Convexity-adjustment volatility.",
-		"ByApprox": "Use approximation method.",
+		"mean_reversion": "Mean reversion parameter.",
+		"volatility": "Convexity-adjustment volatility.",
+		"by_approx": "Use approximation method.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1312,8 +1312,8 @@ def qlArithmeticAveragedOvernightIndexedCouponPricer(
 @xlo.func(
 	help="Create a QuantLib BlackCompoundingOvernightIndexedCouponPricer.",
 	args={
-		"Volatility": "Optionlet volatility handle.",
-		"EffectiveVolatilityInput": "Whether volatility input is effective volatility.",
+		"volatility": "Optionlet volatility handle.",
+		"effective_volatility_input": "Whether volatility input is effective volatility.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1328,8 +1328,8 @@ def qlBlackCompoundingOvernightIndexedCouponPricer(
 @xlo.func(
 	help="Create a QuantLib BlackAveragingOvernightIndexedCouponPricer.",
 	args={
-		"Volatility": "Optionlet volatility handle.",
-		"EffectiveVolatilityInput": "Whether volatility input is effective volatility.",
+		"volatility": "Optionlet volatility handle.",
+		"effective_volatility_input": "Whether volatility input is effective volatility.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1360,8 +1360,8 @@ def qlAveragingMultipleResetsPricer(trigger=None) -> ql.AveragingMultipleResetsP
 @xlo.func(
 	help="Set the floating-rate coupon pricer for a leg.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Pricer": "Floating-rate coupon pricer.",
+		"leg": "Cash-flow leg.",
+		"pricer": "Floating-rate coupon pricer.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1373,11 +1373,11 @@ def qlSetCouponPricer(leg : xlo.Array(dims=1), pricer: ql.FloatingRateCouponPric
 @xlo.func(
 	help="Build a fixed-rate leg.",
 	args={
-		"Schedule": "Payment schedule.",
-		"DayCounter": "Day count convention.",
-		"Nominals": "Nominal amounts.",
-		"CouponRates": "Coupon rates.",
-		"PaymentAdjustment": "Payment adjustment convention.",
+		"schedule": "Payment schedule.",
+		"day_counter": "Day count convention.",
+		"nominals": "Nominal amounts.",
+		"coupon_rates": "Coupon rates.",
+		"payment_adjustment": "Payment adjustment convention.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1395,17 +1395,17 @@ def qlFixedRateLeg(
 @xlo.func(
 	help="Build an Ibor leg.",
 	args={
-		"Nominals": "Nominal amounts.",
-		"Schedule": "Payment schedule.",
-		"Index": "Ibor index.",
-		"PaymentDayCounter": "Payment day count convention.",
-		"PaymentConvention": "Payment convention.",
-		"FixingDays": "Fixing-day sequence.",
-		"Gearings": "Coupon gearings.",
-		"Spreads": "Coupon spreads.",
-		"Caps": "Caps.",
-		"Floors": "Floors.",
-		"IsInArrears": "Whether coupons are in arrears.",
+		"nominals": "Nominal amounts.",
+		"schedule": "Payment schedule.",
+		"index": "Ibor index.",
+		"payment_day_counter": "Payment day count convention.",
+		"payment_convention": "Payment convention.",
+		"fixing_days": "Fixing-day sequence.",
+		"gearings": "Coupon gearings.",
+		"spreads": "Coupon spreads.",
+		"caps": "Caps.",
+		"floors": "Floors.",
+		"is_in_arrears": "Whether coupons are in arrears.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1441,15 +1441,15 @@ def qlIborLeg(
 @xlo.func(
 	help="Build an overnight leg.",
 	args={
-		"Nominals": "Nominal amounts.",
-		"Schedule": "Payment schedule.",
-		"Index": "Overnight index.",
-		"PaymentDayCounter": "Payment day count convention.",
-		"PaymentConvention": "Payment convention.",
-		"Gearings": "Coupon gearings.",
-		"Spreads": "Coupon spreads.",
-		"TelescopicValueDates": "Use telescopic value dates.",
-		"AveragingMethod": "Rate averaging method.",
+		"nominals": "Nominal amounts.",
+		"schedule": "Payment schedule.",
+		"index": "Overnight index.",
+		"payment_day_counter": "Payment day count convention.",
+		"payment_convention": "Payment convention.",
+		"gearings": "Coupon gearings.",
+		"spreads": "Coupon spreads.",
+		"telescopic_value_dates": "Use telescopic value dates.",
+		"averaging_method": "Rate averaging method.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1481,11 +1481,11 @@ def qlOvernightLeg(
 @xlo.func(
 	help="Build a CMS leg.",
 	args={
-		"Nominals": "Nominal amounts.",
-		"Schedule": "Payment schedule.",
-		"Index": "Swap index.",
-		"PaymentDayCounter": "Payment day count convention.",
-		"PaymentConvention": "Payment convention.",
+		"nominals": "Nominal amounts.",
+		"schedule": "Payment schedule.",
+		"index": "Swap index.",
+		"payment_day_counter": "Payment day count convention.",
+		"payment_convention": "Payment convention.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1503,11 +1503,11 @@ def qlCmsLeg(
 @xlo.func(
 	help="Build a CMS zero leg.",
 	args={
-		"Nominals": "Nominal amounts.",
-		"Schedule": "Payment schedule.",
-		"Index": "Swap index.",
-		"PaymentDayCounter": "Payment day count convention.",
-		"PaymentConvention": "Payment convention.",
+		"nominals": "Nominal amounts.",
+		"schedule": "Payment schedule.",
+		"index": "Swap index.",
+		"payment_day_counter": "Payment day count convention.",
+		"payment_convention": "Payment convention.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1525,11 +1525,11 @@ def qlCmsZeroLeg(
 @xlo.func(
 	help="Build a CMS spread leg.",
 	args={
-		"Nominals": "Nominal amounts.",
-		"Schedule": "Payment schedule.",
-		"Index": "Swap spread index.",
-		"PaymentDayCounter": "Payment day count convention.",
-		"PaymentConvention": "Payment convention.",
+		"nominals": "Nominal amounts.",
+		"schedule": "Payment schedule.",
+		"index": "Swap spread index.",
+		"payment_day_counter": "Payment day count convention.",
+		"payment_convention": "Payment convention.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1547,10 +1547,10 @@ def qlCmsSpreadLeg(
 @xlo.func(
 	help="Build a multiple-resets leg.",
 	args={
-		"FullResetSchedule": "Full reset schedule.",
-		"Index": "Ibor index.",
-		"ResetsPerCoupon": "Number of resets per coupon.",
-		"Nominals": "Nominal amounts.",
+		"full_reset_schedule": "Full reset schedule.",
+		"index": "Ibor index.",
+		"resets_per_coupon": "Number of resets per coupon.",
+		"nominals": "Nominal amounts.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1567,11 +1567,11 @@ def qlMultipleResetsLeg(
 @xlo.func(
 	help="Build a range-accrual leg.",
 	args={
-		"Nominals": "Nominal amounts.",
-		"Schedule": "Payment schedule.",
-		"Index": "Ibor index.",
-		"PaymentDayCounter": "Payment day count convention.",
-		"PaymentConvention": "Payment convention.",
+		"nominals": "Nominal amounts.",
+		"schedule": "Payment schedule.",
+		"index": "Ibor index.",
+		"payment_day_counter": "Payment day count convention.",
+		"payment_convention": "Payment convention.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1589,7 +1589,7 @@ def qlRangeAccrualLeg(
 @xlo.func(
 	help="Return the start date of a leg.",
 	args={
-		"Leg": "Cash-flow leg.",
+		"leg": "Cash-flow leg.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1600,7 +1600,7 @@ def qlCashFlowsStartDate(leg : xlo.Array(dims=1), trigger=None) -> qDate:
 @xlo.func(
 	help="Return the maturity date of a leg.",
 	args={
-		"Leg": "Cash-flow leg.",
+		"leg": "Cash-flow leg.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1611,9 +1611,9 @@ def qlCashFlowsMaturityDate(leg : xlo.Array(dims=1), trigger=None) -> qDate:
 @xlo.func(
 	help="Return the previous cash-flow date.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1629,9 +1629,9 @@ def qlCashFlowsPreviousCashFlowDate(
 @xlo.func(
 	help="Return the next cash-flow date.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1647,9 +1647,9 @@ def qlCashFlowsNextCashFlowDate(
 @xlo.func(
 	help="Return the previous cash-flow amount.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1665,9 +1665,9 @@ def qlCashFlowsPreviousCashFlowAmount(
 @xlo.func(
 	help="Return the next cash-flow amount.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1683,9 +1683,9 @@ def qlCashFlowsNextCashFlowAmount(
 @xlo.func(
 	help="Return the previous cash-flow object.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1701,9 +1701,9 @@ def qlCashFlowsPreviousCashFlow(
 @xlo.func(
 	help="Return the next cash-flow object.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1719,9 +1719,9 @@ def qlCashFlowsNextCashFlow(
 @xlo.func(
 	help="Return the accrual period of the next cash flow.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1737,9 +1737,9 @@ def qlCashFlowsAccrualPeriod(
 @xlo.func(
 	help="Return the accrual days of the next cash flow.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1755,9 +1755,9 @@ def qlCashFlowsAccrualDays(
 @xlo.func(
 	help="Return the accrued period at settlement.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1773,9 +1773,9 @@ def qlCashFlowsAccruedPeriod(
 @xlo.func(
 	help="Return the accrued days at settlement.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1791,9 +1791,9 @@ def qlCashFlowsAccruedDays(
 @xlo.func(
 	help="Return the accrued amount at settlement.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1809,11 +1809,11 @@ def qlCashFlowsAccruedAmount(
 @xlo.func(
 	help="Return leg NPV.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"DiscountCurve": "Discount curve handle.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"discount_curve": "Discount curve handle.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1831,11 +1831,11 @@ def qlCashFlowsNpv(
 @xlo.func(
 	help="Return leg NPV from an interest rate.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"InterestRate": "Interest rate object.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"interest_rate": "Interest rate object.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1853,14 +1853,14 @@ def qlCashFlowsNpvFromInterestRate(
 @xlo.func(
 	help="Return leg NPV from rate and compounding inputs.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Yield": "Yield.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"_yield": "Yield.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1890,15 +1890,15 @@ def qlCashFlowsNpvFromRate(
 @xlo.func(
 	help="Return leg NPV from discount curve and z-spread.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"DiscountCurve": "Discount curve handle.",
-		"ZSpread": "Z-spread.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"discount_curve": "Discount curve handle.",
+		"z_spread": "Z-spread.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1930,11 +1930,11 @@ def qlCashFlowsNpvFromZSpread(
 @xlo.func(
 	help="Return leg BPS.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"DiscountCurve": "Discount curve handle.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"discount_curve": "Discount curve handle.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1951,11 +1951,11 @@ def qlCashFlowsBps(
 @xlo.func(
 	help="Return leg BPS from an interest rate.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"InterestRate": "Interest rate object.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"interest_rate": "Interest rate object.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -1973,14 +1973,14 @@ def qlCashFlowsBpsFromInterestRate(
 @xlo.func(
 	help="Return leg BPS from rate and compounding inputs.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Yield": "Yield.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"_yield": "Yield.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2010,11 +2010,11 @@ def qlCashFlowsBpsFromRate(
 @xlo.func(
 	help="Return leg NPV and BPS.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"DiscountCurve": "Discount curve handle.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"discount_curve": "Discount curve handle.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2033,12 +2033,12 @@ def qlCashFlowsNpvBps(
 @xlo.func(
 	help="Return leg ATM rate.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"DiscountCurve": "Discount curve handle.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
-		"Npv": "Optional target NPV.",
+		"leg": "Cash-flow leg.",
+		"discount_curve": "Discount curve handle.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
+		"npv": "Optional target NPV.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2057,14 +2057,14 @@ def qlCashFlowsAtmRate(
 @xlo.func(
 	help="Return leg yield from an NPV.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Npv": "Present value.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"npv": "Present value.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2100,11 +2100,11 @@ def qlCashFlowsYieldRate(
 @xlo.func(
 	help="Return leg duration from an interest rate.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"InterestRate": "Interest rate object.",
-		"DurationType": "Duration type.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
+		"leg": "Cash-flow leg.",
+		"interest_rate": "Interest rate object.",
+		"duration_type": "Duration type.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2122,13 +2122,13 @@ def qlCashFlowsDurationFromInterestRate(
 @xlo.func(
 	help="Return leg duration from rate and compounding inputs.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Yield": "Yield.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"DurationType": "Duration type.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
+		"leg": "Cash-flow leg.",
+		"_yield": "Yield.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"duration_type": "Duration type.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2160,12 +2160,12 @@ def qlCashFlowsDurationFromRate(
 @xlo.func(
 	help="Return leg convexity from rate and compounding inputs.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Yield": "Yield.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
+		"leg": "Cash-flow leg.",
+		"_yield": "Yield.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2195,11 +2195,11 @@ def qlCashFlowsConvexityFromRate(
 @xlo.func(
 	help="Return leg convexity from an interest rate.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"InterestRate": "Interest rate object.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"interest_rate": "Interest rate object.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2217,12 +2217,12 @@ def qlCashFlowsConvexityFromInterestRate(
 @xlo.func(
 	help="Return leg basis-point value from rate and compounding inputs.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Yield": "Yield.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
+		"leg": "Cash-flow leg.",
+		"_yield": "Yield.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2252,11 +2252,11 @@ def qlCashFlowsBasisPointValueFromRate(
 @xlo.func(
 	help="Return leg basis-point value from an interest rate.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"InterestRate": "Interest rate object.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
-		"SettlementDate": "Settlement date.",
-		"NpvDate": "NPV date.",
+		"leg": "Cash-flow leg.",
+		"interest_rate": "Interest rate object.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
+		"settlement_date": "Settlement date.",
+		"npv_date": "NPV date.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2274,13 +2274,13 @@ def qlCashFlowsBasisPointValueFromInterestRate(
 @xlo.func(
 	help="Return leg z-spread from NPV and discount curve.",
 	args={
-		"Leg": "Cash-flow leg.",
-		"Npv": "Present value.",
-		"DiscountCurve": "Discount curve.",
-		"DayCounter": "Day count convention.",
-		"Compounding": "Compounding convention.",
-		"Frequency": "Compounding frequency.",
-		"IncludeSettlementDateFlows": "Include settlement-date flows.",
+		"leg": "Cash-flow leg.",
+		"npv": "Present value.",
+		"discount_curve": "Discount curve.",
+		"day_counter": "Day count convention.",
+		"compounding": "Compounding convention.",
+		"frequency": "Compounding frequency.",
+		"include_settlement_date_flows": "Include settlement-date flows.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2318,7 +2318,7 @@ def qlCashFlowsZSpread(
 @xlo.func(
 	help="Return duration type label.",
 	args={
-		"DurationType": "Duration type value.",
+		"duration_type": "Duration type value.",
 	},
 	group=EXCEL_GROUP_NAME,
 )
@@ -2329,7 +2329,7 @@ def qlDurationTypeName(duration_type: qDurationType, trigger=None) -> str:
 @xlo.func(
 	help="Return rate-averaging type label.",
 	args={
-		"RateAveragingType": "Rate averaging type value.",
+		"averaging_type": "Rate averaging type value.",
 	},
 	group=EXCEL_GROUP_NAME,
 )

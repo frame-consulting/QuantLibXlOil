@@ -37,16 +37,16 @@ def qDateGenerationRule(rule : str) -> ql.DateGeneration:
 @xlo.func(
     help='Create a QuantLib Schedule object.',
     args={
-        'EffectiveDate': 'The effective date of the schedule.',
-        'TerminationDate': 'The termination date of the schedule.',
-        'Tenor': 'The tenor of the schedule.',
-        'Calendar': 'The calendar to use for date adjustments.',
-        'Convention': 'The business day convention to use for date adjustments.',
-        'TerminationDateConvention': 'The business day convention to use for adjusting the termination date.',
-        'DateGenerationRule': 'Backward, Forward, CDS, etc.',
-        'EndOfMonth': 'Whether to adjust dates to the end of the month.',
-        'FirstDate': 'The first date of the schedule (optional).',
-        'LastDate': 'The last date of the schedule (optional).',
+        'effective_date': 'The effective date of the schedule.',
+        'termination_date': 'The termination date of the schedule.',
+        'tenor': 'The tenor of the schedule.',
+        'calendar': 'The calendar to use for date adjustments.',
+        'convention': 'The business day convention to use for date adjustments.',
+        'termination_date_convention': 'The business day convention to use for adjusting the termination date.',
+        'date_generation_rule': 'Backward, Forward, CDS, etc.',
+        'end_of_month': 'Whether to adjust dates to the end of the month.',
+        'first_date': 'The first date of the schedule (optional).',
+        'last_date': 'The last date of the schedule (optional).',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -80,9 +80,9 @@ def qlSchedule(
 @xlo.func(
     help='Create a QuantLib Schedule object from a list of dates.',
     args={
-        'Dates': 'A list of dates to create the schedule from.',
-        'Calendar': 'The calendar to use for date adjustments (optional). Default is NullCalendar.',
-        'Convention': 'The business day convention to use for date adjustments (optional). Default is Unadjusted.',
+        'dates': 'A list of dates to create the schedule from.',
+        'calendar': 'The calendar to use for date adjustments (optional). Default is NullCalendar.',
+        'convention': 'The business day convention to use for date adjustments (optional). Default is Unadjusted.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -103,7 +103,7 @@ def qlScheduleFromDates(
 @xlo.func(
     help='Return the list of dates in a QuantLib Schedule.',
     args={
-        'Schedule': 'The QuantLib Schedule to extract dates from.',
+        'schedule': 'The QuantLib Schedule to extract dates from.',
      },
      group=EXCEL_GROUP_NAME,
 )
@@ -114,7 +114,7 @@ def qlScheduleDates(schedule : ql.Schedule, trigger = None) -> list:
 @xlo.func(
     help='Return the schedule date before a reference date.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
         'ref_date': 'Reference date.',
     },
     group=EXCEL_GROUP_NAME,
@@ -126,7 +126,7 @@ def qlSchedulePreviousDate(schedule : ql.Schedule, ref_date : qDate, trigger = N
 @xlo.func(
     help='Return the schedule date at or after a reference date.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
         'ref_date': 'Reference date.',
     },
     group=EXCEL_GROUP_NAME,
@@ -138,7 +138,7 @@ def qlScheduleNextDate(schedule : ql.Schedule, ref_date : qDate, trigger = None)
 @xlo.func(
     help='Return whether regularity flags are available for a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -149,8 +149,8 @@ def qlScheduleHasIsRegular(schedule : ql.Schedule, trigger = None) -> bool:
 @xlo.func(
     help='Return whether the i-th interval in a QuantLib Schedule is regular.',
     args={
-        'Schedule': 'QuantLib Schedule.',
-        'I': 'The interval index (one-based).',
+        'schedule': 'QuantLib Schedule.',
+        'i': 'The interval index (one-based).',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -161,7 +161,7 @@ def qlScheduleIsRegular(schedule : ql.Schedule, i : int, trigger = None) -> bool
 @xlo.func(
     help='Return regularity flags for all intervals in a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -172,7 +172,7 @@ def qlScheduleIsRegular2(schedule : ql.Schedule, trigger = None) -> list:
 @xlo.func(
     help='Return the calendar used by a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -183,7 +183,7 @@ def qlScheduleCalendar(schedule : ql.Schedule, trigger = None) -> qCalendar:
 @xlo.func(
     help='Return the start date of a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -194,7 +194,7 @@ def qlScheduleStartDate(schedule : ql.Schedule, trigger = None) -> qDate:
 @xlo.func(
     help='Return the end date of a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -205,7 +205,7 @@ def qlScheduleEndDate(schedule : ql.Schedule, trigger = None) -> qDate:
 @xlo.func(
     help='Return whether a QuantLib Schedule has an associated tenor.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -216,7 +216,7 @@ def qlScheduleHasTenor(schedule : ql.Schedule, trigger = None) -> bool:
 @xlo.func(
     help='Return the tenor of a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -227,7 +227,7 @@ def qlScheduleTenor(schedule : ql.Schedule, trigger = None) -> qPeriod:
 @xlo.func(
     help='Return the business day convention of a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -238,7 +238,7 @@ def qlScheduleBusinessDayConvention(schedule : ql.Schedule, trigger = None) -> s
 @xlo.func(
     help='Return whether a QuantLib Schedule has a termination date convention.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -249,7 +249,7 @@ def qlScheduleHasTerminationDateBusinessDayConvention(schedule : ql.Schedule, tr
 @xlo.func(
     help='Return the termination date business day convention of a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -260,7 +260,7 @@ def qlScheduleTerminationDateBusinessDayConvention(schedule : ql.Schedule, trigg
 @xlo.func(
     help='Return whether a QuantLib Schedule has a date generation rule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -271,7 +271,7 @@ def qlScheduleHasRule(schedule : ql.Schedule, trigger = None) -> bool:
 @xlo.func(
     help='Return the date generation rule of a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -282,7 +282,7 @@ def qlScheduleRule(schedule : ql.Schedule, trigger = None) -> str:
 @xlo.func(
     help='Return whether a QuantLib Schedule has an end-of-month flag.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -293,7 +293,7 @@ def qlScheduleHasEndOfMonth(schedule : ql.Schedule, trigger = None) -> bool:
 @xlo.func(
     help='Return the end-of-month flag of a QuantLib Schedule.',
     args={
-        'Schedule': 'QuantLib Schedule.',
+        'schedule': 'QuantLib Schedule.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -304,8 +304,8 @@ def qlScheduleEndOfMonth(schedule : ql.Schedule, trigger = None) -> bool:
 @xlo.func(
     help='Return a QuantLib Schedule truncated after a date.',
     args={
-        'Schedule': 'QuantLib Schedule.',
-        'TruncationDate': 'Truncation date.',
+        'schedule': 'QuantLib Schedule.',
+        'truncation_date': 'Truncation date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -316,8 +316,8 @@ def qlScheduleAfter(schedule : ql.Schedule, truncation_date : qDate, trigger = N
 @xlo.func(
     help='Return a QuantLib Schedule truncated until a date.',
     args={
-        'Schedule': 'QuantLib Schedule.',
-        'TruncationDate': 'Truncation date.',
+        'schedule': 'QuantLib Schedule.',
+        'truncation_date': 'Truncation date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -328,19 +328,19 @@ def qlScheduleUntil(schedule : ql.Schedule, truncation_date : qDate, trigger = N
 @xlo.func(
     help='Create a QuantLib Schedule object with flexible arguments.',
     args={
-        'EffectiveDate': 'The effective date of the schedule (optional).',
-        'TerminationDate': 'The termination date of the schedule (optional).',
-        'Tenor': 'The tenor of the schedule (optional).',
-        'Frequency': 'The frequency of the schedule (optional).',
-        'Calendar': 'The calendar to use for date adjustments (optional).',
-        'Convention': 'The business day convention to use for date adjustments (optional).',
-        'TerminationDateConvention': 'The business day convention to use for adjusting the termination date (optional).',
-        'DateGenerationRule': 'Backward, Forward, CDS, etc. (optional).',
-        'Forwards': 'Whether to generate dates forwards (optional).',
-        'Backwards': 'Whether to generate dates backwards (optional).',
-        'EndOfMonth': 'Whether to adjust dates to the end of the month (optional).',
-        'FirstDate': 'The first date of the schedule (optional).',
-        'NextToLastDate': 'The next-to-last date of the schedule (optional).',
+        'effective_date': 'The effective date of the schedule (optional).',
+        'termination_date': 'The termination date of the schedule (optional).',
+        'tenor': 'The tenor of the schedule (optional).',
+        'frequency': 'The frequency of the schedule (optional).',
+        'calendar': 'The calendar to use for date adjustments (optional).',
+        'convention': 'The business day convention to use for date adjustments (optional).',
+        'terminal_date_convention': 'The business day convention to use for adjusting the termination date (optional).',
+        'rule': 'Backward, Forward, CDS, etc. (optional).',
+        'forwards': 'Whether to generate dates forwards (optional).',
+        'backwards': 'Whether to generate dates backwards (optional).',
+        'end_of_month': 'Whether to adjust dates to the end of the month (optional).',
+        'first_date': 'The first date of the schedule (optional).',
+        'next_to_last_date': 'The next-to-last date of the schedule (optional).',
     },
     group=EXCEL_GROUP_NAME,
 )

@@ -48,14 +48,14 @@ QL_INTERPOLATED_CURVES = {
 @xlo.func(
     help="Construct an interpolated discount curve from a set of dates and discount factors.",
     args={
-        "Dates" : "The dates corresponding to the discount factors.",
-        "Discounts" : "The discount factors corresponding to the dates.",
-        "DayCounter" : "The day count convention to use for the curve.",
-        "Calendar" : "The calendar to use for the curve.",
-        "Traits" : "The interpolation traits: 'Discount', 'ForwardRate', 'ZeroRate'.",
-        "Interpolator" : "The interpolation method to use for the curve.",
-        "MixedInterpolationBehavior" : "The behavior to use for mixed interpolation.",
-        "MixedInterpolationN" : "The where to switch interpolation methods.",
+        "dates" : "The dates corresponding to the discount factors.",
+        "discounts" : "The discount factors corresponding to the dates.",
+        "daycounter" : "The day count convention to use for the curve.",
+        "calendar" : "The calendar to use for the curve.",
+        "traits" : "The interpolation traits: 'Discount', 'ForwardRate', 'ZeroRate'.",
+        "interpolator" : "The interpolation method to use for the curve.",
+        "mixed_interpolation_behavior" : "The behavior to use for mixed interpolation.",
+        "mixed_interpolation_n" : "The where to switch interpolation methods.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -93,10 +93,10 @@ def qlInterpolatedYieldCurve(
 @xlo.func(
     help="Construct a log-linear interpolated discount curve.",
     args={
-        "Dates" : "The dates corresponding to the discount factors.",
-        "Discounts" : "The discount factors corresponding to the dates.",
-        "DayCounter" : "The day count convention to use for the curve.",
-        "Calendar" : "The calendar to use for the curve.",
+        "dates" : "The dates corresponding to the discount factors.",
+        "discounts" : "The discount factors corresponding to the dates.",
+        "daycounter" : "The day count convention to use for the curve.",
+        "calendar" : "The calendar to use for the curve.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -115,10 +115,10 @@ def qlDiscountCurve(
 @xlo.func(
     help="Construct a backward-flat interpolated forward rate curve.",
     args={
-        "Dates" : "The dates corresponding to the forward rates.",
-        "Forwards" : "The forward rates corresponding to the dates.",
-        "DayCounter" : "The day count convention to use for the curve.",
-        "Calendar" : "The calendar to use for the curve.",
+        "dates" : "The dates corresponding to the forward rates.",
+        "forwards" : "The forward rates corresponding to the dates.",
+        "daycounter" : "The day count convention to use for the curve.",
+        "calendar" : "The calendar to use for the curve.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -137,10 +137,10 @@ def qlForwardCurve(
 @xlo.func(
     help="Construct a linear interpolated zero rate curve.",
     args={
-        "Dates" : "The dates corresponding to the zero rates.",
-        "ZeroRates" : "The zero rates corresponding to the dates.",
-        "DayCounter" : "The day count convention to use for the curve.",
-        "Calendar" : "The calendar to use for the curve.",
+        "dates" : "The dates corresponding to the zero rates.",
+        "zerorates" : "The zero rates corresponding to the dates.",
+        "daycounter" : "The day count convention to use for the curve.",
+        "calendar" : "The calendar to use for the curve.",
     },
     group=EXCEL_GROUP_NAME,
 )

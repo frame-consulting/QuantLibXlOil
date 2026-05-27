@@ -92,7 +92,7 @@ def qlPeriod(n : int, unit : qTimeUnit, trigger = None) -> ql.Period:
 @xlo.func(
     help='Return Period length.',
     args={
-        'Period': 'QuantLib Period.',
+        'period': 'QuantLib Period.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -102,7 +102,7 @@ def qlPeriodLength(period : qPeriod, trigger = None) -> int:
 @xlo.func(
     help='Return Period time unit.',
     args={
-        'Period': 'QuantLib Period.',
+        'period': 'QuantLib Period.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -112,7 +112,7 @@ def qlPeriodUnits(period : qPeriod, trigger = None) -> qTimeUnit:
 @xlo.func(
     help='Return Period frequency.',
     args={
-        'Period': 'QuantLib Period.',
+        'period': 'QuantLib Period.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -122,7 +122,7 @@ def qlPeriodFrequency(period : qPeriod, trigger = None) -> qFrequency:
 @xlo.func(
     help='Return a normalized version of a QuantLib Period.',
     args={
-        'Period': 'QuantLib Period.',
+        'period': 'QuantLib Period.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -148,9 +148,9 @@ def xDate(date : ql.Date):
 @xlo.func(
     help='Create a QuantLib Date from year, month and day.',
     args={
-        'Year': 'The year.',
-        'Month': 'The month.',
-        'Day': 'The day.',
+        'year': 'The year.',
+        'month': 'The month.',
+        'day': 'The day.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -160,7 +160,7 @@ def qlDate(year : int, month : int, day : int, trigger = None) -> ql.Date:
 @xlo.func(
     help='Return the weekday of a QuantLib Date.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -170,7 +170,7 @@ def qlDateWeekday(date : qDate, trigger = None) -> str:
 @xlo.func(
     help='Return the day of the month of a QuantLib Date.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -180,7 +180,7 @@ def qlDateDayOfMonth(date : qDate, trigger = None) -> int:
 @xlo.func(
     help='Return the day of the year of a QuantLib Date.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -190,7 +190,7 @@ def qlDateDayOfYear(date : qDate, trigger = None) -> int:
 @xlo.func(
     help='Return the month of a QuantLib Date.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -200,7 +200,7 @@ def qlDateMonth(date : qDate, trigger = None) -> int:
 @xlo.func(
     help='Return the year of a QuantLib Date.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -210,7 +210,7 @@ def qlDateYear(date : qDate, trigger = None) -> int:
 @xlo.func(
     help='Return whether a year is a leap year.',
     args={
-        'Year': 'The year.',
+        'year': 'The year.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -241,7 +241,7 @@ def qlDateTodaysDate(trigger = None) -> ql.Date:
 @xlo.func(
     help='Return the start of the month for a given QuantLib Date.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
 )
 def qlDateStartOfMonth(date : qDate, trigger = None) -> ql.Date:
@@ -250,7 +250,7 @@ def qlDateStartOfMonth(date : qDate, trigger = None) -> ql.Date:
 @xlo.func(
     help='Return the end of the month for a given QuantLib Date.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
 )
 def qlDateEndOfMonth(date : qDate, trigger = None) -> ql.Date:
@@ -259,7 +259,7 @@ def qlDateEndOfMonth(date : qDate, trigger = None) -> ql.Date:
 @xlo.func(
     help='Return whether a date is the start of the month.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
 )
 def qlDateIsStartOfMonth(date : qDate, trigger = None) -> bool:
@@ -268,7 +268,7 @@ def qlDateIsStartOfMonth(date : qDate, trigger = None) -> bool:
 @xlo.func(
     help='Return whether a date is the end of the month.',
     args={
-        'Date': 'QuantLib Date.',
+        'date': 'QuantLib Date.',
     },
 )
 def qlDateIsEndOfMonth(date : qDate, trigger = None) -> bool:
@@ -277,8 +277,8 @@ def qlDateIsEndOfMonth(date : qDate, trigger = None) -> bool:
 @xlo.func(
     help='Return the next date of a given weekday.',
     args={
-        'Date': 'QuantLib Date.',
-        'Weekday': 'The weekday.',
+        'date': 'QuantLib Date.',
+        'weekday': 'The weekday.',
     },
 )
 def qlDateNextWeekday(date : qDate, weekday : qWeekday, trigger = None) -> ql.Date:
@@ -287,10 +287,10 @@ def qlDateNextWeekday(date : qDate, weekday : qWeekday, trigger = None) -> ql.Da
 @xlo.func(
     help='Return the nth occurrence of a weekday in a month and year.',
     args={
-        'N': 'The occurrence (1 for first, 2 for second, etc.).',
-        'Weekday': 'The weekday.',
-        'Month': 'The month.',
-        'Year': 'The year.',
+        'n': 'The occurrence (1 for first, 2 for second, etc.).',
+        'weekday': 'The weekday.',
+        'month': 'The month.',
+        'year': 'The year.',
     },
 )
 def qlDateNthWeekday(n : int, weekday : qWeekday, month : int, year : int, trigger = None) -> ql.Date:
@@ -300,8 +300,8 @@ def qlDateNthWeekday(n : int, weekday : qWeekday, month : int, year : int, trigg
 @xlo.func(
     help='Parse a date string using a specified format.',
     args={
-        'DateString': 'The date string to parse.',
-        'FormatString': 'The format string (e.g. "YYYY-MM-DD").',
+        'date_string': 'The date string to parse.',
+        'format_string': 'The format string (e.g. "YYYY-MM-DD").',
     },
 )
 def qlDateParserParseFormatted(date_string : str, format_string : str, trigger = None) -> ql.Date:
@@ -310,7 +310,7 @@ def qlDateParserParseFormatted(date_string : str, format_string : str, trigger =
 @xlo.func(
     help='Parse a date string in ISO format.',
     args={
-        'DateString': 'The date string to parse.',
+        'date_string': 'The date string to parse.',
     },
 )
 def qlDateParserParseISO(date_string : str, trigger = None) -> ql.Date:
@@ -319,7 +319,7 @@ def qlDateParserParseISO(date_string : str, trigger = None) -> ql.Date:
 @xlo.func(
     help='Parse a period string.',
     args={
-        'PeriodString': 'The period string to parse.',
+        'period_string': 'The period string to parse.',
     },
 )
 def qlPeriodParserParse(period_string : str, trigger = None) -> ql.Period:

@@ -134,13 +134,13 @@ def qCurrency(code : str) -> ql.Currency:
 @xlo.func(
     help="Create a QuantLib Currency object.",
     args={
-        "Name" : "The name of the currency.",
-        "Code" : "The code of the currency.",
-        "NumericalCode" : "The numerical code of the currency.",
-        "Symbol" : "The symbol of the currency.",
-        "FractionSymbol" : "The fraction symbol of the currency.",
-        "FractionsPerUnit" : "The number of fractions per unit of the currency.",
-        "Rounding" : "The rounding method to use for the currency.",
+        "name" : "The name of the currency.",
+        "code" : "The code of the currency.",
+        "numerical_code" : "The numerical code of the currency.",
+        "symbol" : "The symbol of the currency.",
+        "fraction_symbol" : "The fraction symbol of the currency.",
+        "fractions_per_unit" : "The number of fractions per unit of the currency.",
+        "rounding" : "The rounding method to use for the currency.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -169,7 +169,7 @@ def qlCurrency(
 @xlo.func(
     help="Get the name of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -179,7 +179,7 @@ def qlCurrencyName(currency : qCurrency, trigger = None) -> str:
 @xlo.func(
     help="Get the code of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -189,7 +189,7 @@ def qlCurrencyCode(currency : qCurrency, trigger = None) -> str:
 @xlo.func(
     help="Get the numerical code of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -199,7 +199,7 @@ def qlCurrencyNumericalCode(currency : qCurrency, trigger = None) -> int:
 @xlo.func(
     help="Get the symbol of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -209,7 +209,7 @@ def qlCurrencySymbol(currency : qCurrency, trigger = None) -> str:
 @xlo.func(
     help="Get the fraction symbol of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -219,7 +219,7 @@ def qlCurrencyFractionSymbol(currency : qCurrency, trigger = None) -> str:
 @xlo.func(
     help="Get the number of fractions per unit of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -229,7 +229,7 @@ def qlCurrencyFractionsPerUnit(currency : qCurrency, trigger = None) -> int:
 @xlo.func(
     help="Get the rounding method of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -239,7 +239,7 @@ def qlCurrencyRounding(currency : qCurrency, trigger = None) -> ql.Rounding:
 @xlo.func(
     help="Get the triangulation currency of a QuantLib Currency object.",
     args={
-        "Currency" : "The QuantLib Currency object to query.",
+        "currency" : "The QuantLib Currency object to query.",
     },
     group=EXCEL_GROUP_NAME,
 )

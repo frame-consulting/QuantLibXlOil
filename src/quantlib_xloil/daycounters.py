@@ -40,7 +40,7 @@ def xDayCounter(daycounter : ql.DayCounter):
 @xlo.func(
     help='Create a QuantLib DayCounter object from a name.',
     args={
-        'DayCounter': 'The name of the day count convention.',
+        'daycounter_name': 'The name of the day count convention.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -50,9 +50,9 @@ def qlDayCounter(daycounter_name : str, trigger = None) -> ql.DayCounter:
 @xlo.func(
     help='Return the day count between two dates using the given day counter.',
     args={
-        'DayCounter': 'QuantLib DayCounter.',
-        'StartDate': 'Start date.',
-        'EndDate': 'End date.',
+        'daycounter': 'QuantLib DayCounter.',
+        'start_date': 'Start date.',
+        'end_date': 'End date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -63,11 +63,11 @@ def qlDayCounterDayCount(daycounter : qDayCounter, start_date : qDate, end_date 
 @xlo.func(
     help='Return the year fraction between two dates using the given day counter.',
     args={
-        'DayCounter': 'QuantLib DayCounter.',
-        'StartDate': 'Start date.',
-        'EndDate': 'End date.',
-        'RefStartDate': 'Reference start date (optional).',
-        'RefEndDate': 'Reference end date (optional).',
+        'daycounter': 'QuantLib DayCounter.',
+        'start_date': 'Start date.',
+        'end_date': 'End date.',
+        'ref_start_date': 'Reference start date (optional).',
+        'ref_end_date': 'Reference end date (optional).',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -77,7 +77,7 @@ def qlDayCounterYearFraction(daycounter : qDayCounter, start_date : qDate, end_d
 @xlo.func(
     help='Return the name of a QuantLib DayCounter.',
     args={
-        'DayCounter': 'QuantLib DayCounter.',
+        'daycounter': 'QuantLib DayCounter.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -87,7 +87,7 @@ def qlDayCounterName(daycounter : qDayCounter, trigger = None) -> str:
 
 @xlo.func(
     help='Check if a QuantLib DayCounter is empty (i.e., not initialized).',
-    args={      'DayCounter': 'QuantLib DayCounter.',   },
+    args={      'daycounter': 'QuantLib DayCounter.',   },
     group=EXCEL_GROUP_NAME,
 )
 def qlDayCounterEmpty(daycounter : qDayCounter, trigger = None) -> bool:
@@ -97,7 +97,7 @@ def qlDayCounterEmpty(daycounter : qDayCounter, trigger = None) -> bool:
 @xlo.func(
     help='Return the date corresponding to a given year fraction from a reference date using the specified day counter.',
     args={
-        'DayCounter': 'QuantLib DayCounter.',
+        'daycounter': 'QuantLib DayCounter.',
         'ref_date': 'Reference date.',
         'year_fraction': 'Year fraction to convert to a date.',
     },

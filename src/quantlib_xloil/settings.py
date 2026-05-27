@@ -14,7 +14,7 @@ def qlSettingsGetEvaluationDate(trigger = None) -> ql.Date:
 @xlo.func(
     help="Set the evaluation date in QuantLib settings.",
     args={
-        'Date': 'New evaluation date.',
+        'date': 'New evaluation date.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -32,7 +32,7 @@ def qlSettingsGetEnforcesTodaysHistoricFixings(trigger = None) -> bool:
 @xlo.func(
     help="Set whether QuantLib settings enforces today's historic fixings.",
     args={
-        'Enforces': 'Whether to enforce today\'s historic fixings.',
+        'enforces': 'Whether to enforce today\'s historic fixings.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -50,7 +50,7 @@ def qlSettingsGetIncludeReferenceDateEvents(trigger = None) -> bool:
 @xlo.func(
     help="Set whether QuantLib settings include reference date events.",
     args={
-        'Include': 'Whether to include reference date events.',
+        'include': 'Whether to include reference date events.',
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -68,7 +68,7 @@ def qlSettingsGetIncludeTodaysCashFlows(trigger = None) -> bool:
 @xlo.func(
     help="Set whether QuantLib settings include today's cash flows.",
     args={
-        'Include': 'Whether to include today\'s cash flows.',
+        'include': 'Whether to include today\'s cash flows.',
     },
     group=EXCEL_GROUP_NAME,
 )
