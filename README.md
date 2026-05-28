@@ -1,5 +1,7 @@
 # QuantLibXlOil
 
+[![Documentation](https://img.shields.io/badge/Documentation-dev-blue)](https://frame-consulting.github.io/QuantLibXlOil/)
+
 QuantLibXlOil is an interface package to make functions of the open-source [QuantLib](https://github.com/lballabio/QuantLib) pricing library available in Excel.
 
 The interface builds on the Python bindings for QuantLib via [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG).
