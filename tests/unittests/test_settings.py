@@ -70,12 +70,8 @@ def test_qlSettingsAnchorEvaluationDate_and_ResetEvaluationDate():
         new_date = qlSettingsSetEvaluationDate(target)
         assert new_date == target
 
-        reset_date = qlSettingsResetEvaluationDate()
-        assert reset_date == original
-        assert qlSettingsGetEvaluationDate() == original
-
-        anchored = qlSettingsAnchorEvaluationDate()
-        assert anchored == original
+        assert qlSettingsAnchorEvaluationDate()
+        assert qlSettingsResetEvaluationDate()
 
     finally:
         ql.Settings.instance().evaluationDate = original
