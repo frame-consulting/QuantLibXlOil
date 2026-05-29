@@ -51,10 +51,7 @@ Above step installs the xlOil Excel add-in and an `xlOil.ini` configuration file
 
 Installation can be verified by opening Excel with a blank workbook. Type `=xloVersion()` in an empty cell and enter. This should display an output similar to the one below.
 
-| <!-- --> | <!-- -->      |
-|----------|---------------|
-|Version   |  0.22.99      |
-|BuildDate | "May 22 2026" |
+![image](./docs/source/xloVersion.png)
 
 ### Load QuantLibXlOil Functions
 
@@ -68,9 +65,13 @@ Add `QuantLib_xlOil` to the text field *Load Modules*. Use comma separation with
 xloil.xloil_ribbon,QuantLib_xlOil
 ```
 
+![image](./docs/source/xloil_load_modules.png)
+
 Restart Excel and open a blank workbook.
 
 Test the QuantLib functions by entering `=qlVersion()` in an empty cell. This should produce a result like `1.41`.
+
+![image](./docs/source/qlVersion.png)
 
 Now, you are all set for QuantLib in Excel.
 

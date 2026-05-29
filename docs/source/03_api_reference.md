@@ -852,6 +852,162 @@ This section lists the QuantLib functions made available to Excel.
 [qlHexVersion](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/quantlib_.py#L20)(trigger = None)
 
 
+## Ratehelpers
+
+
+[qPillarChoice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L28)(s: str)
+
+
+[qFuturesType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L35)(s: str)
+
+
+[qQuoteHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L39)(rate: str)
+
+
+[qlRateHelperQuote](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L57)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlRateHelperLatestDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L67)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlRateHelperEarliestDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L77)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlRateHelperMaturityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L87)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlRateHelperLatestRelevantDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L97)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlRateHelperPillarDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L107)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlRateHelperImpliedQuote](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L118)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlRateHelperQuoteError](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L129)(rate_helper: ql.RateHelper, trigger = None)
+
+
+[qlDepositRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L145)(rate: qQuoteHandle, tenor: qPeriod, fixing_days: int, calendar: qCalendar, business_day_convention: qBusinessDayConvention, end_of_month: bool, daycounter: qDayCounter, trigger = None)
+
+
+[qlDepositRateHelper2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L173)(rate: qQuoteHandle, index: ql.IborIndex, trigger = None)
+
+
+[qlDepositRateHelper3](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L192)(rate: qQuoteHandle, fixing_date: qDate, index: ql.IborIndex, trigger = None)
+
+
+[qlFRARateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L221)(rate: qQuoteHandle, month_to_start: int, month_to_end: int, fixing_days: int, calendar: qCalendar, business_day_convention: qBusinessDayConvention, end_of_month: bool, day_counter: qDayCounter, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), use_indexed_coupon: bool = True, trigger = None)
+
+
+[qlFRARateHelper2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L261)(rate: qQuoteHandle, month_to_start: int, index: ql.IborIndex, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), use_indexed_coupon: bool = True, trigger = None)
+
+
+[qlFRARateHelper3](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L292)(rate: qQuoteHandle, imm_offset_start: int, imm_offset_end: int, index: ql.IborIndex, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), use_indexed_coupon: bool = True, trigger = None)
+
+
+[qlFRARateHelper4](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L324)(rate: qQuoteHandle, period_to_start: qPeriod, index: ql.IborIndex, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), use_indexed_coupon: bool = True, trigger = None)
+
+
+[qlFRARateHelperForDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L356)(rate: qQuoteHandle, start_date: qDate, end_date: qDate, index: ql.IborIndex, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), use_indexed_coupon: bool = True, trigger = None)
+
+
+[qlFuturesRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L391)(price: qQuoteHandle, ibor_start_date: qDate, n_months: int, calendar: qCalendar, business_day_convention: qBusinessDayConvention, end_of_month: bool, day_counter: qDayCounter, convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), type: qFuturesType = "IMM", trigger = None)
+
+
+[qlFuturesRateHelper2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L427)(price: qQuoteHandle, ibor_start_date: qDate, ibor_end_date: qDate, day_counter: qDayCounter, convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), type: qFuturesType = "IMM", trigger = None)
+
+
+[qlFuturesRateHelper3](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L456)(price: qQuoteHandle, ibor_start_date: qDate, index: ql.IborIndex, convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), type: qFuturesType = "IMM", trigger = None)
+
+
+[qlFuturesRateConvexityAdjustment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L479)(futures_rate_helper: ql.FuturesRateHelper, trigger = None)
+
+
+[qlSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L503)(rate: qQuoteHandle, tenor: qPeriod, calendar: qCalendar, fixed_frequency: qFrequency, fixed_convention: qBusinessDayConvention, fixed_daycount: qDayCounter, ibor_index: ql.IborIndex, spread: float = 0.0, fwd_start: qPeriod = ql.Period(0, ql.Days), discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), settlement_days: int = 0, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), end_of_month: bool = False, with_indexed_coupons: bool = False, trigger = None)
+
+
+[qlSwapRateHelper2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L555)(rate: qQuoteHandle, index: ql.SwapIndex, spread: float = 0.0, fwd_start: qPeriod = ql.Period(0, ql.Days), discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), end_of_month: bool = False, with_indexed_coupons: bool = False, trigger = None)
+
+
+[qlSwapRateForDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L602)(rate: qQuoteHandle, start_date: qDate, end_date: qDate, calendar: qCalendar, fixed_frequencies: qFrequency, business_day_convention: qBusinessDayConvention, day_counter: qDayCounter, index: ql.IborIndex, spread: float = 0.0, discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), pillar: ql.Pillar = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), end_of_month: bool = False, with_indexed_coupons: bool = False, trigger = None)
+
+
+[qlSwapRateHelperSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L643)(swap_rate_helper: ql.SwapRateHelper, trigger = None)
+
+
+[qlSwapRateHelperSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L653)(swap_rate_helper: ql.SwapRateHelper, trigger = None)
+
+
+[qlOISRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L762)(settlement_days: int, tenor: qPeriod, fixed_rate: qQuoteHandle, overnight_index: ql.OvernightIndex, discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), telescopic_value_dates: bool = False, payment_lag: int = 0, payment_convention: qBusinessDayConvention = "Following", payment_frequency: qFrequency = "Annual", payment_calendar: qCalendar = "NullCalendar", forward_start: qPeriod = ql.Period(0, ql.Days), overnight_spread: float = 0.0, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), averaging_method: qRateAveragingType = "Compound", end_of_month: bool = None, fixed_payment_frequency: qFrequency = "NOFREQUENCY", fixed_calendar: qCalendar = "NullCalendar", look_back_days: int = 0, lock_out_days: int = 0, apply_observation_shift: bool = False, pricer: ql.FloatingRateCouponPricer = None, rule: qDateGenerationRule = "Backward", overnight_calendar: qCalendar = "NullCalendar", convention: qBusinessDayConvention = "ModifiedFollowing", trigger = None)
+
+
+[qlOISRateHelperSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L912)(ois_rate_helper: ql.OISRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L932)(fwd_point: qQuoteHandle, spot_fx: qQuoteHandle, tenor: qPeriod, fixing_days: int, calendar: qCalendar, business_day_convention: qBusinessDayConvention, end_of_month: bool, is_fx_base_currency_collateral_currency: bool, collateral_curve: ql.YieldTermStructureHandle, trading_calendar: qCalendar = "NullCalendar", trigger = None)
+
+
+[qlFxSwapRateHelperForDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L971)(fwd_point: qQuoteHandle, spot_fx: qQuoteHandle, start_date: qDate, end_date: qDate, is_fx_base_currency_collateral_currency: bool, collateral_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None)
+
+
+[qlFxSwapRateHelperSpot](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L996)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperTenor](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1006)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperFixingDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1016)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1026)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperBusinessDayConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1037)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1047)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperIsFxBaseCurrencyCollateralCurrency](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1057)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperTradingCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1067)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlFxSwapRateHelperAdjustmentCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1077)(fx_swap_rate_helper: ql.FxSwapRateHelper, trigger = None)
+
+
+[qlOvernightIndexFutureRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1092)(price: qQuoteHandle, value_date: qDate, maturity_date: qDate, index: ql.OvernightIndex, convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), averaging_method: qRateAveragingType = "Compound", trigger = None)
+
+
+[qlOvernightIndexFutureRateHelperConvexityAdjustment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1117)(overnight_index_future_rate_helper: ql.OvernightIndexFutureRateHelper, trigger = None)
+
+
+[qlSofrFutureRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1133)(price: qQuoteHandle, reference_month: int, reference_year: int, frequency: qFrequency, convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), trigger = None)
+
+
+[qlConstNotionalCrossCurrencySwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1167)(fixed_rate: qQuoteHandle, tenor: qPeriod, fixing_days: int, calendar: qCalendar, convention: qBusinessDayConvention, end_of_month: bool, fixed_frequency: qFrequency, fixed_day_count: qDayCounter, float_index: ql.IborIndex, collateral_curve: ql.YieldTermStructureHandle, collateral_on_fixed_leg: bool, payment_lag: int = 0, trigger = None)
+
+
+[qlConstNotionalCrossCurrencyBasisSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1216)(basis: qQuoteHandle, tenor: qPeriod, fixing_days: int, calendar: qCalendar, convention: qBusinessDayConvention, end_of_month: bool, base_currency_index: ql.IborIndex, quote_currency_index: ql.IborIndex, collateral_curve: ql.YieldTermStructureHandle, is_fx_base_currency_collateral_currency: bool, is_basis_on_fx_base_currency_leg: bool, payment_frequency: qFrequency = "NOFREQUENCY", payment_lag: int = 0, trigger = None)
+
+
+[qlMtMCrossCurrencyBasisSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1268)(basis: qQuoteHandle, tenor: qPeriod, fixing_days: int, calendar: qCalendar, convention: qBusinessDayConvention, end_of_month: bool, base_currency_index: ql.IborIndex, quote_currency_index: ql.IborIndex, collateral_curve: ql.YieldTermStructureHandle, is_fx_base_currency_collateral_currency: bool, is_basis_on_fx_base_currency_leg: bool, is_fx_base_currency_leg_resettable: bool, payment_frequency: qFrequency = "NOFREQUENCY", payment_lag: int = 0, trigger = None)
+
+
+[qlIborIborBasisSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1318)(basis: qQuoteHandle, tenor: qPeriod, settlement_days: int, calendar: qCalendar, convention: qBusinessDayConvention, end_of_month: bool, base_index: ql.IborIndex, other_index: ql.IborIndex, discount_handle: ql.YieldTermStructureHandle, bootstrap_base_curve: bool, trigger = None)
+
+
+[qlIborIborBasisSwapRateHelperSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1351)(ibor_ibor_basis_swap_rate_helper: ql.IborIborBasisSwapRateHelper, trigger = None)
+
+
+[qlOvernightIborBasisSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1369)(basis: qQuoteHandle, tenor: qPeriod, settlement_days: int, calendar: qCalendar, convention: qBusinessDayConvention, end_of_month: bool, base_index: ql.IborIndex, other_index: ql.IborIndex, discount_handle: ql.YieldTermStructureHandle, trigger = None)
+
+
+[qlOvernightIborBasisSwapRateHelperSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L1400)(overnight_ibor_basis_swap_rate_helper: ql.OvernightIborBasisSwapRateHelper, trigger = None)
+
+
 ## Rounding
 
 
