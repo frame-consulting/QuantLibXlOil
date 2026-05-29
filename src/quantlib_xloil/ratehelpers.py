@@ -397,7 +397,7 @@ def qlFuturesRateHelper(
     end_of_month: bool, 
     day_counter: qDayCounter, 
     convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), 
-    type: qFuturesType = "IMM", 
+    type: qFuturesType = ql.IMM,
     trigger = None
     ) -> ql.FuturesRateHelper:
     return ql.FuturesRateHelper(
@@ -430,7 +430,7 @@ def qlFuturesRateHelper2(
     ibor_end_date: qDate, 
     day_counter: qDayCounter, 
     convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), 
-    type: qFuturesType = "IMM", 
+    type: qFuturesType = ql.IMM,
     trigger = None
     ) -> ql.FuturesRateHelper:
     return ql.FuturesRateHelper(
@@ -458,7 +458,7 @@ def qlFuturesRateHelper3(
     ibor_start_date: qDate, 
     index: ql.IborIndex, 
     convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), 
-    type: qFuturesType = "IMM", 
+    type: qFuturesType = ql.IMM,
     trigger = None
     ) -> ql.FuturesRateHelper:
     return ql.FuturesRateHelper(
@@ -767,24 +767,24 @@ def qlOISRateHelper(
     discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     telescopic_value_dates: bool = False,
     payment_lag: int = 0,
-    payment_convention: qBusinessDayConvention = "Following",
-    payment_frequency: qFrequency = "Annual",
-    payment_calendar: qCalendar = "NullCalendar",
+    payment_convention: qBusinessDayConvention = ql.Following,
+    payment_frequency: qFrequency = ql.Annual,
+    payment_calendar: qCalendar = ql.NullCalendar,
     forward_start: qPeriod = ql.Period(0, ql.Days),
     overnight_spread: float = 0.0, 
     pillar: qPillarChoice = ql.Pillar.LastRelevantDate, 
     custom_pillar_date: qDate = ql.Date(),
-    averaging_method: qRateAveragingType = "Compound", 
+    averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
     end_of_month: bool = None, 
-    fixed_payment_frequency: qFrequency = "NOFREQUENCY",
-    fixed_calendar: qCalendar = "NullCalendar",
+    fixed_payment_frequency: qFrequency = ql.NoFrequency,
+    fixed_calendar: qCalendar = ql.NullCalendar,
     look_back_days: int = 0,
     lock_out_days: int = 0,
     apply_observation_shift: bool = False,
     pricer: ql.FloatingRateCouponPricer = None,
-    rule: qDateGenerationRule = "Backward",
-    overnight_calendar: qCalendar = "NullCalendar",
-    convention: qBusinessDayConvention = "ModifiedFollowing",
+    rule: qDateGenerationRule = ql.DateGeneration.Backward,
+    overnight_calendar: qCalendar = ql.NullCalendar,
+    convention: qBusinessDayConvention = ql.ModifiedFollowing,
     trigger = None
     ) -> ql.OISRateHelper:
     return ql.OISRateHelper(
@@ -939,7 +939,7 @@ def qlFxSwapRateHelper(
     end_of_month: bool,
     is_fx_base_currency_collateral_currency: bool,
     collateral_curve: ql.YieldTermStructureHandle,
-    trading_calendar: qCalendar = "NullCalendar",
+    trading_calendar: qCalendar = ql.NullCalendar,
     trigger = None
     ) -> ql.FxSwapRateHelper:
     return ql.FxSwapRateHelper(
@@ -1095,7 +1095,7 @@ def qlOvernightIndexFutureRateHelper(
     maturity_date: qDate,
     index: ql.OvernightIndex,
     convexity_adjustment: qQuoteHandle = ql.QuoteHandle(), 
-    averaging_method: qRateAveragingType = "Compound",
+    averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
     trigger = None,
     ) -> ql.OvernightIndexFutureRateHelper:
     return ql.OvernightIndexFutureRateHelper(
@@ -1225,7 +1225,7 @@ def qlConstNotionalCrossCurrencyBasisSwapRateHelper(
     collateral_curve: ql.YieldTermStructureHandle,
     is_fx_base_currency_collateral_currency: bool,
     is_basis_on_fx_base_currency_leg: bool,
-    payment_frequency: qFrequency = "NOFREQUENCY",
+    payment_frequency: qFrequency = ql.NoFrequency,
     payment_lag: int = 0,
     trigger = None,
     ) -> ql.ConstNotionalCrossCurrencyBasisSwapRateHelper:
@@ -1278,7 +1278,7 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
     is_fx_base_currency_collateral_currency: bool,
     is_basis_on_fx_base_currency_leg: bool,
     is_fx_base_currency_leg_resettable: bool,
-    payment_frequency: qFrequency = "NOFREQUENCY",
+    payment_frequency: qFrequency = ql.NoFrequency,
     payment_lag: int = 0,
     trigger = None,
     ) -> ql.MtMCrossCurrencyBasisSwapRateHelper:
