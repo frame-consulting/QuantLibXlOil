@@ -9,7 +9,7 @@ QuantLibXlOil can be installed via pip.
 
 ## Setup Python Environment
 
-We recommend setting up a clean Python environment with `conda` (or `venv`).
+We recommend setting up a clean Python environment with [`conda`](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) (or `venv`).
 
 ```
 conda create -n xloil python
