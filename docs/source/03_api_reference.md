@@ -6,76 +6,76 @@ This section lists the QuantLib functions made available to Excel.
 ## Calendars
 
 
-[qCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L89)(calendarname: str)
+[qCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L96)(calendarname: str)
 
 
-[qBusinessDayConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L100)(conventionname: str)
+[qBusinessDayConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L107)(conventionname: str)
 
 
-[qJointCalendarRule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L108)(rule_name: str)
+[qJointCalendarRule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L115)(rule_name: str)
 
 
-[qlCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L119)(calendar_name: str, trigger = None)
+[qlCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L126)(calendar_name: str, trigger = None)
 
 
-[qlCalendarisWeekend](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L129)(calendar: qCalendar, weekday: qWeekday, trigger = None)
+[qlCalendarisWeekend](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L136)(calendar: qCalendar, weekday: qWeekday, trigger = None)
 
 
-[qlCalendarStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L141)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L148)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L152)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L159)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsBusinessDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L163)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsBusinessDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L170)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L173)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L180)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L183)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L190)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L193)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L200)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarAddHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L203)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarAddHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L210)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarRemoveHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L213)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarRemoveHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L220)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarResetAddedAndRemovedHolidays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L221)(calendar: qCalendar, trigger = None)
+[qlCalendarResetAddedAndRemovedHolidays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L228)(calendar: qCalendar, trigger = None)
 
 
-[qlCalendarAdjust](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L235)(calendar: qCalendar, date: qDate, convention: qBusinessDayConvention = "Following", trigger = None)
+[qlCalendarAdjust](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L242)(calendar: qCalendar, date: qDate, convention: qBusinessDayConvention = "Following", trigger = None)
 
 
-[qlCalendarAdvance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L250)(calendar: qCalendar, date: qDate, n: int, unit: qTimeUnit, convention: qBusinessDayConvention = "Following", end_of_month: bool = False, trigger = None)
+[qlCalendarAdvance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L257)(calendar: qCalendar, date: qDate, n: int, unit: qTimeUnit, convention: qBusinessDayConvention = "Following", end_of_month: bool = False, trigger = None)
 
 
-[qlCalendarAdvance2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L264)(calendar: qCalendar, date: qDate, period: qPeriod, convention: qBusinessDayConvention = "Following", end_of_month: bool = False, trigger = None)
+[qlCalendarAdvance2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L271)(calendar: qCalendar, date: qDate, period: qPeriod, convention: qBusinessDayConvention = "Following", end_of_month: bool = False, trigger = None)
 
 
-[qlCalendarBusinessDaysBetween](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L279)(calendar: qCalendar, from_date: qDate, to_date: qDate, include_first: bool = True, include_last: bool = False, trigger = None)
+[qlCalendarBusinessDaysBetween](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L286)(calendar: qCalendar, from_date: qDate, to_date: qDate, include_first: bool = True, include_last: bool = False, trigger = None)
 
 
-[qlCalendarHolidayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L289)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
+[qlCalendarHolidayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L296)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
 
 
-[qlCalendarBusinessDayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L300)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
+[qlCalendarBusinessDayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L307)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
 
 
-[qlCalendarName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L310)(calendar: qCalendar, trigger = None)
+[qlCalendarName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L317)(calendar: qCalendar, trigger = None)
 
 
-[qlCalendarEmpty](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L320)(calendar: qCalendar, trigger = None)
+[qlCalendarEmpty](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L327)(calendar: qCalendar, trigger = None)
 
 
-[qlCalendarJointCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L332)(calendar1: qCalendar, calendar2: qCalendar, rule: qJointCalendarRule = "JOINHOLIDAYS")
+[qlCalendarJointCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L339)(calendar1: qCalendar, calendar2: qCalendar, rule: qJointCalendarRule = "JOINHOLIDAYS")
 
 
-[qlCalendarJointCalendar2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L345)(calendar1: qCalendar, calendar2: qCalendar, calendar3: qCalendar, rule: qJointCalendarRule = "JOINHOLIDAYS", trigger = None)
+[qlCalendarJointCalendar2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L352)(calendar1: qCalendar, calendar2: qCalendar, calendar3: qCalendar, rule: qJointCalendarRule = "JOINHOLIDAYS", trigger = None)
 
 
 ## Cashflows
@@ -573,25 +573,25 @@ This section lists the QuantLib functions made available to Excel.
 ## Daycounters
 
 
-[qDayCounter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L33)(s: str)
+[qDayCounter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L50)(s: str)
 
 
-[qlDayCounter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L47)(daycounter_name: str, trigger = None)
+[qlDayCounter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L64)(daycounter_name: str, trigger = None)
 
 
-[qlDayCounterDayCount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L59)(daycounter: qDayCounter, start_date: qDate, end_date: qDate, trigger = None)
+[qlDayCounterDayCount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L76)(daycounter: qDayCounter, start_date: qDate, end_date: qDate, trigger = None)
 
 
-[qlDayCounterYearFraction](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L74)(daycounter: qDayCounter, start_date: qDate, end_date: qDate, ref_start_date: qDate = ql.Date(), ref_end_date: qDate = ql.Date(), trigger = None)
+[qlDayCounterYearFraction](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L91)(daycounter: qDayCounter, start_date: qDate, end_date: qDate, ref_start_date: qDate = ql.Date(), ref_end_date: qDate = ql.Date(), trigger = None)
 
 
-[qlDayCounterName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L84)(daycounter: qDayCounter, trigger = None)
+[qlDayCounterName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L101)(daycounter: qDayCounter, trigger = None)
 
 
-[qlDayCounterEmpty](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L93)(daycounter: qDayCounter, trigger = None)
+[qlDayCounterEmpty](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L110)(daycounter: qDayCounter, trigger = None)
 
 
-[qlDayCounterYearFractionToDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L106)(daycounter: qDayCounter, ref_date: qDate, year_fraction: float, trigger = None)
+[qlDayCounterYearFractionToDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L123)(daycounter: qDayCounter, ref_date: qDate, year_fraction: float, trigger = None)
 
 
 ## Indexes
@@ -843,6 +843,39 @@ This section lists the QuantLib functions made available to Excel.
 [qlZeroCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/interpolatedyieldcurves.py#L147)(dates: xlo.Array(dims=1), zerorates: xlo.Array(dims=1), daycounter: qDayCounter = ql.Actual365Fixed(), calendar: qCalendar = ql.NullCalendar(), trigger = None)
 
 
+## Piecewiseyieldcurve
+
+
+[qlYieldTermStructureHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L53)(curve: ql.YieldTermStructure, trigger = None)
+
+
+[qlPiecewiseYieldCurveDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L70)(curve: ql.YieldTermStructure, trigger = None)
+
+
+[qlPiecewiseYieldCurveTimes](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L84)(curve: ql.YieldTermStructure, trigger = None)
+
+
+[qlPiecewiseYieldCurveData](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L98)(curve: ql.YieldTermStructure, trigger = None)
+
+
+[qlPiecewiseYieldCurveAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L118)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+
+
+[qlPiecewiseYieldCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L160)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+
+
+[qlPiecewiseYieldCurveWithJumpsAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L198)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, jumps: xlo.Array(dims=1), jump_dates: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+
+
+[qlPiecewiseYieldCurveWithJumps](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L247)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, jumps: xlo.Array(dims=1), jump_dates: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+
+
+[qlPiecewiseSpreadYieldCurveAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L286)(base_curve: ql.YieldTermStructureHandle, instruments: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+
+
+[qlPiecewiseSpreadYieldCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L326)(base_curve: ql.YieldTermStructureHandle, instruments: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+
+
 ## Quantlib_
 
 
@@ -939,13 +972,13 @@ This section lists the QuantLib functions made available to Excel.
 [qlSwapRateHelperSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L653)(swap_rate_helper: ql.SwapRateHelper, trigger = None)
 
 
-[qlOISRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L762)(settlement_days: int, tenor: qPeriod, fixed_rate: qQuoteHandle, overnight_index: ql.OvernightIndex, discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), telescopic_value_dates: bool = False, payment_lag: int = 0, payment_convention: qBusinessDayConvention = ql.Following, payment_frequency: qFrequency = ql.Annual, payment_calendar: qCalendar = ql.NullCalendar, forward_start: qPeriod = ql.Period(0, ql.Days), overnight_spread: float = 0.0, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), averaging_method: qRateAveragingType = ql.RateAveraging.Compound, end_of_month: bool = None, fixed_payment_frequency: qFrequency = ql.NoFrequency, fixed_calendar: qCalendar = ql.NullCalendar, look_back_days: int = 0, lock_out_days: int = 0, apply_observation_shift: bool = False, pricer: ql.FloatingRateCouponPricer = None, rule: qDateGenerationRule = ql.DateGeneration.Backward, overnight_calendar: qCalendar = ql.NullCalendar, convention: qBusinessDayConvention = ql.ModifiedFollowing, trigger = None)
+[qlOISRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L762)(settlement_days: int, tenor: qPeriod, fixed_rate: qQuoteHandle, overnight_index: ql.OvernightIndex, discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), telescopic_value_dates: bool = False, payment_lag: int = 0, payment_convention: qBusinessDayConvention = ql.Following, payment_frequency: qFrequency = ql.Annual, payment_calendar: qCalendar = ql.NullCalendar(), forward_start: qPeriod = ql.Period(0, ql.Days), overnight_spread: float = 0.0, pillar: qPillarChoice = ql.Pillar.LastRelevantDate, custom_pillar_date: qDate = ql.Date(), averaging_method: qRateAveragingType = ql.RateAveraging.Compound, end_of_month: bool = None, fixed_payment_frequency: qFrequency = ql.NoFrequency, fixed_calendar: qCalendar = ql.NullCalendar(), look_back_days: int = 0, lock_out_days: int = 0, apply_observation_shift: bool = False, pricer: ql.FloatingRateCouponPricer = None, rule: qDateGenerationRule = ql.DateGeneration.Backward, overnight_calendar: qCalendar = ql.NullCalendar(), convention: qBusinessDayConvention = ql.ModifiedFollowing, trigger = None)
 
 
 [qlOISRateHelperSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L912)(ois_rate_helper: ql.OISRateHelper, trigger = None)
 
 
-[qlFxSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L932)(fwd_point: qQuoteHandle, spot_fx: qQuoteHandle, tenor: qPeriod, fixing_days: int, calendar: qCalendar, business_day_convention: qBusinessDayConvention, end_of_month: bool, is_fx_base_currency_collateral_currency: bool, collateral_curve: ql.YieldTermStructureHandle, trading_calendar: qCalendar = ql.NullCalendar, trigger = None)
+[qlFxSwapRateHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L932)(fwd_point: qQuoteHandle, spot_fx: qQuoteHandle, tenor: qPeriod, fixing_days: int, calendar: qCalendar, business_day_convention: qBusinessDayConvention, end_of_month: bool, is_fx_base_currency_collateral_currency: bool, collateral_curve: ql.YieldTermStructureHandle, trading_calendar: qCalendar = ql.NullCalendar(), trigger = None)
 
 
 [qlFxSwapRateHelperForDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/ratehelpers.py#L971)(fwd_point: qQuoteHandle, spot_fx: qQuoteHandle, start_date: qDate, end_date: qDate, is_fx_base_currency_collateral_currency: bool, collateral_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(), trigger = None)
