@@ -69,6 +69,13 @@ QL_BUSINESSDAYCONVENTION = {
     "UNADJUSTED": ql.Unadjusted,
     "HALFMONTHMODIFIEDFOLLOWING": ql.HalfMonthModifiedFollowing,
     "NEAREST": ql.Nearest,
+    # short cuts
+    "F": ql.Following,
+    "P": ql.Preceding,
+    "MF": ql.ModifiedFollowing,
+    "MP": ql.ModifiedPreceding,
+    "U": ql.Unadjusted,
+    "N": ql.Nearest,
 }
 
 QL_JOINTCALENDARRULE = {

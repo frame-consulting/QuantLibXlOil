@@ -17,6 +17,23 @@ QL_DAYCOUNTER = {
     "SIMPLEDAYCOUNTER": ql.SimpleDayCounter,
     "THIRTY360": lambda :ql.Thirty360(ql.Thirty360.ISMA),
     "THIRTY365": ql.Thirty365,
+    # display names
+    "ACTUAL/360": ql.Actual360,
+    "ACTUAL/364": ql.Actual364,
+    "ACTUAL/365.25": ql.Actual36525,
+    "ACTUAL/365 (FIXED)": ql.Actual365Fixed,
+    "ACTUAL/366": ql.Actual366,
+    "ACTUAL/ACTUAL (ISMA)": lambda : ql.ActualActual(ql.ActualActual.ISMA),
+    "BUSINESS/252(BRAZIL)": ql.Business252,
+    "1/1": ql.OneDayCounter,
+    "SIMPLE": ql.SimpleDayCounter,
+    "30/360 (BOND BASIS)": lambda :ql.Thirty360(ql.Thirty360.BondBasis),
+    "30/365": ql.Thirty365,
+    # short cuts
+    "ACT/360": ql.Actual360,
+    "ACT/365": ql.Actual365Fixed,
+    "30/360" : lambda :ql.Thirty360(ql.Thirty360.BondBasis),
+    #
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
