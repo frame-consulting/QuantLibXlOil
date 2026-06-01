@@ -7,6 +7,7 @@ from quantlib_xloil.date import *
 from quantlib_xloil.daycounters import *
 from quantlib_xloil.interpolatedyieldcurves import *
 from quantlib_xloil.indexes import *
+from quantlib_xloil.piecewiseyieldcurve import *
 from quantlib_xloil.quantlib_ import *
 from quantlib_xloil.ratehelpers import *
 from quantlib_xloil.rounding import *

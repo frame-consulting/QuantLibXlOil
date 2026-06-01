@@ -1,5 +1,7 @@
 # QuantLibXlOil
 
+[![Documentation](https://img.shields.io/badge/Documentation-dev-blue)](https://frame-consulting.github.io/QuantLibXlOil/)
+
 QuantLibXlOil is an interface package to make functions of the open-source [QuantLib](https://github.com/lballabio/QuantLib) pricing library available in Excel.
 
 The interface builds on the Python bindings for QuantLib via [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG).
@@ -17,7 +19,7 @@ QuantLibXlOil can be installed via pip.
 
 ### Setup Python Environment
 
-We recommend setting up a clean Python environment with `conda` (or `venv`).
+We recommend setting up a clean Python environment with [`conda`](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) (or `venv`).
 
 ```
 conda create -n xloil python
@@ -49,10 +51,7 @@ Above step installs the xlOil Excel add-in and an `xlOil.ini` configuration file
 
 Installation can be verified by opening Excel with a blank workbook. Type `=xloVersion()` in an empty cell and enter. This should display an output similar to the one below.
 
-| <!-- --> | <!-- -->      |
-|----------|---------------|
-|Version   |  0.22.99      |
-|BuildDate | "May 22 2026" |
+![image](./docs/source/xloVersion.png)
 
 ### Load QuantLibXlOil Functions
 
@@ -66,9 +65,13 @@ Add `QuantLib_xlOil` to the text field *Load Modules*. Use comma separation with
 xloil.xloil_ribbon,QuantLib_xlOil
 ```
 
+![image](./docs/source/xloil_load_modules.png)
+
 Restart Excel and open a blank workbook.
 
 Test the QuantLib functions by entering `=qlVersion()` in an empty cell. This should produce a result like `1.41`.
+
+![image](./docs/source/qlVersion.png)
 
 Now, you are all set for QuantLib in Excel.
 

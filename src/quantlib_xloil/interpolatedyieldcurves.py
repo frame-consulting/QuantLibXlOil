@@ -52,7 +52,7 @@ QL_INTERPOLATED_CURVES = {
         "discounts" : "The discount factors corresponding to the dates.",
         "daycounter" : "The day count convention to use for the curve.",
         "calendar" : "The calendar to use for the curve.",
-        "traits" : "The interpolation traits: 'Discount', 'ForwardRate', 'ZeroRate'.",
+        "traits" : "The interpolation traits: 'LogDiscount', 'ForwardRate', 'ZeroRate'.",
         "interpolator" : "The interpolation method to use for the curve.",
         "mixed_interpolation_behavior" : "The behavior to use for mixed interpolation.",
         "mixed_interpolation_n" : "The where to switch interpolation methods.",
