@@ -8,6 +8,7 @@ from quantlib_xloil.date import *
 from quantlib_xloil.daycounters import *
 from quantlib_xloil.interpolatedyieldcurves import *
 from quantlib_xloil.indexes import *
+from quantlib_xloil.localvolatilities import *
 from quantlib_xloil.payoffs import *
 from quantlib_xloil.piecewiseyieldcurve import *
 from quantlib_xloil.quantlib_ import *
