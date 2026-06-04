@@ -36,7 +36,7 @@ def qFuturesType(s : str) -> ql.Futures:
     return _qFuturesType(s)
 
 @xlo.converter()
-def qQuoteHandle(rate : str) -> ql.QuoteHandle:
+def qQuoteHandle(rate) -> ql.QuoteHandle:
     if isinstance(rate, ql.QuoteHandle):
         return rate
     if isinstance(rate, (int, float)):
