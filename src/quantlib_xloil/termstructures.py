@@ -1,5 +1,4 @@
 import QuantLib as ql
-from tomlkit import date
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
