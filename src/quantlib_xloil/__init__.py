@@ -16,3 +16,4 @@ from quantlib_xloil.rounding import *
 from quantlib_xloil.scheduler import *
 from quantlib_xloil.settings import *
 from quantlib_xloil.termstructures import *
+from quantlib_xloil.volatilities import *
