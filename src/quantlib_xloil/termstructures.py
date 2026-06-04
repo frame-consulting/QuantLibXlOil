@@ -1,4 +1,5 @@
 import QuantLib as ql
+from tomlkit import date
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
@@ -268,7 +269,7 @@ def qlFlatForward(
     reference_date : qDate,
     forward_rate : float,
     daycounter : qDayCounter = ql.Actual365Fixed(),
-    compounding : qCompounding = ql.Compounded,
+    compounding : qCompounding = ql.Continuous,
     frequency : qFrequency = ql.NoFrequency,
     calendar : qCalendar = ql.NullCalendar(),
     trigger = None,
