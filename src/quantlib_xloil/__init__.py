@@ -8,6 +8,7 @@ from quantlib_xloil.date import *
 from quantlib_xloil.daycounters import *
 from quantlib_xloil.dividends import *
 from quantlib_xloil.exercise import *
+from quantlib_xloil.grid import *
 from quantlib_xloil.interpolatedyieldcurves import *
 from quantlib_xloil.indexes import *
 from quantlib_xloil.instruments import *
