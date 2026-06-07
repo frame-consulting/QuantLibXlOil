@@ -43,6 +43,7 @@ def qlBlackCalibrationHelperSetPricingEngine(
     trigger=None,
 ) -> bool:
     helper.setPricingEngine(engine)
+    return True
 
 @xlo.func(
     help='Return the market value of a BlackCalibrationHelper.',
