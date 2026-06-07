@@ -5,7 +5,23 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate
 from .calendars import qCalendar
 from .daycounters import qDayCounter
-from .utilities import enum_value
+from .utilities import first_key, UNKNOWN_KEY, UNKNOWN_VALUE, enum_value
+
+
+# Volatility types
+
+QL_VOLATILITY_TYPE = {
+    'NORMAL' : ql.Normal,
+    'SHIFTEDLOGNORMAL' : ql.ShiftedLognormal,
+    UNKNOWN_KEY : UNKNOWN_VALUE,
+}
+
+def _qVolatilityType(s: str) -> int:
+    return enum_value(s, QL_VOLATILITY_TYPE)
+
+@xlo.converter()
+def qVolatilityType(s: str) -> int:
+    return _qVolatilityType(s)
 
 
 # VolatilityTermStructure/BlackVolTermStructure interface
