@@ -131,3 +131,22 @@ def qlEndCriteriaSucceded(
     trigger=None
 ) -> bool:
     return end_criteria.succeeded(ec_type)
+
+@xlo.func(
+    help='Create a QuantLib LevenbergMarquardt optimization method.',
+    args={
+        'epsfcn': 'The epsilon for the function value.',
+        'xtol': 'The epsilon for the solution.',
+        'gtol': 'The epsilon for the gradient norm.',
+        'use_cost_functions_jacobian': 'Whether to use the cost functions Jacobian.'
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlLevenbergMarquardt(
+    epsfcn: float = 1.0e-8,
+    xtol: float = 1.0e-8,
+    gtol: float = 1.0e-8,
+    use_cost_functions_jacobian: bool = False,
+    trigger = None,
+) -> ql.LevenbergMarquardt:
+    return ql.LevenbergMarquardt(epsfcn, xtol, gtol, use_cost_functions_jacobian)
