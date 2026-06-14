@@ -115,13 +115,22 @@ def qlConstantParameter(
     help="Create a QuantLib PiecewiseConstantParameter.",
     args={
         "times": "The times for the parameter.",
+        "values": "The values for the parameter.",
         "constraint": "The constraint for the parameter.",
     },
     group=EXCEL_GROUP_NAME,
 )
 def qlPiecewiseConstantParameter(
     times: xlo.Array(dims=1),
+    values: xlo.Array(dims=1),
     constraint: ql.Constraint = ql.NoConstraint(),
     trigger=None,
 ) -> ql.PiecewiseConstantParameter:
-    return ql.PiecewiseConstantParameter(to_float_list(times), constraint)
+    if len(times) + 1 != len(values):
+        raise ValueError(
+            f"There must be one more value than times. Got {len(times)} times and {len(values)} values."
+        )
+    p = ql.PiecewiseConstantParameter(to_float_list(times), constraint)
+    for i, value in enumerate(to_float_list(values)):
+        p.setParam(i, value)
+    return p

@@ -64,8 +64,9 @@ def test_qlParameterSetParam_updates_value_and_checks_bounds():
 
 def test_qlPiecewiseConstantParameter_and_test_params():
     times = [1.0, 2.0]
+    values = [0.1, 0.2, 0.3]
     constraint = qlBoundaryConstraint(0.0, 10.0)
-    parameter = qlPiecewiseConstantParameter(times, constraint)
+    parameter = qlPiecewiseConstantParameter(times, values, constraint)
 
     assert isinstance(parameter, ql.PiecewiseConstantParameter)
     assert qlParameterSize(parameter) == 3
