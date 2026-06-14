@@ -240,22 +240,22 @@ This section lists the QuantLib functions made available to Excel.
 [qlCalibratedModelSetParams](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L82)(model: ql.CalibratedModel, params: xlo.Array(dims=1), trigger = None)
 
 
-[qlCalibratedModelValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L100)(model: ql.CalibratedModel, params: xlo.Array(dims=1), calibration_helpers: xlo.Array(dims=1), trigger = None)
+[qlCalibratedModelValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L101)(model: ql.CalibratedModel, params: xlo.Array(dims=1), calibration_helpers: xlo.Array(dims=1), trigger = None)
 
 
-[qlCalibratedModelConstraint](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L116)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelConstraint](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L117)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelEndCriteria](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L128)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelEndCriteria](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L129)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelProblemValues](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L140)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelProblemValues](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L141)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelProblemValuesFunctionEvaluation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L152)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelProblemValuesFunctionEvaluation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L153)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L164)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L165)(model: ql.CalibratedModel, trigger = None)
 
 
 ## Calibrationhelpers
@@ -1191,6 +1191,576 @@ This section lists the QuantLib functions made available to Excel.
 [qlLevenbergMarquardt](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/optimizers.py#L146)(epsfcn: float = 1.0e-8, xtol: float = 1.0e-8, gtol: float = 1.0e-8, use_cost_functions_jacobian: bool = False, trigger = None)
 
 
+## Options
+
+
+[qCashDividendModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L178)(s: str)
+
+
+[qBinomialEngineType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L187)(s: str)
+
+
+[qMCTraits](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L196)(s: str)
+
+
+[qLsmBasisSystemPolynomialType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L205)(s: str)
+
+
+[qAnalyticHestonComplexLogFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L214)(s: str)
+
+
+[qAnalyticPTDHestonComplexLogFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L223)(s: str)
+
+
+[qAnalyticHestonEngineIntegration](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L242)(name: str)
+
+
+[qFdmSchemeType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L284)(s: str)
+
+
+[qFdmSchemeDesc](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L293)(s: str)
+
+
+[qFdBlackScholesCashDividendModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L302)(s: str)
+
+
+[qQdPlusSolverType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L311)(s: str)
+
+
+[qQdFpFixedPointEquation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L320)(s: str)
+
+
+[qQdFpIterationScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L333)(s: str)
+
+
+[qDeltaVolQuoteDeltaType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L342)(s: str)
+
+
+[qDeltaVolQuoteAtmType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L351)(s: str)
+
+
+[qlOptionTypeName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L362)(option_type: qOptionType, trigger = None)
+
+
+[qlOptionPayoff](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L388)(option: ql.Option, trigger = None)
+
+
+[qlOptionExercise](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L399)(option: ql.Option, trigger = None)
+
+
+[qlOneAssetOptionDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L413)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L424)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L435)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L446)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L457)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L468)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L479)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L490)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L501)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L512)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlOneAssetOptionITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L523)(option: ql.OneAssetOption, trigger = None)
+
+
+[qlVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L540)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+
+
+[qlVanillaOptionImpliedVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L560)(option: ql.VanillaOption, target_value: float, process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, accuracy: float = 1.0e-4, max_evaluations: int = 100, min_vol: float = 1.0e-4, max_vol: float = 4.0, trigger = None)
+
+
+[qlEuropeanOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L595)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+
+
+[qlForwardVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L614)(moneyness: float, reset_date: qDate, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+
+
+[qlQuantoVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L632)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+
+
+[qlQuantoVanillaOptionQVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L645)(option: ql.QuantoVanillaOption, trigger = None)
+
+
+[qlQuantoVanillaOptionQRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L656)(option: ql.QuantoVanillaOption, trigger = None)
+
+
+[qlQuantoVanillaOptionQLambda](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L667)(option: ql.QuantoVanillaOption, trigger = None)
+
+
+[qlQuantoForwardVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L681)(moneyness: float, reset_date: qDate, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+
+
+[qlMultiAssetOptionDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L701)(option: ql.MultiAssetOption, trigger = None)
+
+
+[qlMultiAssetOptionGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L712)(option: ql.MultiAssetOption, trigger = None)
+
+
+[qlMultiAssetOptionTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L723)(option: ql.MultiAssetOption, trigger = None)
+
+
+[qlMultiAssetOptionVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L734)(option: ql.MultiAssetOption, trigger = None)
+
+
+[qlMultiAssetOptionRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L745)(option: ql.MultiAssetOption, trigger = None)
+
+
+[qlMultiAssetOptionDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L756)(option: ql.MultiAssetOption, trigger = None)
+
+
+[qlMargrabeOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L772)(q1: int, q2: int, exercise: ql.Exercise, trigger = None)
+
+
+[qlMargrabeOptionDelta1](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L785)(option: ql.MargrabeOption, trigger = None)
+
+
+[qlMargrabeOptionDelta2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L796)(option: ql.MargrabeOption, trigger = None)
+
+
+[qlMargrabeOptionGamma1](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L807)(option: ql.MargrabeOption, trigger = None)
+
+
+[qlMargrabeOptionGamma2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L818)(option: ql.MargrabeOption, trigger = None)
+
+
+[qlTwoAssetCorrelationOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L832)(option_type: qOptionType, strike1: float, strike2: float, exercise: ql.Exercise, trigger = None)
+
+
+[qlCompoundOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L855)(mother_payoff: ql.StrikedTypePayoff, mother_exercise: ql.Exercise, daughter_payoff: ql.StrikedTypePayoff, daughter_exercise: ql.Exercise, trigger = None)
+
+
+[qlSimpleChooserOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L876)(choosing_date: qDate, strike: float, exercise: ql.Exercise, trigger = None)
+
+
+[qlComplexChooserOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L893)(choosing_date: qDate, strike_call: float, strike_put: float, exercise_call: ql.Exercise, exercise_put: ql.Exercise, trigger = None)
+
+
+[qlHolderExtensibleOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L918)(option_type: qOptionType, premium: float, second_expiry_date: qDate, second_strike: float, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+
+
+[qlWriterExtensibleOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L947)(payoff1: ql.PlainVanillaPayoff, exercise1: ql.Exercise, payoff2: ql.PlainVanillaPayoff, exercise2: ql.Exercise, trigger = None)
+
+
+[qlAnalyticEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L970)(process: ql.GeneralizedBlackScholesProcess, discount_curve: ql.YieldTermStructureHandle = None, trigger = None)
+
+
+[qlAnalyticDividendEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L988)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1), trigger = None)
+
+
+[qlCashDividendEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1005)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1), cash_dividend_model: qCashDividendModel = ql.CashDividendEuropeanEngine.Spot, trigger = None)
+
+
+[qlIntegralEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1023)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1036)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlQuantoEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1052)(process: ql.GeneralizedBlackScholesProcess, foreign_risk_free_rate: ql.YieldTermStructureHandle, exchange_rate_volatility: ql.BlackVolTermStructureHandle, correlation: qQuoteHandle, trigger = None)
+
+
+[qlQuantoForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1074)(process: ql.GeneralizedBlackScholesProcess, foreign_risk_free_rate: ql.YieldTermStructureHandle, exchange_rate_volatility: ql.BlackVolTermStructureHandle, correlation: qQuoteHandle, trigger = None)
+
+
+[qlBaroneAdesiWhaleyApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1097)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlBjerksundStenslandApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1111)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlJuQuadraticApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1125)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlAnalyticDigitalAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1139)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlAnalyticEuropeanMargrabeEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1158)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: float, trigger = None)
+
+
+[qlAnalyticAmericanMargrabeEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1176)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: float, trigger = None)
+
+
+[qlAnalyticCompoundOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1192)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlAnalyticSimpleChooserEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1205)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlAnalyticComplexChooserEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1218)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlAnalyticHolderExtensibleOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1231)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlAnalyticWriterExtensibleOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1245)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+
+
+[qlAnalyticTwoAssetCorrelationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1261)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: qQuoteHandle, trigger = None)
+
+
+[qlHestonModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1280)(process: ql.HestonProcess, trigger = None)
+
+
+[qlHestonModelHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1291)(model: ql.HestonModel, trigger = None)
+
+
+[qlHestonModelHandleCurrentLink](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1302)(model_handle: ql.HestonModelHandle, trigger = None)
+
+
+[qlHestonModelTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1315)(model: ql.HestonModel, trigger = None)
+
+
+[qlHestonModelKappa](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1326)(model: ql.HestonModel, trigger = None)
+
+
+[qlHestonModelSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1337)(model: ql.HestonModel, trigger = None)
+
+
+[qlHestonModelRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1348)(model: ql.HestonModel, trigger = None)
+
+
+[qlHestonModelV0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1359)(model: ql.HestonModel, trigger = None)
+
+
+[qlHestonModelProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1370)(model: ql.HestonModel, trigger = None)
+
+
+[qlPiecewiseTimeDependentHestonModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1389)(risk_free_rate: ql.YieldTermStructureHandle, dividend_yield: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, theta: ql.Parameter, kappa: ql.Parameter, sigma: ql.Parameter, rho: ql.Parameter, time_grid: ql.TimeGrid, trigger = None)
+
+
+[qlPiecewiseTimeDependentHestonModelTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1414)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+
+
+[qlPiecewiseTimeDependentHestonModelKappa](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1428)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+
+
+[qlPiecewiseTimeDependentHestonModelSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1442)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+
+
+[qlPiecewiseTimeDependentHestonModelRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1456)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+
+
+[qlPiecewiseTimeDependentHestonModelV0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1469)(model: ql.PiecewiseTimeDependentHestonModel, trigger = None)
+
+
+[qlPiecewiseTimeDependentHestonModelS0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1482)(model: ql.PiecewiseTimeDependentHestonModel, trigger = None)
+
+
+[qlAnalyticHestonEngineIntegrationGaussLaguerre](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1498)(integration_order: int = 128, trigger = None)
+
+
+[qlAnalyticHestonEngineIntegrationNumberOfEvaluations](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1512)(integration: ql.AnalyticHestonEngine_Integration, trigger = None)
+
+
+[qlAnalyticHestonEngineIntegrationIsAdaptive](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1526)(integration: ql.AnalyticHestonEngine_Integration, trigger = None)
+
+
+[qlAnalyticHestonEngineIntegrationAndersenPiterbargIntegrationLimit](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1543)(c_inf: float, epsilon: float, v0: float, t: float, trigger = None)
+
+
+[qlAnalyticHestonEngineOptimalAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1563)(t: float, engine: ql.AnalyticHestonEngine, trigger = None)
+
+
+[qlAnalyticHestonEngineOptimalAlphaValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1579)(optimal_alpha: ql.AnalyticHestonEngine_OptimalAlpha, strike: float, trigger = None)
+
+
+[qlAnalyticHestonEngineOptimalAlphaBounds](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1595)(optimal_alpha: ql.AnalyticHestonEngine_OptimalAlpha, strike: float, trigger = None)
+
+
+[qlAnalyticHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1616)(model: ql.HestonModel, integration_order: int = 144, rel_tolerance: float = None, abs_tolerance: float = None, max_evaluations: int = None, complex_log_formula: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.Gatheral, integration: qAnalyticHestonEngineIntegration = None, andersen_piterbarg_epsilon: float = 1.0e-8, trigger = None)
+
+
+[qlAnalyticHestonEngineNumberOfEvaluations](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1654)(engine: ql.AnalyticHestonEngine, trigger = None)
+
+
+[qlCOSHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1669)(model: ql.HestonModel, l: float = 16.0, n: int = 200, trigger = None)
+
+
+[qlExponentialFittingHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1685)(model: ql.HestonModel, control_variate: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.OptimalCV, scaling: float = ql.nullDouble(), alpha: float = -0.5, trigger = None)
+
+
+[qlAnalyticPDFHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1704)(model: ql.HestonModel, gauss_lobatto_eps: float = 1.0e-6, gauss_lobatto_integration_order: int = 10000, trigger = None)
+
+
+[qlAnalyticHestonForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1723)(process: ql.HestonProcess, integration_order: int = 144, trigger = None)
+
+
+[qlAnalyticPTDHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1744)(model: ql.PiecewiseTimeDependentHestonModel, integration_order: int = 144, rel_tolerance: float = None, abs_tolerance: float = None, max_evaluations: int = None, complex_log_formula: qAnalyticPTDHestonComplexLogFormula = ql.AnalyticPTDHestonEngine.Gatheral, integration: qAnalyticHestonEngineIntegration = None, andersen_piterbarg_epsilon: float = 1.0e-8, trigger = None)
+
+
+[qlAnalyticHestonHullWhiteEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1788)(heston_model: ql.HestonModel, hull_white_model: ql.HullWhite, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
+
+
+[qlAnalyticH1HWEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1817)(heston_model: ql.HestonModel, hull_white_model: ql.HullWhite, rho_sr: float, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
+
+
+[qlBinomialVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1847)(process: ql.GeneralizedBlackScholesProcess, engine_type: qBinomialEngineType, steps: int, trigger = None)
+
+
+[qlFdmSchemeDesc](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1868)(scheme_type: qFdmSchemeType = ql.FdmSchemeDesc.DouglasType, theta: float = 0.5, mu: float = 0.0, trigger = None)
+
+
+[qlFdmSchemeDescByName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1884)(scheme_desc: qFdmSchemeDesc, trigger = None)
+
+
+[qlFdmQuantoHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1901)(domestic_ts: ql.YieldTermStructureHandle, foreign_ts: ql.YieldTermStructureHandle, fx_vol_ts: ql.BlackVolTermStructureHandle, equity_fx_correlation: float, exchange_rate_atm_level: float, trigger = None)
+
+
+[qlFdBlackScholesVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1934)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, quanto_helper: ql.FdmQuantoHelper = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, local_vol: bool = False, illegal_local_vol_overwrite: float = -ql.nullDouble(), cash_dividend_model: qFdBlackScholesCashDividendModel = ql.FdBlackScholesVanillaEngine.Spot, trigger = None)
+
+
+[qlFdBlackScholesShoutEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2011)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
+
+
+[qlFdOrnsteinUhlenbeckVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2045)(process: ql.OrnsteinUhlenbeckProcess, discount_curve: ql.YieldTermStructureHandle, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, epsilon: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
+
+
+[qlFdBatesVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2093)(model: ql.BatesModel, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, v_grid: int = 50, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
+
+
+[qlFdHestonVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2132)(model: ql.HestonModel, dividends: xlo.Array(dims=1) = None, quanto_helper: ql.FdmQuantoHelper = None, t_grid: int = 100, x_grid: int = 100, v_grid: int = 50, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), leverage_fct: ql.LocalVolTermStructureHandle = None, mixing_factor: float = 1.0, trigger = None)
+
+
+[qlFdCEVVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2214)(f0: float, alpha: float, beta: float, discount_curve: ql.YieldTermStructureHandle, t_grid: int = 50, x_grid: int = 400, damping_steps: int = 0, scaling_factor: float = 1.0, eps: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(), trigger = None)
+
+
+[qlFdSabrVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2260)(f0: float, alpha: float, beta: float, nu: float, rho: float, discount_curve: ql.YieldTermStructureHandle, t_grid: int = 50, f_grid: int = 400, x_grid: int = 50, damping_steps: int = 0, scaling_factor: float = 1.0, eps: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), trigger = None)
+
+
+[qlFdHestonHullWhiteVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2310)(model: ql.HestonModel, hull_white_process: ql.HullWhiteProcess, corr_equity_short_rate: float, dividends: xlo.Array(dims=1) = None, t_grid: int = 50, x_grid: int = 100, v_grid: int = 40, r_grid: int = 20, damping_steps: int = 0, control_variate: bool = True, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), trigger = None)
+
+
+[qlMCEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2372)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+
+
+[qlMCAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2420)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, control_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, polynom_order: int = 2, polynom_type: qLsmBasisSystemPolynomialType = ql.LsmBasisSystem.Monomial, n_calibration_samples: int = 2048, antithetic_variate_calibration: bool = None, seed_calibration: int = ql.nullInt(), trigger = None)
+
+
+[qlMCDigitalEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2473)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+
+
+[qlMCEuropeanHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2515)(process: ql.HestonProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+
+
+[qlMCForwardEuropeanBSEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2556)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+
+
+[qlMCForwardEuropeanHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2599)(process: ql.HestonProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, control_variate: bool = False, trigger = None)
+
+
+[qlQdPlusAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2640)(process: ql.GeneralizedBlackScholesProcess, interpolation_points: int = 8, solver_type: qQdPlusSolverType = ql.QdPlusAmericanEngine.Halley, eps: float = 1.0e-6, max_iter: int = ql.nullInt(), trigger = None)
+
+
+[qlQdFpLegendreScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2663)(l: int, m: int, n: int, p: int, trigger = None)
+
+
+[qlQdFpLegendreTanhSinhScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2679)(l: int, m: int, n: int, eps: float, trigger = None)
+
+
+[qlQdFpTanhSinhIterationScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2694)(m: int, n: int, eps: float, trigger = None)
+
+
+[qlQdFpAmericanEngineFastScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2704)(trigger = None)
+
+
+[qlQdFpAmericanEngineAccurateScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2712)(trigger = None)
+
+
+[qlQdFpAmericanEngineHighPrecisionScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2720)(trigger = None)
+
+
+[qlQdFpAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2733)(process: ql.GeneralizedBlackScholesProcess, iteration_scheme: qQdFpIterationScheme = ql.QdFpAmericanEngine.accurateScheme(), fixed_point_equation: qQdFpFixedPointEquation = ql.QdFpAmericanEngine.Auto, trigger = None)
+
+
+[qlAnalyticCEVEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2755)(f0: float, alpha: float, beta: float, discount_curve: ql.YieldTermStructureHandle, trigger = None)
+
+
+[qlBatesModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2772)(process: ql.BatesProcess, trigger = None)
+
+
+[qlBatesEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2786)(model: ql.BatesModel, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
+
+
+[qlVarianceGammaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2805)(process: ql.VarianceGammaProcess, trigger = None)
+
+
+[qlFFTVarianceGammaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2819)(process: ql.VarianceGammaProcess, log_strike_spacing: float = 0.001, trigger = None)
+
+
+[qlGJRGARCHModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2834)(process: ql.GJRGARCHProcess, trigger = None)
+
+
+[qlAnalyticGJRGARCHEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2845)(model: ql.GJRGARCHModel, trigger = None)
+
+
+[qlBlackCalculator](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2866)(payoff: ql.StrikedTypePayoff, forward: float, std_dev: float, discount: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2883)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2895)(calculator: ql.BlackCalculator, spot: float, trigger = None)
+
+
+[qlBlackCalculatorGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2909)(calculator: ql.BlackCalculator, spot: float, trigger = None)
+
+
+[qlBlackCalculatorVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2923)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2938)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2953)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2967)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2981)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2994)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorGammaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3007)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3021)(calculator: ql.BlackCalculator, spot: float, trigger = None)
+
+
+[qlBlackCalculatorElasticityForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3034)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3047)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorITMAssetProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3060)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3073)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorStrikeGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3086)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3097)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBlackCalculatorVanna](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3110)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorVolga](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3124)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBlackCalculatorBeta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3137)(calculator: ql.BlackCalculator, trigger = None)
+
+
+[qlBachelierCalculator](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3154)(payoff: ql.StrikedTypePayoff, forward: float, std_dev: float, discount: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3171)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3185)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
+
+
+[qlBachelierCalculatorGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3199)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
+
+
+[qlBachelierCalculatorVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3213)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3228)(calculator: ql.BachelierCalculator, spot: float, maturity: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3243)(calculator: ql.BachelierCalculator, spot: float, maturity: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3257)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3271)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3284)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorGammaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3297)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3311)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
+
+
+[qlBachelierCalculatorElasticityForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3324)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3337)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorITMAssetProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3350)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3363)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorStrikeGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3376)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3389)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlBachelierCalculatorVanna](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3403)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorVolga](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3417)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+
+
+[qlBachelierCalculatorBeta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3430)(calculator: ql.BachelierCalculator, trigger = None)
+
+
+[qlDeltaVolQuote](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3449)(delta: float, vol: qQuoteHandle, maturity: float, delta_type: qDeltaVolQuoteDeltaType, trigger = None)
+
+
+[qlDeltaVolQuoteAtm](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3474)(vol: qQuoteHandle, delta_type: qDeltaVolQuoteDeltaType, maturity: float, atm_type: qDeltaVolQuoteAtmType)
+
+
+[qlDeltaVolQuoteDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3495)(quote: ql.DeltaVolQuote, trigger = None)
+
+
+[qlDeltaVolQuoteMaturity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3506)(quote: ql.DeltaVolQuote, trigger = None)
+
+
+[qlDeltaVolQuoteDeltaType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3517)(quote: ql.DeltaVolQuote, trigger = None)
+
+
+[qlDeltaVolQuoteAtmType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3528)(quote: ql.DeltaVolQuote, trigger = None)
+
+
+[qlDeltaVolQuoteValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3539)(quote: ql.DeltaVolQuote, trigger = None)
+
+
+[qlDeltaVolQuoteIsValid](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3550)(quote: ql.DeltaVolQuote, trigger = None)
+
+
 ## Parameter
 
 
@@ -1218,7 +1788,7 @@ This section lists the QuantLib functions made available to Excel.
 [qlConstantParameter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/parameter.py#L102)(constraint: ql.Constraint, value: float = None, trigger = None)
 
 
-[qlPiecewiseConstantParameter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/parameter.py#L122)(times: xlo.Array(dims=1), constraint: ql.Constraint = ql.NoConstraint(), trigger = None)
+[qlPiecewiseConstantParameter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/parameter.py#L122)(times: xlo.Array(dims=1), values: xlo.Array(dims=1), constraint: ql.Constraint = ql.NoConstraint(), trigger = None)
 
 
 ## Payoffs
