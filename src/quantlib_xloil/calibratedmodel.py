@@ -86,6 +86,7 @@ def qlCalibratedModelSetParams(
 ) -> bool:
     p_array = ql.Array(to_float_list(params))
     model.setParams(p_array)
+    return True
 
 
 @xlo.func(
@@ -166,14 +167,3 @@ def qlCalibratedModelHandle(
     trigger=None,
 ) -> ql.CalibratedModelHandle:
     return ql.CalibratedModelHandle(model)
-
-
-# Included only for development
-#
-# @xlo.func()
-# def tmpHestonModel(process: ql.HestonProcess) -> ql.HestonModel:
-#     return ql.HestonModel(process)
-#
-# @xlo.func()
-# def tmpAnalyticHestonEngine(model: ql.HestonModel) -> ql.AnalyticHestonEngine:
-#     return ql.AnalyticHestonEngine(model)
