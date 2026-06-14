@@ -15,6 +15,7 @@ from quantlib_xloil.interpolatedyieldcurves import *
 from quantlib_xloil.indexes import *
 from quantlib_xloil.instruments import *
 from quantlib_xloil.localvolatilities import *
+from quantlib_xloil.options import *
 from quantlib_xloil.optimizers import *
 from quantlib_xloil.parameter import *
 from quantlib_xloil.payoffs import *
