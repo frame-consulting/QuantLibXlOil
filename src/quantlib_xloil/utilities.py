@@ -16,15 +16,15 @@ UNKNOWN_KEY = "UNKNOWN"
 UNKNOWN_VALUE = -1
 
 
-def enum_value(string: str, enum_dict: dict):
+def enum_value(key: str, enum_dict: dict, value_type=int):
     """Converts a string to an enum value using the provided dictionary."""
-    if isinstance(string, int):  # handle default values
-        return string
-    if isinstance(string, str):
-        string = string.strip().upper()
-        if string in enum_dict:
-            return enum_dict[string]
-    raise ValueError(f"Cannot convert {string} using {str(enum_dict)}.")
+    if isinstance(key, value_type):  # handle default values
+        return key
+    if isinstance(key, str):
+        key = key.strip().upper()
+        if key in enum_dict:
+            return enum_dict[key]
+    raise ValueError(f"Cannot convert {key} using {str(enum_dict)}.")
 
 
 def to_float_list(values) -> list[float]:
