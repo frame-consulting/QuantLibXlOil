@@ -6,6 +6,9 @@ We use *unit tests* and Excel *workbook tests*. Unit tests are stored in folder 
 
 We use `pytest` as test framework for unit tests. Test automation for workbook tests is tbd.
 
+The Python code is formatted using [Black Formatter](https://github.com/psf/black) with the default settings. We use the latest version of the relevant [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter). Furthermore, the code is organised as follows: First come the import statements, sorted alphabetically, then the unit test cases.
+
+
 ## Test File Names
 
 Test file names are of the form `test_sourcefilename.py` and analogously for workbook tests.
@@ -20,8 +23,6 @@ Each unit test case is implemented by a function of the following form.
 
 ```
 def test_qlFunctionName():
-    import QuantLib as ql
-    from quantlib_xloil import qlFunctionName, ...
     ...
     assert ...
 ```

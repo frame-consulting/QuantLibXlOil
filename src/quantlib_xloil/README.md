@@ -4,11 +4,20 @@ This folder contains wrapper functions for QuantLib object creation and method c
 
 We follow the file structure of the [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG/tree/master/SWIG) interface specification to ensure transparency what the functions do.
 
+The current implementation includes the functionality of [QuantLib-SWIG 1.41](https://github.com/lballabio/QuantLib-SWIG/releases).
+
 ## Implementation Guidelines
 
 We apply the following guidelines for function implementation to ensure consistency across the Excel interface.
 
 The guidelines aim at mimicking the classical [QuantLibXL](https://github.com/eehlers/QuantLibAddin-Old/tree/master/QuantLibAddin/gensrc/metadata/functions) interface. If necessary or if it is deemed an improvement, we deviate from the QuantLibXL interface.
+
+### Code Formatter and Layout
+
+The code is formatted using [Black Formatter](https://github.com/psf/black) with the default settings. We use the latest version of the relevant [Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter).
+
+Furthermore, the code is organised as follows:
+First come the import statements, sorted alphabetically, then the enumerations and enumerated Classes, followed by the [argument converter functions](#argument-converter-functions) and returner functions, and finally the remaining functions and constructors in the same order as in the corresponding SWIG files.
 
 ### Function Names
 
@@ -22,7 +31,7 @@ Class member functions are identified by the class name concatenated with member
 
 Function argument names follow the names of the SWIG interface names. All function argument names are snake_case.
 
-Argument types are specified as type annotations. Build-in types (`str`, `int`, `float`, `bool`) are used directly.
+Argument types are specified as type annotations. Build-in types (`str`, `int`, `float`, `bool`) are used directly. Argument types should always be specified, except in cases where this would conflict with the Swig implementation.
 
 Dates from Excel are supplied as serial numbers. We use the `qDate` argument [converter function](https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#custom-type-conversion) for type annotation.
 
@@ -30,13 +39,14 @@ QuantLib object types are used directly as type annotations. User-created QuantL
 
 For enumerations and enumerated classes (e.g. calendars, day count conventions) we also use converter functions.
 
-Lists of inputs are specified as `xlo.Array(dims=1)`. This is applied for any underlying object types. Note that type checking and error handling is advised in the interface function.
+Lists of inputs are specified as `xlo.Array(dims=1)`. This is applied for any underlying object types. Note that type checking and error handling is advised in the interface function. 
+To convert lists, general converter functions such as `to_float_list` should be used, which convert various input types into a list of floating-point numbers. Such functions should be implemented in `utilities.py`. 
 
 ### Return Types
 
-Function results are returned as is.
+Function results are returned as is. The type of the function result should be specified. The specified type should be a QuantLib type or a build-in type.
 
-If the result type has a custom argument converter then a corresponding custom return [type conversion](https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#custom-return-conversion) should be implemented as well.
+If the result type has a custom [argument converter functions](#argument-converter-functions) then a corresponding custom return [type conversion](https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#custom-return-conversion) should be implemented as well.
 
 Return type converters are use the function name prefix `x`, e.g., `xDate(...)` for conversion from `ql.Date` to excel serial number.
 
@@ -136,7 +146,7 @@ def qlSomeQuantLibFunction(arg : qSomeQuantLibType = ql.SomeDefault())
 
 The similarities in prefixes `_q`, `q` and `ql.` and the common use of `SomeQuantLibType` naming aims at improving AI coding support.
 
-Note that the decorated functions `qSomeQuantLibType` are not accessible in Python. As a consequence, conversion implementation is delegated to separate functions `_qSomeQuantLibType`. The separate functions allow for testing conversions and manually calling conversions (if necessary).
+Note that the decorated functions `qSomeQuantLibType` are accessible in Python via the \_\_wrapped\_\_ attribute. The functions attribute allow for testing conversions and manually calling conversions (if necessary).
 
 ## Testing
 
