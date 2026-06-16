@@ -1,5 +1,6 @@
 from quantlib_xloil.__about__ import __version__
 
+from quantlib_xloil.blackformula import *
 from quantlib_xloil.bonds import *
 from quantlib_xloil.calendars import *
 from quantlib_xloil.calibratedmodel import *
