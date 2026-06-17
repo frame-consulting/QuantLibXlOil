@@ -6,6 +6,7 @@ from .cashflows import _to_ql_leg
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, qFrequency, qPeriod
 from .daycounters import qDayCounter
+from .ratehelpers import qQuoteHandle
 from .termstructures import qCompounding
 from .utilities import enum_value, to_float_list, UNKNOWN_VALUE
 
@@ -26,6 +27,18 @@ def _qBondPriceType(bond_price_type: str) -> ql.BondPrice:
 
 def _qCallabilityType(callability_type: str) -> ql.Callability.Type:
     return enum_value(callability_type, QL_CALLABILITY_TYPE)
+
+
+def _to_callability_list(
+    arr: xlo.Array | list[ql.Callability] | None,
+) -> list[ql.Callability]:
+    if arr is None:
+        return []
+    if isinstance(arr, ql.Callability):
+        return [arr]
+    if isinstance(arr, xlo.Array):
+        return [ql.Callability(x) for x in arr.value]
+    return [ql.Callability(x) for x in arr]
 
 
 @xlo.converter()
@@ -65,7 +78,7 @@ def qlCallability(
     return ql.Callability(price, callability_type, date)
 
 
-# ToDo arg real trigger
+# TODO add argument real trigger
 @xlo.func(
     help="Create a QuantLib SoftCallability object from a bond price, callability type, and date.",
     args={
@@ -92,7 +105,6 @@ def qlBondPriceAmount(bond_price: ql.BondPrice, trigger=None) -> float:
     return bond_price.amount()
 
 
-# ToDo get type object in python and type name in excel
 @xlo.func(
     help="Get the type of a bond price.",
     args={
@@ -129,7 +141,6 @@ def qlCallabilityPrice(callability: ql.Callability, trigger=None) -> ql.BondPric
     return callability.price()
 
 
-# ToDo get type object in python and type name in excel
 @xlo.func(
     help="Get the type of a callability.",
     args={
@@ -561,7 +572,7 @@ def qlBondSettlementValue2(bond: ql.Bond, clean_price: float, trigger=None) -> f
     return bond.settlementValue(clean_price)
 
 
-# Todo perform tests
+# TODO perform tests
 @xlo.func(
     help="Calculate the clean price of a bond given a Z-spread.",
     args={
@@ -577,7 +588,7 @@ def qlBondSettlementValue2(bond: ql.Bond, clean_price: float, trigger=None) -> f
 )
 def qlBondCleanPriceFromZSpread(
     bond: ql.Bond,
-    discount_curve: ql.YieldTermStructureHandle,  # eigentlich ql.YieldTermStructure
+    discount_curve: ql.YieldTermStructureHandle,
     z_spread: float = 0.002,
     dc: qDayCounter = ql.Actual365Fixed(),
     compounding: qCompounding = ql.Compounded,
@@ -590,7 +601,7 @@ def qlBondCleanPriceFromZSpread(
     )
 
 
-# Todo perform tests
+# TODO perform tests
 @xlo.func(
     help="Get the sinking schedule of a bond.",
     args={
@@ -613,7 +624,7 @@ def qlBondsinkingSchedule(
     return bond.sinkingSchedule(start_date, bond_length, frequency, payment_calendar)
 
 
-# Todo perform tests
+# TODO perform tests
 @xlo.func(
     help="Get the sinking notionals of a bond.",
     args={
@@ -770,7 +781,7 @@ def qlAmortizingFixedRateBond(
     )
 
 
-# ToDo test caps and floors parameters
+# TODO test arguments caps and floors
 @xlo.func(
     help="Create a QuantLib AmortizingFloatingRateBond object.",
     args={
@@ -841,7 +852,7 @@ def qlAmortizingFloatingRateBond(
     )
 
 
-# ToDo test caps and floors parameters
+# TODO test arguments caps and floors
 @xlo.func(
     help="Create a QuantLib FloatingRateBond object.",
     args={
@@ -909,7 +920,7 @@ def qlFloatingRateBond(
     )
 
 
-# ToDo test gearings parameter
+# TODO test arguments gearings
 @xlo.func(
     help="Create a QuantLib CmsRateBond object.",
     args={
@@ -965,7 +976,7 @@ def qlCmsRateBond(
     )
 
 
-# ToDo test gearings parameter
+# TODO test argument gearings
 @xlo.func(
     help="Create a QuantLib AmortizingCmsRateBond object.",
     args={
@@ -1031,3 +1042,301 @@ def qlBondSetDiscountingEngine(
 ) -> ql.Bond:
     bond.setPricingEngine(ql.DiscountingBondEngine(discount_curve))
     return ql.DiscountingBondEngine(discount_curve)
+
+
+@xlo.func(
+    help="Return the callability schedule of a CallableBond as a list of tuples (type, date, price).",
+    args={"callable_bond": "The QuantLib CallableBond instance."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableBondCallability(callable_bond: ql.CallableBond, Trigger=None):
+    return callable_bond.callability()
+
+
+@xlo.func(
+    help="Calculate the implied volatility of a bond.",
+    args={
+        "target_price": "The target price of the bond.",
+        "discount_curve": "The discount curve.",
+        "accuracy": "The accuracy of the calculation.",
+        "max_evaluations": "The maximum number of evaluations.",
+        "min_vol": "The minimum volatility.",
+        "max_vol": "The maximum volatility.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableBondImpliedVolatility(
+    callable_bond: ql.CallableBond,
+    target_price: ql.BondPrice,
+    discount_curve: ql.YieldTermStructure,
+    accuracy: float,
+    max_evaluations: int,
+    min_vol: float,
+    max_vol: float,
+    trigger=None,
+):
+    return callable_bond.impliedVolatility(
+        target_price,
+        discount_curve,
+        accuracy,
+        max_evaluations,
+        min_vol,
+        max_vol,
+    )
+
+
+@xlo.func(
+    help="Calculate the Option-Adjusted Spread (OAS) of a bond.",
+    args={
+        "clean_price": "The clean price of the bond.",
+        "engine_ts": "The yield term structure.",
+        "dc": "The day counter.",
+        "compounding": "The compounding convention.",
+        "freq": "The frequency of compounding.",
+        "settlement_date": "The settlement date.",
+        "accuracy": "The accuracy of the calculation.",
+        "max_iterations": "The maximum number of iterations.",
+        "guess": "The initial guess for the OAS.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableBondOAS(
+    callable_bond: ql.CallableBond,
+    clean_price: float,
+    engine_ts: ql.YieldTermStructure,
+    dc: qDayCounter,
+    compounding: qCompounding,
+    freq: qFrequency,
+    settlement_date: qDate = ql.Date(),
+    accuracy: float = 1e-10,
+    max_iterations: int = 100,
+    guess: float = 0.0,
+    trigger=None,
+) -> float:
+    return callable_bond.OAS(
+        clean_price,
+        engine_ts,
+        dc,
+        compounding,
+        freq,
+        settlement_date,
+        accuracy,
+        max_iterations,
+        guess,
+    )
+
+
+@xlo.func(
+    help="Calculate the clean price of a bond given the Option-Adjusted Spread (OAS).",
+    args={
+        "oas": "The Option-Adjusted Spread (OAS).",
+        "engine_ts": "The yield term structure.",
+        "day_counter": "The day counter.",
+        "compounding": "The compounding convention.",
+        "frequency": "The frequency of compounding.",
+        "settlement_date": "The settlement date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableBondCleanPriceOAS(
+    callable_bond: ql.CallableBond,
+    oas: float,
+    engine_ts: ql.YieldTermStructure,
+    day_counter: qDayCounter,
+    compounding: qCompounding,
+    frequency: qFrequency,
+    settlement_date: qDate = ql.Date(),
+    trigger=None,
+) -> float:
+    return callable_bond.cleanPriceOAS(
+        oas,
+        engine_ts,
+        day_counter,
+        compounding,
+        frequency,
+        settlement_date,
+    )
+
+
+@xlo.func(
+    help="Calculate the effective duration of a bond.",
+    args={
+        "oas": "The Option-Adjusted Spread (OAS).",
+        "engine_ts": "The yield term structure.",
+        "day_counter": "The day counter.",
+        "compounding": "The compounding convention.",
+        "frequency": "The frequency of compounding.",
+        "bump": "The bump size for the calculation.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableBondEffectiveDuration(
+    callable_bond: ql.CallableBond,
+    oas: float,
+    engine_ts: ql.YieldTermStructure,
+    day_counter: qDayCounter,
+    compounding: qCompounding,
+    frequency: qFrequency,
+    bump: float = 2e-4,
+    trigger=None,
+) -> float:
+    return callable_bond.effectiveDuration(
+        oas,
+        engine_ts,
+        day_counter,
+        compounding,
+        frequency,
+        bump,
+    )
+
+
+@xlo.func(
+    help="Calculate the effective convexity of a bond.",
+    args={
+        "oas": "The Option-Adjusted Spread (OAS).",
+        "engine_ts": "The yield term structure.",
+        "day_counter": "The day counter.",
+        "compounding": "The compounding convention.",
+        "frequency": "The frequency of compounding.",
+        "bump": "The bump size for the calculation.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableBondEffectiveConvexity(
+    callable_bond: ql.CallableBond,
+    oas: float,
+    engine_ts: ql.YieldTermStructure,
+    day_counter: qDayCounter,
+    compounding: qCompounding,
+    frequency: qFrequency,
+    bump: float = 2e-4,
+    trigger=None,
+) -> float:
+    return callable_bond.effectiveConvexity(
+        oas,
+        engine_ts,
+        day_counter,
+        compounding,
+        frequency,
+        bump,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib CallableFixedRateBond object.",
+    args={
+        "settlement_days": "The number of settlement days after the trade date.",
+        "face_amount": "The face amount of the bond.",
+        "schedule": "The schedule for coupon payments.",
+        "coupons": "The list of coupon rates.",
+        "accrual_day_counter": "The day counter for accrual periods.",
+        "payment_convention": "The business day convention for payment dates.",
+        "redemption": "The redemption amount at maturity.",
+        "issue_date": "The issue date of the bond.",
+        "put_call_schedule": "The list of callability schedules.",
+        "ex_coupon_period": "The period before the ex-coupon date.",
+        "ex_coupon_calendar": "The calendar for ex-coupon dates.",
+        "ex_coupon_convention": "The business day convention for ex-coupon dates.",
+        "ex_coupon_end_of_month": "Whether the ex-coupon date is adjusted to the end of the month.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableFixedRateBond(
+    settlement_days: int,
+    face_amount: float,
+    schedule: ql.Schedule,
+    coupons: xlo.Array(dims=1),
+    accrual_day_counter: qDayCounter,
+    payment_convention: qBusinessDayConvention,
+    redemption: float,
+    issue_date: qDate,
+    put_call_schedule: xlo.Array(dims=1),
+    ex_coupon_period: qPeriod = ql.Period(),
+    ex_coupon_calendar: qCalendar = ql.NullCalendar(),
+    ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted,
+    ex_coupon_end_of_month: bool = False,
+    trigger=None,
+) -> ql.CallableFixedRateBond:
+    return ql.CallableFixedRateBond(
+        settlement_days,
+        face_amount,
+        schedule,
+        to_float_list(coupons),
+        accrual_day_counter,
+        payment_convention,
+        redemption,
+        issue_date,
+        _to_callability_list(put_call_schedule),
+        ex_coupon_period,
+        ex_coupon_calendar,
+        ex_coupon_convention,
+        ex_coupon_end_of_month,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib CallableZeroCouponBond object.",
+    args={
+        "settlement_days": "The number of settlement days after the trade date.",
+        "face_amount": "The face amount of the bond.",
+        "calendar": "The calendar for payment dates.",
+        "maturity_date": "The maturity date of the bond.",
+        "day_counter": "The day counter for accrual periods.",
+        "payment_convention": "The business day convention for payment dates.",
+        "redemption": "The redemption amount at maturity.",
+        "issue_date": "The issue date of the bond.",
+        "put_call_schedule": "The list of callability schedules.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCallableZeroCouponBond(
+    settlement_days: int,
+    face_amount: float,
+    calendar: qCalendar,
+    maturity_date: qDate,
+    day_counter: qDayCounter,
+    payment_convention: qBusinessDayConvention = ql.Following,
+    redemption: float = 100.0,
+    issue_date: qDate = ql.Date(),
+    put_call_schedule: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.CallableZeroCouponBond:
+    return ql.CallableZeroCouponBond(
+        settlement_days,
+        face_amount,
+        calendar,
+        maturity_date,
+        day_counter,
+        payment_convention,
+        redemption,
+        issue_date,
+        _to_callability_list(put_call_schedule),
+    )
+
+
+# TODO The implementation of qlTreeCallableFixedRateBondEngine I + II requires the implemtation of shortratemodels.py
+
+
+@xlo.func(
+    help="Create a QuantLib BlackCallableFixedRateBondEngine object.",
+    args={
+        "fwd_yield_vol": "The forward yield volatility.",
+        "discount_curve": "The discount curve.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackCallableFixedRateBondEngine(
+    callable_bond: ql.CallableBond,
+    fwd_yield_vol: qQuoteHandle,
+    discount_curve: ql.YieldTermStructure,
+    trigger=None,
+) -> ql.CallableBond:
+    return callable_bond.setPricingEngine(
+        ql.BlackCallableFixedRateBondEngine(
+            fwd_yield_vol,
+            discount_curve,
+        )
+    )
+
+
+# TODO The implementation of qlCPIBond requires the implementation of inflation.py
