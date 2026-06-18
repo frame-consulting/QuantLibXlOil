@@ -37,7 +37,7 @@ def _to_ql_rate_helpers(rate_helpers) -> tuple[ql.RateHelper]:
         return tuple(cf for cf in rate_helpers)
     if isinstance(rate_helpers, np.ndarray):
         return tuple(rate_helpers.ravel().tolist())
-    raise ValueError(f"Cannot convert {rate_helpers} to list of QuantLib CashFlows.")
+    raise ValueError(f"Cannot convert {rate_helpers} to list of QuantLib RateHelper.")
 
 
 @xlo.func(

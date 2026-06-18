@@ -58,6 +58,12 @@ QL_CALENDAR = {
     "NULLCALENDAR": ql.NullCalendar,
     "WEEKENDSONLY": ql.WeekendsOnly,
     "JOINTCALENDAR": ql.JointCalendar,
+    #
+    "LONDON": ql.UnitedKingdom,
+    "LDN": ql.UnitedKingdom,
+    "NEWYORK": ql.UnitedStates(ql.UnitedStates.NYSE),
+    "NYC": ql.UnitedStates(ql.UnitedStates.NYSE),
+    #
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
