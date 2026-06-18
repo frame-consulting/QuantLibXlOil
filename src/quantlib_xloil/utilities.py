@@ -65,3 +65,18 @@ def to_int_list(values) -> list[int]:
     if isinstance(values, np.ndarray):
         return values.astype(int).ravel().tolist()
     raise ValueError(f"Cannot convert {values} to list of ints.")
+
+
+def to_bool_list(values) -> list[bool]:
+    if values is None:
+        return []
+    if isinstance(values, (bool, int, float, np.generic)):
+        return [bool(values)]
+    if isinstance(values, (list, tuple)):
+        return [bool(v) for v in values]
+    if isinstance(values, np.ndarray):
+        return values.astype(bool).ravel().tolist()
+    try:
+        return [bool(v) for v in list(values)]
+    except Exception:
+        raise ValueError(f"Cannot convert {values!r} to list of bools.")
