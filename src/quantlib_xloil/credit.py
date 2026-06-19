@@ -13,10 +13,10 @@ QL_PROTECTION_SIDE = {
 }
 
 
-def _qlProtectionSide(s: str) -> int:
+def _qProtectionSide(s: str) -> int:
     return enum_value(s, QL_PROTECTION_SIDE)
 
 
 @xlo.converter()
-def qlProtectionSide(s: str) -> int:
-    return _qlProtectionSide(s)
+def qProtectionSide(s: str) -> int:
+    return _qProtectionSide(s)
