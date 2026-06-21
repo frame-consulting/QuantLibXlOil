@@ -1,7 +1,7 @@
 
 # May come from Conda
 pytest
-QuantLib-Python
+QuantLib == 1.41
 
 # pip dependencies
 xloil
