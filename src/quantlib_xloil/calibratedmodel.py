@@ -3,23 +3,9 @@ import numpy as np
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
-from .utilities import to_float_list
+from .utilities import to_float_list, to_object_list
 
 # CalibratedModel interface
-
-
-def _to_ql_calibration_helpers(calibration_helpers) -> tuple[ql.calibration_helpers]:
-    if calibration_helpers is None:
-        return ()
-    if isinstance(calibration_helpers, ql.CalibrationHelper):
-        return (calibration_helpers,)
-    if isinstance(calibration_helpers, (list, tuple)):
-        return tuple(cf for cf in calibration_helpers)
-    if isinstance(calibration_helpers, np.ndarray):
-        return tuple(calibration_helpers.ravel().tolist())
-    raise ValueError(
-        f"Cannot convert {calibration_helpers} to list of QuantLib CashFlows."
-    )
 
 
 @xlo.func(
@@ -45,7 +31,7 @@ def qlCalibratedModelCalibrate(
     fix_parameters: xlo.Array(dims=1) = [],
     trigger=None,
 ) -> bool:
-    helpers_ = _to_ql_calibration_helpers(calibration_helpers)
+    helpers_ = to_object_list(calibration_helpers, ql.CalibrationHelper)
     weights_ = [float(w) for w in weights]
     fix_parameters_ = [bool(p) for p in fix_parameters]
     model.calibrate(
@@ -105,7 +91,7 @@ def qlCalibratedModelValue(
     trigger=None,
 ) -> float:
     p_array = ql.Array(to_float_list(params))
-    helpers_ = _to_ql_calibration_helpers(calibration_helpers)
+    helpers_ = to_object_list(calibration_helpers, ql.CalibrationHelper)
     return model.value(p_array, helpers_)
 
 

@@ -4,13 +4,19 @@ import xloil as xlo
 from typing import Optional
 
 from .calendars import qBusinessDayConvention, qCalendar, QL_BUSINESSDAYCONVENTION
-from .cashflows import _to_ql_leg, qRateAveragingType, QL_RATE_AVERAGING_TYPE
+from .cashflows import qRateAveragingType, QL_RATE_AVERAGING_TYPE
 from .config import EXCEL_GROUP_NAME
 from .currencies import qCurrency
 from .date import qDate, qFrequency, qPeriod, QL_FREQUENCY
 from .daycounters import qDayCounter
 from .scheduler import qDateGenerationRule
-from .utilities import enum_value, first_key, to_bool_list, to_float_list
+from .utilities import (
+    enum_value,
+    first_key,
+    to_bool_list,
+    to_float_list,
+    to_object_list,
+)
 
 # The value mappings for payer and receiver correspond to those in QuantLib ( enum Type { Receiver = -1, Payer = 1 })
 QL_SWAP_TYPE = {
@@ -51,7 +57,7 @@ def _to_ql_legs(legs) -> tuple[ql.Leg, ...]:
         if isinstance(maybe_leg, np.ndarray) and maybe_leg.ndim == 0:
             maybe_leg = maybe_leg.item()
         try:
-            normalized = _to_ql_leg(maybe_leg)
+            normalized = to_object_list(maybe_leg, ql.CashFlow)
         except TypeError as e:
             raise TypeError(f"Element {idx} is not a valid ql.Leg: {e}") from e
         if len(normalized) == 0:
@@ -78,8 +84,8 @@ def qlSwap(
     second_leg: xlo.Array(dims=1),
     trigger=None,
 ) -> ql.Swap:
-    first_leg = _to_ql_leg(first_leg)
-    second_leg = _to_ql_leg(second_leg)
+    first_leg = to_object_list(first_leg, ql.CashFlow)
+    second_leg = to_object_list(second_leg, ql.CashFlow)
     return ql.Swap(first_leg, second_leg)
 
 

@@ -12,6 +12,7 @@ from .utilities import (
     first_key,
     to_float_list,
     to_int_list,
+    to_object_list,
     UNKNOWN_KEY,
     UNKNOWN_VALUE,
 )
@@ -28,18 +29,6 @@ QL_RATE_AVERAGING_TYPE = {
     "SIMPLE": ql.RateAveraging.Simple,
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
-
-
-def _to_ql_leg(cashflows) -> tuple[ql.CashFlow, ...]:
-    if cashflows is None:
-        return ()
-    if isinstance(cashflows, ql.CashFlow):
-        return (cashflows,)
-    if isinstance(cashflows, (list, tuple)):
-        return tuple(cf for cf in cashflows)
-    if isinstance(cashflows, np.ndarray):
-        return tuple(cashflows.ravel().tolist())
-    raise ValueError(f"Cannot convert {cashflows} to list of QuantLib CashFlows.")
 
 
 def _qDurationType(duration_type: str) -> int:
@@ -1419,7 +1408,7 @@ def qlAveragingMultipleResetsPricer(trigger=None) -> ql.AveragingMultipleResetsP
 def qlSetCouponPricer(
     leg: xlo.Array(dims=1), pricer: ql.FloatingRateCouponPricer, trigger=None
 ) -> bool:
-    ql.setCouponPricer(_to_ql_leg(leg), pricer)
+    ql.setCouponPricer(to_object_list(leg, ql.CashFlow), pricer)
     return True
 
 
@@ -1679,7 +1668,7 @@ def qlRangeAccrualLeg(
     group=EXCEL_GROUP_NAME,
 )
 def qlCashFlowsStartDate(leg: xlo.Array(dims=1), trigger=None) -> ql.Date:
-    return ql.CashFlows.startDate(_to_ql_leg(leg))
+    return ql.CashFlows.startDate(to_object_list(leg, ql.CashFlow))
 
 
 @xlo.func(
@@ -1690,7 +1679,7 @@ def qlCashFlowsStartDate(leg: xlo.Array(dims=1), trigger=None) -> ql.Date:
     group=EXCEL_GROUP_NAME,
 )
 def qlCashFlowsMaturityDate(leg: xlo.Array(dims=1), trigger=None) -> ql.Date:
-    return ql.CashFlows.maturityDate(_to_ql_leg(leg))
+    return ql.CashFlows.maturityDate(to_object_list(leg, ql.CashFlow))
 
 
 @xlo.func(
@@ -1709,7 +1698,7 @@ def qlCashFlowsPreviousCashFlowDate(
     trigger=None,
 ) -> ql.Date:
     return ql.CashFlows.previousCashFlowDate(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1729,7 +1718,7 @@ def qlCashFlowsNextCashFlowDate(
     trigger=None,
 ) -> ql.Date:
     return ql.CashFlows.nextCashFlowDate(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1749,7 +1738,7 @@ def qlCashFlowsPreviousCashFlowAmount(
     trigger=None,
 ) -> float:
     return ql.CashFlows.previousCashFlowAmount(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1769,7 +1758,7 @@ def qlCashFlowsNextCashFlowAmount(
     trigger=None,
 ) -> float:
     return ql.CashFlows.nextCashFlowAmount(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1789,7 +1778,7 @@ def qlCashFlowsPreviousCashFlow(
     trigger=None,
 ) -> ql.CashFlow:
     return ql.CashFlows.previousCashFlow(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1809,7 +1798,7 @@ def qlCashFlowsNextCashFlow(
     trigger=None,
 ) -> ql.CashFlow:
     return ql.CashFlows.nextCashFlow(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1829,7 +1818,7 @@ def qlCashFlowsAccrualPeriod(
     trigger=None,
 ) -> float:
     return ql.CashFlows.accrualPeriod(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1849,7 +1838,7 @@ def qlCashFlowsAccrualDays(
     trigger=None,
 ) -> int:
     return ql.CashFlows.accrualDays(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1869,7 +1858,7 @@ def qlCashFlowsAccruedPeriod(
     trigger=None,
 ) -> float:
     return ql.CashFlows.accruedPeriod(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1889,7 +1878,7 @@ def qlCashFlowsAccruedDays(
     trigger=None,
 ) -> int:
     return ql.CashFlows.accruedDays(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1909,7 +1898,7 @@ def qlCashFlowsAccruedAmount(
     trigger=None,
 ) -> float:
     return ql.CashFlows.accruedAmount(
-        _to_ql_leg(leg), include_settlement_date_flows, settlement_date
+        to_object_list(leg, ql.CashFlow), include_settlement_date_flows, settlement_date
     )
 
 
@@ -1933,7 +1922,7 @@ def qlCashFlowsNpv(
     trigger=None,
 ) -> float:
     return ql.CashFlows.npv(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         discount_curve,
         include_settlement_date_flows,
         settlement_date,
@@ -1961,7 +1950,7 @@ def qlCashFlowsNpvFromInterestRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.npv(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         interest_rate,
         include_settlement_date_flows,
         settlement_date,
@@ -1995,7 +1984,7 @@ def qlCashFlowsNpvFromRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.npv(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         _yield,
         day_counter,
         compounding,
@@ -2034,7 +2023,7 @@ def qlCashFlowsNpvFromZSpread(
     trigger=None,
 ) -> float:
     return ql.CashFlows.npv(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         discount_curve.currentLink(),
         z_spread,
         day_counter,
@@ -2066,7 +2055,7 @@ def qlCashFlowsBps(
     trigger=None,
 ) -> float:
     return ql.CashFlows.bps(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         discount_curve,
         include_settlement_date_flows,
         settlement_date,
@@ -2094,7 +2083,7 @@ def qlCashFlowsBpsFromInterestRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.bps(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         interest_rate,
         include_settlement_date_flows,
         settlement_date,
@@ -2128,7 +2117,7 @@ def qlCashFlowsBpsFromRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.bps(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         _yield,
         day_counter,
         compounding,
@@ -2159,7 +2148,7 @@ def qlCashFlowsNpvBps(
     trigger=None,
 ) -> tuple[float, float]:
     npv, bps = ql.CashFlows.npvbps(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         discount_curve,
         include_settlement_date_flows,
         settlement_date,
@@ -2190,7 +2179,7 @@ def qlCashFlowsAtmRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.atmRate(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         discount_curve.currentLink(),
         include_settlement_date_flows,
         settlement_date,
@@ -2228,7 +2217,7 @@ def qlCashFlowsYieldRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.yieldRate(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         npv,
         day_counter,
         compounding,
@@ -2262,7 +2251,7 @@ def qlCashFlowsDurationFromInterestRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.duration(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         interest_rate,
         duration_type,
         include_settlement_date_flows,
@@ -2296,7 +2285,7 @@ def qlCashFlowsDurationFromRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.duration(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         _yield,
         day_counter,
         compounding,
@@ -2332,7 +2321,7 @@ def qlCashFlowsConvexityFromRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.convexity(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         _yield,
         day_counter,
         compounding,
@@ -2363,7 +2352,7 @@ def qlCashFlowsConvexityFromInterestRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.convexity(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         interest_rate,
         include_settlement_date_flows,
         settlement_date,
@@ -2395,7 +2384,7 @@ def qlCashFlowsBasisPointValueFromRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.basisPointValue(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         _yield,
         day_counter,
         compounding,
@@ -2426,7 +2415,7 @@ def qlCashFlowsBasisPointValueFromInterestRate(
     trigger=None,
 ) -> float:
     return ql.CashFlows.basisPointValue(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         interest_rate,
         include_settlement_date_flows,
         settlement_date,
@@ -2463,7 +2452,7 @@ def qlCashFlowsZSpread(
     trigger=None,
 ) -> float:
     return ql.CashFlows.zSpread(
-        _to_ql_leg(leg),
+        to_object_list(leg, ql.CashFlow),
         npv,
         discount_curve,
         day_counter,

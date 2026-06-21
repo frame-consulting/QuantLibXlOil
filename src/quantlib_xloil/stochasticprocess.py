@@ -8,6 +8,7 @@ from .utilities import (
     enum_value,
     to_float_list,
     to_float_matrix,
+    to_object_list,
     UNKNOWN_KEY,
     UNKNOWN_VALUE,
 )
@@ -39,18 +40,6 @@ def _qGJRGARCHProcessDiscretization(discretization: str) -> int:
 
 def _qHestonProcessDiscretization(discretization: str) -> int:
     return enum_value(discretization, QL_HESTON_PROCESS_DISCRETIZATION)
-
-
-def _to_stochastic_process_list(processes) -> list[ql.StochasticProcess]:
-    if processes is None:
-        return []
-    if isinstance(processes, ql.StochasticProcess):
-        return [processes]
-    if isinstance(processes, (list, tuple)):
-        return [p for p in processes]
-    if isinstance(processes, np.ndarray):
-        return processes.ravel().tolist()
-    raise ValueError(f"Cannot convert {processes} to list of QuantLib CashFlows.")
 
 
 @xlo.converter()
@@ -555,7 +544,8 @@ def qlStochasticProcessArray(
     trigger=None,
 ) -> ql.StochasticProcessArray:
     return ql.StochasticProcessArray(
-        _to_stochastic_process_list(array), ql.Matrix(to_float_matrix(correlation))
+        to_object_list(array, ql.StochasticProcess),
+        ql.Matrix(to_float_matrix(correlation)),
     )
 
 

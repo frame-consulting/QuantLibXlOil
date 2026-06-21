@@ -80,3 +80,15 @@ def to_bool_list(values) -> list[bool]:
         return [bool(v) for v in list(values)]
     except Exception:
         raise ValueError(f"Cannot convert {values!r} to list of bools.")
+
+
+def to_object_list(values, object_type=object) -> tuple[object, ...]:
+    if values is None:
+        return ()
+    if isinstance(values, object_type):
+        return (values,)
+    if isinstance(values, (list, tuple)):
+        return tuple(cf for cf in values)
+    if isinstance(values, np.ndarray):
+        return tuple(values.ravel().tolist())
+    raise ValueError(f"Cannot convert {values} to tuple of type {object_type}.")

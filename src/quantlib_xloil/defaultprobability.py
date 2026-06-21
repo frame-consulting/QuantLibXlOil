@@ -9,24 +9,7 @@ from .date import qDate, _to_date_list, qFrequency, qPeriod
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
 from .scheduler import qDateGenerationRule
-from .utilities import to_float_list
-
-
-def _to_ql_default_probability_helpers(
-    helpers,
-) -> tuple[ql.DefaultProbabilityHelper, ...]:
-    if helpers is None:
-        return ()
-    if isinstance(helpers, ql.DefaultProbabilityHelper):
-        return (helpers,)
-    if isinstance(helpers, (list, tuple)):
-        return tuple(cf for cf in helpers)
-    if isinstance(helpers, np.ndarray):
-        return tuple(helpers.ravel().tolist())
-    raise ValueError(
-        f"Cannot convert {helpers} to list of QuantLib DefaultProbabilityHelper."
-    )
-
+from .utilities import to_float_list, to_object_list
 
 # DefaultProbabilityTermStructure interface
 
@@ -572,7 +555,9 @@ def qlPiecewiseFlatHazardRateAsDts(
     trigger=None,
 ) -> ql.PiecewiseFlatHazardRate:
     return ql.PiecewiseFlatHazardRate(
-        reference_date, _to_ql_default_probability_helpers(helpers), day_counter
+        reference_date,
+        to_object_list(helpers, ql.DefaultProbabilityHelper),
+        day_counter,
     )
 
 
@@ -592,7 +577,9 @@ def qlPiecewiseFlatHazardRate(
     trigger=None,
 ) -> ql.DefaultProbabilityTermStructureHandle:
     ts = ql.PiecewiseFlatHazardRate(
-        reference_date, _to_ql_default_probability_helpers(helpers), day_counter
+        reference_date,
+        to_object_list(helpers, ql.DefaultProbabilityHelper),
+        day_counter,
     )
     return ql.DefaultProbabilityTermStructureHandle(ts)
 

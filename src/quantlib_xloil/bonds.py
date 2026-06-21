@@ -2,13 +2,12 @@ import QuantLib as ql
 import xloil as xlo
 
 from .calendars import qBusinessDayConvention, qCalendar
-from .cashflows import _to_ql_leg
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, qFrequency, qPeriod
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
 from .termstructures import qCompounding
-from .utilities import enum_value, to_float_list, UNKNOWN_VALUE
+from .utilities import enum_value, to_float_list, to_object_list, UNKNOWN_VALUE
 
 QL_BOND_PRICE_TYPE = {
     "CLEAN": ql.BondPrice.Dirty,
@@ -27,18 +26,6 @@ def _qBondPriceType(bond_price_type: str) -> ql.BondPrice:
 
 def _qCallabilityType(callability_type: str) -> ql.Callability.Type:
     return enum_value(callability_type, QL_CALLABILITY_TYPE)
-
-
-def _to_callability_list(
-    arr: xlo.Array | list[ql.Callability] | None,
-) -> list[ql.Callability]:
-    if arr is None:
-        return []
-    if isinstance(arr, ql.Callability):
-        return [arr]
-    if isinstance(arr, xlo.Array):
-        return [ql.Callability(x) for x in arr.value]
-    return [ql.Callability(x) for x in arr]
 
 
 @xlo.converter()
@@ -193,7 +180,7 @@ def qlBond(
         face_amount,
         maturity_date,
         issue_date,
-        _to_ql_leg(cashflows),
+        to_object_list(cashflows, ql.CashFlow),
     )
 
 
@@ -1266,7 +1253,7 @@ def qlCallableFixedRateBond(
         payment_convention,
         redemption,
         issue_date,
-        _to_callability_list(put_call_schedule),
+        to_object_list(put_call_schedule, ql.Callability),
         ex_coupon_period,
         ex_coupon_calendar,
         ex_coupon_convention,
@@ -1310,7 +1297,7 @@ def qlCallableZeroCouponBond(
         payment_convention,
         redemption,
         issue_date,
-        _to_callability_list(put_call_schedule),
+        to_object_list(put_call_schedule, ql.Callability),
     )
 
 

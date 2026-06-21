@@ -6,6 +6,7 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate, _to_date_list
 from .daycounters import qDayCounter
 from .interpolatedyieldcurves import QL_INTERPOLATION_TRAITS, QL_INTERPOLATORS
+from .utilities import to_object_list
 
 QL_PIECEWISE_CURVES = {
     ("FORWARDRATE", "BACKWARDFLAT"): ql.PiecewiseFlatForward,
@@ -26,18 +27,6 @@ QL_PIECEWISE_SPREAD_CURVES = {
     ("LOGDISCOUNT", "CUBIC"): ql.PiecewiseNaturalLogCubicSpreadDiscount,
     ("LOGDISCOUNT", "LINEAR"): ql.PiecewiseLogLinearSpreadDiscount,
 }
-
-
-def _to_ql_rate_helpers(rate_helpers) -> tuple[ql.RateHelper]:
-    if rate_helpers is None:
-        return ()
-    if isinstance(rate_helpers, ql.RateHelper):
-        return (rate_helpers,)
-    if isinstance(rate_helpers, (list, tuple)):
-        return tuple(cf for cf in rate_helpers)
-    if isinstance(rate_helpers, np.ndarray):
-        return tuple(rate_helpers.ravel().tolist())
-    raise ValueError(f"Cannot convert {rate_helpers} to list of QuantLib RateHelper.")
 
 
 @xlo.func(
@@ -143,7 +132,9 @@ def qlPiecewiseYieldCurveAsYts(
         raise ValueError(
             f"Interpolation method not implemented for traits '{traits}' and interpolator '{interpolator}'."
         )
-    yts = curve_class(reference_date, _to_ql_rate_helpers(instruments), daycounter)
+    yts = curve_class(
+        reference_date, to_object_list(instruments, ql.RateHelper), daycounter
+    )
     return yts
 
 
@@ -237,7 +228,11 @@ def qlPiecewiseYieldCurveWithJumpsAsYts(
             f"Interpolation method not implemented for traits '{traits}' and interpolator '{interpolator}'."
         )
     yts = curve_class(
-        reference_date, _to_ql_rate_helpers(instruments), daycounter, jumps, jump_dates
+        reference_date,
+        to_object_list(instruments, ql.RateHelper),
+        daycounter,
+        jumps,
+        jump_dates,
     )
     return yts
 
@@ -328,7 +323,7 @@ def qlPiecewiseSpreadYieldCurveAsYts(
         raise ValueError(
             f"Interpolation method not implemented for traits '{traits}' and interpolator '{interpolator}'."
         )
-    yts = curve_class(base_curve, _to_ql_rate_helpers(instruments))
+    yts = curve_class(base_curve, to_object_list(instruments, ql.RateHelper))
     return yts
 
 

@@ -3,7 +3,6 @@ import QuantLib as ql
 import pytest
 
 from quantlib_xloil.piecewiseyieldcurve import (
-    _to_ql_rate_helpers,
     qlPiecewiseSpreadYieldCurve,
     qlPiecewiseSpreadYieldCurveAsYts,
     qlPiecewiseYieldCurve,
@@ -61,23 +60,6 @@ def _base_curve_handle() -> ql.YieldTermStructureHandle:
         qFrequency.__wrapped__("ANNUAL"),
         qlCalendar("TARGET"),
     )
-
-
-def test_to_ql_rate_helpers_variants():
-    _set_eval_date()
-    helpers = _sample_rate_helpers()
-    helper = helpers[0]
-
-    assert _to_ql_rate_helpers(None) == ()
-    assert _to_ql_rate_helpers(helper) == (helper,)
-    assert _to_ql_rate_helpers(helpers) == tuple(helpers)
-    assert _to_ql_rate_helpers(tuple(helpers)) == tuple(helpers)
-
-    helpers_array = np.array(helpers, dtype=object).reshape(1, -1)
-    assert _to_ql_rate_helpers(helpers_array) == tuple(helpers)
-
-    with pytest.raises(ValueError, match="Cannot convert"):
-        _to_ql_rate_helpers("not-a-rate-helper")
 
 
 def test_qlPiecewiseYieldCurve_happy_path_and_accessors():

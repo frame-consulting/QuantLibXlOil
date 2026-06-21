@@ -6,7 +6,14 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate
 from .payoffs import QL_OPTION_TYPE, _qOptionType, qOptionType
 from .ratehelpers import qQuoteHandle
-from .utilities import enum_value, first_key, UNKNOWN_KEY, UNKNOWN_VALUE, first_key
+from .utilities import (
+    enum_value,
+    first_key,
+    UNKNOWN_KEY,
+    UNKNOWN_VALUE,
+    first_key,
+    to_object_list,
+)
 
 QL_CASH_DIVIDEND_MODEL = {
     "SPOT": ql.CashDividendEuropeanEngine.Spot,
@@ -363,18 +370,6 @@ def qlOptionTypeName(option_type: qOptionType, trigger=None) -> str:
     return first_key(QL_OPTION_TYPE, _qOptionType(option_type), UNKNOWN_VALUE)
 
 
-def _to_dividend_schedule(dividends) -> tuple[ql.Dividend, ...]:
-    if dividends is None:
-        return ()
-    if isinstance(dividends, ql.Dividend):
-        return (dividends,)
-    if isinstance(dividends, (list, tuple)):
-        return tuple(cf for cf in dividends)
-    if isinstance(dividends, np.ndarray):
-        return tuple(dividends.ravel().tolist())
-    raise ValueError(f"Cannot convert {dividends} to list of QuantLib CashFlows.")
-
-
 # Options
 
 
@@ -568,7 +563,7 @@ def qlVanillaOptionImpliedVolatility(
     max_vol: float = 4.0,
     trigger=None,
 ) -> float:
-    dividends_ = _to_dividend_schedule(dividends)
+    dividends_ = to_object_list(dividends, ql.Dividend)
     if len(dividends_) > 0:
         return option.impliedVolatility(
             target_value,
@@ -990,7 +985,9 @@ def qlAnalyticDividendEuropeanEngine(
     dividends: xlo.Array(dims=1),
     trigger=None,
 ) -> ql.AnalyticDividendEuropeanEngine:
-    return ql.AnalyticDividendEuropeanEngine(process, _to_dividend_schedule(dividends))
+    return ql.AnalyticDividendEuropeanEngine(
+        process, to_object_list(dividends, ql.Dividend)
+    )
 
 
 @xlo.func(
@@ -1009,7 +1006,7 @@ def qlCashDividendEuropeanEngine(
     trigger=None,
 ) -> ql.CashDividendEuropeanEngine:
     return ql.CashDividendEuropeanEngine(
-        process, _to_dividend_schedule(dividends), cash_dividend_model
+        process, to_object_list(dividends, ql.Dividend), cash_dividend_model
     )
 
 
@@ -1945,7 +1942,7 @@ def qlFdBlackScholesVanillaEngine(
     trigger=None,
 ) -> ql.FdBlackScholesVanillaEngine:
     scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
-    dividends = _to_dividend_schedule(dividends)
+    dividends = to_object_list(dividends, ql.Dividend)
 
     if quanto_helper is not None and len(dividends) > 0:
         return ql.FdBlackScholesVanillaEngine(
@@ -2018,7 +2015,7 @@ def qlFdBlackScholesShoutEngine(
     trigger=None,
 ) -> ql.FdBlackScholesShoutEngine:
     scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
-    dividends = _to_dividend_schedule(dividends)
+    dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdBlackScholesShoutEngine(
             process, dividends, t_grid, x_grid, damping_steps, scheme_desc
@@ -2054,7 +2051,7 @@ def qlFdOrnsteinUhlenbeckVanillaEngine(
     trigger=None,
 ) -> ql.FdOrnsteinUhlenbeckVanillaEngine:
     scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
-    dividends = _to_dividend_schedule(dividends)
+    dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdOrnsteinUhlenbeckVanillaEngine(
             process,
@@ -2103,7 +2100,7 @@ def qlFdBatesVanillaEngine(
     scheme_desc = (
         scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Hundsdorfer()
     )
-    dividends = _to_dividend_schedule(dividends)
+    dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdBatesVanillaEngine(
             model, dividends, t_grid, x_grid, v_grid, damping_steps, scheme_desc
@@ -2142,7 +2139,7 @@ def qlFdHestonVanillaEngine(
     mixing_factor: float = 1.0,
     trigger=None,
 ) -> ql.FdHestonVanillaEngine:
-    dividends = _to_dividend_schedule(dividends)
+    dividends = to_object_list(dividends, ql.Dividend)
     if leverage_fct is not None:
         leverage_fct = leverage_fct.currentLink()
     #
@@ -2321,7 +2318,7 @@ def qlFdHestonHullWhiteVanillaEngine(
     scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(),
     trigger=None,
 ) -> ql.FdHestonHullWhiteVanillaEngine:
-    dividends = _to_dividend_schedule(dividends)
+    dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdHestonHullWhiteVanillaEngine(
             model,
