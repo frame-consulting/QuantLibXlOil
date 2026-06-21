@@ -1006,7 +1006,7 @@ def qlNonstandardSwapFloatingLeg(swap: ql.NonstandardSwap, trigger=None) -> ql.L
     group=EXCEL_GROUP_NAME,
 )
 def qlDiscountingSwapEngine(
-    discount_curve: ql.YieldTermStructure,
+    discount_curve: ql.YieldTermStructureHandle,
     include_settlement_date_flows: bool = False,
     settlement_date: qDate = ql.Date(),
     npv_date: qDate = ql.Date(),
@@ -1030,7 +1030,7 @@ def qlDiscountingSwapEngine(
     group=EXCEL_GROUP_NAME,
 )
 def qlDiscountingSwapEngine2(
-    discount_curve: ql.YieldTermStructure,
+    discount_curve: ql.YieldTermStructureHandle,
     settlement_date: qDate = ql.Date(),
     npv_date: qDate = ql.Date(),
     trigger=None,
