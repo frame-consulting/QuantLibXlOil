@@ -21,7 +21,7 @@ conda activate xloil
 QuantLibXlOil is available via pip.
 
 ```
-pip install quantlib_xloil
+pip install -U quantlib_xloil
 ```
 
 This step also installs the following dependencies:

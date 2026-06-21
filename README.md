@@ -1,5 +1,7 @@
 # QuantLibXlOil
 
+[![CI](https://github.com/frame-consulting/QuantLibXlOil/actions/workflows/ci.yml/badge.svg)](https://github.com/frame-consulting/QuantLibXlOil/actions/workflows/ci.yml)
+
 [![Documentation](https://img.shields.io/badge/Documentation-dev-blue)](https://frame-consulting.github.io/QuantLibXlOil/)
 
 QuantLibXlOil is an interface package to make functions of the open-source [QuantLib](https://github.com/lballabio/QuantLib) pricing library available in Excel.
@@ -31,7 +33,7 @@ conda activate xloil
 QuantLibXlOil is available via pip.
 
 ```
-pip install quantlib_xloil
+pip install -U quantlib_xloil
 ```
 
 This step also installs the following dependencies:

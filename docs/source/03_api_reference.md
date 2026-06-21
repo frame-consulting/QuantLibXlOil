@@ -3,6 +3,39 @@
 This section lists the QuantLib functions made available to Excel.
 
 
+## Blackformula
+
+
+[qlBlackFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L21)(option_type: qOptionType, strike: float, forward: float, std_dev: float, discount: float = 1.0, displacement: float = 0.0, trigger = None)
+
+
+[qlBlackFormulaImpliedStdDev](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L50)(option_type: qOptionType, strike: float, forward: float, price: float, discount: float = 1.0, displacement: float = 0.0, guess: float = ql.nullDouble(), accuracy: float = 1e-6, max_iterations: int = 100, trigger = None)
+
+
+[qlBlackFormulaImpliedStdDevLiRS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L91)(option_type: qOptionType, strike: float, forward: float, price: float, discount: float = 1.0, displacement: float = 0.0, guess: float = ql.nullDouble(), omega: float = 1.0, accuracy: float = 1e-6, max_iterations: int = 100, trigger = None)
+
+
+[qlBachelierBlackFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L129)(option_type: qOptionType, strike: float, forward: float, std_dev: float, discount: float = 1.0, trigger = None)
+
+
+[qlBachelierBlackFormulaImpliedVol](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L152)(option_type: qOptionType, strike: float, forward: float, time_to_expiry: float, price: float, discount: float = 1.0, trigger = None)
+
+
+[qlBachelierBlackFormulaImpliedVolChoi](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L178)(option_type: qOptionType, strike: float, forward: float, time_to_expiry: float, price: float, discount: float = 1.0, trigger = None)
+
+
+[qlBlackDeltaCalculator](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L204)(option_type: qOptionType, delta_type: qDeltaVolQuoteDeltaType, spot: float, domestic_discount: float, foreign_discount: float, std_dev: float, trigger = None)
+
+
+[qlBlackDeltaCalculatorDeltaFromStrike](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L226)(calculator: ql.BlackDeltaCalculator, strike: float, trigger = None)
+
+
+[qlBlackDeltaCalculatorStrikeFromDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L242)(calculator: ql.BlackDeltaCalculator, delta: float, trigger = None)
+
+
+[qlBlackDeltaCalculatorAtmStrike](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/blackformula.py#L258)(calculator: ql.BlackDeltaCalculator, atm_type: qDeltaVolQuoteAtmType, trigger = None)
+
+
 ## Bonds
 
 
@@ -24,238 +57,265 @@ This section lists the QuantLib functions made available to Excel.
 [qlBondPriceAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L91)(bond_price: ql.BondPrice, trigger = None)
 
 
-[qlBondPriceType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L103)(bond_price: ql.BondPrice, trigger = None)
+[qlBondPriceType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L102)(bond_price: ql.BondPrice, trigger = None)
 
 
-[qlBondPriceIsValid](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L117)(bond_price: ql.BondPrice, trigger = None)
+[qlBondPriceIsValid](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L116)(bond_price: ql.BondPrice, trigger = None)
 
 
-[qlCallabilityPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L128)(callability: ql.Callability, trigger = None)
+[qlCallabilityPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L127)(callability: ql.Callability, trigger = None)
 
 
-[qlCallabilityType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L140)(callability: ql.Callability, trigger = None)
+[qlCallabilityType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L138)(callability: ql.Callability, trigger = None)
 
 
-[qlCallabilityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L154)(callability: ql.Callability, trigger = None)
+[qlCallabilityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L152)(callability: ql.Callability, trigger = None)
 
 
-[qlBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L170)(settlement_days: int, calendar: qCalendar, face_amount: float, maturity_date: qDate, cashflows: ql.Leg, issue_date: qDate = ql.Date(), trigger = None)
+[qlBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L168)(settlement_days: int, calendar: qCalendar, face_amount: float, maturity_date: qDate, cashflows: ql.Leg, issue_date: qDate = ql.Date(), trigger = None)
 
 
-[qlBond2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L199)(settlement_days: int, calendar: qCalendar, issue_date: qDate = ql.Date(), coupons = ql.Leg(), trigger = None)
+[qlBond2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L197)(settlement_days: int, calendar: qCalendar, issue_date: qDate = ql.Date(), coupons = ql.Leg(), trigger = None)
 
 
-[qlBondNextCouponRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L217)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
+[qlBondNextCouponRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L215)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondPreviousCouponRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L229)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
+[qlBondPreviousCouponRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L227)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondNextCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L243)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
+[qlBondNextCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L241)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondPreviousCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L257)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
+[qlBondPreviousCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L255)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondSettlementDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L270)(bond: ql.Bond, trigger = None)
+[qlBondSettlementDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L268)(bond: ql.Bond, trigger = None)
 
 
-[qlBondSettlementDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L282)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
+[qlBondSettlementDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L280)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondIsTradable](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L296)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
+[qlBondIsTradable](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L294)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L307)(bond: ql.Bond, trigger = None)
+[qlBondStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L305)(bond: ql.Bond, trigger = None)
 
 
-[qlBondMaturityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L318)(bond: ql.Bond, trigger = None)
+[qlBondMaturityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L316)(bond: ql.Bond, trigger = None)
 
 
-[qlBondIssueDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L329)(bond: ql.Bond, trigger = None)
+[qlBondIssueDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L327)(bond: ql.Bond, trigger = None)
 
 
-[qlBondCashFlows](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L340)(bond: ql.Bond, trigger = None)
+[qlBondCashFlows](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L338)(bond: ql.Bond, trigger = None)
 
 
-[qlBondRedemption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L351)(bond: ql.Bond, trigger = None)
+[qlBondRedemption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L349)(bond: ql.Bond, trigger = None)
 
 
-[qlBondRedemptions](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L362)(bond: ql.Bond, trigger = None)
+[qlBondRedemptions](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L360)(bond: ql.Bond, trigger = None)
 
 
-[qlBondCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L373)(bond: ql.Bond, trigger = None)
+[qlBondCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L371)(bond: ql.Bond, trigger = None)
 
 
-[qlBondNotionals](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L385)(bond: ql.Bond, trigger = None)
+[qlBondNotionals](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L383)(bond: ql.Bond, trigger = None)
 
 
-[qlBondNotional](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L397)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
+[qlBondNotional](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L395)(bond: ql.Bond, date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondCleanPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L408)(bond: ql.Bond, trigger = None)
+[qlBondCleanPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L406)(bond: ql.Bond, trigger = None)
 
 
-[qlBondCleanPrice2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L424)(bond: ql.Bond, yield_: float, dc: qDayCounter, compounding: qCompounding, frequency: qFrequency = ql.Annual, settlement: qDate = ql.Date(), trigger = None)
+[qlBondCleanPrice2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L422)(bond: ql.Bond, yield_: float, dc: qDayCounter, compounding: qCompounding, frequency: qFrequency = ql.Annual, settlement: qDate = ql.Date(), trigger = None)
 
 
-[qlBondDirtyPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L443)(bond: ql.Bond, trigger = None)
+[qlBondDirtyPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L441)(bond: ql.Bond, trigger = None)
 
 
-[qlBondDirtyPrice2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L459)(bond: ql.Bond, yield_: float, dc: qDayCounter, compounding: qCompounding, frequency: qFrequency, settlement: qDate = ql.Date(), trigger = None)
+[qlBondDirtyPrice2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L457)(bond: ql.Bond, yield_: float, dc: qDayCounter, compounding: qCompounding, frequency: qFrequency, settlement: qDate = ql.Date(), trigger = None)
 
 
-[qlBondYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L483)(bond: ql.Bond, dc: qDayCounter, compounding: qCompounding, freq: qFrequency, accuracy: float = 1.0e-8, max_evaluations: int = 100, trigger = None)
+[qlBondYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L481)(bond: ql.Bond, dc: qDayCounter, compounding: qCompounding, freq: qFrequency, accuracy: float = 1.0e-8, max_evaluations: int = 100, trigger = None)
 
 
-[qlBondYield2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L510)(bond: ql.Bond, price: ql.BondPrice, dc: qDayCounter, compounding: qCompounding, freq: qFrequency, settlement: qDate = ql.Date(), accuracy: float = 1.0e-8, max_evaluations: int = 100, guess: float = 0.05, trigger = None)
+[qlBondYield2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L508)(bond: ql.Bond, price: ql.BondPrice, dc: qDayCounter, compounding: qCompounding, freq: qFrequency, settlement: qDate = ql.Date(), accuracy: float = 1.0e-8, max_evaluations: int = 100, guess: float = 0.05, trigger = None)
 
 
-[qlBondAccruedAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L535)(bond: ql.Bond, settlement: qDate = ql.Date(), trigger = None)
+[qlBondAccruedAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L533)(bond: ql.Bond, settlement: qDate = ql.Date(), trigger = None)
 
 
-[qlBondSettlementValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L548)(bond: ql.Bond, trigger = None)
+[qlBondSettlementValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L546)(bond: ql.Bond, trigger = None)
 
 
-[qlBondSettlementValue2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L560)(bond: ql.Bond, clean_price: float, trigger = None)
+[qlBondSettlementValue2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L558)(bond: ql.Bond, clean_price: float, trigger = None)
 
 
-[qlBondCleanPriceFromZSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L578)(bond: ql.Bond, discount_curve: ql.YieldTermStructureHandle, z_spread: float = 0.002, dc: qDayCounter = ql.Actual365Fixed(), compounding: qCompounding = ql.Compounded, freq: qFrequency = ql.Annual, settlement_date: qDate = ql.Date(), trigger = None)
+[qlBondCleanPriceFromZSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L576)(bond: ql.Bond, discount_curve: ql.YieldTermStructureHandle, z_spread: float = 0.002, dc: qDayCounter = ql.Actual365Fixed(), compounding: qCompounding = ql.Compounded, freq: qFrequency = ql.Annual, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondsinkingSchedule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L605)(bond: ql.Bond, start_date: qDate, bond_length: qPeriod, frequency: qFrequency, payment_calendar: qCalendar, trigger = None)
+[qlBondsinkingSchedule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L603)(bond: ql.Bond, start_date: qDate, bond_length: qPeriod, frequency: qFrequency, payment_calendar: qCalendar, trigger = None)
 
 
-[qlBondSinkingNotionals](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L628)(bond: ql.Bond, bond_length: qPeriod, frequency: qFrequency, coupon_rate: float, initial_notional: float, trigger = None)
+[qlBondSinkingNotionals](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L626)(bond: ql.Bond, bond_length: qPeriod, frequency: qFrequency, coupon_rate: float, initial_notional: float, trigger = None)
 
 
-[qlZeroCouponBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L651)(settlement_days: int, calendar: qCalendar, face_amount: float, maturity_date: qDate, business_day_convention: qBusinessDayConvention = ql.Following, redemption: float = 100.0, issue_date: qDate = ql.Date(), trigger = None)
+[qlZeroCouponBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L649)(settlement_days: int, calendar: qCalendar, face_amount: float, maturity_date: qDate, business_day_convention: qBusinessDayConvention = ql.Following, redemption: float = 100.0, issue_date: qDate = ql.Date(), trigger = None)
 
 
-[qlFixedRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L691)(settlement_days: int, face_amount: float, schedule: ql.Schedule, coupons: xlo.Array(dims=1), payment_day_counter: qDayCounter, business_day_convention: qBusinessDayConvention = ql.Following, redemption: float = 100.0, issue_date: qDate = ql.Date(), payment_calendar: qCalendar = ql.NullCalendar(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, trigger = None)
+[qlFixedRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L689)(settlement_days: int, face_amount: float, schedule: ql.Schedule, coupons: xlo.Array(dims=1), payment_day_counter: qDayCounter, business_day_convention: qBusinessDayConvention = ql.Following, redemption: float = 100.0, issue_date: qDate = ql.Date(), payment_calendar: qCalendar = ql.NullCalendar(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, trigger = None)
 
 
-[qlAmortizingFixedRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L742)(settlement_days: int, notionals: xlo.Array(dims=1), schedule: ql.Schedule, coupons: xlo.Array(dims=1), accrual_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, issue_date: qDate = ql.Date(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, redemption = 100, trigger = None)
+[qlAmortizingFixedRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L740)(settlement_days: int, notionals: xlo.Array(dims=1), schedule: ql.Schedule, coupons: xlo.Array(dims=1), accrual_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, issue_date: qDate = ql.Date(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, redemption = 100, trigger = None)
 
 
-[qlAmortizingFloatingRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L799)(settlement_days: int, notional: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.IborIndex, accrual_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, fixing_days: int = 0, gearings: xlo.Array(dims=1) = [1.0], spreads: xlo.Array(dims=1) = [0.0], caps = None, floors = None, in_arrears: bool = False, issue_date: qDate = ql.Date(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, redemptions = 100.0, payment_lag: int = 0, trigger = None)
+[qlAmortizingFloatingRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L797)(settlement_days: int, notional: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.IborIndex, accrual_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, fixing_days: int = 0, gearings: xlo.Array(dims=1) = [1.0], spreads: xlo.Array(dims=1) = [0.0], caps = None, floors = None, in_arrears: bool = False, issue_date: qDate = ql.Date(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, redemptions = 100.0, payment_lag: int = 0, trigger = None)
 
 
-[qlFloatingRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L869)(settlement_days: int, face_amount: float, schedule: ql.Schedule, index: ql.IborIndex, payment_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, fixing_days: int = 0, gearings: xlo.Array(dims=1) = [1.0], spreads: xlo.Array(dims=1) = [0.0], caps = None, floors = None, in_arrears: bool = False, redemption: float = 100.0, issue_date: qDate = ql.Date(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, trigger = None)
+[qlFloatingRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L867)(settlement_days: int, face_amount: float, schedule: ql.Schedule, index: ql.IborIndex, payment_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, fixing_days: int = 0, gearings: xlo.Array(dims=1) = [1.0], spreads: xlo.Array(dims=1) = [0.0], caps = None, floors = None, in_arrears: bool = False, redemption: float = 100.0, issue_date: qDate = ql.Date(), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, trigger = None)
 
 
-[qlCmsRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L933)(settlement_days: int, face_amount: float, schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter, payment_convention: qBusinessDayConvention, fixing_days: int, gearings: xlo.Array(dims=1), spreads: xlo.Array(dims=1), caps: xlo.Array(dims=1), floors: xlo.Array(dims=1), in_arrears: bool = False, redemption: float = 100.0, issue_date: qDate = ql.Date(), trigger = None)
+[qlCmsRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L931)(settlement_days: int, face_amount: float, schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter, payment_convention: qBusinessDayConvention, fixing_days: int, gearings: xlo.Array(dims=1), spreads: xlo.Array(dims=1), caps: xlo.Array(dims=1), floors: xlo.Array(dims=1), in_arrears: bool = False, redemption: float = 100.0, issue_date: qDate = ql.Date(), trigger = None)
 
 
-[qlAmortizingCmsRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L988)(settlement_days: int, notionals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, fixing_days: int = 0, gearings: xlo.Array(dims=1) = [0.0], spreads: xlo.Array(dims=1) = [0.0], caps: xlo.Array(dims=1) = None, floors: xlo.Array(dims=1) = None, in_arrears: bool = False, issue_date: qDate = ql.Date(), trigger = None)
+[qlAmortizingCmsRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L986)(settlement_days: int, notionals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, fixing_days: int = 0, gearings: xlo.Array(dims=1) = [0.0], spreads: xlo.Array(dims=1) = [0.0], caps: xlo.Array(dims=1) = None, floors: xlo.Array(dims=1) = None, in_arrears: bool = False, issue_date: qDate = ql.Date(), trigger = None)
 
 
-[qlBondSetDiscountingEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1029)(bond: ql.Bond, discount_curve: ql.YieldTermStructureHandle, trigger = None)
+[qlBondSetDiscountingEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1027)(bond: ql.Bond, discount_curve: ql.YieldTermStructureHandle, trigger = None)
+
+
+[qlCallableBondCallability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1039)(callable_bond: ql.CallableBond, Trigger = None)
+
+
+[qlCallableBondImpliedVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1055)(callable_bond: ql.CallableBond, target_price: ql.BondPrice, discount_curve: ql.YieldTermStructure, accuracy: float, max_evaluations: int, min_vol: float, max_vol: float, trigger = None)
+
+
+[qlCallableBondOAS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1090)(callable_bond: ql.CallableBond, clean_price: float, engine_ts: ql.YieldTermStructure, dc: qDayCounter, compounding: qCompounding, freq: qFrequency, settlement_date: qDate = ql.Date(), accuracy: float = 1e-10, max_iterations: int = 100, guess: float = 0.0, trigger = None)
+
+
+[qlCallableBondCleanPriceOAS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1128)(callable_bond: ql.CallableBond, oas: float, engine_ts: ql.YieldTermStructure, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, settlement_date: qDate = ql.Date(), trigger = None)
+
+
+[qlCallableBondEffectiveDuration](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1160)(callable_bond: ql.CallableBond, oas: float, engine_ts: ql.YieldTermStructure, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, bump: float = 2e-4, trigger = None)
+
+
+[qlCallableBondEffectiveConvexity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1192)(callable_bond: ql.CallableBond, oas: float, engine_ts: ql.YieldTermStructure, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, bump: float = 2e-4, trigger = None)
+
+
+[qlCallableFixedRateBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1231)(settlement_days: int, face_amount: float, schedule: ql.Schedule, coupons: xlo.Array(dims=1), accrual_day_counter: qDayCounter, payment_convention: qBusinessDayConvention, redemption: float, issue_date: qDate, put_call_schedule: xlo.Array(dims=1), ex_coupon_period: qPeriod = ql.Period(), ex_coupon_calendar: qCalendar = ql.NullCalendar(), ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted, ex_coupon_end_of_month: bool = False, trigger = None)
+
+
+[qlCallableZeroCouponBond](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1279)(settlement_days: int, face_amount: float, calendar: qCalendar, maturity_date: qDate, day_counter: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, redemption: float = 100.0, issue_date: qDate = ql.Date(), put_call_schedule: xlo.Array(dims=1) = None, trigger = None)
+
+
+[qlBlackCallableFixedRateBondEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/bonds.py#L1315)(callable_bond: ql.CallableBond, fwd_yield_vol: qQuoteHandle, discount_curve: ql.YieldTermStructure, trigger = None)
 
 
 ## Calendars
 
 
-[qCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L107)(calendarname: str)
+[qCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L113)(calendarname: str)
 
 
-[qBusinessDayConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L112)(conventionname: str)
+[qBusinessDayConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L118)(conventionname: str)
 
 
-[qJointCalendarRule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L117)(rule_name: str)
+[qJointCalendarRule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L123)(rule_name: str)
 
 
-[qlCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L133)(calendar_name: str, trigger = None)
+[qlCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L139)(calendar_name: str, trigger = None)
 
 
-[qlCalendarisWeekend](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L144)(calendar: qCalendar, weekday: qWeekday, trigger = None)
+[qlCalendarisWeekend](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L150)(calendar: qCalendar, weekday: qWeekday, trigger = None)
 
 
-[qlCalendarStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L155)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L161)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L166)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L172)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsBusinessDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L177)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsBusinessDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L183)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L188)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L194)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L199)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsEndOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L205)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarIsStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L210)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarIsStartOfMonth](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L216)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarAddHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L221)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarAddHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L227)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarRemoveHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L232)(calendar: qCalendar, date: qDate, trigger = None)
+[qlCalendarRemoveHoliday](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L238)(calendar: qCalendar, date: qDate, trigger = None)
 
 
-[qlCalendarResetAddedAndRemovedHolidays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L241)(calendar: qCalendar, trigger = None)
+[qlCalendarResetAddedAndRemovedHolidays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L247)(calendar: qCalendar, trigger = None)
 
 
-[qlCalendarAdjust](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L254)(calendar: qCalendar, date: qDate, convention: qBusinessDayConvention = ql.Following, trigger = None)
+[qlCalendarAdjust](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L260)(calendar: qCalendar, date: qDate, convention: qBusinessDayConvention = ql.Following, trigger = None)
 
 
-[qlCalendarAdvance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L275)(calendar: qCalendar, date: qDate, n: int, unit: qTimeUnit, convention: qBusinessDayConvention = ql.Following, end_of_month: bool = False, trigger = None)
+[qlCalendarAdvance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L281)(calendar: qCalendar, date: qDate, n: int, unit: qTimeUnit, convention: qBusinessDayConvention = ql.Following, end_of_month: bool = False, trigger = None)
 
 
-[qlCalendarAdvance2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L298)(calendar: qCalendar, date: qDate, period: qPeriod, convention: qBusinessDayConvention = ql.Following, end_of_month: bool = False, trigger = None)
+[qlCalendarAdvance2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L304)(calendar: qCalendar, date: qDate, period: qPeriod, convention: qBusinessDayConvention = ql.Following, end_of_month: bool = False, trigger = None)
 
 
-[qlCalendarBusinessDaysBetween](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L320)(calendar: qCalendar, from_date: qDate, to_date: qDate, include_first: bool = True, include_last: bool = False, trigger = None)
+[qlCalendarBusinessDaysBetween](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L326)(calendar: qCalendar, from_date: qDate, to_date: qDate, include_first: bool = True, include_last: bool = False, trigger = None)
 
 
-[qlCalendarHolidayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L338)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
+[qlCalendarHolidayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L344)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
 
 
-[qlCalendarBusinessDayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L351)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
+[qlCalendarBusinessDayList](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L357)(calendar: qCalendar, from_date: qDate, to_date: qDate, trigger = None)
 
 
-[qlCalendarName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L364)(calendar: qCalendar, trigger = None)
+[qlCalendarName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L370)(calendar: qCalendar, trigger = None)
 
 
-[qlCalendarEmpty](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L375)(calendar: qCalendar, trigger = None)
+[qlCalendarEmpty](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L381)(calendar: qCalendar, trigger = None)
 
 
-[qlCalendarJointCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L388)(calendar1: qCalendar, calendar2: qCalendar, rule: qJointCalendarRule = ql.JoinHolidays)
+[qlCalendarJointCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L394)(calendar1: qCalendar, calendar2: qCalendar, rule: qJointCalendarRule = ql.JoinHolidays)
 
 
-[qlCalendarJointCalendar2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L406)(calendar1: qCalendar, calendar2: qCalendar, calendar3: qCalendar, rule: qJointCalendarRule = ql.JoinHolidays, trigger = None)
+[qlCalendarJointCalendar2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calendars.py#L412)(calendar1: qCalendar, calendar2: qCalendar, calendar3: qCalendar, rule: qJointCalendarRule = ql.JoinHolidays, trigger = None)
 
 
 ## Calibratedmodel
 
 
-[qlCalibratedModelCalibrate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L38)(model: ql.CalibratedModel, calibration_helpers: xlo.Array(dims=1), optimization_method: ql.OptimizationMethod, end_criteria: ql.EndCriteria, constraint: ql.Constraint = ql.NoConstraint(), weights: xlo.Array(dims=1) = [], fix_parameters: xlo.Array(dims=1) = [], trigger = None)
+[qlCalibratedModelCalibrate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L24)(model: ql.CalibratedModel, calibration_helpers: xlo.Array(dims=1), optimization_method: ql.OptimizationMethod, end_criteria: ql.EndCriteria, constraint: ql.Constraint = ql.NoConstraint(), weights: xlo.Array(dims=1) = [], fix_parameters: xlo.Array(dims=1) = [], trigger = None)
 
 
-[qlCalibratedModelParams](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L67)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelParams](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L53)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelSetParams](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L82)(model: ql.CalibratedModel, params: xlo.Array(dims=1), trigger = None)
+[qlCalibratedModelSetParams](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L68)(model: ql.CalibratedModel, params: xlo.Array(dims=1), trigger = None)
 
 
-[qlCalibratedModelValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L101)(model: ql.CalibratedModel, params: xlo.Array(dims=1), calibration_helpers: xlo.Array(dims=1), trigger = None)
+[qlCalibratedModelValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L87)(model: ql.CalibratedModel, params: xlo.Array(dims=1), calibration_helpers: xlo.Array(dims=1), trigger = None)
 
 
-[qlCalibratedModelConstraint](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L117)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelConstraint](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L103)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelEndCriteria](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L129)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelEndCriteria](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L115)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelProblemValues](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L141)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelProblemValues](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L127)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelProblemValuesFunctionEvaluation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L153)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelProblemValuesFunctionEvaluation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L139)(model: ql.CalibratedModel, trigger = None)
 
 
-[qlCalibratedModelHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L165)(model: ql.CalibratedModel, trigger = None)
+[qlCalibratedModelHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/calibratedmodel.py#L151)(model: ql.CalibratedModel, trigger = None)
 
 
 ## Calibrationhelpers
@@ -300,370 +360,499 @@ This section lists the QuantLib functions made available to Excel.
 ## Cashflows
 
 
-[qDurationType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L54)(duration_type: str)
+[qDurationType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L43)(duration_type: str)
 
 
-[qRateAveragingType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L59)(averaging_type: str)
+[qRateAveragingType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L48)(averaging_type: str)
 
 
-[qlSimpleCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L71)(amount: float, date: qDate, trigger = None)
+[qlSimpleCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L60)(amount: float, date: qDate, trigger = None)
 
 
-[qlRedemption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L83)(amount: float, date: qDate, trigger = None)
+[qlRedemption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L72)(amount: float, date: qDate, trigger = None)
 
 
-[qlAmortizingPayment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L95)(amount: float, date: qDate, trigger = None)
+[qlAmortizingPayment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L84)(amount: float, date: qDate, trigger = None)
 
 
-[qlIndexedCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L113)(notional: float, index: ql.Index, base_date: qDate, fixing_date: qDate, payment_date: qDate, growth_only: bool = False, trigger = None)
+[qlIndexedCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L102)(notional: float, index: ql.Index, base_date: qDate, fixing_date: qDate, payment_date: qDate, growth_only: bool = False, trigger = None)
 
 
-[qlCashFlowAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L134)(cashflow: ql.CashFlow, trigger = None)
+[qlCashFlowAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L123)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L145)(cashflow: ql.CashFlow, trigger = None)
+[qlCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L134)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlCashFlowHasOccurred](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L157)(cashflow: ql.CashFlow, ref_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowHasOccurred](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L146)(cashflow: ql.CashFlow, ref_date: qDate = ql.Date(), trigger = None)
 
 
-[qlAsIndexedCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L170)(cashflow: ql.CashFlow, trigger = None)
+[qlAsIndexedCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L159)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlAsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L181)(cashflow: ql.CashFlow, trigger = None)
+[qlAsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L170)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlCouponNominal](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L192)(coupon: ql.Coupon, trigger = None)
+[qlCouponNominal](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L181)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponAccrualStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L203)(coupon: ql.Coupon, trigger = None)
+[qlCouponAccrualStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L192)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponAccrualEndDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L214)(coupon: ql.Coupon, trigger = None)
+[qlCouponAccrualEndDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L203)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponReferencePeriodStart](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L225)(coupon: ql.Coupon, trigger = None)
+[qlCouponReferencePeriodStart](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L214)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponReferencePeriodEnd](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L236)(coupon: ql.Coupon, trigger = None)
+[qlCouponReferencePeriodEnd](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L225)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponExCouponDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L247)(coupon: ql.Coupon, trigger = None)
+[qlCouponExCouponDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L236)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L258)(coupon: ql.Coupon, trigger = None)
+[qlCouponRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L247)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponAccrualPeriod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L269)(coupon: ql.Coupon, trigger = None)
+[qlCouponAccrualPeriod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L258)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponAccrualDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L280)(coupon: ql.Coupon, trigger = None)
+[qlCouponAccrualDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L269)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponDayCounter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L291)(coupon: ql.Coupon, trigger = None)
+[qlCouponDayCounter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L280)(coupon: ql.Coupon, trigger = None)
 
 
-[qlCouponAccruedAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L303)(coupon: ql.Coupon, date: qDate, trigger = None)
+[qlCouponAccruedAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L292)(coupon: ql.Coupon, date: qDate, trigger = None)
 
 
-[qlAsFixedRateCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L314)(cashflow: ql.CashFlow, trigger = None)
+[qlAsFixedRateCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L303)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlAsFloatingRateCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L325)(cashflow: ql.CashFlow, trigger = None)
+[qlAsFloatingRateCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L314)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlFloatingRateCouponFixingDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L338)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponFixingDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L327)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponFixingDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L351)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponFixingDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L340)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponIsInArrears](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L362)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponIsInArrears](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L351)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponGearing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L375)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponGearing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L364)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L386)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L375)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponIndexFixing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L397)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponIndexFixing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L386)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponAdjustedFixing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L410)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponAdjustedFixing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L399)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponConvexityAdjustment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L423)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponConvexityAdjustment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L412)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L437)(coupon: ql.FloatingRateCoupon, discount_curve: ql.YieldTermStructureHandle, trigger = None)
+[qlFloatingRateCouponPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L426)(coupon: ql.FloatingRateCoupon, discount_curve: ql.YieldTermStructureHandle, trigger = None)
 
 
-[qlFloatingRateCouponIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L452)(coupon: ql.FloatingRateCoupon, trigger = None)
+[qlFloatingRateCouponIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L441)(coupon: ql.FloatingRateCoupon, trigger = None)
 
 
-[qlFloatingRateCouponSetPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L466)(coupon: ql.FloatingRateCoupon, pricer: ql.FloatingRateCouponPricer, trigger = None)
+[qlFloatingRateCouponSetPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L455)(coupon: ql.FloatingRateCoupon, pricer: ql.FloatingRateCouponPricer, trigger = None)
 
 
-[qlCappedFlooredCouponIsCapped](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L482)(coupon: ql.CappedFlooredCoupon, trigger = None)
+[qlCappedFlooredCouponIsCapped](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L471)(coupon: ql.CappedFlooredCoupon, trigger = None)
 
 
-[qlCappedFlooredCouponIsFloored](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L493)(coupon: ql.CappedFlooredCoupon, trigger = None)
+[qlCappedFlooredCouponIsFloored](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L482)(coupon: ql.CappedFlooredCoupon, trigger = None)
 
 
-[qlCappedFlooredCouponCap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L506)(coupon: ql.CappedFlooredCoupon, trigger = None)
+[qlCappedFlooredCouponCap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L495)(coupon: ql.CappedFlooredCoupon, trigger = None)
 
 
-[qlCappedFlooredCouponFloor](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L517)(coupon: ql.CappedFlooredCoupon, trigger = None)
+[qlCappedFlooredCouponFloor](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L506)(coupon: ql.CappedFlooredCoupon, trigger = None)
 
 
-[qlCappedFlooredCouponEffectiveCap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L528)(coupon: ql.CappedFlooredCoupon, trigger = None)
+[qlCappedFlooredCouponEffectiveCap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L517)(coupon: ql.CappedFlooredCoupon, trigger = None)
 
 
-[qlCappedFlooredCouponEffectiveFloor](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L541)(coupon: ql.CappedFlooredCoupon, trigger = None)
+[qlCappedFlooredCouponEffectiveFloor](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L530)(coupon: ql.CappedFlooredCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponAveragingMethod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L554)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponAveragingMethod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L543)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponCanApplyTelescopicFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L567)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponCanApplyTelescopicFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L556)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponApplyObservationShift](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L580)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponApplyObservationShift](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L569)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponCompoundSpreadDaily](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L593)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponCompoundSpreadDaily](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L582)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponLockoutDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L606)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponLockoutDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L595)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponRateComputationStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L619)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponRateComputationStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L608)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponRateComputationEndDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L632)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponRateComputationEndDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L621)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponValueDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L645)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponValueDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L634)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponFixingDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L658)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponFixingDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L647)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponInterestDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L671)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponInterestDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L660)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponDt](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L684)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponDt](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L673)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponIndexFixings](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L697)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponIndexFixings](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L686)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponEffectiveIndexFixing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L710)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponEffectiveIndexFixing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L699)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlOvernightIndexedCouponEffectiveSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L723)(coupon: ql.OvernightIndexedCoupon, trigger = None)
+[qlOvernightIndexedCouponEffectiveSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L712)(coupon: ql.OvernightIndexedCoupon, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCouponUnderlying](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L736)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
+[qlCappedFlooredOvernightIndexedCouponUnderlying](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L725)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCouponNakedOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L750)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
+[qlCappedFlooredOvernightIndexedCouponNakedOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L739)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCouponDailyCapFloor](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L764)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
+[qlCappedFlooredOvernightIndexedCouponDailyCapFloor](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L753)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCouponAveragingMethod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L778)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
+[qlCappedFlooredOvernightIndexedCouponAveragingMethod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L767)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCouponCompoundSpreadDaily](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L792)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
+[qlCappedFlooredOvernightIndexedCouponCompoundSpreadDaily](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L781)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCouponEffectiveCapletVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L806)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
+[qlCappedFlooredOvernightIndexedCouponEffectiveCapletVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L795)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCouponEffectiveFloorletVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L820)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
+[qlCappedFlooredOvernightIndexedCouponEffectiveFloorletVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L809)(coupon: ql.CappedFlooredOvernightIndexedCoupon, trigger = None)
 
 
-[qlAsOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L834)(cashflow: ql.CashFlow, trigger = None)
+[qlAsOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L823)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlAsCappedFlooredOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L847)(cashflow: ql.CashFlow, trigger = None)
+[qlAsCappedFlooredOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L836)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlAsMultipleResetsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L860)(cashflow: ql.CashFlow, trigger = None)
+[qlAsMultipleResetsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L849)(cashflow: ql.CashFlow, trigger = None)
 
 
-[qlFixedRateCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L881)(payment_date: qDate, nominal: float, rate: float, day_counter: qDayCounter, start_date: qDate, end_date: qDate, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), ex_coupon_date: qDate = ql.Date(), trigger = None)
+[qlFixedRateCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L870)(payment_date: qDate, nominal: float, rate: float, day_counter: qDayCounter, start_date: qDate, end_date: qDate, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), ex_coupon_date: qDate = ql.Date(), trigger = None)
 
 
-[qlIborCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L925)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.IborIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
+[qlIborCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L914)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.IborIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCappedFlooredIborCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L981)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.IborIndex, gearing: float = 1.0, spread: float = 0.0, cap: float = ql.nullDouble(), floor: float = ql.nullDouble(), ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
+[qlCappedFlooredIborCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L970)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.IborIndex, gearing: float = 1.0, spread: float = 0.0, cap: float = ql.nullDouble(), floor: float = ql.nullDouble(), ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
 
 
-[qlOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1040)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, overnight_index: ql.OvernightIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), telescopic_value_dates: bool = False, averaging_method: qRateAveragingType = ql.RateAveraging.Compound, lookback_days: int = ql.nullInt(), lockout_days: int = 0, apply_observation_shift: bool = False, compound_spread: bool = False, trigger = None)
+[qlOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1029)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, overnight_index: ql.OvernightIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), telescopic_value_dates: bool = False, averaging_method: qRateAveragingType = ql.RateAveraging.Compound, lookback_days: int = ql.nullInt(), lockout_days: int = 0, apply_observation_shift: bool = False, compound_spread: bool = False, trigger = None)
 
 
-[qlCappedFlooredOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1090)(underlying: ql.OvernightIndexedCoupon, cap: float = ql.nullDouble(), floor: float = ql.nullDouble(), naked_option: bool = False, daily_cap_floor: bool = False, trigger = None)
+[qlCappedFlooredOvernightIndexedCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1079)(underlying: ql.OvernightIndexedCoupon, cap: float = ql.nullDouble(), floor: float = ql.nullDouble(), naked_option: bool = False, daily_cap_floor: bool = False, trigger = None)
 
 
-[qlCmsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1122)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.SwapIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
+[qlCmsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1111)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.SwapIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCmsSpreadCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1174)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.SwapSpreadIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
+[qlCmsSpreadCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1163)(payment_date: qDate, nominal: float, start_date: qDate, end_date: qDate, fixing_days: int, index: ql.SwapSpreadIndex, gearing: float = 1.0, spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), is_in_arrears: bool = False, ex_coupon_date: qDate = ql.Date(), trigger = None)
 
 
-[qlRangeAccrualFloatersCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1227)(payment_date: qDate, nominal: float, index: ql.IborIndex, start_date: qDate, end_date: qDate, fixing_days: int, day_counter: qDayCounter, gearing: float, spread: float, ref_period_start: qDate, ref_period_end: qDate, observations_schedule: ql.Schedule, lower_trigger: float, upper_trigger: float, trigger = None)
+[qlRangeAccrualFloatersCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1216)(payment_date: qDate, nominal: float, index: ql.IborIndex, start_date: qDate, end_date: qDate, fixing_days: int, day_counter: qDayCounter, gearing: float, spread: float, ref_period_start: qDate, ref_period_end: qDate, observations_schedule: ql.Schedule, lower_trigger: float, upper_trigger: float, trigger = None)
 
 
-[qlMultipleResetsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1280)(payment_date: qDate, nominal: float, reset_schedule: ql.Schedule, fixing_days: int, index: ql.IborIndex, gearing: float = 1.0, coupon_spread: float = 0.0, rate_spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), ex_coupon_date: qDate = ql.Date(), trigger = None)
+[qlMultipleResetsCoupon](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1269)(payment_date: qDate, nominal: float, reset_schedule: ql.Schedule, fixing_days: int, index: ql.IborIndex, gearing: float = 1.0, coupon_spread: float = 0.0, rate_spread: float = 0.0, ref_period_start: qDate = ql.Date(), ref_period_end: qDate = ql.Date(), day_counter: qDayCounter = ql.Actual365Fixed(), ex_coupon_date: qDate = ql.Date(), trigger = None)
 
 
-[qlBlackIborCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1320)(volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(), trigger = None)
+[qlBlackIborCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1309)(volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(), trigger = None)
 
 
-[qlCompoundingOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1331)(trigger = None)
+[qlCompoundingOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1320)(trigger = None)
 
 
-[qlArithmeticAveragedOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1346)(mean_reversion: float = 0.03, volatility: float = 0.0, by_approx: bool = False, trigger = None)
+[qlArithmeticAveragedOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1335)(mean_reversion: float = 0.03, volatility: float = 0.0, by_approx: bool = False, trigger = None)
 
 
-[qlBlackCompoundingOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1365)(volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(), effective_volatility_input: bool = False, trigger = None)
+[qlBlackCompoundingOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1354)(volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(), effective_volatility_input: bool = False, trigger = None)
 
 
-[qlBlackAveragingOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1383)(volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(), effective_volatility_input: bool = False, trigger = None)
+[qlBlackAveragingOvernightIndexedCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1372)(volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(), effective_volatility_input: bool = False, trigger = None)
 
 
-[qlCompoundingMultipleResetsPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1397)(trigger = None)
+[qlCompoundingMultipleResetsPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1386)(trigger = None)
 
 
-[qlAveragingMultipleResetsPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1407)(trigger = None)
+[qlAveragingMultipleResetsPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1396)(trigger = None)
 
 
-[qlSetCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1419)(leg: xlo.Array(dims=1), pricer: ql.FloatingRateCouponPricer, trigger = None)
+[qlSetCouponPricer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1408)(leg: xlo.Array(dims=1), pricer: ql.FloatingRateCouponPricer, trigger = None)
 
 
-[qlFixedRateLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1437)(schedule: ql.Schedule, day_counter: qDayCounter, nominals: xlo.Array(dims=1), coupon_rates: xlo.Array(dims=1), payment_adjustment: qBusinessDayConvention = ql.Following, trigger = None)
+[qlFixedRateLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1426)(schedule: ql.Schedule, day_counter: qDayCounter, nominals: xlo.Array(dims=1), coupon_rates: xlo.Array(dims=1), payment_adjustment: qBusinessDayConvention = ql.Following, trigger = None)
 
 
-[qlIborLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1471)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.IborIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, fixing_days = (), gearings: xlo.Array(dims=1) = None, spreads: xlo.Array(dims=1) = None, caps: xlo.Array(dims=1) = None, floors: xlo.Array(dims=1) = None, is_in_arrears: bool = False, trigger = None)
+[qlIborLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1460)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.IborIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, fixing_days = (), gearings: xlo.Array(dims=1) = None, spreads: xlo.Array(dims=1) = None, caps: xlo.Array(dims=1) = None, floors: xlo.Array(dims=1) = None, is_in_arrears: bool = False, trigger = None)
 
 
-[qlOvernightLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1515)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.OvernightIndex, payment_day_counter: qDayCounter = ql.Actual360(), payment_convention: qBusinessDayConvention = ql.Following, gearings: xlo.Array(dims=1) = None, spreads: xlo.Array(dims=1) = None, telescopic_value_dates: bool = False, averaging_method: qRateAveragingType = ql.RateAveraging.Compound, trigger = None)
+[qlOvernightLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1504)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.OvernightIndex, payment_day_counter: qDayCounter = ql.Actual360(), payment_convention: qBusinessDayConvention = ql.Following, gearings: xlo.Array(dims=1) = None, spreads: xlo.Array(dims=1) = None, telescopic_value_dates: bool = False, averaging_method: qRateAveragingType = ql.RateAveraging.Compound, trigger = None)
 
 
-[qlCmsLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1551)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
+[qlCmsLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1540)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
 
 
-[qlCmsZeroLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1579)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
+[qlCmsZeroLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1568)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
 
 
-[qlCmsSpreadLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1607)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapSpreadIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
+[qlCmsSpreadLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1596)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.SwapSpreadIndex, payment_day_counter: qDayCounter = ql.Actual365Fixed(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
 
 
-[qlMultipleResetsLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1634)(full_reset_schedule: ql.Schedule, index: ql.IborIndex, resets_per_coupon: int, nominals: xlo.Array(dims=1), trigger = None)
+[qlMultipleResetsLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1623)(full_reset_schedule: ql.Schedule, index: ql.IborIndex, resets_per_coupon: int, nominals: xlo.Array(dims=1), trigger = None)
 
 
-[qlRangeAccrualLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1657)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.IborIndex, payment_day_counter: qDayCounter = ql.Actual360(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
+[qlRangeAccrualLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1646)(nominals: xlo.Array(dims=1), schedule: ql.Schedule, index: ql.IborIndex, payment_day_counter: qDayCounter = ql.Actual360(), payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
 
 
-[qlCashFlowsStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1681)(leg: xlo.Array(dims=1), trigger = None)
+[qlCashFlowsStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1670)(leg: xlo.Array(dims=1), trigger = None)
 
 
-[qlCashFlowsMaturityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1692)(leg: xlo.Array(dims=1), trigger = None)
+[qlCashFlowsMaturityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1681)(leg: xlo.Array(dims=1), trigger = None)
 
 
-[qlCashFlowsPreviousCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1705)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsPreviousCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1694)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNextCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1725)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNextCashFlowDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1714)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsPreviousCashFlowAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1745)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsPreviousCashFlowAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1734)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNextCashFlowAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1765)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNextCashFlowAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1754)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsPreviousCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1785)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsPreviousCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1774)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNextCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1805)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNextCashFlow](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1794)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsAccrualPeriod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1825)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsAccrualPeriod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1814)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsAccrualDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1845)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsAccrualDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1834)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsAccruedPeriod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1865)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsAccruedPeriod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1854)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsAccruedDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1885)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsAccruedDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1874)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsAccruedAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1905)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsAccruedAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1894)(leg: xlo.Array(dims=1), include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNpv](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1927)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNpv](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1916)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNpvFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1955)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNpvFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1944)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNpvFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1986)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNpvFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L1975)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNpvFromZSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2024)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, z_spread: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNpvFromZSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2013)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, z_spread: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsBps](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2060)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsBps](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2049)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsBpsFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2088)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsBpsFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2077)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsBpsFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2119)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsBpsFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2108)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsNpvBps](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2153)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsNpvBps](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2142)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsAtmRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2183)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), npv: float = ql.nullDouble(), trigger = None)
+[qlCashFlowsAtmRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2172)(leg: xlo.Array(dims=1), discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), npv: float = ql.nullDouble(), trigger = None)
 
 
-[qlCashFlowsYieldRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2216)(leg: xlo.Array(dims=1), npv: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), accuracy: float = 1.0e-10, max_iterations: int = 10000, guess: float = 0.05, trigger = None)
+[qlCashFlowsYieldRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2205)(leg: xlo.Array(dims=1), npv: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), accuracy: float = 1.0e-10, max_iterations: int = 10000, guess: float = 0.05, trigger = None)
 
 
-[qlCashFlowsDurationFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2256)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, duration_type: qDurationType, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsDurationFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2245)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, duration_type: qDurationType, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsDurationFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2286)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, duration_type: qDurationType, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsDurationFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2275)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, duration_type: qDurationType, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsConvexityFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2323)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsConvexityFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2312)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsConvexityFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2357)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsConvexityFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2346)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsBasisPointValueFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2386)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsBasisPointValueFromRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2375)(leg: xlo.Array(dims=1), _yield: float, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsBasisPointValueFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2420)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+[qlCashFlowsBasisPointValueFromInterestRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2409)(leg: xlo.Array(dims=1), interest_rate: ql.InterestRate, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
 
 
-[qlCashFlowsZSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2450)(leg: xlo.Array(dims=1), npv: float, discount_curve: ql.YieldTermStructure, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), accuracy: float = 1.0e-10, max_iterations: int = 100, guess: float = 0.0, trigger = None)
+[qlCashFlowsZSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2439)(leg: xlo.Array(dims=1), npv: float, discount_curve: ql.YieldTermStructure, day_counter: qDayCounter, compounding: qCompounding, frequency: qFrequency, include_settlement_date_flows: bool, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), accuracy: float = 1.0e-10, max_iterations: int = 100, guess: float = 0.0, trigger = None)
 
 
-[qlDurationTypeName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2488)(duration_type: qDurationType, trigger = None)
+[qlDurationTypeName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2477)(duration_type: qDurationType, trigger = None)
 
 
-[qlRateAveragingTypeName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2499)(averaging_type: qRateAveragingType, trigger = None)
+[qlRateAveragingTypeName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/cashflows.py#L2488)(averaging_type: qRateAveragingType, trigger = None)
+
+
+## Credit
+
+
+[qProtectionSide](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/credit.py#L21)(s: str)
+
+
+## Creditdefaultswap
+
+
+[qCreditDefaultSwapPricingModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L44)(s: str)
+
+
+[qIsdaCdsEngineNumericalFix](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L53)(s: str)
+
+
+[qIsdaCdsEngineAccrualBias](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L62)(s: str)
+
+
+[qIsdaCdsEngineForwardsInCouponPeriod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L71)(s: str)
+
+
+[qlClaimAmount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L89)(claim: ql.Claim, default_date: qDate, notional: float, recovery_rate: float, trigger = None)
+
+
+[qlFaceValueClaim](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L103)(trigger = None)
+
+
+[qlFaceValueAccrualClaim](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L116)(bond: ql.Bond, trigger = None)
+
+
+[qlCreditDefaultSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L142)(protection_side: qProtectionSide, notional: float, spread: float, schedule: ql.Schedule, payment_convention: qBusinessDayConvention, day_counter: qDayCounter, settles_accrual: bool = True, pays_at_default: bool = True, protection_start_date: qDate = ql.Date(), claim: ql.Claim = None, last_period_day_counter: str = None, rebates_accrual: bool = True, trade_date: qDate = ql.Date(), trigger = None)
+
+
+[qlCreditDefaultSwapWithUpfront](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L202)(protection_side: qProtectionSide, notional: float, upfront: float, spread: float, schedule: ql.Schedule, payment_convention: qBusinessDayConvention, day_counter: qDayCounter, settles_accrual: bool = True, pays_at_default: bool = True, protection_start_date: qDate = ql.Date(), upfront_date: qDate = ql.Date(), claim: ql.Claim = None, last_period_day_counter: str = None, rebates_accrual: bool = True, trade_date: qDate = ql.Date(), cash_settlement_days: int = 3, trigger = None)
+
+
+[qlCreditdefaultswapSide](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L253)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapNotional](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L264)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapRunningSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L275)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapUpfront](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L286)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditdefaultSwapSettlesAccrual](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L297)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditdefaultswapPaysAtDefaultTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L308)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapCoupons](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L321)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapProtectionStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L334)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapProtectionEndDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L347)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapRebatesAccrual](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L360)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultswapUpfrontPayment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L371)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapAccrualRebate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L384)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapTradeDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L397)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapCashSettlementDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L408)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapFairUpfront](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L421)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapFairSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L432)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapCouponLegBPS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L443)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapUpfrontBPS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L454)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapCouponLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L465)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapDefaultLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L476)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapUpfrontNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L487)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapAccrualRebateNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L498)(cds: ql.CreditDefaultSwap, trigger = None)
+
+
+[qlCreditDefaultSwapImpliedHazardRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L517)(cds: ql.CreditDefaultSwap, target_npv: float, discount_curve: ql.YieldTermStructureHandle, day_counter: qDayCounter, recovery_rate: float = 0.40, accuracy: float = 1e-6, model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.Midpoint, trigger = None)
+
+
+[qlCreditDefaultSwapConventionalSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L543)(cds: ql.CreditDefaultSwap, conventional_recovery: float, discount_curve: ql.YieldTermStructureHandle, day_counter: qDayCounter, model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.ISDA, trigger = None)
+
+
+[qlMakeCreditDefaultSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L558)(maturity: str | float, running_spread: float, upfront_rate = None, side = None, notional = None, coupon_tenor = None, day_counter = None, last_period_day_counter = None, date_generation_rule = None, cash_settlement_days = None, pricing_engine = None, trade_date = None, trigger = None)
+
+
+[qlCdsMaturity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L613)(trade_date: qDate, tenor: qPeriod, date_generation_rule: qDateGenerationRule, trigger = None)
+
+
+[qlMidPointCdsEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L631)(default_curve: ql.DefaultProbabilityTermStructureHandle, recovery_rate: float, discount_curve: ql.YieldTermStructureHandle, trigger = None)
+
+
+[qlIntegralCdsEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L651)(integration_step: qPeriod, default_curve: ql.DefaultProbabilityTermStructureHandle, recovery_rate: float, discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool = False, trigger = None)
+
+
+[qlIsdaCdsEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L681)(default_curve: ql.DefaultProbabilityTermStructureHandle, recovery_rate: float, discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool = False, numerical_fix: qIsdaCdsEngineNumericalFix = ql.IsdaCdsEngine.Taylor, accrual_bias: qIsdaCdsEngineAccrualBias = ql.IsdaCdsEngine.HalfDayBias, forwards_in_coupon_period: qIsdaCdsEngineForwardsInCouponPeriod = ql.IsdaCdsEngine.Piecewise, trigger = None)
+
+
+[qlCdsOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L711)(cds: ql.CreditDefaultSwap, exercise: ql.Exercise, knocks_out: bool = True, trigger = None)
+
+
+[qlBlackCdsOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/creditdefaultswap.py#L730)(default_curve: ql.DefaultProbabilityTermStructureHandle, recovery_rate: float, discount_curve: ql.YieldTermStructureHandle, vol: qQuoteHandle, trigger = None)
 
 
 ## Currencies
@@ -811,6 +1000,90 @@ This section lists the QuantLib functions made available to Excel.
 
 
 [qlDayCounterYearFractionToDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/daycounters.py#L140)(daycounter: qDayCounter, ref_date: qDate, year_fraction: float, trigger = None)
+
+
+## Defaultprobability
+
+
+[qlDefaultProbabilityTermStructureDefaultProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L26)(ts: ql.DefaultProbabilityTermStructureHandle, date: qDate, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureDefaultProbabilityFromTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L44)(ts: ql.DefaultProbabilityTermStructureHandle, time: float, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureDefaultProbability2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L63)(ts: ql.DefaultProbabilityTermStructureHandle, date_one: qDate, date_two: qDate, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureDefaultProbabilityFromTime2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L83)(ts: ql.DefaultProbabilityTermStructureHandle, time_one: float, time_two: float, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureSurvivalProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L102)(ts: ql.DefaultProbabilityTermStructureHandle, date: qDate, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureSurvivalProbabilityFromTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L120)(ts: ql.DefaultProbabilityTermStructureHandle, time: float, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureDefaultDensity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L138)(ts: ql.DefaultProbabilityTermStructureHandle, date: qDate, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureDefaultDensityFromTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L156)(ts: ql.DefaultProbabilityTermStructureHandle, time: float, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureHazardRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L174)(ts: ql.DefaultProbabilityTermStructureHandle, date: qDate, extrapolate: bool = False, trigger = None)
+
+
+[qlDefaultProbabilityTermStructureHazardRateFromTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L192)(ts: ql.DefaultProbabilityTermStructureHandle, time: float, extrapolate: bool = False, trigger = None)
+
+
+[qlFlatHazardRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L213)(reference_date: qDate, hazard_rate: qQuoteHandle, day_counter: qDayCounter, trigger = None)
+
+
+[qlHazardRateCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L233)(dates: xlo.Array(dims=1), hazard_rates: xlo.Array(dims=1), day_counter: qDayCounter, calendar: qCalendar = ql.NullCalendar(), trigger = None)
+
+
+[qlDefaultDensityCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L256)(dates: xlo.Array(dims=1), default_densities: xlo.Array(dims=1), day_counter: qDayCounter, calendar: qCalendar = ql.NullCalendar(), trigger = None)
+
+
+[qlSurvivalProbabilityCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L279)(dates: xlo.Array(dims=1), survival_probabilities: xlo.Array(dims=1), day_counter: qDayCounter, calendar: qCalendar = ql.NullCalendar(), trigger = None)
+
+
+[qlDefaultProbabilityHelperQuote](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L305)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlDefaultProbabilityHelperLatestDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L318)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlDefaultProbabilityHelperEarliestDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L331)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlDefaultProbabilityHelperMaturity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L344)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlDefaultProbabilityHelperLatestRelevantDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L357)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlDefaultProbabilityHelperPillarDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L370)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlDefaultProbabilityHelperImpliedQuote](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L383)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlDefaultProbabilityHelperQuoteError](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L397)(helper: ql.DefaultProbabilityHelper, trigger = None)
+
+
+[qlSpreadCdsHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L426)(spread: qQuoteHandle, tenor: qPeriod, settlement_days: int, calendar: qCalendar, frequency: qFrequency, payment_convention: qBusinessDayConvention, date_generation: qDateGenerationRule, day_counter: qDayCounter, recovery_rate: float, discount_curve: ql.YieldTermStructureHandle, settles_accrual: bool = True, pays_at_default: bool = True, start_date: qDate = ql.Date(), last_period_day_counter: str = None, rebates_accrual: bool = True, model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.Midpoint, trigger = None)
+
+
+[qlUpfrontCdsHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L494)(upfront: qQuoteHandle, spread: float, tenor: qPeriod, settlement_days: int, calendar: qCalendar, frequency: qFrequency, payment_convention: qBusinessDayConvention, date_generation: qDateGenerationRule, day_counter: qDayCounter, recovery_rate: float, discount_curve: ql.YieldTermStructureHandle, upfront_settlement_days: int = 0, settles_accrual: bool = True, pays_at_default: bool = True, start_date: qDate = ql.Date(), last_period_day_counter: str = None, rebates_accrual: bool = True, model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.Midpoint, trigger = None)
+
+
+[qlPiecewiseFlatHazardRateAsDts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L551)(reference_date: qDate, helpers: xlo.Array(dims=1), day_counter: qDayCounter, trigger = None)
+
+
+[qlPiecewiseFlatHazardRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L573)(reference_date: qDate, helpers: xlo.Array(dims=1), day_counter: qDayCounter, trigger = None)
+
+
+[qlRiskyBondEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/defaultprobability.py#L596)(default_curve: ql.DefaultProbabilityTermStructureHandle, recovery_rate: float, discount_curve: ql.YieldTermStructureHandle, trigger = None)
 
 
 ## Dividends
@@ -1194,571 +1467,571 @@ This section lists the QuantLib functions made available to Excel.
 ## Options
 
 
-[qCashDividendModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L178)(s: str)
+[qCashDividendModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L185)(s: str)
 
 
-[qBinomialEngineType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L187)(s: str)
+[qBinomialEngineType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L194)(s: str)
 
 
-[qMCTraits](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L196)(s: str)
+[qMCTraits](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L203)(s: str)
 
 
-[qLsmBasisSystemPolynomialType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L205)(s: str)
+[qLsmBasisSystemPolynomialType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L212)(s: str)
 
 
-[qAnalyticHestonComplexLogFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L214)(s: str)
+[qAnalyticHestonComplexLogFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L221)(s: str)
 
 
-[qAnalyticPTDHestonComplexLogFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L223)(s: str)
+[qAnalyticPTDHestonComplexLogFormula](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L230)(s: str)
 
 
-[qAnalyticHestonEngineIntegration](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L242)(name: str)
+[qAnalyticHestonEngineIntegration](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L249)(name: str)
 
 
-[qFdmSchemeType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L284)(s: str)
+[qFdmSchemeType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L291)(s: str)
 
 
-[qFdmSchemeDesc](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L293)(s: str)
+[qFdmSchemeDesc](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L300)(s: str)
 
 
-[qFdBlackScholesCashDividendModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L302)(s: str)
+[qFdBlackScholesCashDividendModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L309)(s: str)
 
 
-[qQdPlusSolverType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L311)(s: str)
+[qQdPlusSolverType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L318)(s: str)
 
 
-[qQdFpFixedPointEquation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L320)(s: str)
+[qQdFpFixedPointEquation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L327)(s: str)
 
 
-[qQdFpIterationScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L333)(s: str)
+[qQdFpIterationScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L340)(s: str)
 
 
-[qDeltaVolQuoteDeltaType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L342)(s: str)
+[qDeltaVolQuoteDeltaType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L349)(s: str)
 
 
-[qDeltaVolQuoteAtmType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L351)(s: str)
+[qDeltaVolQuoteAtmType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L358)(s: str)
 
 
-[qlOptionTypeName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L362)(option_type: qOptionType, trigger = None)
+[qlOptionTypeName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L369)(option_type: qOptionType, trigger = None)
 
 
-[qlOptionPayoff](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L388)(option: ql.Option, trigger = None)
+[qlOptionPayoff](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L383)(option: ql.Option, trigger = None)
 
 
-[qlOptionExercise](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L399)(option: ql.Option, trigger = None)
+[qlOptionExercise](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L394)(option: ql.Option, trigger = None)
 
 
-[qlOneAssetOptionDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L413)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L408)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L424)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L419)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L435)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L430)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L446)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L441)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L457)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L452)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L468)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L463)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L479)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L474)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L490)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L485)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L501)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L496)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L512)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L507)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlOneAssetOptionITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L523)(option: ql.OneAssetOption, trigger = None)
+[qlOneAssetOptionITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L518)(option: ql.OneAssetOption, trigger = None)
 
 
-[qlVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L540)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+[qlVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L535)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
 
 
-[qlVanillaOptionImpliedVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L560)(option: ql.VanillaOption, target_value: float, process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, accuracy: float = 1.0e-4, max_evaluations: int = 100, min_vol: float = 1.0e-4, max_vol: float = 4.0, trigger = None)
+[qlVanillaOptionImpliedVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L555)(option: ql.VanillaOption, target_value: float, process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, accuracy: float = 1.0e-4, max_evaluations: int = 100, min_vol: float = 1.0e-4, max_vol: float = 4.0, trigger = None)
 
 
-[qlEuropeanOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L595)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+[qlEuropeanOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L590)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
 
 
-[qlForwardVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L614)(moneyness: float, reset_date: qDate, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+[qlForwardVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L609)(moneyness: float, reset_date: qDate, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
 
 
-[qlQuantoVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L632)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+[qlQuantoVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L627)(payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
 
 
-[qlQuantoVanillaOptionQVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L645)(option: ql.QuantoVanillaOption, trigger = None)
+[qlQuantoVanillaOptionQVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L640)(option: ql.QuantoVanillaOption, trigger = None)
 
 
-[qlQuantoVanillaOptionQRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L656)(option: ql.QuantoVanillaOption, trigger = None)
+[qlQuantoVanillaOptionQRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L651)(option: ql.QuantoVanillaOption, trigger = None)
 
 
-[qlQuantoVanillaOptionQLambda](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L667)(option: ql.QuantoVanillaOption, trigger = None)
+[qlQuantoVanillaOptionQLambda](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L662)(option: ql.QuantoVanillaOption, trigger = None)
 
 
-[qlQuantoForwardVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L681)(moneyness: float, reset_date: qDate, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+[qlQuantoForwardVanillaOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L676)(moneyness: float, reset_date: qDate, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
 
 
-[qlMultiAssetOptionDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L701)(option: ql.MultiAssetOption, trigger = None)
+[qlMultiAssetOptionDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L696)(option: ql.MultiAssetOption, trigger = None)
 
 
-[qlMultiAssetOptionGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L712)(option: ql.MultiAssetOption, trigger = None)
+[qlMultiAssetOptionGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L707)(option: ql.MultiAssetOption, trigger = None)
 
 
-[qlMultiAssetOptionTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L723)(option: ql.MultiAssetOption, trigger = None)
+[qlMultiAssetOptionTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L718)(option: ql.MultiAssetOption, trigger = None)
 
 
-[qlMultiAssetOptionVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L734)(option: ql.MultiAssetOption, trigger = None)
+[qlMultiAssetOptionVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L729)(option: ql.MultiAssetOption, trigger = None)
 
 
-[qlMultiAssetOptionRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L745)(option: ql.MultiAssetOption, trigger = None)
+[qlMultiAssetOptionRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L740)(option: ql.MultiAssetOption, trigger = None)
 
 
-[qlMultiAssetOptionDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L756)(option: ql.MultiAssetOption, trigger = None)
+[qlMultiAssetOptionDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L751)(option: ql.MultiAssetOption, trigger = None)
 
 
-[qlMargrabeOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L772)(q1: int, q2: int, exercise: ql.Exercise, trigger = None)
+[qlMargrabeOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L767)(q1: int, q2: int, exercise: ql.Exercise, trigger = None)
 
 
-[qlMargrabeOptionDelta1](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L785)(option: ql.MargrabeOption, trigger = None)
+[qlMargrabeOptionDelta1](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L780)(option: ql.MargrabeOption, trigger = None)
 
 
-[qlMargrabeOptionDelta2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L796)(option: ql.MargrabeOption, trigger = None)
+[qlMargrabeOptionDelta2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L791)(option: ql.MargrabeOption, trigger = None)
 
 
-[qlMargrabeOptionGamma1](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L807)(option: ql.MargrabeOption, trigger = None)
+[qlMargrabeOptionGamma1](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L802)(option: ql.MargrabeOption, trigger = None)
 
 
-[qlMargrabeOptionGamma2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L818)(option: ql.MargrabeOption, trigger = None)
+[qlMargrabeOptionGamma2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L813)(option: ql.MargrabeOption, trigger = None)
 
 
-[qlTwoAssetCorrelationOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L832)(option_type: qOptionType, strike1: float, strike2: float, exercise: ql.Exercise, trigger = None)
+[qlTwoAssetCorrelationOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L827)(option_type: qOptionType, strike1: float, strike2: float, exercise: ql.Exercise, trigger = None)
 
 
-[qlCompoundOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L855)(mother_payoff: ql.StrikedTypePayoff, mother_exercise: ql.Exercise, daughter_payoff: ql.StrikedTypePayoff, daughter_exercise: ql.Exercise, trigger = None)
+[qlCompoundOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L850)(mother_payoff: ql.StrikedTypePayoff, mother_exercise: ql.Exercise, daughter_payoff: ql.StrikedTypePayoff, daughter_exercise: ql.Exercise, trigger = None)
 
 
-[qlSimpleChooserOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L876)(choosing_date: qDate, strike: float, exercise: ql.Exercise, trigger = None)
+[qlSimpleChooserOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L871)(choosing_date: qDate, strike: float, exercise: ql.Exercise, trigger = None)
 
 
-[qlComplexChooserOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L893)(choosing_date: qDate, strike_call: float, strike_put: float, exercise_call: ql.Exercise, exercise_put: ql.Exercise, trigger = None)
+[qlComplexChooserOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L888)(choosing_date: qDate, strike_call: float, strike_put: float, exercise_call: ql.Exercise, exercise_put: ql.Exercise, trigger = None)
 
 
-[qlHolderExtensibleOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L918)(option_type: qOptionType, premium: float, second_expiry_date: qDate, second_strike: float, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
+[qlHolderExtensibleOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L913)(option_type: qOptionType, premium: float, second_expiry_date: qDate, second_strike: float, payoff: ql.StrikedTypePayoff, exercise: ql.Exercise, trigger = None)
 
 
-[qlWriterExtensibleOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L947)(payoff1: ql.PlainVanillaPayoff, exercise1: ql.Exercise, payoff2: ql.PlainVanillaPayoff, exercise2: ql.Exercise, trigger = None)
+[qlWriterExtensibleOption](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L942)(payoff1: ql.PlainVanillaPayoff, exercise1: ql.Exercise, payoff2: ql.PlainVanillaPayoff, exercise2: ql.Exercise, trigger = None)
 
 
-[qlAnalyticEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L970)(process: ql.GeneralizedBlackScholesProcess, discount_curve: ql.YieldTermStructureHandle = None, trigger = None)
+[qlAnalyticEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L965)(process: ql.GeneralizedBlackScholesProcess, discount_curve: ql.YieldTermStructureHandle = None, trigger = None)
 
 
-[qlAnalyticDividendEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L988)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1), trigger = None)
+[qlAnalyticDividendEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L983)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1), trigger = None)
 
 
-[qlCashDividendEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1005)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1), cash_dividend_model: qCashDividendModel = ql.CashDividendEuropeanEngine.Spot, trigger = None)
+[qlCashDividendEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1002)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1), cash_dividend_model: qCashDividendModel = ql.CashDividendEuropeanEngine.Spot, trigger = None)
 
 
-[qlIntegralEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1023)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlIntegralEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1020)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1036)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1033)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlQuantoEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1052)(process: ql.GeneralizedBlackScholesProcess, foreign_risk_free_rate: ql.YieldTermStructureHandle, exchange_rate_volatility: ql.BlackVolTermStructureHandle, correlation: qQuoteHandle, trigger = None)
+[qlQuantoEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1049)(process: ql.GeneralizedBlackScholesProcess, foreign_risk_free_rate: ql.YieldTermStructureHandle, exchange_rate_volatility: ql.BlackVolTermStructureHandle, correlation: qQuoteHandle, trigger = None)
 
 
-[qlQuantoForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1074)(process: ql.GeneralizedBlackScholesProcess, foreign_risk_free_rate: ql.YieldTermStructureHandle, exchange_rate_volatility: ql.BlackVolTermStructureHandle, correlation: qQuoteHandle, trigger = None)
+[qlQuantoForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1071)(process: ql.GeneralizedBlackScholesProcess, foreign_risk_free_rate: ql.YieldTermStructureHandle, exchange_rate_volatility: ql.BlackVolTermStructureHandle, correlation: qQuoteHandle, trigger = None)
 
 
-[qlBaroneAdesiWhaleyApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1097)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlBaroneAdesiWhaleyApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1094)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlBjerksundStenslandApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1111)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlBjerksundStenslandApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1108)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlJuQuadraticApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1125)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlJuQuadraticApproximationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1122)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlAnalyticDigitalAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1139)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlAnalyticDigitalAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1136)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlAnalyticEuropeanMargrabeEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1158)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: float, trigger = None)
+[qlAnalyticEuropeanMargrabeEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1155)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: float, trigger = None)
 
 
-[qlAnalyticAmericanMargrabeEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1176)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: float, trigger = None)
+[qlAnalyticAmericanMargrabeEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1173)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: float, trigger = None)
 
 
-[qlAnalyticCompoundOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1192)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlAnalyticCompoundOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1189)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlAnalyticSimpleChooserEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1205)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlAnalyticSimpleChooserEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1202)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlAnalyticComplexChooserEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1218)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlAnalyticComplexChooserEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1215)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlAnalyticHolderExtensibleOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1231)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlAnalyticHolderExtensibleOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1228)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlAnalyticWriterExtensibleOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1245)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlAnalyticWriterExtensibleOptionEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1242)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlAnalyticTwoAssetCorrelationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1261)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: qQuoteHandle, trigger = None)
+[qlAnalyticTwoAssetCorrelationEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1258)(process1: ql.GeneralizedBlackScholesProcess, process2: ql.GeneralizedBlackScholesProcess, correlation: qQuoteHandle, trigger = None)
 
 
-[qlHestonModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1280)(process: ql.HestonProcess, trigger = None)
+[qlHestonModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1277)(process: ql.HestonProcess, trigger = None)
 
 
-[qlHestonModelHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1291)(model: ql.HestonModel, trigger = None)
+[qlHestonModelHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1288)(model: ql.HestonModel, trigger = None)
 
 
-[qlHestonModelHandleCurrentLink](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1302)(model_handle: ql.HestonModelHandle, trigger = None)
+[qlHestonModelHandleCurrentLink](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1299)(model_handle: ql.HestonModelHandle, trigger = None)
 
 
-[qlHestonModelTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1315)(model: ql.HestonModel, trigger = None)
+[qlHestonModelTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1312)(model: ql.HestonModel, trigger = None)
 
 
-[qlHestonModelKappa](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1326)(model: ql.HestonModel, trigger = None)
+[qlHestonModelKappa](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1323)(model: ql.HestonModel, trigger = None)
 
 
-[qlHestonModelSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1337)(model: ql.HestonModel, trigger = None)
+[qlHestonModelSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1334)(model: ql.HestonModel, trigger = None)
 
 
-[qlHestonModelRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1348)(model: ql.HestonModel, trigger = None)
+[qlHestonModelRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1345)(model: ql.HestonModel, trigger = None)
 
 
-[qlHestonModelV0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1359)(model: ql.HestonModel, trigger = None)
+[qlHestonModelV0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1356)(model: ql.HestonModel, trigger = None)
 
 
-[qlHestonModelProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1370)(model: ql.HestonModel, trigger = None)
+[qlHestonModelProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1367)(model: ql.HestonModel, trigger = None)
 
 
-[qlPiecewiseTimeDependentHestonModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1389)(risk_free_rate: ql.YieldTermStructureHandle, dividend_yield: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, theta: ql.Parameter, kappa: ql.Parameter, sigma: ql.Parameter, rho: ql.Parameter, time_grid: ql.TimeGrid, trigger = None)
+[qlPiecewiseTimeDependentHestonModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1386)(risk_free_rate: ql.YieldTermStructureHandle, dividend_yield: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, theta: ql.Parameter, kappa: ql.Parameter, sigma: ql.Parameter, rho: ql.Parameter, time_grid: ql.TimeGrid, trigger = None)
 
 
-[qlPiecewiseTimeDependentHestonModelTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1414)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+[qlPiecewiseTimeDependentHestonModelTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1411)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
 
 
-[qlPiecewiseTimeDependentHestonModelKappa](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1428)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+[qlPiecewiseTimeDependentHestonModelKappa](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1425)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
 
 
-[qlPiecewiseTimeDependentHestonModelSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1442)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+[qlPiecewiseTimeDependentHestonModelSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1439)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
 
 
-[qlPiecewiseTimeDependentHestonModelRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1456)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
+[qlPiecewiseTimeDependentHestonModelRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1453)(model: ql.PiecewiseTimeDependentHestonModel, t: float, trigger = None)
 
 
-[qlPiecewiseTimeDependentHestonModelV0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1469)(model: ql.PiecewiseTimeDependentHestonModel, trigger = None)
+[qlPiecewiseTimeDependentHestonModelV0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1466)(model: ql.PiecewiseTimeDependentHestonModel, trigger = None)
 
 
-[qlPiecewiseTimeDependentHestonModelS0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1482)(model: ql.PiecewiseTimeDependentHestonModel, trigger = None)
+[qlPiecewiseTimeDependentHestonModelS0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1479)(model: ql.PiecewiseTimeDependentHestonModel, trigger = None)
 
 
-[qlAnalyticHestonEngineIntegrationGaussLaguerre](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1498)(integration_order: int = 128, trigger = None)
+[qlAnalyticHestonEngineIntegrationGaussLaguerre](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1495)(integration_order: int = 128, trigger = None)
 
 
-[qlAnalyticHestonEngineIntegrationNumberOfEvaluations](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1512)(integration: ql.AnalyticHestonEngine_Integration, trigger = None)
+[qlAnalyticHestonEngineIntegrationNumberOfEvaluations](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1509)(integration: ql.AnalyticHestonEngine_Integration, trigger = None)
 
 
-[qlAnalyticHestonEngineIntegrationIsAdaptive](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1526)(integration: ql.AnalyticHestonEngine_Integration, trigger = None)
+[qlAnalyticHestonEngineIntegrationIsAdaptive](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1523)(integration: ql.AnalyticHestonEngine_Integration, trigger = None)
 
 
-[qlAnalyticHestonEngineIntegrationAndersenPiterbargIntegrationLimit](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1543)(c_inf: float, epsilon: float, v0: float, t: float, trigger = None)
+[qlAnalyticHestonEngineIntegrationAndersenPiterbargIntegrationLimit](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1540)(c_inf: float, epsilon: float, v0: float, t: float, trigger = None)
 
 
-[qlAnalyticHestonEngineOptimalAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1563)(t: float, engine: ql.AnalyticHestonEngine, trigger = None)
+[qlAnalyticHestonEngineOptimalAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1560)(t: float, engine: ql.AnalyticHestonEngine, trigger = None)
 
 
-[qlAnalyticHestonEngineOptimalAlphaValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1579)(optimal_alpha: ql.AnalyticHestonEngine_OptimalAlpha, strike: float, trigger = None)
+[qlAnalyticHestonEngineOptimalAlphaValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1576)(optimal_alpha: ql.AnalyticHestonEngine_OptimalAlpha, strike: float, trigger = None)
 
 
-[qlAnalyticHestonEngineOptimalAlphaBounds](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1595)(optimal_alpha: ql.AnalyticHestonEngine_OptimalAlpha, strike: float, trigger = None)
+[qlAnalyticHestonEngineOptimalAlphaBounds](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1592)(optimal_alpha: ql.AnalyticHestonEngine_OptimalAlpha, strike: float, trigger = None)
 
 
-[qlAnalyticHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1616)(model: ql.HestonModel, integration_order: int = 144, rel_tolerance: float = None, abs_tolerance: float = None, max_evaluations: int = None, complex_log_formula: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.Gatheral, integration: qAnalyticHestonEngineIntegration = None, andersen_piterbarg_epsilon: float = 1.0e-8, trigger = None)
+[qlAnalyticHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1613)(model: ql.HestonModel, integration_order: int = 144, rel_tolerance: float = None, abs_tolerance: float = None, max_evaluations: int = None, complex_log_formula: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.Gatheral, integration: qAnalyticHestonEngineIntegration = None, andersen_piterbarg_epsilon: float = 1.0e-8, trigger = None)
 
 
-[qlAnalyticHestonEngineNumberOfEvaluations](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1654)(engine: ql.AnalyticHestonEngine, trigger = None)
+[qlAnalyticHestonEngineNumberOfEvaluations](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1651)(engine: ql.AnalyticHestonEngine, trigger = None)
 
 
-[qlCOSHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1669)(model: ql.HestonModel, l: float = 16.0, n: int = 200, trigger = None)
+[qlCOSHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1666)(model: ql.HestonModel, l: float = 16.0, n: int = 200, trigger = None)
 
 
-[qlExponentialFittingHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1685)(model: ql.HestonModel, control_variate: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.OptimalCV, scaling: float = ql.nullDouble(), alpha: float = -0.5, trigger = None)
+[qlExponentialFittingHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1682)(model: ql.HestonModel, control_variate: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.OptimalCV, scaling: float = ql.nullDouble(), alpha: float = -0.5, trigger = None)
 
 
-[qlAnalyticPDFHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1704)(model: ql.HestonModel, gauss_lobatto_eps: float = 1.0e-6, gauss_lobatto_integration_order: int = 10000, trigger = None)
+[qlAnalyticPDFHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1701)(model: ql.HestonModel, gauss_lobatto_eps: float = 1.0e-6, gauss_lobatto_integration_order: int = 10000, trigger = None)
 
 
-[qlAnalyticHestonForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1723)(process: ql.HestonProcess, integration_order: int = 144, trigger = None)
+[qlAnalyticHestonForwardEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1720)(process: ql.HestonProcess, integration_order: int = 144, trigger = None)
 
 
-[qlAnalyticPTDHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1744)(model: ql.PiecewiseTimeDependentHestonModel, integration_order: int = 144, rel_tolerance: float = None, abs_tolerance: float = None, max_evaluations: int = None, complex_log_formula: qAnalyticPTDHestonComplexLogFormula = ql.AnalyticPTDHestonEngine.Gatheral, integration: qAnalyticHestonEngineIntegration = None, andersen_piterbarg_epsilon: float = 1.0e-8, trigger = None)
+[qlAnalyticPTDHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1741)(model: ql.PiecewiseTimeDependentHestonModel, integration_order: int = 144, rel_tolerance: float = None, abs_tolerance: float = None, max_evaluations: int = None, complex_log_formula: qAnalyticPTDHestonComplexLogFormula = ql.AnalyticPTDHestonEngine.Gatheral, integration: qAnalyticHestonEngineIntegration = None, andersen_piterbarg_epsilon: float = 1.0e-8, trigger = None)
 
 
-[qlAnalyticHestonHullWhiteEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1788)(heston_model: ql.HestonModel, hull_white_model: ql.HullWhite, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
+[qlAnalyticHestonHullWhiteEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1785)(heston_model: ql.HestonModel, hull_white_model: ql.HullWhite, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
 
 
-[qlAnalyticH1HWEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1817)(heston_model: ql.HestonModel, hull_white_model: ql.HullWhite, rho_sr: float, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
+[qlAnalyticH1HWEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1814)(heston_model: ql.HestonModel, hull_white_model: ql.HullWhite, rho_sr: float, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
 
 
-[qlBinomialVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1847)(process: ql.GeneralizedBlackScholesProcess, engine_type: qBinomialEngineType, steps: int, trigger = None)
+[qlBinomialVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1844)(process: ql.GeneralizedBlackScholesProcess, engine_type: qBinomialEngineType, steps: int, trigger = None)
 
 
-[qlFdmSchemeDesc](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1868)(scheme_type: qFdmSchemeType = ql.FdmSchemeDesc.DouglasType, theta: float = 0.5, mu: float = 0.0, trigger = None)
+[qlFdmSchemeDesc](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1865)(scheme_type: qFdmSchemeType = ql.FdmSchemeDesc.DouglasType, theta: float = 0.5, mu: float = 0.0, trigger = None)
 
 
-[qlFdmSchemeDescByName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1884)(scheme_desc: qFdmSchemeDesc, trigger = None)
+[qlFdmSchemeDescByName](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1881)(scheme_desc: qFdmSchemeDesc, trigger = None)
 
 
-[qlFdmQuantoHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1901)(domestic_ts: ql.YieldTermStructureHandle, foreign_ts: ql.YieldTermStructureHandle, fx_vol_ts: ql.BlackVolTermStructureHandle, equity_fx_correlation: float, exchange_rate_atm_level: float, trigger = None)
+[qlFdmQuantoHelper](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1898)(domestic_ts: ql.YieldTermStructureHandle, foreign_ts: ql.YieldTermStructureHandle, fx_vol_ts: ql.BlackVolTermStructureHandle, equity_fx_correlation: float, exchange_rate_atm_level: float, trigger = None)
 
 
-[qlFdBlackScholesVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1934)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, quanto_helper: ql.FdmQuantoHelper = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, local_vol: bool = False, illegal_local_vol_overwrite: float = -ql.nullDouble(), cash_dividend_model: qFdBlackScholesCashDividendModel = ql.FdBlackScholesVanillaEngine.Spot, trigger = None)
+[qlFdBlackScholesVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L1931)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, quanto_helper: ql.FdmQuantoHelper = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, local_vol: bool = False, illegal_local_vol_overwrite: float = -ql.nullDouble(), cash_dividend_model: qFdBlackScholesCashDividendModel = ql.FdBlackScholesVanillaEngine.Spot, trigger = None)
 
 
-[qlFdBlackScholesShoutEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2011)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
+[qlFdBlackScholesShoutEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2008)(process: ql.GeneralizedBlackScholesProcess, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
 
 
-[qlFdOrnsteinUhlenbeckVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2045)(process: ql.OrnsteinUhlenbeckProcess, discount_curve: ql.YieldTermStructureHandle, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, epsilon: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
+[qlFdOrnsteinUhlenbeckVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2042)(process: ql.OrnsteinUhlenbeckProcess, discount_curve: ql.YieldTermStructureHandle, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, damping_steps: int = 0, epsilon: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
 
 
-[qlFdBatesVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2093)(model: ql.BatesModel, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, v_grid: int = 50, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
+[qlFdBatesVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2090)(model: ql.BatesModel, dividends: xlo.Array(dims=1) = None, t_grid: int = 100, x_grid: int = 100, v_grid: int = 50, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = None, trigger = None)
 
 
-[qlFdHestonVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2132)(model: ql.HestonModel, dividends: xlo.Array(dims=1) = None, quanto_helper: ql.FdmQuantoHelper = None, t_grid: int = 100, x_grid: int = 100, v_grid: int = 50, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), leverage_fct: ql.LocalVolTermStructureHandle = None, mixing_factor: float = 1.0, trigger = None)
+[qlFdHestonVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2129)(model: ql.HestonModel, dividends: xlo.Array(dims=1) = None, quanto_helper: ql.FdmQuantoHelper = None, t_grid: int = 100, x_grid: int = 100, v_grid: int = 50, damping_steps: int = 0, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), leverage_fct: ql.LocalVolTermStructureHandle = None, mixing_factor: float = 1.0, trigger = None)
 
 
-[qlFdCEVVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2214)(f0: float, alpha: float, beta: float, discount_curve: ql.YieldTermStructureHandle, t_grid: int = 50, x_grid: int = 400, damping_steps: int = 0, scaling_factor: float = 1.0, eps: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(), trigger = None)
+[qlFdCEVVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2211)(f0: float, alpha: float, beta: float, discount_curve: ql.YieldTermStructureHandle, t_grid: int = 50, x_grid: int = 400, damping_steps: int = 0, scaling_factor: float = 1.0, eps: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(), trigger = None)
 
 
-[qlFdSabrVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2260)(f0: float, alpha: float, beta: float, nu: float, rho: float, discount_curve: ql.YieldTermStructureHandle, t_grid: int = 50, f_grid: int = 400, x_grid: int = 50, damping_steps: int = 0, scaling_factor: float = 1.0, eps: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), trigger = None)
+[qlFdSabrVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2257)(f0: float, alpha: float, beta: float, nu: float, rho: float, discount_curve: ql.YieldTermStructureHandle, t_grid: int = 50, f_grid: int = 400, x_grid: int = 50, damping_steps: int = 0, scaling_factor: float = 1.0, eps: float = 1.0e-4, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), trigger = None)
 
 
-[qlFdHestonHullWhiteVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2310)(model: ql.HestonModel, hull_white_process: ql.HullWhiteProcess, corr_equity_short_rate: float, dividends: xlo.Array(dims=1) = None, t_grid: int = 50, x_grid: int = 100, v_grid: int = 40, r_grid: int = 20, damping_steps: int = 0, control_variate: bool = True, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), trigger = None)
+[qlFdHestonHullWhiteVanillaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2307)(model: ql.HestonModel, hull_white_process: ql.HullWhiteProcess, corr_equity_short_rate: float, dividends: xlo.Array(dims=1) = None, t_grid: int = 50, x_grid: int = 100, v_grid: int = 40, r_grid: int = 20, damping_steps: int = 0, control_variate: bool = True, scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(), trigger = None)
 
 
-[qlMCEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2372)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+[qlMCEuropeanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2369)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
 
 
-[qlMCAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2420)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, control_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, polynom_order: int = 2, polynom_type: qLsmBasisSystemPolynomialType = ql.LsmBasisSystem.Monomial, n_calibration_samples: int = 2048, antithetic_variate_calibration: bool = None, seed_calibration: int = ql.nullInt(), trigger = None)
+[qlMCAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2417)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, control_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, polynom_order: int = 2, polynom_type: qLsmBasisSystemPolynomialType = ql.LsmBasisSystem.Monomial, n_calibration_samples: int = 2048, antithetic_variate_calibration: bool = None, seed_calibration: int = ql.nullInt(), trigger = None)
 
 
-[qlMCDigitalEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2473)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+[qlMCDigitalEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2470)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
 
 
-[qlMCEuropeanHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2515)(process: ql.HestonProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+[qlMCEuropeanHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2512)(process: ql.HestonProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
 
 
-[qlMCForwardEuropeanBSEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2556)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
+[qlMCForwardEuropeanBSEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2553)(process: ql.GeneralizedBlackScholesProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), brownian_bridge: bool = False, antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, trigger = None)
 
 
-[qlMCForwardEuropeanHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2599)(process: ql.HestonProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, control_variate: bool = False, trigger = None)
+[qlMCForwardEuropeanHestonEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2596)(process: ql.HestonProcess, traits: qMCTraits, time_steps: int = ql.nullInt(), time_steps_per_year: int = ql.nullInt(), antithetic_variate: bool = False, required_samples: int = ql.nullInt(), required_tolerance: float = ql.nullDouble(), max_samples: int = ql.nullInt(), seed: int = 0, control_variate: bool = False, trigger = None)
 
 
-[qlQdPlusAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2640)(process: ql.GeneralizedBlackScholesProcess, interpolation_points: int = 8, solver_type: qQdPlusSolverType = ql.QdPlusAmericanEngine.Halley, eps: float = 1.0e-6, max_iter: int = ql.nullInt(), trigger = None)
+[qlQdPlusAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2637)(process: ql.GeneralizedBlackScholesProcess, interpolation_points: int = 8, solver_type: qQdPlusSolverType = ql.QdPlusAmericanEngine.Halley, eps: float = 1.0e-6, max_iter: int = ql.nullInt(), trigger = None)
 
 
-[qlQdFpLegendreScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2663)(l: int, m: int, n: int, p: int, trigger = None)
+[qlQdFpLegendreScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2660)(l: int, m: int, n: int, p: int, trigger = None)
 
 
-[qlQdFpLegendreTanhSinhScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2679)(l: int, m: int, n: int, eps: float, trigger = None)
+[qlQdFpLegendreTanhSinhScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2676)(l: int, m: int, n: int, eps: float, trigger = None)
 
 
-[qlQdFpTanhSinhIterationScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2694)(m: int, n: int, eps: float, trigger = None)
+[qlQdFpTanhSinhIterationScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2691)(m: int, n: int, eps: float, trigger = None)
 
 
-[qlQdFpAmericanEngineFastScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2704)(trigger = None)
+[qlQdFpAmericanEngineFastScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2701)(trigger = None)
 
 
-[qlQdFpAmericanEngineAccurateScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2712)(trigger = None)
+[qlQdFpAmericanEngineAccurateScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2709)(trigger = None)
 
 
-[qlQdFpAmericanEngineHighPrecisionScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2720)(trigger = None)
+[qlQdFpAmericanEngineHighPrecisionScheme](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2717)(trigger = None)
 
 
-[qlQdFpAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2733)(process: ql.GeneralizedBlackScholesProcess, iteration_scheme: qQdFpIterationScheme = ql.QdFpAmericanEngine.accurateScheme(), fixed_point_equation: qQdFpFixedPointEquation = ql.QdFpAmericanEngine.Auto, trigger = None)
+[qlQdFpAmericanEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2730)(process: ql.GeneralizedBlackScholesProcess, iteration_scheme: qQdFpIterationScheme = ql.QdFpAmericanEngine.accurateScheme(), fixed_point_equation: qQdFpFixedPointEquation = ql.QdFpAmericanEngine.Auto, trigger = None)
 
 
-[qlAnalyticCEVEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2755)(f0: float, alpha: float, beta: float, discount_curve: ql.YieldTermStructureHandle, trigger = None)
+[qlAnalyticCEVEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2752)(f0: float, alpha: float, beta: float, discount_curve: ql.YieldTermStructureHandle, trigger = None)
 
 
-[qlBatesModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2772)(process: ql.BatesProcess, trigger = None)
+[qlBatesModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2769)(process: ql.BatesProcess, trigger = None)
 
 
-[qlBatesEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2786)(model: ql.BatesModel, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
+[qlBatesEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2783)(model: ql.BatesModel, integration_order: int = 144, rel_tolerance: float = None, max_evaluations: int = None, trigger = None)
 
 
-[qlVarianceGammaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2805)(process: ql.VarianceGammaProcess, trigger = None)
+[qlVarianceGammaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2802)(process: ql.VarianceGammaProcess, trigger = None)
 
 
-[qlFFTVarianceGammaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2819)(process: ql.VarianceGammaProcess, log_strike_spacing: float = 0.001, trigger = None)
+[qlFFTVarianceGammaEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2816)(process: ql.VarianceGammaProcess, log_strike_spacing: float = 0.001, trigger = None)
 
 
-[qlGJRGARCHModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2834)(process: ql.GJRGARCHProcess, trigger = None)
+[qlGJRGARCHModel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2831)(process: ql.GJRGARCHProcess, trigger = None)
 
 
-[qlAnalyticGJRGARCHEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2845)(model: ql.GJRGARCHModel, trigger = None)
+[qlAnalyticGJRGARCHEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2842)(model: ql.GJRGARCHModel, trigger = None)
 
 
-[qlBlackCalculator](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2866)(payoff: ql.StrikedTypePayoff, forward: float, std_dev: float, discount: float = 1.0, trigger = None)
+[qlBlackCalculator](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2863)(payoff: ql.StrikedTypePayoff, forward: float, std_dev: float, discount: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2883)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2880)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2895)(calculator: ql.BlackCalculator, spot: float, trigger = None)
+[qlBlackCalculatorDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2892)(calculator: ql.BlackCalculator, spot: float, trigger = None)
 
 
-[qlBlackCalculatorGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2909)(calculator: ql.BlackCalculator, spot: float, trigger = None)
+[qlBlackCalculatorGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2906)(calculator: ql.BlackCalculator, spot: float, trigger = None)
 
 
-[qlBlackCalculatorVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2923)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+[qlBlackCalculatorVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2920)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2938)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
+[qlBlackCalculatorTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2935)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2953)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
+[qlBlackCalculatorThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2950)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2967)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+[qlBlackCalculatorRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2964)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2981)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+[qlBlackCalculatorDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2978)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2994)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L2991)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorGammaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3007)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorGammaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3004)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3021)(calculator: ql.BlackCalculator, spot: float, trigger = None)
+[qlBlackCalculatorElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3018)(calculator: ql.BlackCalculator, spot: float, trigger = None)
 
 
-[qlBlackCalculatorElasticityForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3034)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorElasticityForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3031)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3047)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3044)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorITMAssetProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3060)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorITMAssetProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3057)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3073)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3070)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorStrikeGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3086)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorStrikeGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3083)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3097)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3094)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBlackCalculatorVanna](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3110)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
+[qlBlackCalculatorVanna](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3107)(calculator: ql.BlackCalculator, spot: float, maturity: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorVolga](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3124)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
+[qlBlackCalculatorVolga](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3121)(calculator: ql.BlackCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBlackCalculatorBeta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3137)(calculator: ql.BlackCalculator, trigger = None)
+[qlBlackCalculatorBeta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3134)(calculator: ql.BlackCalculator, trigger = None)
 
 
-[qlBachelierCalculator](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3154)(payoff: ql.StrikedTypePayoff, forward: float, std_dev: float, discount: float = 1.0, trigger = None)
+[qlBachelierCalculator](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3151)(payoff: ql.StrikedTypePayoff, forward: float, std_dev: float, discount: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3171)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3168)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3185)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
+[qlBachelierCalculatorDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3182)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
 
 
-[qlBachelierCalculatorGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3199)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
+[qlBachelierCalculatorGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3196)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
 
 
-[qlBachelierCalculatorVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3213)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+[qlBachelierCalculatorVega](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3210)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3228)(calculator: ql.BachelierCalculator, spot: float, maturity: float = 1.0, trigger = None)
+[qlBachelierCalculatorTheta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3225)(calculator: ql.BachelierCalculator, spot: float, maturity: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3243)(calculator: ql.BachelierCalculator, spot: float, maturity: float = 1.0, trigger = None)
+[qlBachelierCalculatorThetaPerDay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3240)(calculator: ql.BachelierCalculator, spot: float, maturity: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3257)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+[qlBachelierCalculatorRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3254)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3271)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+[qlBachelierCalculatorDividendRho](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3268)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3284)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorDeltaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3281)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorGammaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3297)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorGammaForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3294)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3311)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
+[qlBachelierCalculatorElasticity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3308)(calculator: ql.BachelierCalculator, spot: float, trigger = None)
 
 
-[qlBachelierCalculatorElasticityForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3324)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorElasticityForward](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3321)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3337)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorITMCashProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3334)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorITMAssetProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3350)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorITMAssetProbability](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3347)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3363)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorStrikeSensitivity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3360)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorStrikeGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3376)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorStrikeGamma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3373)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3389)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3386)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlBachelierCalculatorVanna](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3403)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+[qlBachelierCalculatorVanna](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3400)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorVolga](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3417)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
+[qlBachelierCalculatorVolga](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3414)(calculator: ql.BachelierCalculator, maturity: float = 1.0, trigger = None)
 
 
-[qlBachelierCalculatorBeta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3430)(calculator: ql.BachelierCalculator, trigger = None)
+[qlBachelierCalculatorBeta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3427)(calculator: ql.BachelierCalculator, trigger = None)
 
 
-[qlDeltaVolQuote](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3449)(delta: float, vol: qQuoteHandle, maturity: float, delta_type: qDeltaVolQuoteDeltaType, trigger = None)
+[qlDeltaVolQuote](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3446)(delta: float, vol: qQuoteHandle, maturity: float, delta_type: qDeltaVolQuoteDeltaType, trigger = None)
 
 
-[qlDeltaVolQuoteAtm](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3474)(vol: qQuoteHandle, delta_type: qDeltaVolQuoteDeltaType, maturity: float, atm_type: qDeltaVolQuoteAtmType)
+[qlDeltaVolQuoteAtm](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3471)(vol: qQuoteHandle, delta_type: qDeltaVolQuoteDeltaType, maturity: float, atm_type: qDeltaVolQuoteAtmType)
 
 
-[qlDeltaVolQuoteDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3495)(quote: ql.DeltaVolQuote, trigger = None)
+[qlDeltaVolQuoteDelta](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3492)(quote: ql.DeltaVolQuote, trigger = None)
 
 
-[qlDeltaVolQuoteMaturity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3506)(quote: ql.DeltaVolQuote, trigger = None)
+[qlDeltaVolQuoteMaturity](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3503)(quote: ql.DeltaVolQuote, trigger = None)
 
 
-[qlDeltaVolQuoteDeltaType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3517)(quote: ql.DeltaVolQuote, trigger = None)
+[qlDeltaVolQuoteDeltaType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3514)(quote: ql.DeltaVolQuote, trigger = None)
 
 
-[qlDeltaVolQuoteAtmType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3528)(quote: ql.DeltaVolQuote, trigger = None)
+[qlDeltaVolQuoteAtmType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3525)(quote: ql.DeltaVolQuote, trigger = None)
 
 
-[qlDeltaVolQuoteValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3539)(quote: ql.DeltaVolQuote, trigger = None)
+[qlDeltaVolQuoteValue](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3536)(quote: ql.DeltaVolQuote, trigger = None)
 
 
-[qlDeltaVolQuoteIsValid](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3550)(quote: ql.DeltaVolQuote, trigger = None)
+[qlDeltaVolQuoteIsValid](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/options.py#L3547)(quote: ql.DeltaVolQuote, trigger = None)
 
 
 ## Parameter
@@ -1788,7 +2061,7 @@ This section lists the QuantLib functions made available to Excel.
 [qlConstantParameter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/parameter.py#L102)(constraint: ql.Constraint, value: float = None, trigger = None)
 
 
-[qlPiecewiseConstantParameter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/parameter.py#L122)(times: xlo.Array(dims=1), values: xlo.Array(dims=1), constraint: ql.Constraint = ql.NoConstraint(), trigger = None)
+[qlPiecewiseConstantParameter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/parameter.py#L123)(times: xlo.Array(dims=1), values: xlo.Array(dims=1), constraint: ql.Constraint = ql.NoConstraint(), trigger = None)
 
 
 ## Payoffs
@@ -1833,34 +2106,34 @@ This section lists the QuantLib functions made available to Excel.
 ## Piecewiseyieldcurve
 
 
-[qlYieldTermStructureHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L50)(curve: ql.YieldTermStructure, trigger = None)
+[qlYieldTermStructureHandle](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L39)(curve: ql.YieldTermStructure, trigger = None)
 
 
-[qlPiecewiseYieldCurveDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L67)(curve: ql.YieldTermStructure, trigger = None)
+[qlPiecewiseYieldCurveDates](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L56)(curve: ql.YieldTermStructure, trigger = None)
 
 
-[qlPiecewiseYieldCurveTimes](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L81)(curve: ql.YieldTermStructure, trigger = None)
+[qlPiecewiseYieldCurveTimes](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L70)(curve: ql.YieldTermStructure, trigger = None)
 
 
-[qlPiecewiseYieldCurveData](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L95)(curve: ql.YieldTermStructure, trigger = None)
+[qlPiecewiseYieldCurveData](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L84)(curve: ql.YieldTermStructure, trigger = None)
 
 
-[qlPiecewiseYieldCurveAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L115)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+[qlPiecewiseYieldCurveAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L104)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
 
 
-[qlPiecewiseYieldCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L163)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+[qlPiecewiseYieldCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L154)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
 
 
-[qlPiecewiseYieldCurveWithJumpsAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L203)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, jumps: xlo.Array(dims=1), jump_dates: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+[qlPiecewiseYieldCurveWithJumpsAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L194)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, jumps: xlo.Array(dims=1), jump_dates: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
 
 
-[qlPiecewiseYieldCurveWithJumps](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L260)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, jumps: xlo.Array(dims=1), jump_dates: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+[qlPiecewiseYieldCurveWithJumps](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L255)(reference_date: qDate, instruments: xlo.Array(dims=1), daycounter: qDayCounter, jumps: xlo.Array(dims=1), jump_dates: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
 
 
-[qlPiecewiseSpreadYieldCurveAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L301)(base_curve: ql.YieldTermStructureHandle, instruments: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+[qlPiecewiseSpreadYieldCurveAsYts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L296)(base_curve: ql.YieldTermStructureHandle, instruments: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
 
 
-[qlPiecewiseSpreadYieldCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L347)(base_curve: ql.YieldTermStructureHandle, instruments: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
+[qlPiecewiseSpreadYieldCurve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/piecewiseyieldcurve.py#L342)(base_curve: ql.YieldTermStructureHandle, instruments: xlo.Array(dims=1), traits: str, interpolator: str, mixed_interpolation_behavior: str = None, mixed_interpolation_n: int = None, trigger = None)
 
 
 ## Quantlib_
@@ -2151,199 +2424,517 @@ This section lists the QuantLib functions made available to Excel.
 ## Stochasticprocess
 
 
-[qGJRGARCHProcessDiscretization](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L57)(discretization: str)
+[qGJRGARCHProcessDiscretization](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L46)(discretization: str)
 
 
-[qHestonProcessDiscretization](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L62)(discretization: str)
+[qHestonProcessDiscretization](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L51)(discretization: str)
 
 
-[qlStochasticProcessSize](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L73)(process: ql.StochasticProcess, trigger = None)
+[qlStochasticProcessSize](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L62)(process: ql.StochasticProcess, trigger = None)
 
 
-[qlStochasticProcessFactors](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L84)(process: ql.StochasticProcess, trigger = None)
+[qlStochasticProcessFactors](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L73)(process: ql.StochasticProcess, trigger = None)
 
 
-[qlStochasticProcessInitialValues](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L95)(process: ql.StochasticProcess, trigger = None)
+[qlStochasticProcessInitialValues](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L84)(process: ql.StochasticProcess, trigger = None)
 
 
-[qlStochasticProcessDrift](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L110)(process: ql.StochasticProcess, t: float, x: xlo.Array(dims=1), trigger = None)
+[qlStochasticProcessDrift](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L99)(process: ql.StochasticProcess, t: float, x: xlo.Array(dims=1), trigger = None)
 
 
-[qlStochasticProcessDiffusion](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L125)(process: ql.StochasticProcess, t: float, x: xlo.Array(dims=1), trigger = None)
+[qlStochasticProcessDiffusion](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L114)(process: ql.StochasticProcess, t: float, x: xlo.Array(dims=1), trigger = None)
 
 
-[qlStochasticProcessExpectation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L141)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, trigger = None)
+[qlStochasticProcessExpectation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L130)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, trigger = None)
 
 
-[qlStochasticProcessStdDeviation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L161)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, trigger = None)
+[qlStochasticProcessStdDeviation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L150)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, trigger = None)
 
 
-[qlStochasticProcessCovariance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L181)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, trigger = None)
+[qlStochasticProcessCovariance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L170)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, trigger = None)
 
 
-[qlStochasticProcessEvolve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L202)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, dw: xlo.Array(dims=1), trigger = None)
+[qlStochasticProcessEvolve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L191)(process: ql.StochasticProcess, t0: float, x0: xlo.Array(dims=1), dt: float, dw: xlo.Array(dims=1), trigger = None)
 
 
-[qlStochasticProcess1DX0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L222)(process: ql.StochasticProcess1D, trigger = None)
+[qlStochasticProcess1DX0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L211)(process: ql.StochasticProcess1D, trigger = None)
 
 
-[qlStochasticProcess1DDrift](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L235)(process: ql.StochasticProcess1D, t: float, x: float, trigger = None)
+[qlStochasticProcess1DDrift](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L224)(process: ql.StochasticProcess1D, t: float, x: float, trigger = None)
 
 
-[qlStochasticProcess1DDiffusion](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L250)(process: ql.StochasticProcess1D, t: float, x: float, trigger = None)
+[qlStochasticProcess1DDiffusion](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L239)(process: ql.StochasticProcess1D, t: float, x: float, trigger = None)
 
 
-[qlStochasticProcess1DExpectation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L266)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, trigger = None)
+[qlStochasticProcess1DExpectation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L255)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, trigger = None)
 
 
-[qlStochasticProcess1DStdDeviation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L282)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, trigger = None)
+[qlStochasticProcess1DStdDeviation](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L271)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, trigger = None)
 
 
-[qlStochasticProcess1DVariance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L298)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, trigger = None)
+[qlStochasticProcess1DVariance](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L287)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, trigger = None)
 
 
-[qlStochasticProcess1DEvolve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L315)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, dw: float, trigger = None)
+[qlStochasticProcess1DEvolve](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L304)(process: ql.StochasticProcess1D, t0: float, x0: float, dt: float, dw: float, trigger = None)
 
 
-[qlStochasticProcess1DApply](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L335)(process: ql.StochasticProcess1D, x0: float, dx: float, trigger = None)
+[qlStochasticProcess1DApply](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L324)(process: ql.StochasticProcess1D, x0: float, dx: float, trigger = None)
 
 
-[qlGeneralizedBlackScholesProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L352)(s0: qQuoteHandle, dividend_ts: ql.YieldTermStructureHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, local_vol_ts: ql.LocalVolTermStructureHandle = None, trigger = None)
+[qlGeneralizedBlackScholesProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L341)(s0: qQuoteHandle, dividend_ts: ql.YieldTermStructureHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, local_vol_ts: ql.LocalVolTermStructureHandle = None, trigger = None)
 
 
-[qlGeneralizedBlackScholesProcessStateVariable](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L374)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlGeneralizedBlackScholesProcessStateVariable](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L363)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlGeneralizedBlackScholesProcessDividendYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L387)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlGeneralizedBlackScholesProcessDividendYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L376)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlGeneralizedBlackScholesProcessRiskFreeRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L400)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlGeneralizedBlackScholesProcessRiskFreeRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L389)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlGeneralizedBlackScholesProcessBlackVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L413)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlGeneralizedBlackScholesProcessBlackVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L402)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlGeneralizedBlackScholesProcessLocalVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L426)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
+[qlGeneralizedBlackScholesProcessLocalVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L415)(process: ql.GeneralizedBlackScholesProcess, trigger = None)
 
 
-[qlBlackScholesProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L441)(s0: qQuoteHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
+[qlBlackScholesProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L430)(s0: qQuoteHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
 
 
-[qlBlackScholesMertonProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L460)(s0: qQuoteHandle, dividend_ts: ql.YieldTermStructureHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
+[qlBlackScholesMertonProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L449)(s0: qQuoteHandle, dividend_ts: ql.YieldTermStructureHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
 
 
-[qlBlackProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L479)(s0: qQuoteHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
+[qlBlackProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L468)(s0: qQuoteHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
 
 
-[qlGarmanKohlagenProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L498)(s0: qQuoteHandle, foreign_risk_free_ts: ql.YieldTermStructureHandle, domestic_risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
+[qlGarmanKohlagenProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L487)(s0: qQuoteHandle, foreign_risk_free_ts: ql.YieldTermStructureHandle, domestic_risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, trigger = None)
 
 
-[qlMerton76Process](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L523)(state_variable: qQuoteHandle, dividend_ts: ql.YieldTermStructureHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, jump_intensity: qQuoteHandle, mean_log_jump: qQuoteHandle, jump_volatility: qQuoteHandle, trigger = None)
+[qlMerton76Process](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L512)(state_variable: qQuoteHandle, dividend_ts: ql.YieldTermStructureHandle, risk_free_ts: ql.YieldTermStructureHandle, vol_ts: ql.BlackVolTermStructureHandle, jump_intensity: qQuoteHandle, mean_log_jump: qQuoteHandle, jump_volatility: qQuoteHandle, trigger = None)
 
 
-[qlStochasticProcessArray](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L552)(array: xlo.Array(dims=1), correlation: xlo.Array(dims=2), trigger = None)
+[qlStochasticProcessArray](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L541)(array: xlo.Array(dims=1), correlation: xlo.Array(dims=2), trigger = None)
 
 
-[qlGeometricBrownianMotionProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L571)(initial_value: float, mu: float, sigma: float, trigger = None)
+[qlGeometricBrownianMotionProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L561)(initial_value: float, mu: float, sigma: float, trigger = None)
 
 
-[qlVarianceGammaProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L592)(s0: qQuoteHandle, dividend_yield: ql.YieldTermStructureHandle, risk_free_rate: ql.YieldTermStructureHandle, sigma: float, nu: float, theta: float, trigger = None)
+[qlVarianceGammaProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L582)(s0: qQuoteHandle, dividend_yield: ql.YieldTermStructureHandle, risk_free_rate: ql.YieldTermStructureHandle, sigma: float, nu: float, theta: float, trigger = None)
 
 
-[qlHestonProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L619)(risk_free_ts: ql.YieldTermStructureHandle, dividend_ts: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, kappa: float, theta: float, sigma: float, rho: float, discretization: qHestonProcessDiscretization = ql.HestonProcess.QuadraticExponentialMartingale, trigger = None)
+[qlHestonProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L609)(risk_free_ts: ql.YieldTermStructureHandle, dividend_ts: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, kappa: float, theta: float, sigma: float, rho: float, discretization: qHestonProcessDiscretization = ql.HestonProcess.QuadraticExponentialMartingale, trigger = None)
 
 
-[qlHestonProcessS0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L643)(process: ql.HestonProcess, trigger = None)
+[qlHestonProcessS0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L633)(process: ql.HestonProcess, trigger = None)
 
 
-[qlHestonProcessDividendYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L654)(process: ql.HestonProcess, trigger = None)
+[qlHestonProcessDividendYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L644)(process: ql.HestonProcess, trigger = None)
 
 
-[qlHestonProcessRiskFreeRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L667)(process: ql.HestonProcess, trigger = None)
+[qlHestonProcessRiskFreeRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L657)(process: ql.HestonProcess, trigger = None)
 
 
-[qlBatesProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L690)(risk_free_rate: ql.YieldTermStructureHandle, dividend_yield: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, kappa: float, theta: float, sigma: float, rho: float, lambda_parameter: float, nu: float, delta: float, trigger = None)
+[qlBatesProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L680)(risk_free_rate: ql.YieldTermStructureHandle, dividend_yield: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, kappa: float, theta: float, sigma: float, rho: float, lambda_parameter: float, nu: float, delta: float, trigger = None)
 
 
-[qlHullWhiteProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L728)(risk_free_ts: ql.YieldTermStructureHandle, a: float, sigma: float, trigger = None)
+[qlHullWhiteProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L718)(risk_free_ts: ql.YieldTermStructureHandle, a: float, sigma: float, trigger = None)
 
 
-[qlHullWhiteForwardProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L746)(risk_free_ts: ql.YieldTermStructureHandle, a: float, sigma: float, trigger = None)
+[qlHullWhiteForwardProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L736)(risk_free_ts: ql.YieldTermStructureHandle, a: float, sigma: float, trigger = None)
 
 
-[qlHullWhiteForwardProcessAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L763)(process: ql.HullWhiteForwardProcess, t: float, trigger = None)
+[qlHullWhiteForwardProcessAlpha](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L753)(process: ql.HullWhiteForwardProcess, t: float, trigger = None)
 
 
-[qlHullWhiteForwardProcessMT](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L779)(process: ql.HullWhiteForwardProcess, s: float, t: float, t_measure: float, trigger = None)
+[qlHullWhiteForwardProcessMT](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L769)(process: ql.HullWhiteForwardProcess, s: float, t: float, t_measure: float, trigger = None)
 
 
-[qlHullWhiteForwardProcessB](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L798)(process: ql.HullWhiteForwardProcess, s: float, t: float, trigger = None)
+[qlHullWhiteForwardProcessB](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L788)(process: ql.HullWhiteForwardProcess, s: float, t: float, trigger = None)
 
 
-[qlHullWhiteForwardProcessSetForwardMeasureTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L812)(process: ql.HullWhiteForwardProcess, t: float, trigger = None)
+[qlHullWhiteForwardProcessSetForwardMeasureTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L802)(process: ql.HullWhiteForwardProcess, t: float, trigger = None)
 
 
-[qlG2Process](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L830)(a: float, sigma: float, b: float, eta: float, rho: float, trigger = None)
+[qlG2Process](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L820)(a: float, sigma: float, b: float, eta: float, rho: float, trigger = None)
 
 
-[qlG2ForwardProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L852)(a: float, sigma: float, b: float, eta: float, rho: float, trigger = None)
+[qlG2ForwardProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L842)(a: float, sigma: float, b: float, eta: float, rho: float, trigger = None)
 
 
-[qlG2ForwardProcessSetForwardMeasureTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L871)(process: ql.G2ForwardProcess, t: float, trigger = None)
+[qlG2ForwardProcessSetForwardMeasureTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L861)(process: ql.G2ForwardProcess, t: float, trigger = None)
 
 
-[qlGsrProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L888)(times: xlo.Array(dims=1), vols: xlo.Array(dims=1), reversions: xlo.Array(dims=1), t: float = 60.0, trigger = None)
+[qlGsrProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L878)(times: xlo.Array(dims=1), vols: xlo.Array(dims=1), reversions: xlo.Array(dims=1), t: float = 60.0, trigger = None)
 
 
-[qlGsrProcessSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L909)(process: ql.GsrProcess, t: float, trigger = None)
+[qlGsrProcessSigma](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L899)(process: ql.GsrProcess, t: float, trigger = None)
 
 
-[qlGsrProcessReversion](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L922)(process: ql.GsrProcess, t: float, trigger = None)
+[qlGsrProcessReversion](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L912)(process: ql.GsrProcess, t: float, trigger = None)
 
 
-[qlGsrProcessY](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L935)(process: ql.GsrProcess, t: float, trigger = None)
+[qlGsrProcessY](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L925)(process: ql.GsrProcess, t: float, trigger = None)
 
 
-[qlGsrProcessG](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L950)(process: ql.GsrProcess, t: float, T: float, x: float, trigger = None)
+[qlGsrProcessG](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L940)(process: ql.GsrProcess, t: float, T: float, x: float, trigger = None)
 
 
-[qlGsrProcessSetForwardMeasureTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L965)(process: ql.GsrProcess, t: float, trigger = None)
+[qlGsrProcessSetForwardMeasureTime](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L955)(process: ql.GsrProcess, t: float, trigger = None)
 
 
-[qlOrnsteinUhlenbeckProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L983)(speed: float, vol: float, x0: float = 0.0, level: float = 0.0, trigger = None)
+[qlOrnsteinUhlenbeckProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L973)(speed: float, vol: float, x0: float = 0.0, level: float = 0.0, trigger = None)
 
 
-[qlOrnsteinUhlenbeckProcessSpeed](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1000)(process: ql.OrnsteinUhlenbeckProcess, trigger = None)
+[qlOrnsteinUhlenbeckProcessSpeed](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L990)(process: ql.OrnsteinUhlenbeckProcess, trigger = None)
 
 
-[qlOrnsteinUhlenbeckProcessVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1013)(process: ql.OrnsteinUhlenbeckProcess, trigger = None)
+[qlOrnsteinUhlenbeckProcessVolatility](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1003)(process: ql.OrnsteinUhlenbeckProcess, trigger = None)
 
 
-[qlOrnsteinUhlenbeckProcessLevel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1026)(process: ql.OrnsteinUhlenbeckProcess, trigger = None)
+[qlOrnsteinUhlenbeckProcessLevel](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1016)(process: ql.OrnsteinUhlenbeckProcess, trigger = None)
 
 
-[qlExtendedOrnsteinUhlenbeckProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1043)(speed: float, sigma: float, x0: float, function, int_eps: float = 1.0e-4, trigger = None)
+[qlExtendedOrnsteinUhlenbeckProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1033)(speed: float, sigma: float, x0: float, function, int_eps: float = 1.0e-4, trigger = None)
 
 
-[qlExtendedOrnsteinUhlenbeckProcessConstantFunction](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1061)(x: float)
+[qlExtendedOrnsteinUhlenbeckProcessConstantFunction](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1051)(x: float)
 
 
-[qlExtOUWithJumpsProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1077)(process: ql.ExtendedOrnsteinUhlenbeckProcess, Y0: float, beta: float, jump_intensity: float, eta: float, trigger = None)
+[qlExtOUWithJumpsProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1067)(process: ql.ExtendedOrnsteinUhlenbeckProcess, Y0: float, beta: float, jump_intensity: float, eta: float, trigger = None)
 
 
-[qlKlugeExtOUProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1097)(rho: float, kluge: ql.ExtOUWithJumpsProcess, ext_ou: ql.ExtendedOrnsteinUhlenbeckProcess, trigger = None)
+[qlKlugeExtOUProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1087)(rho: float, kluge: ql.ExtOUWithJumpsProcess, ext_ou: ql.ExtendedOrnsteinUhlenbeckProcess, trigger = None)
 
 
-[qlGJRGARCHProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1123)(risk_free_rate: ql.YieldTermStructureHandle, dividend_yield: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, omega: float, alpha: float, beta: float, gamma: float, lambda_parameter: float, days_per_year: float = 252.0, discretization: qGJRGARCHProcessDiscretization = ql.GJRGARCHProcess.FullTruncation, trigger = None)
+[qlGJRGARCHProcess](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1113)(risk_free_rate: ql.YieldTermStructureHandle, dividend_yield: ql.YieldTermStructureHandle, s0: qQuoteHandle, v0: float, omega: float, alpha: float, beta: float, gamma: float, lambda_parameter: float, days_per_year: float = 252.0, discretization: qGJRGARCHProcessDiscretization = ql.GJRGARCHProcess.FullTruncation, trigger = None)
 
 
-[qlGJRGARCHProcessS0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1159)(process: ql.GJRGARCHProcess, trigger = None)
+[qlGJRGARCHProcessS0](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1149)(process: ql.GJRGARCHProcess, trigger = None)
 
 
-[qlGJRGARCHProcessDividendYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1170)(process: ql.GJRGARCHProcess, trigger = None)
+[qlGJRGARCHProcessDividendYield](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1160)(process: ql.GJRGARCHProcess, trigger = None)
 
 
-[qlGJRGARCHProcessRiskFreeRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1183)(process: ql.GJRGARCHProcess, trigger = None)
+[qlGJRGARCHProcessRiskFreeRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/stochasticprocess.py#L1173)(process: ql.GJRGARCHProcess, trigger = None)
+
+
+## Swap
+
+
+[qSwapType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L70)(swap_type: str | int | float)
+
+
+[qlSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L82)(first_leg: xlo.Array(dims=1), second_leg: xlo.Array(dims=1), trigger = None)
+
+
+[qlSwap2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L100)(legs: xlo.Array(dims=1), payer: xlo.Array(dims=1), trigger = None)
+
+
+[qlSwapNumberOfLegs](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L117)(swap: ql.Swap, trigger = None)
+
+
+[qlSwapStartDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L128)(swap: ql.Swap, trigger = None)
+
+
+[qlSwapMaturityDate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L139)(swap: ql.Swap, trigger = None)
+
+
+[qlSwapLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L151)(swap: ql.Swap, i: int, trigger = None)
+
+
+[qlSwapLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L163)(swap: ql.Swap, j: int, trigger = None)
+
+
+[qlSwapLegBPS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L175)(swap: ql.Swap, k: int, trigger = None)
+
+
+[qlSwapStartDiscounts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L187)(swap: ql.Swap, j: int, trigger = None)
+
+
+[qlSwapEndDiscounts](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L199)(swap: ql.Swap, j: int, trigger = None)
+
+
+[qlSwapNpvDateDiscount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L210)(swap: ql.Swap, trigger = None)
+
+
+[qlSwapPayer](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L222)(swap: ql.Swap, j: int, trigger = None)
+
+
+[qlFixedVsFloatingSwapType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L233)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapNominal](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L247)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapNominals](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L261)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFixedNominals](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L275)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFixedSchedule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L289)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFixedRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L303)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFixedDayCount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L317)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFloatingNominals](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L331)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFloatingSchedule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L345)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapIborIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L359)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L373)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFloatingDayCount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L387)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapPaymentConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L401)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFixedLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L415)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFloatingLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L429)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFixedLegBPS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L443)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFixedLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L457)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFairRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L471)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFloatingLegBPS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L485)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFloatingLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L499)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlFixedVsFloatingSwapFairSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L513)(swap: ql.FixedVsFloatingSwap, trigger = None)
+
+
+[qlVanillaSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L537)(type: qSwapType, nominal: float, fixed_schedule: ql.Schedule, fixed_rate: float, fixed_day_count: qDayCounter, float_schedule: ql.Schedule, index: ql.IborIndex, spread: float, floating_day_count: qDayCounter, payment_convention: qBusinessDayConvention = ql.Following, with_indexed_coupons: Optional[bool] = None, trigger = None)
+
+
+[qlMakeVanillaSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L607)(swap_tenor: qPeriod, ibor_index: ql.IborIndex, fixed_rate = None, forward_start: qPeriod = ql.Period(0, ql.Days), receive_fixed = None, swap_type = None, nominal = None, settlement_days = None, effective_date = None, termination_date = None, date_generation_rule = None, payment_convention = None, fixed_leg_tenor = None, fixed_leg_calendar = None, fixed_leg_convention = None, fixed_leg_termination_date_convention = None, fixed_leg_date_gen_rule = None, fixed_leg_end_of_month = None, fixed_leg_first_date = None, fixed_leg_next_to_last_date = None, fixed_leg_day_count = None, floating_leg_tenor = None, floating_leg_calendar = None, floating_leg_convention = None, floating_leg_termination_date_convention = None, floating_leg_date_gen_rule = None, floating_leg_end_of_month = None, floating_leg_first_date = None, floating_leg_next_to_last_date = None, floating_leg_day_count = None, floating_leg_spread = None, discounting_term_structure = None, pricing_engine = None, indexed_coupons = None, at_par_coupons = None, trigger = None)
+
+
+[qlNonstandardSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L785)(type: qSwapType, fixed_nominal: xlo.Array(dims=1), floating_nominal: xlo.Array(dims=1), fixed_schedule: ql.Schedule, fixed_rate: xlo.Array(dims=1), fixed_day_count: qDayCounter, float_schedule: ql.Schedule, index: ql.IborIndex, gearing: xlo.Array(dims=1), spread: xlo.Array(dims=1), float_day_count: qDayCounter, intermediate_capital_exchange: bool = False, final_capital_exchange: bool = False, payment_convention: qBusinessDayConvention = ql.Following, trigger = None)
+
+
+[qlNonstandardSwapType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L827)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFixedNominal](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L838)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFloatingNominal](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L849)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFixedSchedule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L860)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFixedRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L873)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFixedDayCount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L884)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFloatingSchedule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L897)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapIborIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L910)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L921)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapGearing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L932)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapSpreads](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L943)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapGearings](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L954)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFloatingDayCount](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L965)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapPaymentConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L978)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFixedLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L989)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlNonstandardSwapFloatingLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1000)(swap: ql.NonstandardSwap, trigger = None)
+
+
+[qlDiscountingSwapEngine](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1014)(discount_curve: ql.YieldTermStructureHandle, include_settlement_date_flows: bool = False, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+
+
+[qlDiscountingSwapEngine2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1038)(discount_curve: ql.YieldTermStructureHandle, settlement_date: qDate = ql.Date(), npv_date: qDate = ql.Date(), trigger = None)
+
+
+[qlAssetSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1069)(pay_fixed_rate: bool, bond: ql.Bond, bond_clean_price: float, index: ql.IborIndex, spread: float, float_schedule: ql.Schedule = ql.Schedule(), floating_day_count: qDayCounter = ql.Actual360(), par_asset_swap: bool = True, gearing: float = 1.0, non_par_repayment: float = 0, deal_maturity: qDate = ql.Date(), trigger = None)
+
+
+[qlAssetSwapFairCleanPrice](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1105)(swap: ql.AssetSwap, trigger = None)
+
+
+[qlAssetSwapFairSpread](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1116)(swap: ql.AssetSwap, trigger = None)
+
+
+[qlFloatFloatSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1148)(type: qSwapType, nominal1: xlo.Array(dims=1), nominal2: xlo.Array(dims=1), schedule1: ql.Schedule, index1: ql.InterestRateIndex, day_count1: qDayCounter, schedule2: ql.Schedule, index2: ql.InterestRateIndex, day_count2: qDayCounter, intermediate_capital_exchange: bool = False, final_capital_exchange: bool = False, gearing1: xlo.Array(dims=1) = None, spread1: xlo.Array(dims=1) = None, capped_rate1: xlo.Array(dims=1) = None, floored_rate1: xlo.Array(dims=1) = None, gearing2: xlo.Array(dims=1) = None, spread2: xlo.Array(dims=1) = None, capped_rate2: xlo.Array(dims=1) = None, floored_rate2: xlo.Array(dims=1) = None, payment_convention1: qBusinessDayConvention = ql.Following, payment_convention2: qBusinessDayConvention = ql.Following, trigger = None)
+
+
+[qlOvernightIndexedSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1218)(type: qSwapType, nominal: float, schedule: ql.Schedule, fixed_rate: float, fixed_dc: qDayCounter, index: ql.OvernightIndex, spread: float = 0.0, payment_lag: int = 0, payment_adjustment: qBusinessDayConvention = ql.Following, payment_calendar: qCalendar = ql.NullCalendar(), telescopic_value_dates: bool = False, averaging_method: qRateAveragingType = ql.RateAveraging.Compound, lookback_days: int = 0, lockout_days: int = 0, apply_observation_shift: bool = False, trigger = None)
+
+
+[qlOvernightIndexedSwap2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1278)(type: qSwapType, fixed_nominals: xlo.Array(dims=1), fixed_schedule: ql.Schedule, fixed_rate: float, fixed_dc: qDayCounter, overnight_nominals: xlo.Array(dims=1), overnight_schedule: ql.Schedule, overnight_index: ql.OvernightIndex, spread: float = 0.0, payment_lag: int = 0, payment_adjustment: qBusinessDayConvention = ql.Following, payment_calendar: qCalendar = ql.NullCalendar(), telescopic_value_dates: bool = False, averaging_method: qRateAveragingType = ql.RateAveraging.Compound, lookback_days: int = 0, lockout_days: int = 0, apply_observation_shift: bool = False, trigger = None)
+
+
+[qlOvernightIndexedSwapOvernightLegBPS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1326)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapOvernightLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1339)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapPaymentFrequency](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1352)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapOvernightIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1363)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapOvernightLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1376)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapAveragingMethod](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1389)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapLookbackDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1400)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapLockoutDays](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1413)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlOvernightIndexedSwapApplyObservationShift](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1426)(swap: ql.OvernightIndexedSwap, trigger = None)
+
+
+[qlMakeOIS](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1478)(swap_tenor: qPeriod, overnight_index: ql.OvernightIndex, fixed_rate: float = None, fwd_start: qPeriod = ql.Period(0, ql.Days), receive_fixed = None, swap_type = None, nominal = None, settlement_days = None, effective_date = None, termination_date = None, date_generation_rule = None, fixed_leg_rule = None, overnight_leg_rule = None, payment_frequency = None, fixed_leg_payment_frequency = None, overnight_leg_payment_frequency = None, payment_adjustment_convention = None, payment_lag = None, payment_calendar = None, calendar = None, fixed_leg_calendar = None, overnight_leg_calendar = None, convention = None, fixed_leg_convention = None, overnight_leg_convention = None, termination_date_convention = None, fixed_leg_termination_date_convention = None, overnight_leg_termination_date_convention = None, end_of_month = None, fixed_leg_end_of_month = None, overnight_leg_end_of_month = None, fixed_leg_day_count = None, overnight_leg_spread = None, discounting_term_structure = None, telescopic_value_dates = None, averaging_method = None, lookback_days = None, lockout_days = None, pricing_engine = None, trigger = None)
+
+
+[qlOvernightIndexedSwapIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1680)(family_name: str, tenor: qPeriod, settlement_days: int, currency: qCurrency, overnight_index: ql.OvernightIndex, telescopic_value_dates: bool = False, averaging_method: qRateAveragingType = ql.RateAveraging.Compound, trigger = None)
+
+
+[qlOvernightIndexedSwapIndexOvernightIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1708)(index: ql.OvernightIndexedSwapIndex, trigger = None)
+
+
+[qlOvernightIndexedSwapIndexUnderlyingSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1722)(index: ql.OvernightIndexedSwapIndex, fixing_date: qDate, trigger = None)
+
+
+[qlAsOvernightSwapIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1736)(index: ql.InterestRateIndex, trigger = None)
+
+
+[qlZeroCouponSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1757)(type: qSwapType, base_nominal: float, start_date: qDate, maturity_date: qDate, fixed_payment: float, ibor_index: ql.IborIndex, payment_calendar: qCalendar, payment_convention: qBusinessDayConvention = ql.Following, payment_delay: int = 0, trigger = None)
+
+
+[qlZeroCouponSwap2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1798)(type: qSwapType, base_nominal: float, start_date: qDate, maturity_date: qDate, fixed_rate: float, fixed_day_counter: qDayCounter, ibor_index: ql.IborIndex, payment_calendar: qCalendar, payment_convention: qBusinessDayConvention = ql.Following, payment_delay: int = 0, trigger = None)
+
+
+[qlZeroCouponSwapType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1832)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapBaseNominal](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1843)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapIborIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1854)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapFixedLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1865)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapFloatingLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1876)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapFixedPayment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1887)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapFixedLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1898)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapFloatingLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1909)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapFairFixedPayment](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1920)(swap: ql.ZeroCouponSwap, trigger = None)
+
+
+[qlZeroCouponSwapFairFixedRate](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1932)(swap: ql.ZeroCouponSwap, day_counter: qDayCounter, trigger = None)
+
+
+[qlEquityTotalReturnSwap](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L1955)(type: qSwapType, nominal: float, schedule: ql.Schedule, equity_index: ql.EquityIndex, interest_rate_index: ql.IborIndex, day_counter: qDayCounter, margin: float, gearing: float = 1.0, payment_calendar: qCalendar = ql.NullCalendar(), payment_convention: qBusinessDayConvention = ql.Unadjusted, payment_delay: int = 0, trigger = None)
+
+
+[qlEquityTotalReturnSwap2](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2001)(type: qSwapType, nominal: float, schedule: ql.Schedule, equity_index: ql.EquityIndex, interest_rate_index: ql.OvernightIndex, day_counter: qDayCounter, margin: float, gearing: float = 1.0, payment_calendar: qCalendar = ql.NullCalendar(), payment_convention: qBusinessDayConvention = ql.Unadjusted, payment_delay: int = 0, trigger = None)
+
+
+[qlEquityTotalReturnSwapType](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2037)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapNominal](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2048)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapEquityIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2061)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapInterestRateIndex](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2074)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapSchedule](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2087)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapDayCounter](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2100)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapMargin](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2113)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapGearing](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2126)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapPaymentCalendar](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2139)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapPaymentConvention](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2152)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapPaymentDelay](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2165)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapEquityLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2178)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapInterestRateLeg](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2191)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapEquityLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2204)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapInterestRateLegNPV](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2217)(swap: ql.EquityTotalReturnSwap, trigger = None)
+
+
+[qlEquityTotalReturnSwapFairMargin](https://github.com/frame-consulting/QuantLibXlOil/blob/main/src/quantlib_xloil/swap.py#L2230)(swap: ql.EquityTotalReturnSwap, trigger = None)
 
 
 ## Termstructures
