@@ -31,7 +31,7 @@ from quantlib_xloil.bonds import (
     qlBondPriceType,
     qlBondSettlementDate,
     qlBondSettlementDays,
-    qlBondSetDiscountingEngine,
+    qlDiscountingBondEngine,
     qlBondSettlementValue,
     qlBondSettlementValue2,
     qlBondYield,
@@ -128,7 +128,9 @@ def test_fixed_rate_bond_pricing_and_yield_wrappers():
         discount_curve = ql.YieldTermStructureHandle(
             ql.FlatForward(eval_date, 0.03, day_counter)
         )
-        engine = qlBondSetDiscountingEngine(bond, discount_curve)
+
+        engine = qlDiscountingBondEngine(discount_curve)
+        bond.setPricingEngine(engine)
 
         assert isinstance(bond, ql.FixedRateBond)
         assert isinstance(engine, ql.DiscountingBondEngine)
@@ -273,10 +275,8 @@ def test_callable_bond_analytics_wrappers_match_methods():
         )
         vol = qQuoteHandle.__wrapped__(0.20)
 
-        # Wrapper currently forwards setPricingEngine return value (None).
-        assert (
-            qlBlackCallableFixedRateBondEngine(callable_bond, vol, curve_handle) is None
-        )
+        engine = qlBlackCallableFixedRateBondEngine(vol, curve_handle)
+        callable_bond.setPricingEngine(engine)
 
         compounding = qCompounding.__wrapped__("COMPOUNDED")
         frequency = qFrequency.__wrapped__("ANNUAL")

@@ -7,7 +7,13 @@ from .date import qDate, qFrequency, qPeriod
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
 from .termstructures import qCompounding
-from .utilities import enum_value, to_float_list, to_object_list, UNKNOWN_VALUE
+from .utilities import (
+    enum_value,
+    first_key,
+    to_float_list,
+    to_object_list,
+    UNKNOWN_VALUE,
+)
 
 QL_BOND_PRICE_TYPE = {
     "CLEAN": ql.BondPrice.Dirty,
@@ -20,7 +26,7 @@ QL_CALLABILITY_TYPE = {
 }
 
 
-def _qBondPriceType(bond_price_type: str) -> ql.BondPrice:
+def _qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
     return enum_value(bond_price_type, QL_BOND_PRICE_TYPE)
 
 
@@ -29,7 +35,7 @@ def _qCallabilityType(callability_type: str) -> ql.Callability.Type:
 
 
 @xlo.converter()
-def qBondPriceType(bond_price_type: str) -> ql.BondPrice:
+def qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
     return _qBondPriceType(bond_price_type)
 
 
@@ -100,10 +106,7 @@ def qlBondPriceAmount(bond_price: ql.BondPrice, trigger=None) -> float:
     group=EXCEL_GROUP_NAME,
 )
 def qlBondPriceType(bond_price: ql.BondPrice, trigger=None) -> str:
-    for key, value in QL_BOND_PRICE_TYPE.items():
-        if value == bond_price.type():
-            return key
-    return UNKNOWN_VALUE
+    return first_key(QL_BOND_PRICE_TYPE, bond_price.type())
 
 
 @xlo.func(
@@ -136,10 +139,7 @@ def qlCallabilityPrice(callability: ql.Callability, trigger=None) -> ql.BondPric
     group=EXCEL_GROUP_NAME,
 )
 def qlCallabilityType(callability: ql.Callability, trigger=None) -> str:
-    for key, value in QL_CALLABILITY_TYPE.items():
-        if value == callability.type():
-            return key
-    return UNKNOWN_VALUE
+    return first_key(QL_CALLABILITY_TYPE, callability.type())
 
 
 @xlo.func(
@@ -335,7 +335,7 @@ def qlBondIssueDate(bond: ql.Bond, trigger=None) -> ql.Date:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBondCashFlows(bond: ql.Bond, trigger=None):
+def qlBondCashFlows(bond: ql.Bond, trigger=None) -> list[ql.CashFlow]:
     return bond.cashflows()
 
 
@@ -346,7 +346,7 @@ def qlBondCashFlows(bond: ql.Bond, trigger=None):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBondRedemption(bond: ql.Bond, trigger=None):
+def qlBondRedemption(bond: ql.Bond, trigger=None) -> ql.CashFlow:
     return bond.redemption()
 
 
@@ -357,7 +357,7 @@ def qlBondRedemption(bond: ql.Bond, trigger=None):
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBondRedemptions(bond: ql.Bond, trigger=None):
+def qlBondRedemptions(bond: ql.Bond, trigger=None) -> list[ql.CashFlow]:
     return bond.redemptions()
 
 
@@ -380,7 +380,7 @@ def qlBondCalendar(bond: ql.Bond, trigger=None) -> ql.Calendar:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBondNotionals(bond: ql.Bond, trigger=None):
+def qlBondNotionals(bond: ql.Bond, trigger=None) -> list[float]:
     return bond.notionals()
 
 
@@ -630,7 +630,7 @@ def qlBondSinkingNotionals(
     coupon_rate: float,
     initial_notional: float,
     trigger=None,
-):
+) -> list[float]:
     return bond.sinkingNotionals(bond_length, frequency, coupon_rate, initial_notional)
 
 
@@ -1017,17 +1017,15 @@ def qlAmortizingCmsRateBond(
 
 
 @xlo.func(
-    help="Set a discounting pricing engine on a bond using a yield term structure handle.",
+    help="Create a bond discounting pricing engine.",
     args={
-        "bond": "The bond object.",
         "discount_curve": "The discount curve (yield term structure handle).",
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBondSetDiscountingEngine(
-    bond: ql.Bond, discount_curve: ql.YieldTermStructureHandle, trigger=None
-) -> ql.Bond:
-    bond.setPricingEngine(ql.DiscountingBondEngine(discount_curve))
+def qlDiscountingBondEngine(
+    discount_curve: ql.YieldTermStructureHandle, trigger=None
+) -> ql.DiscountingBondEngine:
     return ql.DiscountingBondEngine(discount_curve)
 
 
@@ -1036,10 +1034,13 @@ def qlBondSetDiscountingEngine(
     args={"callable_bond": "The QuantLib CallableBond instance."},
     group=EXCEL_GROUP_NAME,
 )
-def qlCallableBondCallability(callable_bond: ql.CallableBond, Trigger=None):
+def qlCallableBondCallability(
+    callable_bond: ql.CallableBond, Trigger=None
+) -> list[ql.Callability]:
     return callable_bond.callability()
 
 
+# TODO test in excel
 @xlo.func(
     help="Calculate the implied volatility of a bond.",
     args={
@@ -1055,13 +1056,13 @@ def qlCallableBondCallability(callable_bond: ql.CallableBond, Trigger=None):
 def qlCallableBondImpliedVolatility(
     callable_bond: ql.CallableBond,
     target_price: ql.BondPrice,
-    discount_curve: ql.YieldTermStructure,
+    discount_curve: ql.YieldTermStructureHandle,
     accuracy: float,
     max_evaluations: int,
     min_vol: float,
     max_vol: float,
     trigger=None,
-):
+) -> float:
     return callable_bond.impliedVolatility(
         target_price,
         discount_curve,
@@ -1072,6 +1073,7 @@ def qlCallableBondImpliedVolatility(
     )
 
 
+# TODO test in excel
 @xlo.func(
     help="Calculate the Option-Adjusted Spread (OAS) of a bond.",
     args={
@@ -1090,7 +1092,7 @@ def qlCallableBondImpliedVolatility(
 def qlCallableBondOAS(
     callable_bond: ql.CallableBond,
     clean_price: float,
-    engine_ts: ql.YieldTermStructure,
+    engine_ts: ql.YieldTermStructureHandle,
     dc: qDayCounter,
     compounding: qCompounding,
     freq: qFrequency,
@@ -1128,7 +1130,7 @@ def qlCallableBondOAS(
 def qlCallableBondCleanPriceOAS(
     callable_bond: ql.CallableBond,
     oas: float,
-    engine_ts: ql.YieldTermStructure,
+    engine_ts: ql.YieldTermStructureHandle,
     day_counter: qDayCounter,
     compounding: qCompounding,
     frequency: qFrequency,
@@ -1160,7 +1162,7 @@ def qlCallableBondCleanPriceOAS(
 def qlCallableBondEffectiveDuration(
     callable_bond: ql.CallableBond,
     oas: float,
-    engine_ts: ql.YieldTermStructure,
+    engine_ts: ql.YieldTermStructureHandle,
     day_counter: qDayCounter,
     compounding: qCompounding,
     frequency: qFrequency,
@@ -1192,7 +1194,7 @@ def qlCallableBondEffectiveDuration(
 def qlCallableBondEffectiveConvexity(
     callable_bond: ql.CallableBond,
     oas: float,
-    engine_ts: ql.YieldTermStructure,
+    engine_ts: ql.YieldTermStructureHandle,
     day_counter: qDayCounter,
     compounding: qCompounding,
     frequency: qFrequency,
@@ -1313,16 +1315,13 @@ def qlCallableZeroCouponBond(
     group=EXCEL_GROUP_NAME,
 )
 def qlBlackCallableFixedRateBondEngine(
-    callable_bond: ql.CallableBond,
     fwd_yield_vol: qQuoteHandle,
-    discount_curve: ql.YieldTermStructure,
+    discount_curve: ql.YieldTermStructureHandle,
     trigger=None,
-) -> ql.CallableBond:
-    return callable_bond.setPricingEngine(
-        ql.BlackCallableFixedRateBondEngine(
-            fwd_yield_vol,
-            discount_curve,
-        )
+) -> ql.BlackCallableFixedRateBondEngine:
+    return ql.BlackCallableFixedRateBondEngine(
+        fwd_yield_vol,
+        discount_curve,
     )
 
 
