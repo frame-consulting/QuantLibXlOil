@@ -52,7 +52,7 @@ QL_CALENDAR = {
     "THAILAND": ql.Thailand,
     "TURKEY": ql.Turkey,
     "UKRAINE": ql.Ukraine,
-    "UNITEDSTATES": ql.UnitedStates(ql.UnitedStates.NYSE),
+    "UNITEDSTATES": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
     "UNITEDKINGDOM": ql.UnitedKingdom,
     # "UZBEKISTAN": ql.Uzbekistan,
     "NULLCALENDAR": ql.NullCalendar,
@@ -61,8 +61,20 @@ QL_CALENDAR = {
     #
     "LONDON": ql.UnitedKingdom,
     "LDN": ql.UnitedKingdom,
-    "NEWYORK": ql.UnitedStates(ql.UnitedStates.NYSE),
-    "NYC": ql.UnitedStates(ql.UnitedStates.NYSE),
+    "NEWYORK": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
+    "NYC": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
+    #
+    "UK_SETTLEMENT": lambda: ql.UnitedKingdom(ql.UnitedKingdom.Settlement),
+    "UK_EXCHANGE": lambda: ql.UnitedKingdom(ql.UnitedKingdom.Exchange),
+    "UK_METALS": lambda: ql.UnitedKingdom(ql.UnitedKingdom.Metals),
+    #
+    "US_SETTLEMENT": lambda: ql.UnitedStates(ql.UnitedStates.Settlement),
+    "US_NYSE": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
+    "US_GOVERNMENTBOND": lambda: ql.UnitedStates(ql.UnitedStates.GovernmentBond),
+    "US_NERC": lambda: ql.UnitedStates(ql.UnitedStates.NERC),
+    "US_LIBORIMPACT": lambda: ql.UnitedStates(ql.UnitedStates.LiborImpact),
+    "US_FEDERALRESERVE": lambda: ql.UnitedStates(ql.UnitedStates.FederalReserve),
+    "US_SOFR": lambda: ql.UnitedStates(ql.UnitedStates.SOFR),
     #
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
