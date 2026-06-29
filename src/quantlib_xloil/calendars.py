@@ -5,7 +5,7 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate, qPeriod, qTimeUnit, qWeekday
 from .utilities import enum_value, UNKNOWN_KEY, UNKNOWN_VALUE
 
-# Todo BespokeCalendars, explicit JointCalendars, JointCalenders and USCalenders
+# TODO BespokeCalendars, explicit JointCalendars, JointCalenders
 
 QL_CALENDAR = {
     "ARGENTINA": ql.Argentina,
@@ -76,6 +76,25 @@ QL_CALENDAR = {
     "US_FEDERALRESERVE": lambda: ql.UnitedStates(ql.UnitedStates.FederalReserve),
     "US_SOFR": lambda: ql.UnitedStates(ql.UnitedStates.SOFR),
     #
+    "UK SETTLEMENT": ql.UnitedKingdom,
+    "NEW YORK STOCK EXCHANGE": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
+    #
+    "LONDON STOCK EXCHANGE": lambda: ql.UnitedKingdom(ql.UnitedKingdom.Exchange),
+    "LONDON METAL EXCHANGE": lambda: ql.UnitedKingdom(ql.UnitedKingdom.Metals),
+    #
+    "US SETTLEMENT": lambda: ql.UnitedStates(ql.UnitedStates.Settlement),
+    "US GOVERNMENT BOND MARKET": lambda: ql.UnitedStates(
+        ql.UnitedStates.GovernmentBond
+    ),
+    "NORTH AMERICAN ENERGY RELIABILITY COUNCIL": lambda: ql.UnitedStates(
+        ql.UnitedStates.NERC
+    ),
+    "US WITH LIBOR IMPACT": lambda: ql.UnitedStates(ql.UnitedStates.LiborImpact),
+    "FEDERAL RESERVE BANKWIRE SYSTEM": lambda: ql.UnitedStates(
+        ql.UnitedStates.FederalReserve
+    ),
+    "SOFR FIXING CALENDAR": lambda: ql.UnitedStates(ql.UnitedStates.SOFR),
+    #
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
@@ -107,11 +126,20 @@ def _qBusinessDayConvention(conventionname: str):
     return enum_value(conventionname, QL_BUSINESSDAYCONVENTION)
 
 
+# TODO use regex nad rule and second constructor for JointCalendars
 def _qCalendar(name: str) -> ql.Calendar:
     if isinstance(name, ql.Calendar):  # capture default argument values
         return name
     if isinstance(name, str):
-        name = name.strip().upper()
+        cal_str = name.strip()
+        if "(" in cal_str and cal_str.endswith(")"):
+            rule = cal_str[: cal_str.index("(")].strip()
+            inside = cal_str[cal_str.index("(") + 1 : -1]
+            cals = [c.strip() for c in inside.split(",") if c.strip()]
+            return qlCalendarJointCalendar(
+                qlCalendar.__wrapped__(cals[0]), qlCalendar.__wrapped__(cals[1])
+            )
+        name = cal_str.strip().upper()
         if name in QL_CALENDAR:
             return QL_CALENDAR[name]()
     raise ValueError(f"Unknown calendar: {name}")
