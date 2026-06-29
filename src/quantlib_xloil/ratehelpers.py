@@ -509,7 +509,7 @@ def qlSwapRateHelper(
     spread: float = 0.0,
     fwd_start: qPeriod = ql.Period(0, ql.Days),
     discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
-    settlement_days: int = 0,
+    settlement_days: int = ql.nullInt(),
     pillar: qPillarChoice = ql.Pillar.LastRelevantDate,
     custom_pillar_date: qDate = ql.Date(),
     end_of_month: bool = False,
