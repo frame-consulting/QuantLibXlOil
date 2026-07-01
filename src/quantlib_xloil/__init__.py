@@ -32,4 +32,5 @@ from quantlib_xloil.scheduler import *
 from quantlib_xloil.settings import *
 from quantlib_xloil.swap import *
 from quantlib_xloil.termstructures import *
+from quantlib_xloil.swaption import *
 from quantlib_xloil.volatilities import *
