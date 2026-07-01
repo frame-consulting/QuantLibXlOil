@@ -20,12 +20,12 @@ from .utilities import (
 
 # The value mappings for payer and receiver correspond to those in QuantLib ( enum Type { Receiver = -1, Payer = 1 })
 QL_SWAP_TYPE = {
-    "PAYER": 1,
-    "RECEIVER": -1,
-    "1": 1,
-    "-1": -1,
-    "1.0": 1,
-    "-1.0": -1,
+    "PAYER": ql.Swap.Payer,
+    "RECEIVER": ql.Swap.Receiver,
+    "1": ql.Swap.Payer,
+    "-1": ql.Swap.Receiver,
+    "1.0": ql.Swap.Payer,
+    "-1.0": ql.Swap.Receiver,
 }
 
 
