@@ -3,10 +3,10 @@ import xloil as xlo
 
 from .calendars import qBusinessDayConvention, qCalendar
 from .config import EXCEL_GROUP_NAME
-from .date import qDate, qPeriod
+from .date import qDate, qPeriod, _to_date_list
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
-from .utilities import enum_value, UNKNOWN_KEY, UNKNOWN_VALUE
+from .utilities import enum_value, UNKNOWN_KEY, UNKNOWN_VALUE, to_float_matrix
 
 # Volatility types
 
@@ -855,5 +855,49 @@ def qlConstantSwaptionVolatility(
         day_counter,
         volatility_type,
         shift,
+    )
+    return ql.SwaptionVolatilityStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a SwaptionVolatilityMatrix object and returns a handle to it.",
+    args={
+        "reference_date": "Reference date for the volatility matrix.",
+        "expiry_dates": "Array of option expiry dates.",
+        "lengths": "Array of swap lengths corresponding to the expiry dates.",
+        "vols": "2D array of volatilities corresponding to the expiry dates and lengths.",
+        "day_counter": "Day count convention for the volatility matrix.",
+        "flat_extrapolation": "Whether to use flat extrapolation for the volatility matrix.",
+        "volatility_type": "Volatility type (e.g. 'Normal' or 'ShiftedLognormal').",
+        "shifts": "2D array of shifts corresponding to the expiry dates and lengths (only used if volatility_type is 'ShiftedLognormal').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityMatrix(
+    reference_date: qDate,
+    expiry_dates: xlo.Array(dims=1),
+    lengths: xlo.Array(dims=1),
+    vols: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    flat_extrapolation: bool = False,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shifts: xlo.Array(dims=2) = None,
+    trigger=None,
+) -> ql.SwaptionVolatilityStructureHandle:
+    #
+    dates_list = _dates = _to_date_list(expiry_dates)
+    length_list = [qPeriod.__wrapped__(length) for length in lengths]
+    vol_matrix = ql.Matrix(to_float_matrix(vols))
+    shift_matrix = ql.Matrix(to_float_matrix(shifts))
+    #
+    vol_ts = ql.SwaptionVolatilityMatrix(
+        reference_date,
+        dates_list,
+        length_list,
+        vol_matrix,
+        day_counter,
+        flat_extrapolation,
+        volatility_type,
+        shift_matrix,
     )
     return ql.SwaptionVolatilityStructureHandle(vol_ts)

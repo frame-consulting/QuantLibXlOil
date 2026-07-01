@@ -30,6 +30,7 @@ from quantlib_xloil.volatilities import (
     qlSwaptionVolatilityStructureSmileSectionFromTime,
     qlSwaptionVolatilityStructureVolatility,
     qlSwaptionVolatilityStructureVolatilityFromTime,
+    qlSwaptionVolatilityMatrix,
     qVolatilityType,
 )
 from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
@@ -325,3 +326,50 @@ def test_qlSwaptionVolatilityStructure_smile_section():
 def test_qlVolatilityType_converter():
     assert qVolatilityType.__wrapped__("NORMAL") == ql.Normal
     assert qVolatilityType.__wrapped__("SHIFTEDLOGNORMAL") == ql.ShiftedLognormal
+
+
+def test_qlSwaptionVolatilityMatrix_creates_handle_and_interpolates():
+    import numpy as np
+
+    reference_date = qlDate(2024, 1, 2)
+    day_counter = qlDayCounter("ACTUAL365FIXED")
+
+    # Define a 2x2 vol matrix: 2 expiries x 2 swap tenors
+    expiry_dates = np.array(
+        [
+            qlDate(2025, 1, 2),
+            qlDate(2026, 1, 2),
+        ]
+    )
+    lengths = np.array([qlPeriod(2, ql.Years), qlPeriod(5, ql.Years)])
+    vols = np.array([[0.20, 0.22], [0.18, 0.21]])
+
+    handle = qlSwaptionVolatilityMatrix(
+        reference_date=reference_date,
+        expiry_dates=expiry_dates,
+        lengths=lengths,
+        vols=vols,
+        day_counter=day_counter,
+        flat_extrapolation=True,
+        volatility_type=qVolatilityType.__wrapped__("SHIFTEDLOGNORMAL"),
+        shifts=None,
+    )
+
+    assert isinstance(handle, ql.SwaptionVolatilityStructureHandle)
+
+    # Volatility at grid nodes should match input
+    vol_1y_2y = qlSwaptionVolatilityStructureVolatility(
+        handle,
+        option_date=expiry_dates[0],
+        swap_tenor=lengths[0],
+        strike=0.025,
+    )
+    vol_2y_5y = qlSwaptionVolatilityStructureVolatility(
+        handle,
+        option_date=expiry_dates[1],
+        swap_tenor=lengths[1],
+        strike=0.025,
+    )
+
+    assert vol_1y_2y == pytest.approx(vols[0, 0], rel=1e-4)
+    assert vol_2y_5y == pytest.approx(vols[1, 1], rel=1e-4)
