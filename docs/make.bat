@@ -2,7 +2,17 @@
 
 pushd %~dp0
 
-REM Command file for Sphinx documentation
+REM auto-generate function index
+
+echo.
+echo.Generating function index from ../src/quantlib_xloil
+
+python tools\make_function_indxed.py ../src/quantlib_xloil > source/03_api_reference.md
+
+echo.Done.
+echo.
+
+REM Build Sphinx documentation
 
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
