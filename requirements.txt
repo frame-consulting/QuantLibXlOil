@@ -13,3 +13,5 @@ twine  # Uploading to PyPI
 sphinx # For documentation
 myst-parser # For parsing markdown in Sphinx
 furo # Sphinx theme
+
+pywin32 # for workbook tests
