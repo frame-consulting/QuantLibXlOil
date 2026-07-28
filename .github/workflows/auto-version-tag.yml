@@ -1,0 +1,25 @@
+name: 🐍 Auto Version Tag
+
+# See https://github.com/Jorricks/action-python-autotagging
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/quantlib_xloil/__about__.py'
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Version tag
+        uses: Jorricks/action-python-autotagging@1.0.1
+
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: src/quantlib_xloil/__about__.py
+          variable: __version__
+          prefix: v
