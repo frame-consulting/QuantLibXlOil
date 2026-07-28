@@ -12,6 +12,8 @@ We use [xlOil](https://github.com/cunnane/xloil) to make the QuantLib Python obj
 
 The QuantLibXlOil package largely contains wrapper functions in Python which delegate calls to QuantLib constructors and method/function call. The wrapper functions are made available to Excel via xlOil's function decorator. In addition, the package provides converter functions between Excel data types and QuantLib types.
 
+We support recent versions of QuantLib. See section [Versioning](#versioning).
+
 ## Getting Started
 
 QuantLibXlOil can be installed via pip.
@@ -76,6 +78,18 @@ Test the QuantLib functions by entering `=qlVersion()` in an empty cell. This sh
 ![image](./docs/source/qlVersion.png)
 
 Now, you are all set for QuantLib in Excel.
+
+## Versioning
+
+Current QuantLibXlOil version is specified [here](./src/quantlib_xloil/__about__.py).
+
+We use a major version `0` for the time being until interfaces are well tested, coverage is sufficiently high and our upgrade process to new QuantLib versions works smoothly.
+
+Minor versions are aligned with the QuantLib minor version supported. That is, QuantLibXlOil `v0.41` works with QuantLib `v1.41`. Similarly, QuantLibXlOil `v0.42` works with QuantLib `v1.42`.
+
+QuantLibXlOil patch versions are used to capture bug fixes and new features for a QuantLib version specified by the minor version.
+
+The QuantLib version supported by a given QuantLibXlOil version is installed automatically as [dependency](./pyproject.toml) when running `pip install -U quantlib_xloil`.
 
 
 ## Why Another QuantLib Interface?
