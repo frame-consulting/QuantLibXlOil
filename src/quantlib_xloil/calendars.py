@@ -264,8 +264,9 @@ def qlCalendarIsStartOfMonth(calendar: qCalendar, date: qDate, trigger=None) -> 
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarAddHoliday(calendar: qCalendar, date: qDate, trigger=None) -> None:
+def qlCalendarAddHoliday(calendar: qCalendar, date: qDate, trigger=None) -> bool:
     calendar.addHoliday(date)
+    return True
 
 
 @xlo.func(
@@ -275,8 +276,9 @@ def qlCalendarAddHoliday(calendar: qCalendar, date: qDate, trigger=None) -> None
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarRemoveHoliday(calendar: qCalendar, date: qDate, trigger=None) -> None:
+def qlCalendarRemoveHoliday(calendar: qCalendar, date: qDate, trigger=None) -> bool:
     calendar.removeHoliday(date)
+    return True
 
 
 @xlo.func(
@@ -284,8 +286,9 @@ def qlCalendarRemoveHoliday(calendar: qCalendar, date: qDate, trigger=None) -> N
     args={},
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarResetAddedAndRemovedHolidays(calendar: qCalendar, trigger=None) -> None:
+def qlCalendarResetAddedAndRemovedHolidays(calendar: qCalendar, trigger=None) -> bool:
     calendar.resetAddedAndRemovedHolidays()
+    return True
 
 
 @xlo.func(
