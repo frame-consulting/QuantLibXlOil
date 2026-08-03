@@ -147,7 +147,7 @@ def qlCapFloorType(capfloor: ql.CapFloor, trigger=None) -> str:
 def qlCapFloorAtmRate(
     capfloor: ql.CapFloor, discount_curve: ql.YieldTermStructureHandle, trigger=None
 ) -> float:
-    return capfloor.atmRate(discount_curve)
+    return capfloor.atmRate(discount_curve.currentLink())
 
 
 @xlo.func(

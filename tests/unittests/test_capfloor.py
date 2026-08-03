@@ -471,7 +471,7 @@ class TestCapFloorAdvancedFeatures:
         cap = qlMakeCapFloor("CAP", ql.Period(1, ql.Years), index, 0.05)
 
         # Calculate ATM rate
-        atm_rate = qlCapFloorAtmRate(cap, discount_curve.currentLink())
+        atm_rate = qlCapFloorAtmRate(cap, discount_curve)
 
         assert isinstance(atm_rate, float)
         assert atm_rate > 0  # Should be positive
