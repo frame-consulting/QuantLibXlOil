@@ -3,6 +3,7 @@ import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, _to_date_list
+from .options import qMCTraits
 from .ratehelpers import qQuoteHandle
 from .utilities import (
     enum_value,
@@ -47,8 +48,6 @@ def qlContinuousAveragingAsianOption(
     exercise: ql.Exercise,
     trigger=None,
 ) -> ql.ContinuousAveragingAsianOption:
-    if isinstance(average_type, str):
-        average_type = _qAverageType(average_type)
     return ql.ContinuousAveragingAsianOption(average_type, payoff, exercise)
 
 
@@ -69,42 +68,7 @@ def qlContinuousAveragingAsianOptionWithStartDate(
     exercise: ql.Exercise,
     trigger=None,
 ) -> ql.ContinuousAveragingAsianOption:
-    if isinstance(average_type, str):
-        average_type = _qAverageType(average_type)
     return ql.ContinuousAveragingAsianOption(average_type, start_date, payoff, exercise)
-
-
-@xlo.func(
-    help="Create a QuantLib DiscreteAveragingAsianOption object.",
-    args={
-        "average_type": "Average type (ARITHMETIC or GEOMETRIC).",
-        "running_accumulator": "Running accumulator value.",
-        "past_fixings": "Number of past fixings.",
-        "fixing_dates": "Array of fixing dates.",
-        "payoff": "Striked type payoff.",
-        "exercise": "Exercise specification.",
-    },
-    group=EXCEL_GROUP_NAME,
-)
-def qlDiscreteAveragingAsianOption(
-    average_type: qAverageType,
-    running_accumulator: float,
-    past_fixings: int,
-    fixing_dates: xlo.Array(dims=1),
-    payoff: ql.StrikedTypePayoff,
-    exercise: ql.Exercise,
-    trigger=None,
-) -> ql.DiscreteAveragingAsianOption:
-    if isinstance(average_type, str):
-        average_type = _qAverageType(average_type)
-    return ql.DiscreteAveragingAsianOption(
-        average_type,
-        running_accumulator,
-        past_fixings,
-        _to_date_list(fixing_dates),
-        payoff,
-        exercise,
-    )
 
 
 @xlo.func(
@@ -118,7 +82,7 @@ def qlDiscreteAveragingAsianOption(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlDiscreteAveragingAsianOptionWithPastFixings(
+def qlDiscreteAveragingAsianOption(
     average_type: qAverageType,
     fixing_dates: xlo.Array(dims=1),
     payoff: ql.StrikedTypePayoff,
@@ -126,8 +90,6 @@ def qlDiscreteAveragingAsianOptionWithPastFixings(
     all_past_fixings: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.DiscreteAveragingAsianOption:
-    if isinstance(average_type, str):
-        average_type = _qAverageType(average_type)
     if all_past_fixings is None:
         return ql.DiscreteAveragingAsianOption(
             average_type,
@@ -153,14 +115,8 @@ def qlDiscreteAveragingAsianOptionWithPastFixings(
 )
 def qlDiscreteAveragingAsianOptionTimeGrid(
     option: ql.DiscreteAveragingAsianOption, trigger=None
-) -> list[float]:
-    try:
-        time_grid = option.timeGrid()
-    except RuntimeError as exc:
-        if "TimeGrid not provided" in str(exc):
-            return []
-        raise
-    return [time_grid[i] for i in range(time_grid.size())]
+) -> ql.TimeGrid:
+    return option.timeGrid()
 
 
 # Analytic Engines
@@ -263,13 +219,13 @@ def qlAnalyticDiscreteGeometricAverageStrikeAsianEngine(
 )
 def qlMCDiscreteArithmeticAPEngine(
     process: ql.GeneralizedBlackScholesProcess,
-    traits: str,
+    traits: qMCTraits,
     brownian_bridge: bool = False,
     antithetic_variate: bool = False,
     control_variate: bool = False,
-    required_samples: int = None,
-    required_tolerance: float = None,
-    max_samples: int = None,
+    required_samples: int = ql.nullInt(),
+    required_tolerance: float = ql.nullDouble(),
+    max_samples: int = ql.nullInt(),
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
@@ -286,9 +242,9 @@ def qlMCDiscreteArithmeticAPEngine(
         brownian_bridge,
         antithetic_variate,
         control_variate,
-        required_samples if required_samples is not None else None,
-        required_tolerance if required_tolerance is not None else None,
-        max_samples if max_samples is not None else None,
+        required_samples,
+        required_tolerance,
+        max_samples,
         seed,
     )
 
@@ -311,14 +267,14 @@ def qlMCDiscreteArithmeticAPEngine(
 )
 def qlMCDiscreteArithmeticAPHestonEngine(
     process: ql.HestonProcess,
-    traits: str,
+    traits: qMCTraits,
     antithetic_variate: bool = False,
-    required_samples: int = None,
-    required_tolerance: float = None,
-    max_samples: int = None,
+    required_samples: int = ql.nullInt(),
+    required_tolerance: float = ql.nullDouble(),
+    max_samples: int = ql.nullInt(),
     seed: int = 0,
-    time_steps: int = None,
-    time_steps_per_year: int = None,
+    time_steps: int = ql.nullInt(),
+    time_steps_per_year: int = ql.nullInt(),
     control_variate: bool = False,
     trigger=None,
 ) -> ql.PricingEngine:
@@ -333,12 +289,12 @@ def qlMCDiscreteArithmeticAPHestonEngine(
     return cls(
         process,
         antithetic_variate,
-        required_samples if required_samples is not None else None,
-        required_tolerance if required_tolerance is not None else None,
-        max_samples if max_samples is not None else None,
+        required_samples,
+        required_tolerance,
+        max_samples,
         seed,
-        time_steps if time_steps is not None else None,
-        time_steps_per_year if time_steps_per_year is not None else None,
+        time_steps,
+        time_steps_per_year,
         control_variate,
     )
 
@@ -359,19 +315,19 @@ def qlMCDiscreteArithmeticAPHestonEngine(
 )
 def qlMCDiscreteArithmeticASEngine(
     process: ql.GeneralizedBlackScholesProcess,
-    traits: str,
+    traits: qMCTraits,
     brownian_bridge: bool = False,
     antithetic_variate: bool = False,
-    required_samples: int = None,
-    required_tolerance: float = None,
-    max_samples: int = None,
+    required_samples: int = ql.nullInt(),
+    required_tolerance: float = ql.nullDouble(),
+    max_samples: int = ql.nullInt(),
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
     traits = traits.lower()
-    if traits == "pr" or traits == "pseudorandom":
+    if traits == "pseudorandom":
         cls = ql.MCPRDiscreteArithmeticASEngine
-    elif traits == "ld" or traits == "lowdiscrepancy":
+    elif traits == "lowdiscrepancy":
         cls = ql.MCLDDiscreteArithmeticASEngine
     else:
         raise RuntimeError(f"unknown MC traits: {traits}")
@@ -380,9 +336,9 @@ def qlMCDiscreteArithmeticASEngine(
         process,
         brownian_bridge,
         antithetic_variate,
-        required_samples if required_samples is not None else None,
-        required_tolerance if required_tolerance is not None else None,
-        max_samples if max_samples is not None else None,
+        required_samples,
+        required_tolerance,
+        max_samples,
         seed,
     )
 
@@ -403,19 +359,19 @@ def qlMCDiscreteArithmeticASEngine(
 )
 def qlMCDiscreteGeometricAPEngine(
     process: ql.GeneralizedBlackScholesProcess,
-    traits: str,
+    traits: qMCTraits,
     brownian_bridge: bool = False,
     antithetic_variate: bool = False,
-    required_samples: int = None,
-    required_tolerance: float = None,
-    max_samples: int = None,
+    required_samples: int = ql.nullInt(),
+    required_tolerance: float = ql.nullDouble(),
+    max_samples: int = ql.nullInt(),
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
     traits = traits.lower()
-    if traits == "pr" or traits == "pseudorandom":
+    if traits == "pseudorandom":
         cls = ql.MCPRDiscreteGeometricAPEngine
-    elif traits == "ld" or traits == "lowdiscrepancy":
+    elif traits == "lowdiscrepancy":
         cls = ql.MCLDDiscreteGeometricAPEngine
     else:
         raise RuntimeError(f"unknown MC traits: {traits}")
@@ -424,9 +380,9 @@ def qlMCDiscreteGeometricAPEngine(
         process,
         brownian_bridge,
         antithetic_variate,
-        required_samples if required_samples is not None else None,
-        required_tolerance if required_tolerance is not None else None,
-        max_samples if max_samples is not None else None,
+        required_samples,
+        required_tolerance,
+        max_samples,
         seed,
     )
 
@@ -448,20 +404,20 @@ def qlMCDiscreteGeometricAPEngine(
 )
 def qlMCDiscreteGeometricAPHestonEngine(
     process: ql.HestonProcess,
-    traits: str,
+    traits: qMCTraits,
     antithetic_variate: bool = False,
-    required_samples: int = None,
-    required_tolerance: float = None,
-    max_samples: int = None,
+    required_samples: int = ql.nullInt(),
+    required_tolerance: float = ql.nullDouble(),
+    max_samples: int = ql.nullInt(),
     seed: int = 0,
-    time_steps: int = None,
-    time_steps_per_year: int = None,
+    time_steps: int = ql.nullInt(),
+    time_steps_per_year: int = ql.nullInt(),
     trigger=None,
 ) -> ql.PricingEngine:
     traits = traits.lower()
-    if traits == "pr" or traits == "pseudorandom":
+    if traits == "pseudorandom":
         cls = ql.MCPRDiscreteGeometricAPHestonEngine
-    elif traits == "ld" or traits == "lowdiscrepancy":
+    elif traits == "lowdiscrepancy":
         cls = ql.MCLDDiscreteGeometricAPHestonEngine
     else:
         raise RuntimeError(f"unknown MC traits: {traits}")
@@ -469,12 +425,12 @@ def qlMCDiscreteGeometricAPHestonEngine(
     return cls(
         process,
         antithetic_variate,
-        required_samples if required_samples is not None else None,
-        required_tolerance if required_tolerance is not None else None,
-        max_samples if max_samples is not None else None,
+        required_samples,
+        required_tolerance,
+        max_samples,
         seed,
-        time_steps if time_steps is not None else None,
-        time_steps_per_year if time_steps_per_year is not None else None,
+        time_steps,
+        time_steps_per_year,
     )
 
 
@@ -532,6 +488,7 @@ def qlFdBlackScholesAsianEngine(
     a_grid: int,
     trigger=None,
 ) -> ql.FdBlackScholesAsianEngine:
+    # for discrete arithmetic averaging only
     return ql.FdBlackScholesAsianEngine(process, t_grid, x_grid, a_grid)
 
 
