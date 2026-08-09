@@ -86,11 +86,17 @@ def qlEuropeanExercise(date: qDate, trigger=None) -> ql.EuropeanExercise:
 
 @xlo.func(
     help="Create a Bermudan exercise.",
-    args={"dates": "The exercise dates."},
+    args={
+        "dates": "The exercise dates.",
+        "payoff_at_expiry": "Whether the payoff is at expiry or at exercise.",
+    },
     group=EXCEL_GROUP_NAME,
 )
-def qlBermudanExercise(dates: xlo.Array(dims=1), trigger=None) -> ql.BermudanExercise:
-    return ql.BermudanExercise(_to_date_list(dates))
+def qlBermudanExercise(
+    dates: xlo.Array(dims=1), payoff_at_expiry: bool = False, trigger=None
+) -> ql.BermudanExercise:
+
+    return ql.BermudanExercise(_to_date_list(dates), payoff_at_expiry)
 
 
 @xlo.func(
@@ -98,13 +104,14 @@ def qlBermudanExercise(dates: xlo.Array(dims=1), trigger=None) -> ql.BermudanExe
     args={
         "first_date": "The first exercise date.",
         "last_date": "The last exercise date.",
+        "payoff_at_expiry": "Whether the payoff is at expiry or at exercise.",
     },
     group=EXCEL_GROUP_NAME,
 )
 def qlAmericanExercise(
-    first_date: qDate, last_date: qDate, trigger=None
+    first_date: qDate, last_date: qDate, payoff_at_expiry: bool = False, trigger=None
 ) -> ql.AmericanExercise:
-    return ql.AmericanExercise(first_date, last_date)
+    return ql.AmericanExercise(first_date, last_date, payoff_at_expiry)
 
 
 @xlo.func(
