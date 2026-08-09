@@ -219,3 +219,6 @@ __marimo__/
 
 # VS Code settings
 .vscode/
+
+# a clone of the QuantLib-SWIG repository
+.qlswig
