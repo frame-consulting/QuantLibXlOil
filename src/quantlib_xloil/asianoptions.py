@@ -229,10 +229,9 @@ def qlMCDiscreteArithmeticAPEngine(
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
-    traits = traits.lower()
-    if traits == "pr" or traits == "pseudorandom":
+    if traits == "pseudorandom":
         cls = ql.MCPRDiscreteArithmeticAPEngine
-    elif traits == "ld" or traits == "lowdiscrepancy":
+    elif traits == "lowdiscrepancy":
         cls = ql.MCLDDiscreteArithmeticAPEngine
     else:
         raise RuntimeError(f"unknown MC traits: {traits}")
@@ -278,10 +277,9 @@ def qlMCDiscreteArithmeticAPHestonEngine(
     control_variate: bool = False,
     trigger=None,
 ) -> ql.PricingEngine:
-    traits = traits.lower()
-    if traits == "pr" or traits == "pseudorandom":
+    if traits == "pseudorandom":
         cls = ql.MCPRDiscreteArithmeticAPHestonEngine
-    elif traits == "ld" or traits == "lowdiscrepancy":
+    elif traits == "lowdiscrepancy":
         cls = ql.MCLDDiscreteArithmeticAPHestonEngine
     else:
         raise RuntimeError(f"unknown MC traits: {traits}")
@@ -324,7 +322,6 @@ def qlMCDiscreteArithmeticASEngine(
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
-    traits = traits.lower()
     if traits == "pseudorandom":
         cls = ql.MCPRDiscreteArithmeticASEngine
     elif traits == "lowdiscrepancy":
@@ -368,7 +365,6 @@ def qlMCDiscreteGeometricAPEngine(
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
-    traits = traits.lower()
     if traits == "pseudorandom":
         cls = ql.MCPRDiscreteGeometricAPEngine
     elif traits == "lowdiscrepancy":
@@ -414,7 +410,6 @@ def qlMCDiscreteGeometricAPHestonEngine(
     time_steps_per_year: int = ql.nullInt(),
     trigger=None,
 ) -> ql.PricingEngine:
-    traits = traits.lower()
     if traits == "pseudorandom":
         cls = ql.MCPRDiscreteGeometricAPHestonEngine
     elif traits == "lowdiscrepancy":
