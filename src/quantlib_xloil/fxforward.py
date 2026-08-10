@@ -29,7 +29,7 @@ def qlFxForward(
     maturity_date: qDate,
     pay_source_currency: bool,
     settlement_days: int = 2,
-    payment_calendar: qCalendar = None,
+    payment_calendar: qCalendar = ql.NullCalendar(),
     trigger=None,
 ) -> ql.FxForward:
     if payment_calendar is None:
@@ -68,7 +68,7 @@ def qlFxForward2(
     maturity_date: qDate,
     pay_source_currency: bool,
     settlement_days: int = 2,
-    payment_calendar: qCalendar = None,
+    payment_calendar: qCalendar = ql.NullCalendar(),
     trigger=None,
 ) -> ql.FxForward:
     if payment_calendar is None:
@@ -180,7 +180,9 @@ def qlFxForwardSettlementDays(fx_forward: ql.FxForward, trigger=None) -> int:
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlFxForwardSettlementCalendar(fx_forward: ql.FxForward, trigger=None) -> ql.Calendar:
+def qlFxForwardSettlementCalendar(
+    fx_forward: ql.FxForward, trigger=None
+) -> ql.Calendar:
     return fx_forward.settlementCalendar()
 
 

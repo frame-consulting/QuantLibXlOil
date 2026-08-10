@@ -52,6 +52,7 @@ def test_qlFxForward_constructor_with_nominals():
     assert qlFxForwardTargetCurrency(fx_forward).code() == "EUR"
     assert qlFxForwardMaturityDate(fx_forward) == maturity_date
     assert qlFxForwardPaySourceCurrency(fx_forward) is True
+    assert isinstance(qlFxForwardSettlementCalendar(fx_forward), ql.Calendar)
 
 
 def test_qlFxForward2_constructor_with_forward_rate():
