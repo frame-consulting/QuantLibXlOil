@@ -861,6 +861,7 @@ def qlAmortizingFloatingRateBond(
         "ex_coupon_calendar": "The calendar for ex-coupon dates.",
         "ex_coupon_convention": "The business day convention for ex-coupon dates.",
         "ex_coupon_end_of_month": "Whether to adjust ex-coupon dates to the end of the month.",
+        "fixing_convention": "The business day convention for fixing dates (default: Preceding).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -883,6 +884,7 @@ def qlFloatingRateBond(
     ex_coupon_calendar: qCalendar = ql.NullCalendar(),
     ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted,
     ex_coupon_end_of_month: bool = False,
+    fixing_convention: qBusinessDayConvention = ql.Preceding,
     trigger=None,
 ) -> ql.FloatingRateBond:
     return ql.FloatingRateBond(
@@ -904,6 +906,7 @@ def qlFloatingRateBond(
         ex_coupon_calendar,
         ex_coupon_convention,
         ex_coupon_end_of_month,
+        fixing_convention,
     )
 
 

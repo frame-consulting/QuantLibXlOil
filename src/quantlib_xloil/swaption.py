@@ -2,7 +2,9 @@ import QuantLib as ql
 import xloil as xlo
 from typing import Optional
 
+from .calendars import qBusinessDayConvention, qCalendar
 from .config import EXCEL_GROUP_NAME
+from .date import qDate, qPeriod
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
 from .swap import QL_SWAP_TYPE
@@ -469,4 +471,79 @@ def qlBachelierSwaptionEngineFromQuote(
     return ql.BachelierSwaptionEngine(discount_curve, volatility, day_counter, model)
 
 
-# TODO: add MakeSwaption helper
+@xlo.func(
+    help="Create a QuantLib Swaption using the MakeSwaption helper.",
+    args={
+        "swap_index": "The swap index (e.g., USDLiborSwapIsdaFixAm).",
+        "option_tenor": "The option tenor (as a qPeriod).",
+        "strike": "The strike rate (optional).",
+        "nominal": "The nominal amount (optional).",
+        "settlement_type": "Settlement type ('Physical' or 'Cash') (optional).",
+        "settlement_method": "Settlement method ('PhysicalOTC', 'PhysicalCleared', 'CollateralizedCashPrice', 'ParYieldCurve') (optional).",
+        "option_convention": "The business day convention for option dates (optional).",
+        "exercise_date": "The exercise date (optional).",
+        "underlying_type": "The underlying swap type (optional).",
+        "exercise_calendar": "The calendar for exercise dates (optional).",
+        "pricing_engine": "The pricing engine (optional).",
+        "indexed_coupons": "Whether to use indexed coupons (optional).",
+        "at_par_coupons": "Whether to use at par coupons (optional).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMakeSwaption(
+    swap_index: ql.SwapIndex,
+    option_tenor: qPeriod,
+    strike=None,
+    nominal=None,
+    settlement_type=None,
+    settlement_method=None,
+    option_convention=None,
+    exercise_date=None,
+    underlying_type=None,
+    exercise_calendar=None,
+    pricing_engine=None,
+    indexed_coupons=None,
+    at_par_coupons=None,
+    trigger=None,
+) -> ql.Swaption:
+    if strike is not None:
+        strike = float(strike)
+    if nominal is not None:
+        nominal = float(nominal)
+    if settlement_type is not None:
+        settlement_type = qSettlementType.__wrapped__(settlement_type)
+    if settlement_method is not None:
+        settlement_method = qSettlementMethod.__wrapped__(settlement_method)
+    if option_convention is not None:
+        option_convention = qBusinessDayConvention.__wrapped__(option_convention)
+    if exercise_date is not None:
+        exercise_date = qDate.__wrapped__(exercise_date)
+    if underlying_type is not None:
+        underlying_type = qSwapType.__wrapped__(underlying_type)
+    if exercise_calendar is not None:
+        exercise_calendar = qCalendar.__wrapped__(exercise_calendar)
+    if indexed_coupons is not None:
+        indexed_coupons = bool(indexed_coupons)
+    if at_par_coupons is not None:
+        at_par_coupons = bool(at_par_coupons)
+
+    _MAKESWAPTION_KWARGS = {
+        "nominal": "nominal",
+        "settlement_type": "settlementType",
+        "settlement_method": "settlementMethod",
+        "option_convention": "optionConvention",
+        "exercise_date": "exerciseDate",
+        "underlying_type": "underlyingType",
+        "exercise_calendar": "exerciseCalendar",
+        "pricing_engine": "pricingEngine",
+        "indexed_coupons": "indexedCoupons",
+        "at_par_coupons": "atParCoupons",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _MAKESWAPTION_KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
+    return ql.MakeSwaption(swap_index, option_tenor, strike, **kwargs)

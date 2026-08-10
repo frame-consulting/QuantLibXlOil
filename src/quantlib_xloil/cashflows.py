@@ -342,6 +342,19 @@ def qlFloatingRateCouponFixingDays(coupon: ql.FloatingRateCoupon, trigger=None) 
 
 
 @xlo.func(
+    help="Return floating-rate coupon fixing convention.",
+    args={
+        "coupon": "QuantLib FloatingRateCoupon.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFloatingRateCouponFixingConvention(
+    coupon: ql.FloatingRateCoupon, trigger=None
+) -> ql.BusinessDayConvention:
+    return coupon.fixingConvention()
+
+
+@xlo.func(
     help="Return whether the floating-rate coupon is in arrears.",
     args={
         "coupon": "QuantLib FloatingRateCoupon.",
@@ -840,7 +853,7 @@ def qlAsCappedFlooredOvernightIndexedCoupon(
 
 
 @xlo.func(
-    help="Cast a CashFlow to SubPeriodsCoupon if possible.",
+    help="Cast a CashFlow to MultipleResetsCoupon if possible.",
     args={
         "cashflow": "QuantLib CashFlow.",
     },
@@ -848,7 +861,7 @@ def qlAsCappedFlooredOvernightIndexedCoupon(
 )
 def qlAsMultipleResetsCoupon(
     cashflow: ql.CashFlow, trigger=None
-) -> ql.SubPeriodsCoupon:
+) -> ql.MultipleResetsCoupon:
     return ql.as_multiple_resets_coupon(cashflow)
 
 

@@ -40,7 +40,7 @@ QL_INTERPOLATED_CURVES = {
     ("LOGDISCOUNT", "LINEAR"): ql.DiscountCurve,
     #
     ("ZERORATE", "CUBIC"): ql.NaturalCubicZeroCurve,
-    ("ZERORATE", "KRUGER"): ql.KrugerZeroCurve,
+    ("ZERORATE", "KRUGER"): ql.CubicZeroCurve,
     ("ZERORATE", "LINEAR"): ql.ZeroCurve,
     ("ZERORATE", "MONOTONICCUBIC"): ql.MonotonicCubicZeroCurve,
 }

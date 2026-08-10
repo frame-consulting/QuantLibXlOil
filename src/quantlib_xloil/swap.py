@@ -601,6 +601,7 @@ def qlVanillaSwap(
         "pricing_engine": "The pricing engine (default: None).",
         "indexed_coupons": "Whether to use indexed coupons (default: None).",
         "at_par_coupons": "Whether to use at par coupons (default: None).",
+        "maturity_end_of_month": "Whether to adjust maturity date to end of month (default: None).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -640,6 +641,7 @@ def qlMakeVanillaSwap(
     pricing_engine=None,
     indexed_coupons=None,
     at_par_coupons=None,
+    maturity_end_of_month=None,
     trigger=None,
 ):
 
@@ -719,6 +721,8 @@ def qlMakeVanillaSwap(
         indexed_coupons = bool(indexed_coupons)
     if at_par_coupons is not None:
         at_par_coupons = bool(at_par_coupons)
+    if maturity_end_of_month is not None:
+        maturity_end_of_month = bool(maturity_end_of_month)
 
     _MAKEVANILLA_KWARGS = {
         "receive_fixed": "receiveFixed",
@@ -749,6 +753,7 @@ def qlMakeVanillaSwap(
         "discounting_term_structure": "discountingTermStructure",
         "pricing_engine": "pricingEngine",
         "at_par_coupons": "atParCoupons",
+        "maturity_end_of_month": "maturityEndOfMonth",
     }
 
     kwargs = {}
@@ -1195,6 +1200,28 @@ def qlFloatFloatSwap(
 
 
 @xlo.func(
+    help="Get the fair spread of the first leg of a FloatFloatSwap.",
+    args={
+        "swap": "The FloatFloatSwap object.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFloatFloatSwapFairSpread1(swap: ql.FloatFloatSwap, trigger=None) -> float:
+    return swap.fairSpread1()
+
+
+@xlo.func(
+    help="Get the fair spread of the second leg of a FloatFloatSwap.",
+    args={
+        "swap": "The FloatFloatSwap object.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFloatFloatSwapFairSpread2(swap: ql.FloatFloatSwap, trigger=None) -> float:
+    return swap.fairSpread2()
+
+
+@xlo.func(
     help="Create a QuantLib OvernightIndexedSwap object.",
     args={
         "type": "The type of the swap (Payer or Receiver).",
@@ -1472,6 +1499,7 @@ def qlOvernightIndexedSwapApplyObservationShift(
         "lockout_days": "The number of lockout days (default: None).",
         "apply_observation_shift": "Whether to apply observation shift (default: None).",
         "pricing_engine": "The pricing engine (default: None).",
+        "maturity_end_of_month": "Whether to adjust maturity date to end of month (default: None).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1516,6 +1544,7 @@ def qlMakeOIS(
     lockout_days=None,
     # apply_observation_shift=None, not supported
     pricing_engine=None,
+    maturity_end_of_month=None,
     trigger=None,
 ):
     if fixed_rate is not None:
@@ -1600,6 +1629,8 @@ def qlMakeOIS(
         lookback_days = int(lookback_days)
     if lockout_days is not None:
         lockout_days = int(lockout_days)
+    if maturity_end_of_month is not None:
+        maturity_end_of_month = bool(maturity_end_of_month)
 
     # Map kwargs for MakeOIS. Note: QuantLib.MakeOIS does not accept a
     # top-level `paymentConvention` keyword in this QuantLib version, so
@@ -1642,6 +1673,7 @@ def qlMakeOIS(
         "lockout_days": "lockoutDays",
         # do not forward "apply_observation_shift" ->  "observationShift" not supported
         "pricing_engine": "pricingEngine",
+        "maturity_end_of_month": "maturityEndOfMonth",
     }
 
     kwargs = {}

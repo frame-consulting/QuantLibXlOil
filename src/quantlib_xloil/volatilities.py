@@ -17,6 +17,14 @@ QL_VOLATILITY_TYPE = {
 }
 
 
+QL_BLACK_VOL_TIME_EXTRAPOLATION = {
+    "FLATVOLATILITY": ql.BlackVolTimeExtrapolation.FlatVolatility,
+    "USEINTERPOLATOR": ql.BlackVolTimeExtrapolation.UseInterpolator,
+    "LINEARVARIANCE": ql.BlackVolTimeExtrapolation.LinearVariance,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
 def _qVolatilityType(s: str) -> int:
     return enum_value(s, QL_VOLATILITY_TYPE)
 
@@ -24,6 +32,15 @@ def _qVolatilityType(s: str) -> int:
 @xlo.converter()
 def qVolatilityType(s: str) -> int:
     return _qVolatilityType(s)
+
+
+def _qBlackVolTimeExtrapolation(s: str) -> int:
+    return enum_value(s, QL_BLACK_VOL_TIME_EXTRAPOLATION)
+
+
+@xlo.converter()
+def qBlackVolTimeExtrapolation(s: str) -> int:
+    return _qBlackVolTimeExtrapolation(s)
 
 
 # VolatilityTermStructure/BlackVolTermStructure interface
@@ -249,6 +266,37 @@ def qlBlackConstantVol(
     #
     volts = ql.BlackConstantVol(reference_date, calendar, volatility, day_counter)
     return ql.BlackVolTermStructureHandle(volts)
+
+
+@xlo.func(
+    help="Create a QuantLib BlackVarianceCurve object from dates, volatilities, and day counter.",
+    args={
+        "reference_date": "Reference date for the variance curve.",
+        "dates": "Vector of dates for the variance curve.",
+        "volatilities": "Vector of volatilities corresponding to the dates.",
+        "day_counter": "Day count convention for the variance curve.",
+        "force_monotone_variance": "Whether to force monotone variance (default: True).",
+        "time_extrapolation_type": "The time extrapolation type for the curve (default: FlatVolatility).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVarianceCurve(
+    reference_date: qDate,
+    dates,
+    volatilities,
+    day_counter: qDayCounter,
+    force_monotone_variance: bool = True,
+    time_extrapolation_type: qBlackVolTimeExtrapolation = ql.BlackVolTimeExtrapolation.FlatVolatility,
+    trigger=None,
+) -> ql.BlackVarianceCurve:
+    return ql.BlackVarianceCurve(
+        reference_date,
+        dates,
+        volatilities,
+        day_counter,
+        force_monotone_variance,
+        time_extrapolation_type,
+    )
 
 
 # LocalVolTermStructure interface

@@ -1125,6 +1125,8 @@ def qlFxSwapRateHelperAdjustmentCalendar(
         "index": "The overnight index (e.g., SOFR, SONIA, EONIA).",
         "convexity_adjustment": "The convexity adjustment for the future (default: 0.0).",
         "averaging_method": "The rate averaging method (default: Compound).",
+        "pillar": "The pillar choice for the helper (default: LastRelevantDate).",
+        "custom_pillar_date": "The custom pillar date if pillar choice is Custom (optional).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1135,10 +1137,12 @@ def qlOvernightIndexFutureRateHelper(
     index: ql.OvernightIndex,
     convexity_adjustment: qQuoteHandle = ql.QuoteHandle(),
     averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    pillar: qPillarChoice = ql.Pillar.LastRelevantDate,
+    custom_pillar_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.OvernightIndexFutureRateHelper:
     return ql.OvernightIndexFutureRateHelper(
-        price, value_date, maturity_date, index, convexity_adjustment, averaging_method
+        price, value_date, maturity_date, index, convexity_adjustment, averaging_method, pillar, custom_pillar_date
     )
 
 
@@ -1174,6 +1178,8 @@ def qlSofrFutureRateHelper(
     reference_year: int,
     frequency: qFrequency,
     convexity_adjustment: qQuoteHandle = ql.QuoteHandle(),
+    pillar: qPillarChoice = ql.Pillar.LastRelevantDate,
+    custom_pillar_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.SofrFutureRateHelper:
     return ql.SofrFutureRateHelper(
@@ -1182,6 +1188,56 @@ def qlSofrFutureRateHelper(
         reference_year,
         frequency,
         convexity_adjustment,
+        pillar,
+        custom_pillar_date,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib MultipleResetsSwapRateHelper object for rate curve building with multiple resets per coupon.",
+    args={
+        "settlement_days": "The number of settlement days.",
+        "tenor": "The tenor of the swap.",
+        "fixed_rate": "The fixed rate (or quote handle).",
+        "ibor_index": "The IBOR index for the floating leg.",
+        "resets_per_coupon": "The number of resets per coupon.",
+        "discounting_curve": "The discounting curve (optional).",
+        "averaging_method": "The rate averaging method (default: Compound).",
+        "spread": "The spread (default: 0.0).",
+        "fixed_frequency": "The fixed leg frequency (optional).",
+        "fixed_day_count": "The fixed leg day count (optional).",
+        "fixed_convention": "The fixed leg business day convention (optional).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMultipleResetsSwapRateHelper(
+    settlement_days: int,
+    tenor: qPeriod,
+    fixed_rate,
+    ibor_index: ql.IborIndex,
+    resets_per_coupon: int,
+    discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    spread: float = 0.0,
+    fixed_frequency: qFrequency = ql.NoFrequency,
+    fixed_day_count: qDayCounter = ql.Actual365Fixed(),
+    fixed_convention: qBusinessDayConvention = ql.ModifiedFollowing,
+    trigger=None,
+) -> ql.MultipleResetsSwapRateHelper:
+    if isinstance(fixed_rate, (int, float)):
+        fixed_rate = ql.QuoteHandle(ql.SimpleQuote(float(fixed_rate)))
+    return ql.MultipleResetsSwapRateHelper(
+        settlement_days,
+        tenor,
+        fixed_rate,
+        ibor_index,
+        resets_per_coupon,
+        discounting_curve,
+        averaging_method,
+        spread,
+        fixed_frequency,
+        fixed_day_count,
+        fixed_convention,
     )
 
 
