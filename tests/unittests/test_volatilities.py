@@ -10,6 +10,7 @@ from quantlib_xloil.volatilities import (
     qlBlackVolTermStructureBlackVariance,
     qlBlackVolTermStructureBlackVarianceFromTime,
     qlBlackVolTermStructureBlackVol,
+    qlBlackVarianceCurve,
     qlBlackVolTermStructureBlackVolFromTime,
     qlBlackVolTermStructureMaxStrike,
     qlBlackVolTermStructureMinStrike,
@@ -142,6 +143,22 @@ def test_qlLocalVolTermStructure_interface():
     assert qlLocalVolTermStructureLocalVolFromTime(
         lvol_handle, 0.5, 100.0
     ) == pytest.approx(0.25)
+
+
+def test_qlBlackVarianceCurve_creates_curve_from_dates_and_volatilities():
+    reference_date = qlDate(2023, 1, 2)
+    dates = [qlDate(2024, 1, 2), qlDate(2024, 7, 2), qlDate(2025, 1, 2)]
+    volatilities = [0.20, 0.22, 0.24]
+
+    curve = qlBlackVarianceCurve(
+        reference_date=reference_date,
+        dates=dates,
+        volatilities=volatilities,
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+    )
+
+    assert isinstance(curve, ql.BlackVarianceCurve)
+    assert curve.blackVol(qlDate(2024, 1, 2), 100.0, False) == pytest.approx(0.20)
 
 
 # Helper functions for optionlet and swaption volatility tests

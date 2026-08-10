@@ -6,7 +6,13 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate, qPeriod, _to_date_list
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
-from .utilities import enum_value, UNKNOWN_KEY, UNKNOWN_VALUE, to_float_matrix
+from .utilities import (
+    enum_value,
+    UNKNOWN_KEY,
+    UNKNOWN_VALUE,
+    to_float_matrix,
+    to_float_list,
+)
 
 # Volatility types
 
@@ -282,8 +288,8 @@ def qlBlackConstantVol(
 )
 def qlBlackVarianceCurve(
     reference_date: qDate,
-    dates,
-    volatilities,
+    dates: xlo.Array(dims=1),
+    volatilities: xlo.Array(dims=1),
     day_counter: qDayCounter,
     force_monotone_variance: bool = True,
     time_extrapolation_type: qBlackVolTimeExtrapolation = ql.BlackVolTimeExtrapolation.FlatVolatility,
@@ -291,8 +297,8 @@ def qlBlackVarianceCurve(
 ) -> ql.BlackVarianceCurve:
     return ql.BlackVarianceCurve(
         reference_date,
-        dates,
-        volatilities,
+        _to_date_list(dates),
+        to_float_list(volatilities),
         day_counter,
         force_monotone_variance,
         time_extrapolation_type,
@@ -933,7 +939,7 @@ def qlSwaptionVolatilityMatrix(
     trigger=None,
 ) -> ql.SwaptionVolatilityStructureHandle:
     #
-    dates_list = _dates = _to_date_list(expiry_dates)
+    dates_list = _to_date_list(expiry_dates)
     length_list = [qPeriod.__wrapped__(length) for length in lengths]
     vol_matrix = ql.Matrix(to_float_matrix(vols))
     shift_matrix = ql.Matrix(to_float_matrix(shifts))

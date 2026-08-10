@@ -23,6 +23,7 @@ from quantlib_xloil.ratehelpers import (
     qlFxSwapRateHelperSpot,
     qlFxSwapRateHelperTenor,
     qlFxSwapRateHelperTradingCalendar,
+    qlMultipleResetsSwapRateHelper,
     qlOISRateHelper,
     qlOISRateHelperSwap,
     qlOvernightIndexFutureRateHelper,
@@ -255,6 +256,21 @@ def test_fx_swap_helper_and_accessors():
     assert isinstance(qlFxSwapRateHelperAdjustmentCalendar(helper), ql.Calendar)
     assert qlFxSwapRateHelperEndOfMonth(helper) is False
     assert qlFxSwapRateHelperIsFxBaseCurrencyCollateralCurrency(helper) is True
+
+
+def test_multiple_resets_swap_rate_helper_constructs():
+    _set_eval_date()
+    index = qlUSDLibor(ql.Period("3M"))
+    helper = qlMultipleResetsSwapRateHelper(
+        settlement_days=2,
+        tenor=ql.Period("1Y"),
+        fixed_rate=0.03,
+        ibor_index=index,
+        resets_per_coupon=5,
+        fixed_frequency=qFrequency.__wrapped__("ANNUAL"),
+    )
+
+    assert isinstance(helper, ql.MultipleResetsSwapRateHelper)
 
 
 def test_overnight_and_sofr_future_helpers():

@@ -16,6 +16,7 @@ from quantlib_xloil import (
     qlFloatFloatSwaptionUnderlyingValue,
     qlInstrumentNPV,
     qlInstrumentSetPricingEngine,
+    qlMakeSwaption,
     qlNonstandardSwaption,
     qlNonstandardSwaptionCalibrationBasket,
     qlNonstandardSwaptionProbabilities,
@@ -115,6 +116,17 @@ def test_swaption_converters():
 
     assert _qCashAnnuityModel("DISCOUNTCURVE") == ql.BlackSwaptionEngine.DiscountCurve
     assert _qCashAnnuityModel("SWAPRATE") == ql.BlackSwaptionEngine.SwapRate
+
+
+def test_make_swaption_constructor():
+    """Test MakeSwaption construction through the wrapper."""
+    _set_eval_date()
+    reference_date, day_counter, risk_free, forecast = _setup_curves()
+
+    index = ql.UsdLiborSwapIsdaFixAm(ql.Period("5Y"), forecast, risk_free)
+    swaption = qlMakeSwaption(index, ql.Period("1Y"))
+
+    assert isinstance(swaption, ql.Swaption)
 
 
 def test_swaption_constructor_and_accessors():

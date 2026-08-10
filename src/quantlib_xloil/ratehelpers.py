@@ -1142,7 +1142,14 @@ def qlOvernightIndexFutureRateHelper(
     trigger=None,
 ) -> ql.OvernightIndexFutureRateHelper:
     return ql.OvernightIndexFutureRateHelper(
-        price, value_date, maturity_date, index, convexity_adjustment, averaging_method, pillar, custom_pillar_date
+        price,
+        value_date,
+        maturity_date,
+        index,
+        convexity_adjustment,
+        averaging_method,
+        pillar,
+        custom_pillar_date,
     )
 
 
@@ -1213,7 +1220,7 @@ def qlSofrFutureRateHelper(
 def qlMultipleResetsSwapRateHelper(
     settlement_days: int,
     tenor: qPeriod,
-    fixed_rate,
+    fixed_rate: qQuoteHandle,
     ibor_index: ql.IborIndex,
     resets_per_coupon: int,
     discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
@@ -1224,8 +1231,6 @@ def qlMultipleResetsSwapRateHelper(
     fixed_convention: qBusinessDayConvention = ql.ModifiedFollowing,
     trigger=None,
 ) -> ql.MultipleResetsSwapRateHelper:
-    if isinstance(fixed_rate, (int, float)):
-        fixed_rate = ql.QuoteHandle(ql.SimpleQuote(float(fixed_rate)))
     return ql.MultipleResetsSwapRateHelper(
         settlement_days,
         tenor,

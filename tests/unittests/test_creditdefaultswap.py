@@ -38,6 +38,7 @@ from quantlib_xloil.creditdefaultswap import (
     qlFaceValueClaim,
     qlIntegralCdsEngine,
     qlIsdaCdsEngine,
+    qlMakeCreditDefaultSwap,
     qlMidPointCdsEngine,
 )
 
@@ -227,3 +228,44 @@ def test_claim_wrapper_parity():
     with pytest.raises(TypeError, match="takes 4 positional arguments"):
         qlClaimAmount(claim, default_date, 1_000_000.0, 0.40)
     assert claim.amount(default_date, 1_000_000.0, 0.40) > 0.0
+
+
+def test_qlMakeCreditDefaultSwap():
+    """Test the qlMakeCreditDefaultSwap wrapper function."""
+    reference_date = ql.Date(2, 1, 2025)
+    end = ql.Date(2, 1, 2030)
+
+    # Test with minimal parameters (maturity as qDate, running_spread)
+    cds1 = qlMakeCreditDefaultSwap(end, 0.01)
+    assert isinstance(cds1, ql.CreditDefaultSwap)
+    assert cds1.runningSpread() == pytest.approx(0.01)
+
+    # Test with maturity as qPeriod
+    cds2 = qlMakeCreditDefaultSwap("5Y", 0.01)
+    assert isinstance(cds2, ql.CreditDefaultSwap)
+    assert cds2.runningSpread() == pytest.approx(0.01)
+
+    # Test with additional parameters
+    cds3 = qlMakeCreditDefaultSwap(
+        "5Y",
+        0.01,
+        upfront_rate=0.02,
+        side="BUY",
+        nominal=1_000_000.0,
+        day_counter="ACT/360",
+    )
+    assert isinstance(cds3, ql.CreditDefaultSwap)
+    assert cds3.runningSpread() == pytest.approx(0.01)
+    assert cds3.upfront() == pytest.approx(0.02)
+    assert qlCreditdefaultswapSide(cds3) == "BUY"
+    assert qlCreditDefaultSwapNotional(cds3) == pytest.approx(1_000_000.0)
+
+    # Test with trade_date parameter
+    cds4 = qlMakeCreditDefaultSwap(
+        "5Y",
+        0.015,
+        trade_date=reference_date,
+    )
+    assert isinstance(cds4, ql.CreditDefaultSwap)
+    assert cds4.tradeDate() == reference_date
+    assert cds4.runningSpread() == pytest.approx(0.015)

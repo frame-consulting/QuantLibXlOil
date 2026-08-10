@@ -553,52 +553,70 @@ def qlCreditDefaultSwapConventionalSpread(
     )
 
 
-if ql.__version__ >= "1.42":
-
-    def qlMakeCreditDefaultSwap(
-        maturity: str | float,
-        running_spread: float,
-        upfront_rate=None,
-        side=None,
-        notional=None,
-        coupon_tenor=None,
-        day_counter=None,
-        last_period_day_counter=None,
-        date_generation_rule=None,
-        cash_settlement_days=None,
-        pricing_engine=None,
-        trade_date=None,
-        trigger=None,
-    ) -> ql.CreditDefaultSwap:
-        if isinstance(maturity, str):
-            maturity = qPeriod.__wrapped__(maturity)
-        else:
-            maturity = qDate.__wrapped__(maturity)
-        #
-        kwargs = {}
-        if upfront_rate is not None:
-            kwargs["upfrontRate"] = upfront_rate
-        if side is not None:
-            kwargs["protectionSide"] = qProtectionSide.__wrapped__(side)
-        if coupon_tenor is not None:
-            kwargs["couponTenor"] = qPeriod.__wrapped__(coupon_tenor)
-        if day_counter is not None:
-            kwargs["dayCounter"] = qDayCounter.__wrapped__(day_counter)
-        if last_period_day_counter is not None:
-            kwargs["lastPeriodDayCounter"] = qDayCounter.__wrapped__(
-                last_period_day_counter
-            )
-        if date_generation_rule is not None:
-            kwargs["dateGenerationRule"] = qDateGenerationRule.__wrapped__(
-                date_generation_rule
-            )
-        if cash_settlement_days is not None:
-            kwargs["cashSettlementDays"] = cash_settlement_days
-        if pricing_engine is not None:
-            kwargs["pricingEngine"] = pricing_engine
-        if trade_date is not None:
-            kwargs["tradeDate"] = qDate.__wrapped__(trade_date)
-        return ql.MakeCreditDefaultSwap(maturity, running_spread, **kwargs)
+@xlo.func(
+    help="Creates a CreditDefaultSwap object using the MakeCreditDefaultSwap helper.",
+    args={
+        "maturity": "The maturity of the CDS (as a qDate or qPeriod).",
+        "running_spread": "The running spread of the CDS.",
+        "upfront_rate": "The upfront rate of the CDS (optional).",
+        "side": "The protection side of the CDS (BUY/SELL) (optional).",
+        "nominal": "The nominal amount of the CDS (optional).",
+        "coupon_tenor": "The coupon tenor of the CDS (as a qPeriod) (optional).",
+        "day_counter": "The day counter of the CDS (optional).",
+        "last_period_day_counter": "The day counter for the last period of the CDS (optional).",
+        "date_generation_rule": "The date generation rule for the CDS (optional).",
+        "cash_settlement_days": "The number of cash settlement days for the CDS (optional).",
+        "pricing_engine": "The pricing engine to use for the CDS (optional).",
+        "trade_date": "The trade date of the CDS (as a qDate) (optional).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMakeCreditDefaultSwap(
+    maturity: str | float,
+    running_spread: float,
+    upfront_rate=None,
+    side=None,
+    nominal=None,
+    coupon_tenor=None,
+    day_counter=None,
+    last_period_day_counter=None,
+    date_generation_rule=None,
+    cash_settlement_days=None,
+    pricing_engine=None,
+    trade_date=None,
+    trigger=None,
+) -> ql.CreditDefaultSwap:
+    if isinstance(maturity, str):
+        maturity = qPeriod.__wrapped__(maturity)
+    else:
+        maturity = qDate.__wrapped__(maturity)
+    #
+    kwargs = {}
+    if upfront_rate is not None:
+        kwargs["upfrontRate"] = upfront_rate
+    if side is not None:
+        kwargs["side"] = qProtectionSide.__wrapped__(side)
+    if nominal is not None:
+        kwargs["nominal"] = float(nominal)
+    if coupon_tenor is not None:
+        kwargs["couponTenor"] = qPeriod.__wrapped__(coupon_tenor)
+    if day_counter is not None:
+        kwargs["dayCounter"] = qDayCounter.__wrapped__(day_counter)
+    if last_period_day_counter is not None:
+        kwargs["lastPeriodDayCounter"] = qDayCounter.__wrapped__(
+            last_period_day_counter
+        )
+    if date_generation_rule is not None:
+        kwargs["dateGenerationRule"] = qDateGenerationRule.__wrapped__(
+            date_generation_rule
+        )
+    if cash_settlement_days is not None:
+        kwargs["cashSettlementDays"] = int(cash_settlement_days)
+    if pricing_engine is not None:
+        kwargs["pricingEngine"] = pricing_engine
+    if trade_date is not None:
+        kwargs["tradeDate"] = qDate.__wrapped__(trade_date)
+    return ql.MakeCreditDefaultSwap(maturity, running_spread, **kwargs)
 
 
 @xlo.func(

@@ -2,7 +2,7 @@ import numpy as np
 import QuantLib as ql
 import xloil as xlo
 
-from .calendars import qBusinessDayConvention
+from .calendars import qBusinessDayConvention, QL_BUSINESSDAYCONVENTION
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, qFrequency, _qDate
 from .daycounters import qDayCounter
@@ -350,8 +350,8 @@ def qlFloatingRateCouponFixingDays(coupon: ql.FloatingRateCoupon, trigger=None) 
 )
 def qlFloatingRateCouponFixingConvention(
     coupon: ql.FloatingRateCoupon, trigger=None
-) -> ql.BusinessDayConvention:
-    return coupon.fixingConvention()
+) -> str:
+    return first_key(QL_BUSINESSDAYCONVENTION, coupon.fixingConvention(), UNKNOWN_KEY)
 
 
 @xlo.func(

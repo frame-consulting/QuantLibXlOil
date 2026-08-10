@@ -18,7 +18,6 @@ QL_PIECEWISE_CURVES = {
     ("LOGDISCOUNT", "KRUGER"): ql.PiecewiseKrugerLogDiscount,
     #
     ("ZERORATE", "CUBIC"): ql.PiecewiseNaturalCubicZero,
-    ("ZERORATE", "KRUGER"): ql.PiecewiseCubicZero,
     ("ZERORATE", "LINEAR"): ql.PiecewiseLinearZero,
     ("ZERORATE", "MONOTONICCUBIC"): ql.PiecewiseConvexMonotoneZero,
 }
