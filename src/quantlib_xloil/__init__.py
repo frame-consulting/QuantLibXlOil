@@ -17,6 +17,7 @@ from quantlib_xloil.daycounters import *
 from quantlib_xloil.defaultprobability import *
 from quantlib_xloil.dividends import *
 from quantlib_xloil.exercise import *
+from quantlib_xloil.futures import *
 from quantlib_xloil.gaussian1dmodel import *
 from quantlib_xloil.grid import *
 from quantlib_xloil.interpolatedyieldcurves import *
