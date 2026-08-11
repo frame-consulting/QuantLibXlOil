@@ -31,4 +31,4 @@ def test_qlXlOilVersion():
     # We impose a safeguard to accidental minor version change.
     # See the comments in __about__.py.
     # This test should be updated manually when the minor version is changed.
-    assert version_parts[1] == "41"
+    assert version_parts[1] == "42"
