@@ -2,4 +2,4 @@
 # The version number is used when publishing to pypi and testpypi.
 # The minor version number must coincide with the QuantLib version.
 #
-__version__ = "0.42.0rc1"
+__version__ = "0.42.0"
