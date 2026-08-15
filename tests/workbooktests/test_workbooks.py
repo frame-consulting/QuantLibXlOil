@@ -39,6 +39,19 @@ def _workbooks_path():
     return workbooks
 
 
+def _workbook_file_names():
+    workbook_dir = _workbooks_path()
+    this_path = os.getcwd()
+    os.chdir(workbook_dir)
+    workbook_names = [
+        os.path.join(root, filename)[2:]
+        for root, _, files in os.walk(".")
+        for filename in files
+    ]
+    os.chdir(this_path)
+    return workbook_names
+
+
 @pytest.fixture(scope="module", autouse=True)
 def workbooks_path():
     yield _workbooks_path()
@@ -85,7 +98,7 @@ workbook_dir = _workbooks_path()
 workbook_names = [
     # "test_swap.xlsx",
 ]
-workbook_names = os.listdir(workbook_dir)
+workbook_names = _workbook_file_names()
 test_args = workbook_names
 
 
