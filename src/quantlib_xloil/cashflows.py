@@ -1,4 +1,3 @@
-import numpy as np
 import QuantLib as ql
 import xloil as xlo
 
@@ -1015,6 +1014,24 @@ def qlCappedFlooredIborCoupon(
         is_in_arrears,
         ex_coupon_date,
     )
+
+
+@xlo.func(
+    help="Create a QuantLib CappedFlooredCoupon object.",
+    args={
+        "underlying": "Underlying floating-rate coupon.",
+        "cap": "Cap rate.",
+        "floor": "Floor rate.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCappedFlooredCoupon(
+    underlying: ql.FloatingRateCoupon,
+    cap: float = ql.nullDouble(),
+    floor: float = ql.nullDouble(),
+    trigger=None,
+) -> ql.CappedFlooredCoupon:
+    return ql.CappedFlooredCoupon(underlying, cap, floor)
 
 
 @xlo.func(
