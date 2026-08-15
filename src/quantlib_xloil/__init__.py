@@ -42,4 +42,5 @@ from quantlib_xloil.termstructures import *
 from quantlib_xloil.swaption import *
 from quantlib_xloil.volatilities import *
 
+from quantlib_xloil.extras.cashflows_analysis import *
 from quantlib_xloil.extras.quantlib_xloil_version import *
