@@ -356,20 +356,20 @@ def test_qlCalendarAdjust():
 def test_qlCalendarAdvance():
     calendar = qlCalendar("TARGET")
     date = qlDate(2026, 1, 31)  # This is a Saturday
-    n = 10
-    unit = qTimeUnit.__wrapped__("DAYS")
+    period = qlPeriod(3, ql.Months)
     convention = qBusinessDayConvention.__wrapped__("Following")
-    advanced_date = qlCalendarAdvance(calendar, date, n, unit, convention)
-    assert advanced_date == qlDate(2026, 2, 13)
+    advanced_date = qlCalendarAdvance(calendar, date, period, convention)
+    assert advanced_date == qlDate(2026, 4, 30)
 
 
 def test_qlCalendarAdvance2():
     calendar = qlCalendar("TARGET")
     date = qlDate(2026, 1, 31)  # This is a Saturday
-    period = qlPeriod(3, ql.Months)
+    n = 10
+    unit = qTimeUnit.__wrapped__("DAYS")
     convention = qBusinessDayConvention.__wrapped__("Following")
-    advanced_date = qlCalendarAdvance2(calendar, date, period, convention)
-    assert advanced_date == qlDate(2026, 4, 30)
+    advanced_date = qlCalendarAdvance2(calendar, date, n, unit, convention)
+    assert advanced_date == qlDate(2026, 2, 13)
 
 
 def test_qlCalendarBusinessDaysBetween():

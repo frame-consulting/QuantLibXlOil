@@ -310,6 +310,28 @@ def qlCalendarAdjust(
 
 
 @xlo.func(
+    help="Advance a date by a given period according to the calendar and business day convention.",
+    args={
+        "date": "The date to advance.",
+        "calendar": "The calendar to use for advancement.",
+        "period": "The period by which to advance.",
+        "convention": "The business day convention to apply.",
+        "end_of_month": "Whether to adjust to the end of the month.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCalendarAdvance(
+    calendar: qCalendar,
+    date: qDate,
+    period: qPeriod,
+    convention: qBusinessDayConvention = ql.Following,
+    end_of_month: bool = False,
+    trigger=None,
+) -> ql.Date:
+    return calendar.advance(date, period, convention, end_of_month)
+
+
+@xlo.func(
     help="Advance a date by a given number of time units according to the calendar and business day convention.",
     args={
         "date": "The date to advance.",
@@ -321,7 +343,7 @@ def qlCalendarAdjust(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCalendarAdvance(
+def qlCalendarAdvance2(
     calendar: qCalendar,
     date: qDate,
     n: int,
@@ -331,28 +353,6 @@ def qlCalendarAdvance(
     trigger=None,
 ) -> ql.Date:
     return calendar.advance(date, n, unit, convention, end_of_month)
-
-
-@xlo.func(
-    help="Advance a date by a given period according to the calendar and business day convention.",
-    args={
-        "date": "The date to advance.",
-        "calendar": "The calendar to use for advancement.",
-        "period": "The period by which to advance.",
-        "convention": "The business day convention to apply.",
-        "end_of_month": "Whether to adjust to the end of the month.",
-    },
-    group=EXCEL_GROUP_NAME,
-)
-def qlCalendarAdvance2(
-    calendar: qCalendar,
-    date: qDate,
-    period: qPeriod,
-    convention: qBusinessDayConvention = ql.Following,
-    end_of_month: bool = False,
-    trigger=None,
-) -> ql.Date:
-    return calendar.advance(date, period, convention, end_of_month)
 
 
 @xlo.func(
