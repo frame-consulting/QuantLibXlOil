@@ -483,12 +483,9 @@ def qlFdG2SwaptionEngine(
     y_grid: int = 50,
     damping_steps: int = 0,
     inv_eps: float = 1e-5,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(),
     trigger=None,
 ) -> ql.FdG2SwaptionEngine:
-    scheme_desc = (
-        scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Hundsdorfer()
-    )
     return ql.FdG2SwaptionEngine(
         model, t_grid, x_grid, y_grid, damping_steps, inv_eps, scheme_desc
     )
@@ -512,10 +509,9 @@ def qlFdHullWhiteSwaptionEngine(
     x_grid: int = 100,
     damping_steps: int = 0,
     inv_eps: float = 1e-5,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(),
     trigger=None,
 ) -> ql.FdHullWhiteSwaptionEngine:
-    scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
     return ql.FdHullWhiteSwaptionEngine(
         model, t_grid, x_grid, damping_steps, inv_eps, scheme_desc
     )

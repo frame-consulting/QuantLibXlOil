@@ -325,12 +325,11 @@ def qlFdBlackScholesBarrierEngine(
     t_grid: int = 100,
     x_grid: int = 100,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(),
     local_vol: bool = False,
     illegal_local_vol_overwrite: float = -ql.nullDouble(),
     trigger=None,
 ) -> ql.FdBlackScholesBarrierEngine:
-    scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
     dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdBlackScholesBarrierEngine(
@@ -374,12 +373,11 @@ def qlFdBlackScholesRebateEngine(
     t_grid: int = 100,
     x_grid: int = 100,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(),
     local_vol: bool = False,
     illegal_local_vol_overwrite: float = -ql.nullDouble(),
     trigger=None,
 ) -> ql.FdBlackScholesRebateEngine:
-    scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
     dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdBlackScholesRebateEngine(
@@ -425,14 +423,11 @@ def qlFdHestonBarrierEngine(
     x_grid: int = 100,
     v_grid: int = 50,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(),
     leverage_fct: ql.LocalVolTermStructure = None,
     mixing_factor: float = 1.0,
     trigger=None,
 ) -> ql.FdHestonBarrierEngine:
-    scheme_desc = (
-        scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Hundsdorfer()
-    )
     dividends = to_object_list(dividends, ql.Dividend)
 
     if len(dividends) > 0:
@@ -481,16 +476,12 @@ def qlFdHestonRebateEngine(
     x_grid: int = 100,
     v_grid: int = 50,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(),
     leverage_fct: ql.LocalVolTermStructure = None,
     mixing_factor: float = 1.0,
     trigger=None,
 ) -> ql.FdHestonRebateEngine:
-    scheme_desc = (
-        scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Hundsdorfer()
-    )
     dividends = to_object_list(dividends, ql.Dividend)
-
     if len(dividends) > 0:
         return ql.FdHestonRebateEngine(
             model,
@@ -702,14 +693,11 @@ def qlFdHestonDoubleBarrierEngine(
     x_grid: int = 100,
     v_grid: int = 50,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(),
     leverage_fct: ql.LocalVolTermStructure = None,
     mixing_factor: float = 1.0,
     trigger=None,
 ) -> ql.FdHestonDoubleBarrierEngine:
-    scheme_desc = (
-        scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Hundsdorfer()
-    )
     return ql.FdHestonDoubleBarrierEngine(
         model,
         t_grid,

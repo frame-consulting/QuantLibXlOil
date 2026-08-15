@@ -1935,15 +1935,13 @@ def qlFdBlackScholesVanillaEngine(
     t_grid: int = 100,
     x_grid: int = 100,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(),
     local_vol: bool = False,
     illegal_local_vol_overwrite: float = -ql.nullDouble(),
     cash_dividend_model: qFdBlackScholesCashDividendModel = ql.FdBlackScholesVanillaEngine.Spot,
     trigger=None,
 ) -> ql.FdBlackScholesVanillaEngine:
-    scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
     dividends = to_object_list(dividends, ql.Dividend)
-
     if quanto_helper is not None and len(dividends) > 0:
         return ql.FdBlackScholesVanillaEngine(
             process,
@@ -2011,10 +2009,9 @@ def qlFdBlackScholesShoutEngine(
     t_grid: int = 100,
     x_grid: int = 100,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(),
     trigger=None,
 ) -> ql.FdBlackScholesShoutEngine:
-    scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
     dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdBlackScholesShoutEngine(
@@ -2047,10 +2044,9 @@ def qlFdOrnsteinUhlenbeckVanillaEngine(
     x_grid: int = 100,
     damping_steps: int = 0,
     epsilon: float = 1.0e-4,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Douglas(),
     trigger=None,
 ) -> ql.FdOrnsteinUhlenbeckVanillaEngine:
-    scheme_desc = scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Douglas()
     dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdOrnsteinUhlenbeckVanillaEngine(
@@ -2094,12 +2090,9 @@ def qlFdBatesVanillaEngine(
     x_grid: int = 100,
     v_grid: int = 50,
     damping_steps: int = 0,
-    scheme_desc: ql.FdmSchemeDesc = None,
+    scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(),
     trigger=None,
 ) -> ql.FdBatesVanillaEngine:
-    scheme_desc = (
-        scheme_desc if scheme_desc is not None else ql.FdmSchemeDesc.Hundsdorfer()
-    )
     dividends = to_object_list(dividends, ql.Dividend)
     if len(dividends) > 0:
         return ql.FdBatesVanillaEngine(
