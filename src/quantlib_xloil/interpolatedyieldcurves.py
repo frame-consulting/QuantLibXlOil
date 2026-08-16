@@ -48,8 +48,8 @@ QL_INTERPOLATED_CURVES = {
 @xlo.func(
     help="Construct an interpolated discount curve from a set of dates and discount factors.",
     args={
-        "dates": "The dates corresponding to the discount factors.",
-        "discounts": "The discount factors corresponding to the dates.",
+        "dates": "The dates corresponding to the curve values.",
+        "values": "The values corresponding to the dates and traits.",
         "daycounter": "The day count convention to use for the curve.",
         "calendar": "The calendar to use for the curve.",
         "traits": "The interpolation traits: 'LogDiscount', 'ForwardRate', 'ZeroRate'.",
@@ -61,7 +61,7 @@ QL_INTERPOLATED_CURVES = {
 )
 def qlInterpolatedYieldCurve(
     dates: xlo.Array(dims=1),
-    discounts: xlo.Array(dims=1),
+    values: xlo.Array(dims=1),
     daycounter: qDayCounter,
     calendar: qCalendar,
     traits: str,
@@ -73,7 +73,7 @@ def qlInterpolatedYieldCurve(
     if mixed_interpolation_behavior or mixed_interpolation_n:
         raise ValueError("Mixed interpolation not implemented.")
     _dates = _to_date_list(dates)
-    _discounts = to_float_list(discounts)
+    _values = to_float_list(values)
     #
     traits = str(traits).strip().upper()
     if traits not in QL_INTERPOLATION_TRAITS:
@@ -92,7 +92,7 @@ def qlInterpolatedYieldCurve(
         raise ValueError(
             f"Interpolation method not implemented for traits '{traits}' and interpolator '{interpolator}'."
         )
-    yts = curve(_dates, _discounts, daycounter, calendar)
+    yts = curve(_dates, _values, daycounter, calendar)
     return ql.YieldTermStructureHandle(yts)
 
 
