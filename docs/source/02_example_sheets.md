@@ -2,7 +2,7 @@
 
 This section lists example sheets which are setup as part of the package testing framework.
 
-An illustrative example of QuantLib in Excel is provided via the [interest rate derivatives sheet](https://github.com/frame-consulting/QuantLibXlOil/tree/main//workbooktests/workbooks/extras/example_interest_rate_derivatives.xlsx).
+An illustrative example of QuantLib in Excel is provided via the [interest rate derivatives sheet](https://github.com/frame-consulting/QuantLibXlOil/blob/main/tests/workbooktests/workbooks/extras/example_interest_rate_derivatives.xlsx). You can download the sheet using the *Download raw file* icon.
 
 ![image](./example_interest_rate_derivatives.png)
 

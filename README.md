@@ -81,11 +81,11 @@ Now, you are all set for QuantLib in Excel.
 
 ## Examples
 
-An illustrative example of QuantLib in Excel is provided via the [interest rate derivatives sheet](./tests/workbooktests/workbooks/extras/example_interest_rate_derivatives.xlsx).
+An illustrative example of QuantLib in Excel is provided via the [interest rate derivatives sheet](./tests/workbooktests/workbooks/extras/example_interest_rate_derivatives.xlsx). You can download the sheet using the *Download raw file* icon.
 
 ![image](./docs/source/example_interest_rate_derivatives.png)
 
-A comprehensive list of examples are specified in the [workbook test sheets](./tests/workbooktests/).
+A comprehensive list of examples are specified in the [workbook test sheets](./tests/workbooktests/workbooks/).
 
 ## Versioning
 
