@@ -79,6 +79,14 @@ Test the QuantLib functions by entering `=qlVersion()` in an empty cell. This sh
 
 Now, you are all set for QuantLib in Excel.
 
+## Examples
+
+An illustrative example of QuantLib in Excel is provided via the [interest rate derivatives sheet](./tests/workbooktests/workbooks/extras/example_interest_rate_derivatives.xlsx).
+
+![image](./docs/source/example_interest_rate_derivatives.png)
+
+A comprehensive list of examples are specified in the [workbook test sheets](./tests/workbooktests/).
+
 ## Versioning
 
 Current QuantLibXlOil version is specified [here](./src/quantlib_xloil/__about__.py).
