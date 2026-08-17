@@ -87,6 +87,39 @@ An illustrative example of QuantLib in Excel is provided via the [interest rate 
 
 A comprehensive list of examples are specified in the [workbook test sheets](./tests/workbooktests/workbooks/).
 
+## QuantLib Functions and Function Arguments
+
+A list of available QuantLib functions and links to their implementation can be queried in Excel via `=qlListFunctions()`.
+
+![image](./docs/source/qlListFunctions.png)
+
+Many QuantLib function arguments encode QuantLib enumerations or *enumerated* classes. Examples are business day conventions and day counters.
+
+QuantLib enumerations and *enumerated* classes are represented as strings organised via dictionaries in QuantLibXlOil. A list of dictionaries and links to their implementation can be viewed in Excel via `=qlListDictionaries()`.
+
+![image](./docs/source/qlListDictionaries.png)
+
+For each dictionary, the entries can be inspected via `qlListDictionaryEntries(...)`
+
+![image](./docs/source/qlListDictionaryEntries.png)
+
+For above `QL_DAYCOUNTER` example, some string keys are mapped directly to QuantLib classes. Other classes, that need additional parameters to construct objects, are wrapped in lambda expressions which do not give a sensible output here. Please check the source code to see the actual QuantLib implementation.
+
+
+## QuantLib Objects in Excel
+
+Return values of QuantLib functions can be of basic type (string, integer, float and boolean) or complex type. Results of basic types are represented directly in the Excel cell.
+
+Results which are list-like objects are unpacked and the elements of the list are shown in the Excel cells.
+
+Complex result types are, for example, QuantLib classes. Such results are stored in an xlOil object repository. The return value is a string with a reference to the QuantLib object in the repository.
+
+![image](./docs/source/qlEstr.png)
+
+xlOil uses a particular [methodology](https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#cached-objects) to compose and resolve the object references. In particular, the Mandarin xīn symbol 欣 (*happy, joyful*) is used to identify cache strings.
+
+Such cache strings can be passed as arguments back in QuantLib functions. xlOil resolves the corresponding object and passes it to the function in Python.
+
 ## Versioning
 
 Current QuantLibXlOil version is specified [here](./src/quantlib_xloil/__about__.py).
