@@ -21,7 +21,7 @@ jobs:
           pip install sphinx furo myst_parser
       - name: Generate function index
         run: |
-          python docs/tools/make_function_indxed.py > docs/source/03_api_reference.md
+          python docs/tools/make_function_indxed.py > docs/source/50_api_reference.md
       - name: Sphinx build
         run: |
           sphinx-build docs/source _build

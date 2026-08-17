@@ -7,7 +7,7 @@ REM auto-generate function index
 echo.
 echo.Generating function index from ../src/quantlib_xloil
 
-python tools\make_function_indxed.py ../src/quantlib_xloil > source/03_api_reference.md
+python tools\make_function_indxed.py ../src/quantlib_xloil > source/50_api_reference.md
 
 echo.Done.
 echo.

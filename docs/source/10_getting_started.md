@@ -98,3 +98,5 @@ Complex result types are, for example, QuantLib classes. Such results are stored
 xlOil uses a particular [methodology](https://xloil.readthedocs.io/en/stable/xlOil_Python/TypeConversion.html#cached-objects) to compose and resolve the object references. In particular, the Mandarin xīn symbol 欣 (*happy, joyful*) is used to identify cache strings.
 
 Such cache strings can be passed as arguments back in QuantLib functions. xlOil resolves the corresponding object and passes it to the function in Python.
+
+An approach for more user-friendly object reference names is documented in the [QuantLibXlOil Extras](./40_quantlib_xloil_extras.md#alias-repository) section.
