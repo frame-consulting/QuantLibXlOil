@@ -10,6 +10,6 @@ An illustrative example of QuantLib in Excel is provided via the [interest rate 
 
 ## Workbook Test Sheets
 
-A comprehensive list of examples are specified in the [workbook test sheets](https://github.com/frame-consulting/QuantLibXlOil/tree/main/tests/workbooktests/workbooks).
+A comprehensive list of examples are specified in the [workbook test sheets](https://github.com/frame-consulting/QuantLibXlOil/tree/main/tests/workbooktests/workbooks) folder.
 
 ![image](./workbook_test_sheets.png)

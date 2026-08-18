@@ -222,3 +222,6 @@ __marimo__/
 
 # a clone of the QuantLib-SWIG repository
 .qlswig
+
+# temp files and tests
+.sandbox
