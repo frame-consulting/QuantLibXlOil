@@ -1,6 +1,17 @@
 import QuantLib as ql
 
 from quantlib_xloil.date import (
+    qlECBCode,
+    qlECBDate,
+    qlECBDateFromCode,
+    qlECBIsECBCode,
+    qlECBIsECBDate,
+    qlECBNextCode,
+    qlECBNextCodeFromCode,
+    qlECBNextDate,
+    qlECBNextDateFromCode,
+    qlECBNextDates,
+    qlECBNextDatesFromCode,
     qDate,
     qFrequency,
     qPeriod,
@@ -196,3 +207,29 @@ def test_qlDateParserParseISO():
     date_str = "2020-01-15"
     date = qlDateParserParseISO(date_str)
     assert date == ql.Date(15, 1, 2020)
+
+
+def test_qlECB_wrappers():
+    ecb_date = qlECBDate(1, 2024)
+
+    assert qlECBIsECBDate(ecb_date) is True
+
+    code = qlECBCode(ecb_date)
+    assert code == "JAN24"
+    assert qlECBIsECBCode(code) is True
+
+    from_code = qlECBDateFromCode("JUN24")
+    assert from_code == ql.Date(12, 6, 2024)
+
+    # Keep references in the known ECB schedule window to avoid runtime errors.
+    next_date = qlECBNextDate(ql.Date(1, 1, 2024))
+    assert qlECBIsECBDate(next_date) is True
+    assert qlECBNextDateFromCode("JAN24") == ql.Date(13, 3, 2024)
+
+    next_dates = qlECBNextDates(ql.Date(1, 1, 2024))
+    next_dates_from_code = qlECBNextDatesFromCode("JAN24")
+    assert len(next_dates) > 0
+    assert len(next_dates_from_code) > 0
+
+    assert qlECBNextCode(ql.Date(1, 1, 2024)) == "JAN24"
+    assert qlECBNextCodeFromCode("JAN24") == "FEB24"

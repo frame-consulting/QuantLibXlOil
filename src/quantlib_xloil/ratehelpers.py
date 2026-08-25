@@ -1247,6 +1247,46 @@ def qlMultipleResetsSwapRateHelper(
 
 
 @xlo.func(
+    help="Create a QuantLib BMASwapRateHelper object.",
+    args={
+        "libor_fraction": "LIBOR fraction quote handle.",
+        "tenor": "The tenor period.",
+        "settlement_days": "Settlement days.",
+        "calendar": "Calendar used for date adjustments.",
+        "bma_period": "BMA index period.",
+        "bma_convention": "Business-day convention for the BMA leg.",
+        "bma_day_count": "Day-count convention for the BMA leg.",
+        "bma_index": "BMA index.",
+        "ibor_index": "IBOR index.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapRateHelper(
+    libor_fraction: qQuoteHandle,
+    tenor: qPeriod,
+    settlement_days: int,
+    calendar: qCalendar,
+    bma_period: qPeriod,
+    bma_convention: qBusinessDayConvention,
+    bma_day_count: qDayCounter,
+    bma_index: ql.BMAIndex,
+    ibor_index: ql.IborIndex,
+    trigger=None,
+) -> ql.BMASwapRateHelper:
+    return ql.BMASwapRateHelper(
+        libor_fraction,
+        tenor,
+        settlement_days,
+        calendar,
+        bma_period,
+        bma_convention,
+        bma_day_count,
+        bma_index,
+        ibor_index,
+    )
+
+
+@xlo.func(
     help="Create a QuantLib ConstNotionalCrossCurrencySwapRateHelper object for cross-currency swap rate curve building.",
     args={
         "fixed_rate": "The fixed rate quote handle for the cross-currency swap.",

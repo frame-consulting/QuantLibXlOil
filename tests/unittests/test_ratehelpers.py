@@ -2,6 +2,7 @@ import QuantLib as ql
 import pytest
 
 from quantlib_xloil.ratehelpers import (
+    qlBMASwapRateHelper,
     qFuturesType,
     qPillarChoice,
     qQuoteHandle,
@@ -47,7 +48,12 @@ from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
 from quantlib_xloil.cashflows import qRateAveragingType
 from quantlib_xloil.date import qFrequency, qlDate
 from quantlib_xloil.daycounters import qlDayCounter
-from quantlib_xloil.indexes import qlSofr, qlUSDLibor, qlUsdLiborSwapIsdaFixAm
+from quantlib_xloil.indexes import (
+    qlBMAIndex,
+    qlSofr,
+    qlUSDLibor,
+    qlUsdLiborSwapIsdaFixAm,
+)
 from quantlib_xloil.scheduler import qDateGenerationRule
 from quantlib_xloil.termstructures import qCompounding, qlFlatForward
 
@@ -271,6 +277,23 @@ def test_multiple_resets_swap_rate_helper_constructs():
     )
 
     assert isinstance(helper, ql.MultipleResetsSwapRateHelper)
+
+
+def test_bma_swap_rate_helper_constructs():
+    _set_eval_date()
+    helper = qlBMASwapRateHelper(
+        ql.QuoteHandle(ql.SimpleQuote(0.25)),
+        ql.Period("5Y"),
+        2,
+        qlCalendar("TARGET"),
+        ql.Period("3M"),
+        qBusinessDayConvention.__wrapped__("MODIFIEDFOLLOWING"),
+        qlDayCounter("ACTUALACTUAL"),
+        qlBMAIndex(),
+        qlUSDLibor(ql.Period("3M")),
+    )
+
+    assert isinstance(helper, ql.BMASwapRateHelper)
 
 
 def test_overnight_and_sofr_future_helpers():

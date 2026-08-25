@@ -64,3 +64,13 @@ def test_qlCurrency_create_custom_currency():
     assert custom.numericCode() == 999
     assert custom.fractionsPerUnit() == 100
     assert isinstance(custom.rounding(), ql.Rounding)
+
+
+def test_qCurrency_new_quantlib_143_currencies():
+    mkd = qCurrency.__wrapped__("MKD")
+    uzs = qCurrency.__wrapped__("UZS")
+
+    assert isinstance(mkd, ql.Currency)
+    assert isinstance(uzs, ql.Currency)
+    assert mkd.code() == "MKD"
+    assert uzs.code() == "UZS"

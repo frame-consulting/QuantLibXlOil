@@ -338,6 +338,132 @@ def qlDateNthWeekday(
 
 
 @xlo.func(
+    help="Return whether a date is an ECB meeting date.",
+    args={
+        "date": "QuantLib Date.",
+    },
+)
+def qlECBIsECBDate(date: qDate, trigger=None) -> bool:
+    return ql.ECB.isECBdate(date)
+
+
+@xlo.func(
+    help="Return whether a string is a valid ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+    },
+)
+def qlECBIsECBCode(ecb_code: str, trigger=None) -> bool:
+    return ql.ECB.isECBcode(ecb_code)
+
+
+@xlo.func(
+    help="Return ECB date code for a QuantLib Date.",
+    args={
+        "date": "QuantLib Date.",
+    },
+)
+def qlECBCode(date: qDate, trigger=None) -> str:
+    return ql.ECB.code(date)
+
+
+@xlo.func(
+    help="Return ECB date for a month and year.",
+    args={
+        "month": "Month number.",
+        "year": "Year.",
+    },
+)
+def qlECBDate(month: int, year: int, trigger=None) -> ql.Date:
+    return ql.ECB.date(month, year)
+
+
+@xlo.func(
+    help="Return ECB date for an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+        "reference_date": "Optional reference date.",
+    },
+)
+def qlECBDateFromCode(
+    ecb_code: str,
+    reference_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.Date:
+    return ql.ECB.date(ecb_code, reference_date)
+
+
+@xlo.func(
+    help="Return next ECB date from a reference date.",
+    args={
+        "date": "Optional reference date.",
+    },
+)
+def qlECBNextDate(date: qDate = ql.Date(), trigger=None) -> ql.Date:
+    return ql.ECB.nextDate(date)
+
+
+@xlo.func(
+    help="Return next ECB date from an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+        "reference_date": "Optional reference date.",
+    },
+)
+def qlECBNextDateFromCode(
+    ecb_code: str,
+    reference_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.Date:
+    return ql.ECB.nextDate(ecb_code, reference_date)
+
+
+@xlo.func(
+    help="Return all next ECB dates from a reference date.",
+    args={
+        "date": "Optional reference date.",
+    },
+)
+def qlECBNextDates(date: qDate = ql.Date(), trigger=None) -> list:
+    return list(ql.ECB.nextDates(date))
+
+
+@xlo.func(
+    help="Return all next ECB dates from an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+        "reference_date": "Optional reference date.",
+    },
+)
+def qlECBNextDatesFromCode(
+    ecb_code: str,
+    reference_date: qDate = ql.Date(),
+    trigger=None,
+) -> list:
+    return list(ql.ECB.nextDates(ecb_code, reference_date))
+
+
+@xlo.func(
+    help="Return next ECB date code from a reference date.",
+    args={
+        "date": "Optional reference date.",
+    },
+)
+def qlECBNextCode(date: qDate = ql.Date(), trigger=None) -> str:
+    return ql.ECB.nextCode(date)
+
+
+@xlo.func(
+    help="Return next ECB date code from an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+    },
+)
+def qlECBNextCodeFromCode(ecb_code: str, trigger=None) -> str:
+    return ql.ECB.nextCode(ecb_code)
+
+
+@xlo.func(
     help="Parse a date string using a specified format.",
     args={
         "date_string": "The date string to parse.",
