@@ -1073,6 +1073,10 @@ def qlOvernightIndexedCoupon(
     lockout_days: int = 0,
     apply_observation_shift: bool = False,
     compound_spread: bool = False,
+    rate_computation_start_date: qDate = ql.Date(),
+    rate_computation_end_date: qDate = ql.Date(),
+    ex_coupon_date: qDate = ql.Date(),
+    rounding_precision: int = ql.nullInt(),
     trigger=None,
 ) -> ql.OvernightIndexedCoupon:
     return ql.OvernightIndexedCoupon(
@@ -1092,6 +1096,10 @@ def qlOvernightIndexedCoupon(
         lockout_days,
         apply_observation_shift,
         compound_spread,
+        rate_computation_start_date,
+        rate_computation_end_date,
+        ex_coupon_date,
+        rounding_precision,
     )
 
 
@@ -1541,6 +1549,19 @@ def qlOvernightLeg(
     spreads: xlo.Array(dims=1) = None,
     telescopic_value_dates: bool = False,
     averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    payment_calendar: qCalendar = ql.NullCalendar(),
+    payment_lag: int = 0,
+    lookback_days: int = ql.nullInt(),
+    lockout_days: int = 0,
+    apply_observation_shift: bool = False,
+    compound_spread_daily: bool = False,
+    caps: xlo.Array(dims=1) = None,
+    floors: xlo.Array(dims=1) = None,
+    daily_cap_floor: bool = False,
+    is_in_arrears: bool = True,
+    naked_option: bool = False,
+    payment_dates: xlo.Array(dims=1) = None,
+    rounding_precision: int = ql.nullInt(),
     trigger=None,
 ):
     return ql.OvernightLeg(
@@ -1553,6 +1574,19 @@ def qlOvernightLeg(
         to_float_list(spreads),
         telescopic_value_dates,
         averaging_method,
+        payment_calendar,
+        payment_lag,
+        lookback_days,
+        lockout_days,
+        apply_observation_shift,
+        compound_spread_daily,
+        to_float_list(caps),
+        to_float_list(floors),
+        daily_cap_floor,
+        is_in_arrears,
+        naked_option,
+        [] if payment_dates is None else _to_date_list(payment_dates),
+        rounding_precision,
     )
 
 

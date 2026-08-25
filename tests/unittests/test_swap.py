@@ -6,6 +6,13 @@ from quantlib_xloil.date import qlDate
 from quantlib_xloil.swap import (
     qSwapType,
     qlAsOvernightSwapIndex,
+    qlConstNotionalCrossCurrencyBasisSwap,
+    qlConstNotionalCrossCurrencyFixedVsFloatingSwap,
+    qlConstNotionalCrossCurrencySwap,
+    qlConstNotionalCrossCurrencySwapInCcyLegBPS,
+    qlConstNotionalCrossCurrencySwapInCcyLegNPV,
+    qlConstNotionalCrossCurrencySwapLegCurrency,
+    qlDiscountingConstNotionalCrossCurrencySwapEngine,
     qlEquityTotalReturnSwap,
     qlEquityTotalReturnSwap2,
     qlEquityTotalReturnSwapDayCounter,
@@ -137,6 +144,82 @@ def test_qlswap_and_qlswap2_leg_accessors():
         assert qlSwapStartDate(s) <= qlSwapMaturityDate(s)
         assert qlSwapPayer(s, 0) is True
         assert qlSwapPayer(s, 1) is False
+
+
+def test_const_notional_cross_currency_swap_smoke():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        fixed_schedule = _schedule(eval_date, qlDate(2029, 1, 2), ql.Period("1Y"))
+        float_schedule = _schedule(eval_date, qlDate(2029, 1, 2), ql.Period("6M"))
+
+        discount_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        forecast_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.021, ql.Actual365Fixed())
+        )
+        eur = ql.EURCurrency()
+        usd = ql.USDCurrency()
+        ibor = ql.USDLibor(ql.Period("6M"), forecast_curve)
+        spot_fx = ql.SimpleQuote(1.10)
+
+        swap = qlConstNotionalCrossCurrencyFixedVsFloatingSwap(
+            qSwapType.__wrapped__("PAYER"),
+            1_000_000.0,
+            eur,
+            fixed_schedule,
+            0.025,
+            ql.Actual365Fixed(),
+            ql.Following,
+            0,
+            ql.NullCalendar(),
+            1_000_000.0,
+            usd,
+            float_schedule,
+            ibor,
+            0.0,
+            ql.Following,
+            0,
+            ql.NullCalendar(),
+        )
+
+        assert isinstance(swap, ql.ConstNotionalCrossCurrencyFixedVsFloatingSwap)
+        assert qlConstNotionalCrossCurrencySwapLegCurrency(swap, 0) == eur
+
+        engine = qlDiscountingConstNotionalCrossCurrencySwapEngine(
+            eur,
+            discount_curve,
+            usd,
+            forecast_curve,
+            spot_fx,
+        )
+        swap.setPricingEngine(engine)
+
+        with pytest.raises(RuntimeError, match="fixing|Missing|null pricing engine"):
+            qlConstNotionalCrossCurrencySwapInCcyLegNPV(swap, 0)
+        with pytest.raises(RuntimeError, match="fixing|Missing|null pricing engine"):
+            qlConstNotionalCrossCurrencySwapInCcyLegBPS(swap, 0)
+
+        basis_swap = qlConstNotionalCrossCurrencyBasisSwap(
+            1_000_000.0,
+            eur,
+            fixed_schedule,
+            ibor,
+            0.001,
+            1.0,
+            1_000_000.0,
+            usd,
+            float_schedule,
+            ibor,
+            0.001,
+            1.0,
+        )
+        assert isinstance(basis_swap, ql.ConstNotionalCrossCurrencyBasisSwap)
+
+        assert isinstance(engine, ql.DiscountingConstNotionalCrossCurrencySwapEngine)
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
 
 
 def test_vanilla_swap_pricing_and_wrapper_parity():

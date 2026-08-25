@@ -2,6 +2,9 @@ import pytest
 import QuantLib as ql
 
 from quantlib_xloil.volatilities import (
+    qlBlackVolTermStructureAtmLevel,
+    qlBlackVolTermStructureSmileSection,
+    qlBlackVolTermStructureSmileSectionFromTime,
     qlBlackConstantVol,
     qlBlackVolTermStructureBlackForwardVariance,
     qlBlackVolTermStructureBlackForwardVarianceFromTime,
@@ -131,6 +134,23 @@ def test_qlBlackVolTermStructure_forward_variance_matches_elapsed_time():
     assert forward_variance_by_date == pytest.approx(
         (volatility * volatility) * expected_forward_t
     )
+
+
+def test_qlBlackVolTermStructure_smile_section_and_atm_level():
+    handle = _constant_vol_handle(0.20)
+
+    smile_by_date = qlBlackVolTermStructureSmileSection(
+        handle, maturity_date=qlDate(2024, 7, 2)
+    )
+    smile_by_time = qlBlackVolTermStructureSmileSectionFromTime(
+        handle, maturity_time=0.5
+    )
+
+    assert isinstance(smile_by_date, ql.SmileSection)
+    assert isinstance(smile_by_time, ql.SmileSection)
+
+    atm_level = qlBlackVolTermStructureAtmLevel(handle, maturity_time=0.5)
+    assert atm_level is None
 
 
 def test_qlLocalVolTermStructure_interface():
