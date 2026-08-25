@@ -20,7 +20,7 @@ def test_initialise_lists_discovers_dictionaries_and_functions():
     assert inspect_code.QL_DICTIONARIES["QL_CALENDAR"].startswith(
         inspect_code._url_to_blob
     )
-    assert inspect_code.QL_FUNCTIONS["qlCalendar"].endswith("calendars.py#L179")
+    assert inspect_code.QL_FUNCTIONS["qlCalendar"].endswith("calendars.py#L180")
 
 
 def test_initialise_lists_is_idempotent():
