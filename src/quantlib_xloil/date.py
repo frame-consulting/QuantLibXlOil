@@ -276,6 +276,7 @@ def qlDateTodaysDate(trigger=None) -> ql.Date:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateStartOfMonth(date: qDate, trigger=None) -> ql.Date:
     return ql.Date.startOfMonth(date)
@@ -286,6 +287,7 @@ def qlDateStartOfMonth(date: qDate, trigger=None) -> ql.Date:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateEndOfMonth(date: qDate, trigger=None) -> ql.Date:
     return ql.Date.endOfMonth(date)
@@ -296,6 +298,7 @@ def qlDateEndOfMonth(date: qDate, trigger=None) -> ql.Date:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateIsStartOfMonth(date: qDate, trigger=None) -> bool:
     return ql.Date.isStartOfMonth(date)
@@ -306,6 +309,7 @@ def qlDateIsStartOfMonth(date: qDate, trigger=None) -> bool:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateIsEndOfMonth(date: qDate, trigger=None) -> bool:
     return ql.Date.isEndOfMonth(date)
@@ -317,6 +321,7 @@ def qlDateIsEndOfMonth(date: qDate, trigger=None) -> bool:
         "date": "QuantLib Date.",
         "weekday": "The weekday.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateNextWeekday(date: qDate, weekday: qWeekday, trigger=None) -> ql.Date:
     return ql.Date.nextWeekday(date, weekday)
@@ -330,6 +335,7 @@ def qlDateNextWeekday(date: qDate, weekday: qWeekday, trigger=None) -> ql.Date:
         "month": "The month.",
         "year": "The year.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateNthWeekday(
     n: int, weekday: qWeekday, month: int, year: int, trigger=None
@@ -342,6 +348,7 @@ def qlDateNthWeekday(
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBIsECBDate(date: qDate, trigger=None) -> bool:
     return ql.ECB.isECBdate(date)
@@ -352,6 +359,7 @@ def qlECBIsECBDate(date: qDate, trigger=None) -> bool:
     args={
         "ecb_code": "ECB date code string.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBIsECBCode(ecb_code: str, trigger=None) -> bool:
     return ql.ECB.isECBcode(ecb_code)
@@ -362,6 +370,7 @@ def qlECBIsECBCode(ecb_code: str, trigger=None) -> bool:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBCode(date: qDate, trigger=None) -> str:
     return ql.ECB.code(date)
@@ -373,6 +382,7 @@ def qlECBCode(date: qDate, trigger=None) -> str:
         "month": "Month number.",
         "year": "Year.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBDate(month: int, year: int, trigger=None) -> ql.Date:
     return ql.ECB.date(month, year)
@@ -384,6 +394,7 @@ def qlECBDate(month: int, year: int, trigger=None) -> ql.Date:
         "ecb_code": "ECB date code string.",
         "reference_date": "Optional reference date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBDateFromCode(
     ecb_code: str,
@@ -398,6 +409,7 @@ def qlECBDateFromCode(
     args={
         "date": "Optional reference date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBNextDate(date: qDate = ql.Date(), trigger=None) -> ql.Date:
     return ql.ECB.nextDate(date)
@@ -409,6 +421,7 @@ def qlECBNextDate(date: qDate = ql.Date(), trigger=None) -> ql.Date:
         "ecb_code": "ECB date code string.",
         "reference_date": "Optional reference date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBNextDateFromCode(
     ecb_code: str,
@@ -423,6 +436,7 @@ def qlECBNextDateFromCode(
     args={
         "date": "Optional reference date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBNextDates(date: qDate = ql.Date(), trigger=None) -> list:
     return list(ql.ECB.nextDates(date))
@@ -434,6 +448,7 @@ def qlECBNextDates(date: qDate = ql.Date(), trigger=None) -> list:
         "ecb_code": "ECB date code string.",
         "reference_date": "Optional reference date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBNextDatesFromCode(
     ecb_code: str,
@@ -448,6 +463,7 @@ def qlECBNextDatesFromCode(
     args={
         "date": "Optional reference date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBNextCode(date: qDate = ql.Date(), trigger=None) -> str:
     return ql.ECB.nextCode(date)
@@ -458,6 +474,7 @@ def qlECBNextCode(date: qDate = ql.Date(), trigger=None) -> str:
     args={
         "ecb_code": "ECB date code string.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlECBNextCodeFromCode(ecb_code: str, trigger=None) -> str:
     return ql.ECB.nextCode(ecb_code)
@@ -469,6 +486,7 @@ def qlECBNextCodeFromCode(ecb_code: str, trigger=None) -> str:
         "date_string": "The date string to parse.",
         "format_string": 'The format string (e.g. "YYYY-MM-DD").',
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateParserParseFormatted(
     date_string: str, format_string: str, trigger=None
@@ -481,6 +499,7 @@ def qlDateParserParseFormatted(
     args={
         "date_string": "The date string to parse.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateParserParseISO(date_string: str, trigger=None) -> ql.Date:
     return ql.DateParser.parseISO(date_string)
@@ -491,6 +510,7 @@ def qlDateParserParseISO(date_string: str, trigger=None) -> ql.Date:
     args={
         "period_string": "The period string to parse.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlPeriodParserParse(period_string: str, trigger=None) -> ql.Period:
     return ql.PeriodParser.parse(period_string)
