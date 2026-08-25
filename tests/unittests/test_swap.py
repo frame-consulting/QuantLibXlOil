@@ -162,7 +162,7 @@ def test_const_notional_cross_currency_swap_smoke():
         eur = ql.EURCurrency()
         usd = ql.USDCurrency()
         ibor = ql.USDLibor(ql.Period("6M"), forecast_curve)
-        spot_fx = ql.SimpleQuote(1.10)
+        spot_fx = ql.QuoteHandle(ql.SimpleQuote(1.10))
 
         swap = qlConstNotionalCrossCurrencyFixedVsFloatingSwap(
             qSwapType.__wrapped__("PAYER"),

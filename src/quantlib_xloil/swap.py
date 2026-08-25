@@ -764,34 +764,27 @@ def qlDiscountingConstNotionalCrossCurrencySwapEngine(
     domestic_curve: ql.YieldTermStructureHandle,
     foreign_currency: qCurrency,
     foreign_curve: ql.YieldTermStructureHandle,
-    spot_fx: ql.Quote | ql.QuoteHandle,
+    spot_fx: ql.QuoteHandle,
     include_settlement_date_flows: Optional[bool] = None,
     settlement_date: qDate = ql.Date(),
     npv_date: qDate = ql.Date(),
     spot_fx_settle_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.DiscountingConstNotionalCrossCurrencySwapEngine:
-    if isinstance(spot_fx, ql.QuoteHandle):
-        spot_fx_handle = spot_fx
-    elif isinstance(spot_fx, ql.Quote):
-        spot_fx_handle = ql.QuoteHandle(spot_fx)
-    else:
-        spot_fx_handle = ql.QuoteHandle(ql.SimpleQuote(float(spot_fx)))
-
     if include_settlement_date_flows is None:
         return ql.DiscountingConstNotionalCrossCurrencySwapEngine(
             domestic_currency,
             domestic_curve,
             foreign_currency,
             foreign_curve,
-            spot_fx_handle,
+            spot_fx,
         )
     return ql.DiscountingConstNotionalCrossCurrencySwapEngine(
         domestic_currency,
         domestic_curve,
         foreign_currency,
         foreign_curve,
-        spot_fx_handle,
+        spot_fx,
         include_settlement_date_flows,
         settlement_date,
         npv_date,
