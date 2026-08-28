@@ -14,6 +14,7 @@ from quantlib_xloil.cliquetoptions import *
 from quantlib_xloil.credit import *
 from quantlib_xloil.creditdefaultswap import *
 from quantlib_xloil.currencies import *
+from quantlib_xloil.convertiblebonds import *
 from quantlib_xloil.date import *
 from quantlib_xloil.daycounters import *
 from quantlib_xloil.defaultprobability import *
