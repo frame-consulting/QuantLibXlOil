@@ -8,10 +8,10 @@ from .utilities import (
     UNKNOWN_KEY,
     UNKNOWN_VALUE,
     enum_value,
+    to_float_list,
     to_float_matrix,
     to_object_list,
 )
-
 
 QL_OPERATOR_SPLITTING_SPREAD_ENGINE_ORDER = {
     "FIRST": ql.OperatorSplittingSpreadEngine.First,
@@ -58,7 +58,7 @@ def qlMaxBasketPayoff(payoff: ql.Payoff, trigger=None) -> ql.MaxBasketPayoff:
 def qlAverageBasketPayoff(
     payoff: ql.Payoff, weights: xlo.Array(dims=1), trigger=None
 ) -> ql.AverageBasketPayoff:
-    return ql.AverageBasketPayoff(payoff, weights)
+    return ql.AverageBasketPayoff(payoff, to_float_list(weights))
 
 
 @xlo.func(
@@ -113,14 +113,9 @@ def qlMCEuropeanBasketEngine(
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
-    if traits == "pseudorandom":
-        cls = ql.MCPREuropeanBasketEngine
-    elif traits == "lowdiscrepancy":
-        cls = ql.MCLDEuropeanBasketEngine
-    else:
-        raise RuntimeError(f"unknown MC traits: {traits}")
-    return cls(
+    return ql.MCEuropeanBasketEngine(
         process,
+        traits,
         time_steps,
         time_steps_per_year,
         brownian_bridge,
@@ -167,14 +162,9 @@ def qlMCAmericanBasketEngine(
     polynom_type: int = ql.LsmBasisSystem.Monomial,
     trigger=None,
 ) -> ql.PricingEngine:
-    if traits == "pseudorandom":
-        cls = ql.MCPRAmericanBasketEngine
-    elif traits == "lowdiscrepancy":
-        cls = ql.MCLDAmericanBasketEngine
-    else:
-        raise RuntimeError(f"unknown MC traits: {traits}")
-    return cls(
+    return ql.MCAmericanBasketEngine(
         process,
+        traits,
         time_steps,
         time_steps_per_year,
         brownian_bridge,
@@ -306,13 +296,6 @@ def qlFd2dBlackScholesVanillaEngine(
     )
 
 
-def _processes_and_correlation(processes, correlation):
-    return (
-        to_object_list(processes, ql.GeneralizedBlackScholesProcess),
-        ql.Matrix(to_float_matrix(correlation)),
-    )
-
-
 @xlo.func(
     help="Create a QuantLib ChoiBasketEngine object.",
     args={
@@ -327,17 +310,18 @@ def _processes_and_correlation(processes, correlation):
 )
 def qlChoiBasketEngine(
     processes: xlo.Array(dims=1),
-    correlation: xlo.Array,
+    correlation: xlo.Array(dims=2),
     lambda_: float = 10.0,
     max_nr_integration_steps: int = ql.nullInt(),
     calc_fwd_delta: bool = False,
     control_variate: bool = False,
     trigger=None,
 ) -> ql.ChoiBasketEngine:
-    processes, correlation = _processes_and_correlation(processes, correlation)
+    processes = to_object_list(processes, ql.GeneralizedBlackScholesProcess)
+    correlation = ql.Matrix(to_float_matrix(correlation))
     return ql.ChoiBasketEngine(
         processes,
-        correlation,
+        ql.Matrix(to_float_matrix(correlation)),
         lambda_,
         max_nr_integration_steps,
         calc_fwd_delta,
@@ -354,9 +338,10 @@ def qlChoiBasketEngine(
     group=EXCEL_GROUP_NAME,
 )
 def qlDengLiZhouBasketEngine(
-    processes: xlo.Array(dims=1), correlation: xlo.Array, trigger=None
+    processes: xlo.Array(dims=1), correlation: xlo.Array(dims=2), trigger=None
 ) -> ql.DengLiZhouBasketEngine:
-    processes, correlation = _processes_and_correlation(processes, correlation)
+    processes = to_object_list(processes, ql.GeneralizedBlackScholesProcess)
+    correlation = ql.Matrix(to_float_matrix(correlation))
     return ql.DengLiZhouBasketEngine(processes, correlation)
 
 
@@ -374,14 +359,15 @@ def qlDengLiZhouBasketEngine(
 )
 def qlFdndimBlackScholesVanillaEngine(
     processes: xlo.Array(dims=1),
-    correlation: xlo.Array,
+    correlation: xlo.Array(dims=2),
     x_grid: int,
     t_grid: int = 50,
     damping_steps: int = 0,
     scheme_desc: ql.FdmSchemeDesc = ql.FdmSchemeDesc.Hundsdorfer(),
     trigger=None,
 ) -> ql.FdndimBlackScholesVanillaEngine:
-    processes, correlation = _processes_and_correlation(processes, correlation)
+    processes = to_object_list(processes, ql.GeneralizedBlackScholesProcess)
+    correlation = ql.Matrix(to_float_matrix(correlation))
     return ql.FdndimBlackScholesVanillaEngine(
         processes, correlation, x_grid, t_grid, damping_steps, scheme_desc
     )
@@ -431,14 +417,9 @@ def qlMCEverestEngine(
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
-    if traits == "pseudorandom":
-        cls = ql.MCPREverestEngine
-    elif traits == "lowdiscrepancy":
-        cls = ql.MCLDEverestEngine
-    else:
-        raise RuntimeError(f"unknown MC traits: {traits}")
-    return cls(
+    return ql.MCEverestEngine(
         process,
+        traits,
         time_steps,
         time_steps_per_year,
         brownian_bridge,
@@ -489,14 +470,9 @@ def qlMCHimalayaEngine(
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:
-    if traits == "pseudorandom":
-        cls = ql.MCPRHimalayaEngine
-    elif traits == "lowdiscrepancy":
-        cls = ql.MCLDHimalayaEngine
-    else:
-        raise RuntimeError(f"unknown MC traits: {traits}")
-    return cls(
+    return ql.MCHimalayaEngine(
         process,
+        traits,
         brownian_bridge,
         antithetic_variate,
         required_samples,
