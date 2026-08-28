@@ -23,6 +23,7 @@ from quantlib_xloil.gaussian1dmodel import *
 from quantlib_xloil.grid import *
 from quantlib_xloil.interpolatedyieldcurves import *
 from quantlib_xloil.indexes import *
+from quantlib_xloil.inflation import *
 from quantlib_xloil.instruments import *
 from quantlib_xloil.localvolatilities import *
 from quantlib_xloil.options import *
