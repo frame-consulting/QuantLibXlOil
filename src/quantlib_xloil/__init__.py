@@ -10,6 +10,7 @@ from quantlib_xloil.calibratedmodel import *
 from quantlib_xloil.calibrationhelpers import *
 from quantlib_xloil.capfloor import *
 from quantlib_xloil.cashflows import *
+from quantlib_xloil.cliquetoptions import *
 from quantlib_xloil.credit import *
 from quantlib_xloil.creditdefaultswap import *
 from quantlib_xloil.currencies import *
