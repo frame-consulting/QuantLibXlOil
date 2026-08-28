@@ -145,32 +145,125 @@ def test_basket_option_pricing_with_kirk_engine():
     assert qlInstrumentNPV(option) > 0.0
 
 
-def test_everest_and_himalaya_option_wrappers():
+def test_basket_option_pricing_with_monte_carlo_engine():
+    ql.Settings.instance().evaluationDate = qlDate(2024, 1, 2)
+    _, _, process_array = _process_array()
+    payoff = qlAverageBasketPayoff(
+        qlPlainVanillaPayoff(ql.Option.Call, 90.0), [0.5, 0.5]
+    )
+    option = qlBasketOption(payoff, qlEuropeanExercise(qlDate(2025, 1, 2)))
+    engine = qlMCEuropeanBasketEngine(
+        process_array,
+        qMCTraits.__wrapped__("PR"),
+        time_steps=1,
+        required_samples=1024,
+        seed=42,
+    )
+
+    assert qlInstrumentSetPricingEngine(option, engine) is True
+    assert qlInstrumentNPV(option) > 0.0
+
+
+def test_basket_option_pricing_with_american_monte_carlo_engine():
+    ql.Settings.instance().evaluationDate = qlDate(2024, 1, 2)
+    _, _, process_array = _process_array()
+    payoff = qlAverageBasketPayoff(
+        qlPlainVanillaPayoff(ql.Option.Call, 90.0), [0.5, 0.5]
+    )
+    option = qlBasketOption(
+        payoff, qlAmericanExercise(qlDate(2024, 6, 1), qlDate(2025, 1, 2))
+    )
+    engine = qlMCAmericanBasketEngine(
+        process_array,
+        qMCTraits.__wrapped__("PR"),
+        time_steps=10,
+        required_samples=1024,
+        seed=42,
+        n_calibration_samples=1024,
+    )
+
+    assert qlInstrumentSetPricingEngine(option, engine) is True
+    assert qlInstrumentNPV(option) > 0.0
+
+
+def test_basket_option_pricing_with_two_asset_engines():
+    ql.Settings.instance().evaluationDate = qlDate(2024, 1, 2)
+    process1 = _process(100.0)
+    process2 = _process(95.0, 0.25)
+    exercise = qlEuropeanExercise(qlDate(2025, 1, 2))
+    min_option = qlBasketOption(
+        qlMinBasketPayoff(qlPlainVanillaPayoff(ql.Option.Call, 90.0)), exercise
+    )
+    spread_option = qlBasketOption(
+        qlSpreadBasketPayoff(qlPlainVanillaPayoff(ql.Option.Call, 5.0)), exercise
+    )
+
+    engines = [
+        (min_option, qlStulzEngine(process1, process2, 0.30)),
+        (spread_option, qlBjerksundStenslandSpreadEngine(process1, process2, 0.30)),
+        (
+            spread_option,
+            qlOperatorSplittingSpreadEngine(
+                process1,
+                process2,
+                0.30,
+                qOperatorSplittingSpreadEngineOrder.__wrapped__("SECOND"),
+            ),
+        ),
+        (
+            spread_option,
+            qlFd2dBlackScholesVanillaEngine(process1, process2, 0.30, 25, 25, 25),
+        ),
+    ]
+
+    for option, engine in engines:
+        assert qlInstrumentSetPricingEngine(option, engine) is True
+        assert qlInstrumentNPV(option) > 0.0
+
+
+def test_basket_option_pricing_with_multi_asset_engines():
+    ql.Settings.instance().evaluationDate = qlDate(2024, 1, 2)
+    processes, correlation, _ = _process_array()
+    payoff = qlAverageBasketPayoff(
+        qlPlainVanillaPayoff(ql.Option.Call, 5.0), [1.0, -1.0]
+    )
+    option = qlBasketOption(payoff, qlEuropeanExercise(qlDate(2025, 1, 2)))
+    engines = [
+        qlChoiBasketEngine(processes, correlation, max_nr_integration_steps=100),
+        qlDengLiZhouBasketEngine(processes, correlation),
+        qlFdndimBlackScholesVanillaEngine(processes, correlation, 10, 25),
+    ]
+
+    for engine in engines:
+        assert qlInstrumentSetPricingEngine(option, engine) is True
+        assert qlInstrumentNPV(option) > 0.0
+
+
+def test_everest_and_himalaya_option_pricing():
+    ql.Settings.instance().evaluationDate = qlDate(2024, 1, 2)
     _, _, process_array = _process_array()
     european_exercise = qlEuropeanExercise(qlDate(2025, 1, 2))
-    american_exercise = qlAmericanExercise(qlDate(2024, 6, 1), qlDate(2025, 1, 2))
 
-    assert isinstance(qlEverestOption(100.0, 0.05, european_exercise), ql.EverestOption)
-    assert isinstance(
-        qlMCEverestEngine(
-            process_array,
-            qMCTraits.__wrapped__("PR"),
-            time_steps=10,
-            required_samples=64,
-        ),
-        ql.PricingEngine,
+    everest_option = qlEverestOption(100.0, 0.05, european_exercise)
+    everest_engine = qlMCEverestEngine(
+        process_array,
+        qMCTraits.__wrapped__("PR"),
+        time_steps=10,
+        required_samples=1024,
+        seed=42,
     )
-    assert isinstance(
-        qlHimalayaOption(
-            [qlDate(2024, 7, 2).serialNumber(), qlDate(2025, 1, 2).serialNumber()],
-            100.0,
-        ),
-        ql.HimalayaOption,
+    assert qlInstrumentSetPricingEngine(everest_option, everest_engine) is True
+    assert qlInstrumentNPV(everest_option) > 0.0
+
+    himalaya_option = qlHimalayaOption(
+        [qlDate(2024, 7, 2).serialNumber(), qlDate(2025, 1, 2).serialNumber()],
+        100.0,
     )
-    assert isinstance(american_exercise, ql.AmericanExercise)
-    assert isinstance(
-        qlMCHimalayaEngine(
-            process_array, qMCTraits.__wrapped__("LD"), required_samples=64
-        ),
-        ql.PricingEngine,
+    himalaya_engine = qlMCHimalayaEngine(
+        process_array,
+        qMCTraits.__wrapped__("PR"),
+        required_samples=1024,
+        seed=42,
     )
+    assert qlInstrumentSetPricingEngine(himalaya_option, himalaya_engine) is True
+    assert qlInstrumentNPV(himalaya_option) > 0.0
