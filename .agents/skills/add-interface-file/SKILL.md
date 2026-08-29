@@ -5,40 +5,83 @@ description: Add a new interface file to the project or extend the existing inte
 
 ---
 
+# Add or Extend an Interface Wrapper
 
-Read the `README.md` file in the project root directory for more information on the QuantLibXlOil project.
+Use this skill to add QuantLib-SWIG wrappers to QuantLibXlOil. Follow the sequence
+below. Stop and ask the user when a required input, environment, or source reference is
+missing; do not guess.
 
-Identify the interface file from the user prompt and store it in a variable `interface_file`. If the interface file is not specified, stop the execution and ask the user to provide the interface file name.
+## Inputs and source version
 
-Identify the QuantLib version by running the following script:
+1. Read `README.md`, `src/quantlib_xloil/README.md`, and `tests/README.md`.
+2. Obtain `interface_file` from the user. Accept `foo` or `foo.i`; normalize to
+   `foo.i` for SWIG and `foo` for Python. If absent, stop and ask.
+3. Use a **CMD terminal** for all environment and test commands. Do not nest CMD in
+   PowerShell, mix shell separators, or redirect output to temporary files.
 
-```python
-import QuantLib
-print(QuantLib.__version__)
-```
+   ```cmd
+   call C:\ProgramData\miniconda3\Scripts\activate.bat && conda activate xloil && python -c "import QuantLib; print(QuantLib.__version__)"
+   ```
 
-Store the QuantLib version in a variable `quantlib_version`.
+   Store the output as `quantlib_version`. If it fails, stop and ask the user to repair
+   or locate the `xloil` environment.
+4. Confirm `.qlswig\QuantLib-SWIG` exists and is a Git worktree. It is the source of
+   truth for SWIG specifications.
+5. Resolve `swig_version` from `quantlib_version` as the matching tag
+   `v<quantlib_version>` (for example, QuantLib `1.42.1` uses SWIG `v1.42.1`). Verify
+   it without CMD's caret-sensitive revision syntax:
 
-Read the QuantLib-SWIG interface specifications from the `QuantLib-SWIG` repository for the specified version. You can find the interface specifications in the `QuantLib-SWIG` repository on GitHub: https://github.com/lballabio/QuantLib-SWIG/tree/`swig_version`/SWIG/
+   ```cmd
+   git -C .qlswig\QuantLib-SWIG show-ref --tags --verify refs/tags/v<quantlib_version>
+   ```
 
-The interface specifications are defined in the `*.i` files in the `SWIG` directory.
+   If the tag is missing, stop and ask the user for the compatible SWIG reference. Keep
+   the chosen reference fixed for the remainder of the task.
+6. Tell the user the normalized interface and QuantLib/SWIG versions before editing.
 
-The relevant interface file for this skill is `interface_file` with `*.i` file extension, which is located in the `SWIG` directory of the QuantLib-SWIG repository.
+## Inspect and implement
 
-Consider only interface specifications for Python or for all platforms. The interface specifications for Python are marked with the `#if defined(SWIGPYTHON)` directive in the SWIG interface files.
+1. Read the specification directly from the pinned tag:
 
-QuantLibXlOil interface files are located in the folder `src/quantlib_xloil/`. Read the coding guidelines from the file `src/quantlib_xloil/README.md`.
+   ```cmd
+   git -C .qlswig\QuantLib-SWIG show v<quantlib_version>:SWIG/interface_file
+   ```
 
-Create a new interface file in the folder `src/quantlib_xloil/` with the name `interface_file` and the file extension `.py`. If the interface file already exists, extend it with new functions.
+   If it is absent, stop and ask the user to confirm the interface or reference.
+2. Consider shared declarations and `#if defined(SWIGPYTHON)` declarations only. Do
+   not wrap declarations restricted to another language.
+3. Select useful constructors and method/function calls; do not mechanically wrap every
+   declaration. Verify uncertain constructors, defaults, enums, handles, and engine
+   pairings against the live Python binding in `xloil` before editing.
+4. Map the specification to `src/quantlib_xloil/<module>.py`. Inspect that module (if
+   present) and one nearby analogous wrapper. If no clear mapping exists, stop and ask.
+5. Create or extend the wrapper following local naming, conversion, annotation, help,
+   and return conventions. Add the module import to `src/quantlib_xloil/__init__.py`
+   when creating a new module.
+6. Track each added wrapper as `(module, symbol, action, reason)` for the final summary.
 
-Add new wrapper functions for QuantLib object creation and method calls to the interface file. The wrapper functions should follow follow the patterns used in the existing interface files and the coding guidelines specified in the `src/quantlib_xloil/README.md` file.
+## Test and commit
 
-Python unit tests for the project are located in the folder `tests/unittests/`. The unit tests are organized in files named `test_*.py`, where `*` corresponds to the name of the interface file being tested.
+1. Create or update `tests/unittests/test_<module>.py`. Cover each wrapper, optional
+   arguments, and representative method calls. For pricing engines, assign the engine
+   to a compatible instrument and assert a representative NPV. Use fixed seeds for
+   Monte Carlo tests. Do not add workbook tests.
+2. Run the focused tests in the same CMD terminal:
 
-Add new unit tests for the new wrapper functions in the interface file. The unit tests should follow the patterns used in the existing unit test files and the guidelines specified in the file `tests/README.md`.
+   ```cmd
+   call C:\ProgramData\miniconda3\Scripts\activate.bat && conda activate xloil && pytest tests\unittests\test_<module>.py -v
+   ```
 
-Test the new wrapper functions and unit tests to ensure they work correctly and pass all tests. For test execution, use Windows CMD prompt and Python from the conda environment `xloil`. Do not attempt to run the tests with bash or zsh shells as they do not work with the conda environment.
+   Fix implementation/test failures and rerun this command. Stop only for environment
+   or dependency failures. Add a focused regression test when shared helpers, handles,
+   fixings, or engine wiring changes.
+3. Inspect `git status --short` and `git diff --check`. Stage only task files; never use
+   `git add .` when unrelated changes are present. Commit the scoped change after tests
+   pass:
 
-Do not attempt to implement workbook tests in the folder `tests/workbooktests/` as they are not required for this skill.
+   ```text
+   Add new interface file `foo` - add <brief function summary>
+   Extend existing interface file `foo` - add <brief function summary>
+   ```
 
-Create a git commit with the message "Add new interface file `interface_file`" or "Extend existing interface file `interface_file`" depending on whether the interface file was created or extended. Add to the commit message a brief description of the new functions added to the interface file.
+   If unrelated changes prevent identifying a scoped file set, stop and ask the user.
