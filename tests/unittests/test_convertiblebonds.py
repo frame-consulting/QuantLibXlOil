@@ -53,13 +53,26 @@ def test_convertible_bond_constructors():
 
     assert isinstance(
         qlConvertibleZeroCouponBond(
-            exercise, 1.0, [], issue_date, 0, day_counter, schedule
+            exercise,
+            1.0,
+            issue_date,
+            0,
+            day_counter,
+            schedule,
+            callability=[],
         ),
         ql.ConvertibleZeroCouponBond,
     )
     assert isinstance(
         qlConvertibleFixedCouponBond(
-            exercise, 1.0, [], issue_date, 0, [0.03], day_counter, schedule
+            exercise,
+            1.0,
+            issue_date,
+            0,
+            [0.03],
+            day_counter,
+            schedule,
+            callability=[],
         ),
         ql.ConvertibleFixedCouponBond,
     )
@@ -67,7 +80,6 @@ def test_convertible_bond_constructors():
         qlConvertibleFloatingRateBond(
             exercise,
             1.0,
-            [],
             issue_date,
             0,
             ql.Euribor6M(),
@@ -75,6 +87,7 @@ def test_convertible_bond_constructors():
             [0.01],
             day_counter,
             schedule,
+            callability=[],
         ),
         ql.ConvertibleFloatingRateBond,
     )
@@ -85,11 +98,11 @@ def test_qlBinomialConvertibleEngine_npv():
     bond = qlConvertibleZeroCouponBond(
         _exercise(),
         1.0,
-        [],
         qlDate(2024, 1, 2),
         0,
         ql.Actual365Fixed(),
         _schedule(),
+        callability=[],
     )
     engine = qlBinomialConvertibleEngine(
         _process(),

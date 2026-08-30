@@ -15,24 +15,24 @@ from .utilities import to_float_list, to_object_list
     args={
         "exercise": "Exercise specification.",
         "conversion_ratio": "Conversion ratio.",
-        "callability": "Array of callability specifications.",
         "issue_date": "Bond issue date.",
         "settlement_days": "Settlement days.",
         "day_counter": "Day count convention.",
         "schedule": "Bond schedule.",
         "redemption": "Redemption amount.",
+        "callability": "Array of callability specifications.",
     },
     group=EXCEL_GROUP_NAME,
 )
 def qlConvertibleZeroCouponBond(
     exercise: ql.Exercise,
     conversion_ratio: float,
-    callability: xlo.Array(dims=1),
     issue_date: qDate,
     settlement_days: int,
     day_counter: qDayCounter,
     schedule: ql.Schedule,
     redemption: float = 100.0,
+    callability: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.ConvertibleZeroCouponBond:
     return ql.ConvertibleZeroCouponBond(
@@ -52,7 +52,6 @@ def qlConvertibleZeroCouponBond(
     args={
         "exercise": "Exercise specification.",
         "conversion_ratio": "Conversion ratio.",
-        "callability": "Array of callability specifications.",
         "issue_date": "Bond issue date.",
         "settlement_days": "Settlement days.",
         "coupons": "Array of coupon rates.",
@@ -63,13 +62,13 @@ def qlConvertibleZeroCouponBond(
         "ex_coupon_calendar": "Ex-coupon calendar.",
         "ex_coupon_convention": "Ex-coupon business day convention.",
         "ex_coupon_end_of_month": "Use end-of-month adjustment for ex-coupon dates.",
+        "callability": "Array of callability specifications.",
     },
     group=EXCEL_GROUP_NAME,
 )
 def qlConvertibleFixedCouponBond(
     exercise: ql.Exercise,
     conversion_ratio: float,
-    callability: xlo.Array(dims=1),
     issue_date: qDate,
     settlement_days: int,
     coupons: xlo.Array(dims=1),
@@ -80,6 +79,7 @@ def qlConvertibleFixedCouponBond(
     ex_coupon_calendar: qCalendar = ql.NullCalendar(),
     ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted,
     ex_coupon_end_of_month: bool = False,
+    callability: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.ConvertibleFixedCouponBond:
     return ql.ConvertibleFixedCouponBond(
@@ -104,7 +104,6 @@ def qlConvertibleFixedCouponBond(
     args={
         "exercise": "Exercise specification.",
         "conversion_ratio": "Conversion ratio.",
-        "callability": "Array of callability specifications.",
         "issue_date": "Bond issue date.",
         "settlement_days": "Settlement days.",
         "index": "Ibor index.",
@@ -117,13 +116,13 @@ def qlConvertibleFixedCouponBond(
         "ex_coupon_calendar": "Ex-coupon calendar.",
         "ex_coupon_convention": "Ex-coupon business day convention.",
         "ex_coupon_end_of_month": "Use end-of-month adjustment for ex-coupon dates.",
+        "callability": "Array of callability specifications.",
     },
     group=EXCEL_GROUP_NAME,
 )
 def qlConvertibleFloatingRateBond(
     exercise: ql.Exercise,
     conversion_ratio: float,
-    callability: xlo.Array(dims=1),
     issue_date: qDate,
     settlement_days: int,
     index: ql.IborIndex,
@@ -136,6 +135,7 @@ def qlConvertibleFloatingRateBond(
     ex_coupon_calendar: qCalendar = ql.NullCalendar(),
     ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted,
     ex_coupon_end_of_month: bool = False,
+    callability: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.ConvertibleFloatingRateBond:
     return ql.ConvertibleFloatingRateBond(
