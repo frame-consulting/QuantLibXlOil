@@ -294,12 +294,16 @@ def qlSABRInterpolation(
 
     arguments.extend(
         [
-            end_criteria
-            if end_criteria is not None
-            else ql.EndCriteria(1000, 100, 1.0e-8, 1.0e-8, 1.0e-8),
-            optimization_method
-            if optimization_method is not None
-            else ql.LevenbergMarquardt(),
+            (
+                end_criteria
+                if end_criteria is not None
+                else ql.EndCriteria(1000, 100, 1.0e-8, 1.0e-8, 1.0e-8)
+            ),
+            (
+                optimization_method
+                if optimization_method is not None
+                else ql.LevenbergMarquardt()
+            ),
             error_accept,
             use_max_error,
             max_guesses,
@@ -310,27 +314,44 @@ def qlSABRInterpolation(
     return ql.SABRInterpolation(*arguments)
 
 
-@xlo.func(help="Returns the alpha parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
-def qlSABRInterpolationAlpha(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+@xlo.func(
+    help="Returns the alpha parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolationAlpha(
+    interpolation: ql.SABRInterpolation, trigger=None
+) -> float:
     return interpolation.alpha()
 
 
-@xlo.func(help="Returns the beta parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the beta parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSABRInterpolationBeta(interpolation: ql.SABRInterpolation, trigger=None) -> float:
     return interpolation.beta()
 
 
-@xlo.func(help="Returns the nu parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the nu parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSABRInterpolationNu(interpolation: ql.SABRInterpolation, trigger=None) -> float:
     return interpolation.nu()
 
 
-@xlo.func(help="Returns the rho parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the rho parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSABRInterpolationRho(interpolation: ql.SABRInterpolation, trigger=None) -> float:
     return interpolation.rho()
 
 
-@xlo.func(help="Returns the interpolated volatility for a given strike.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the interpolated volatility for a given strike.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSABRInterpolationValue(
     interpolation: ql.SABRInterpolation,
     strike: float,
@@ -443,6 +464,62 @@ def qlSviSmileSectionFromTime(
     trigger=None,
 ) -> ql.SviSmileSection:
     return ql.SviSmileSection(expiry_time, forward, to_float_list(svi_parameters))
+
+
+@xlo.func(
+    help="Creates a SviInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSection(
+    option_date: qDate,
+    forward: float,
+    strikes: xlo.Array(dims=1),
+    has_floating_strikes: bool,
+    atm_volatility: float,
+    volatilities: xlo.Array(dims=1),
+    a: float,
+    b: float,
+    sigma: float,
+    rho: float,
+    m: float,
+    a_is_fixed: bool,
+    b_is_fixed: bool,
+    sigma_is_fixed: bool,
+    rho_is_fixed: bool,
+    m_is_fixed: bool,
+    vega_weighted: bool = True,
+    trigger=None,
+) -> ql.SviInterpolatedSmileSection:
+    return ql.SviInterpolatedSmileSection(
+        option_date, forward, to_float_list(strikes), has_floating_strikes,
+        atm_volatility, to_float_list(volatilities), a, b, sigma, rho, m,
+        a_is_fixed, b_is_fixed, sigma_is_fixed, rho_is_fixed, m_is_fixed,
+        vega_weighted,
+    )
+
+
+@xlo.func(help="Returns the a parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
+def qlSviInterpolatedSmileSectionA(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+    return section.a()
+
+
+@xlo.func(help="Returns the b parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
+def qlSviInterpolatedSmileSectionB(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+    return section.b()
+
+
+@xlo.func(help="Returns the sigma parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
+def qlSviInterpolatedSmileSectionSigma(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+    return section.sigma()
+
+
+@xlo.func(help="Returns the rho parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
+def qlSviInterpolatedSmileSectionRho(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+    return section.rho()
+
+
+@xlo.func(help="Returns the m parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
+def qlSviInterpolatedSmileSectionM(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+    return section.m()
 
 
 @xlo.func(

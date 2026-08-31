@@ -51,6 +51,12 @@ from quantlib_xloil.volatilities import (
     qlShiftedSabrVolatility,
     qlSviSmileSection,
     qlSviSmileSectionFromTime,
+    qlSviInterpolatedSmileSection,
+    qlSviInterpolatedSmileSectionA,
+    qlSviInterpolatedSmileSectionB,
+    qlSviInterpolatedSmileSectionM,
+    qlSviInterpolatedSmileSectionRho,
+    qlSviInterpolatedSmileSectionSigma,
     qlSplineCubicInterpolatedSmileSection,
     qlFlatSmileSection,
     qlFlatSmileSectionFromTime,
@@ -332,6 +338,20 @@ def test_qlSviSmileSection_creates_date_and_time_sections():
 
     assert date_section.volatility(0.025) > 0.0
     assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlSviInterpolatedSmileSection_returns_fixed_parameters():
+    section = qlSviInterpolatedSmileSection(
+        qlDate(2027, 1, 2), 0.025, [0.02, 0.025, 0.03], False, 0.20,
+        [0.21, 0.20, 0.19], 0.01, 0.10, 0.20, -0.20, 0.0,
+        True, True, True, True, True,
+    )
+
+    assert qlSviInterpolatedSmileSectionA(section) == pytest.approx(0.01)
+    assert qlSviInterpolatedSmileSectionB(section) == pytest.approx(0.10)
+    assert qlSviInterpolatedSmileSectionSigma(section) == pytest.approx(0.20)
+    assert qlSviInterpolatedSmileSectionRho(section) == pytest.approx(-0.20)
+    assert qlSviInterpolatedSmileSectionM(section) == pytest.approx(0.0)
 
 
 def test_qlFlatSmileSection_creates_date_and_time_sections():
