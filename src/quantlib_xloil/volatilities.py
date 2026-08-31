@@ -1446,6 +1446,35 @@ def qlBlackVarianceSurface(
 
 
 @xlo.func(
+    help="Creates a PiecewiseBlackVarianceSurface object from a volatility grid.",
+    args={
+        "reference_date": "Reference date for the volatility surface.",
+        "dates": "Array of option expiry dates.",
+        "strikes": "Array of strikes.",
+        "black_vols": "2D array of Black volatilities with shape (#strikes, #dates).",
+        "day_counter": "Day count convention for the volatility surface.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseBlackVarianceSurfaceFromGrid(
+    reference_date: qDate,
+    dates: xlo.Array(dims=1),
+    strikes: xlo.Array(dims=1),
+    black_vols: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    vol_ts = ql.PiecewiseBlackVarianceSurface.makeFromGrid(
+        reference_date,
+        _to_date_list(dates),
+        to_float_list(strikes),
+        ql.Matrix(to_float_matrix(black_vols)),
+        day_counter,
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
+
+
+@xlo.func(
     help="Creates a HestonBlackVolSurface object and returns a handle to it.",
     args={
         "heston_model": "Handle to a HestonModel object.",

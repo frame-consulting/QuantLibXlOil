@@ -73,6 +73,7 @@ from quantlib_xloil.volatilities import (
     qlNoArbSabrInterpolatedSmileSectionBeta,
     qlNoArbSabrInterpolatedSmileSectionNu,
     qlNoArbSabrInterpolatedSmileSectionRho,
+    qlPiecewiseBlackVarianceSurfaceFromGrid,
     qlSmileSectionAtmLevel,
     qlSmileSectionDensity,
     qlSmileSectionDigitalOptionPrice,
@@ -248,6 +249,21 @@ def test_qlBlackVarianceSurface_creates_handle_with_optional_extrapolation():
     assert constant_extrapolation_surface.blackVol(
         expiry_dates[0], strikes[0]
     ) == pytest.approx(0.20)
+
+
+def test_qlPiecewiseBlackVarianceSurfaceFromGrid_creates_handle():
+    expiry_dates = [qlDate(2025, 1, 2), qlDate(2026, 1, 2)]
+    strikes = [90.0, 110.0]
+    vol_tsh = qlPiecewiseBlackVarianceSurfaceFromGrid(
+        qlDate(2024, 1, 2),
+        expiry_dates,
+        strikes,
+        [[0.20, 0.21], [0.22, 0.23]],
+        qlDayCounter("ACTUAL365FIXED"),
+    )
+
+    assert isinstance(vol_tsh, ql.BlackVolTermStructureHandle)
+    assert vol_tsh.blackVol(expiry_dates[0], strikes[0]) == pytest.approx(0.20)
 
 
 def test_qlHestonBlackVolSurface_creates_handle_with_positive_volatility():
