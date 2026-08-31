@@ -39,6 +39,12 @@ from quantlib_xloil.volatilities import (
     qlSwaptionVolatilityMatrix,
     qlSabrFlochKennedyVolatility,
     qlSabrGuess,
+    qlSABRInterpolation,
+    qlSABRInterpolationAlpha,
+    qlSABRInterpolationBeta,
+    qlSABRInterpolationNu,
+    qlSABRInterpolationRho,
+    qlSABRInterpolationValue,
     qlSabrSmileSection,
     qlSabrSmileSectionFromTime,
     qlSabrVolatility,
@@ -263,6 +269,29 @@ def test_qlSabrVolatility_functions_and_guess():
     assert floch_kennedy_volatility > 0.0
     assert len(guess) == 4
     assert all(isinstance(parameter, float) for parameter in guess)
+
+
+def test_qlSABRInterpolation_evaluates_fixed_parameters():
+    interpolation = qlSABRInterpolation(
+        [0.02, 0.025, 0.03],
+        [0.21, 0.20, 0.19],
+        1.0,
+        0.025,
+        0.02,
+        0.50,
+        0.30,
+        -0.20,
+        True,
+        True,
+        True,
+        True,
+    )
+
+    assert qlSABRInterpolationAlpha(interpolation) == pytest.approx(0.02)
+    assert qlSABRInterpolationBeta(interpolation) == pytest.approx(0.50)
+    assert qlSABRInterpolationNu(interpolation) == pytest.approx(0.30)
+    assert qlSABRInterpolationRho(interpolation) == pytest.approx(-0.20)
+    assert qlSABRInterpolationValue(interpolation, 0.025) > 0.0
 
 
 def test_qlSabrSmileSection_creates_date_and_time_sections():

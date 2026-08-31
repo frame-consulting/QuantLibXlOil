@@ -222,6 +222,117 @@ def qlSabrGuess(
     )
 
 
+@xlo.func(
+    help="Creates a SABRInterpolation object.",
+    args={
+        "strikes": "Array of option strikes.",
+        "volatilities": "Array of market volatilities.",
+        "expiry_time": "Time to expiry.",
+        "forward": "Forward price.",
+        "alpha": "Initial SABR alpha parameter.",
+        "beta": "Initial SABR beta parameter.",
+        "nu": "Initial SABR nu parameter.",
+        "rho": "Initial SABR rho parameter.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolation(
+    strikes: xlo.Array(dims=1),
+    volatilities: xlo.Array(dims=1),
+    expiry_time: float,
+    forward: float,
+    alpha: float,
+    beta: float,
+    nu: float,
+    rho: float,
+    alpha_is_fixed: bool = False,
+    beta_is_fixed: bool = False,
+    nu_is_fixed: bool = False,
+    rho_is_fixed: bool = False,
+    vega_weighted: bool = True,
+    end_criteria: ql.EndCriteria = None,
+    optimization_method: ql.OptimizationMethod = None,
+    error_accept: float = 0.0020,
+    use_max_error: bool = False,
+    max_guesses: int = 50,
+    shift: float = 0.0,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> ql.SABRInterpolation:
+    arguments = [
+        to_float_list(strikes),
+        to_float_list(volatilities),
+        expiry_time,
+        forward,
+        alpha,
+        beta,
+        nu,
+        rho,
+        alpha_is_fixed,
+        beta_is_fixed,
+        nu_is_fixed,
+        rho_is_fixed,
+        vega_weighted,
+    ]
+    if (
+        end_criteria is None
+        and optimization_method is None
+        and error_accept == 0.0020
+        and not use_max_error
+        and max_guesses == 50
+        and shift == 0.0
+        and _qVolatilityType(volatility_type) == ql.ShiftedLognormal
+    ):
+        return ql.SABRInterpolation(*arguments)
+
+    arguments.extend(
+        [
+            end_criteria
+            if end_criteria is not None
+            else ql.EndCriteria(1000, 100, 1.0e-8, 1.0e-8, 1.0e-8),
+            optimization_method
+            if optimization_method is not None
+            else ql.LevenbergMarquardt(),
+            error_accept,
+            use_max_error,
+            max_guesses,
+            shift,
+            _qVolatilityType(volatility_type),
+        ]
+    )
+    return ql.SABRInterpolation(*arguments)
+
+
+@xlo.func(help="Returns the alpha parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
+def qlSABRInterpolationAlpha(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+    return interpolation.alpha()
+
+
+@xlo.func(help="Returns the beta parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
+def qlSABRInterpolationBeta(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+    return interpolation.beta()
+
+
+@xlo.func(help="Returns the nu parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
+def qlSABRInterpolationNu(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+    return interpolation.nu()
+
+
+@xlo.func(help="Returns the rho parameter of a SABRInterpolation object.", group=EXCEL_GROUP_NAME)
+def qlSABRInterpolationRho(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+    return interpolation.rho()
+
+
+@xlo.func(help="Returns the interpolated volatility for a given strike.", group=EXCEL_GROUP_NAME)
+def qlSABRInterpolationValue(
+    interpolation: ql.SABRInterpolation,
+    strike: float,
+    allow_extrapolation: bool = False,
+    trigger=None,
+) -> float:
+    return interpolation(strike, allow_extrapolation)
+
+
 # SmileSection constructors
 
 
