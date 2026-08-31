@@ -46,6 +46,19 @@ from quantlib_xloil.volatilities import (
     qlFlatSmileSectionFromTime,
     qlNoArbSabrSmileSection,
     qlNoArbSabrSmileSectionFromTime,
+    qlSmileSectionAtmLevel,
+    qlSmileSectionDensity,
+    qlSmileSectionDigitalOptionPrice,
+    qlSmileSectionExerciseDate,
+    qlSmileSectionExerciseTime,
+    qlSmileSectionMaxStrike,
+    qlSmileSectionMinStrike,
+    qlSmileSectionOptionPrice,
+    qlSmileSectionShift,
+    qlSmileSectionVariance,
+    qlSmileSectionVega,
+    qlSmileSectionVolatility,
+    qlSmileSectionVolatilityType,
     qlSpreadedSwaptionVolatility,
     qBlackVarianceSurfaceExtrapolation,
     qVolatilityType,
@@ -293,6 +306,26 @@ def test_qlNoArbSabrSmileSection_creates_date_and_time_sections():
 
     assert date_section.volatility(0.025) > 0.0
     assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlSmileSection_accessors_and_evaluators():
+    smile_section = qlFlatSmileSection(
+        qlDate(2027, 1, 2), 0.20, qlDayCounter("ACTUAL365FIXED"), qlDate(2026, 1, 2), 0.025
+    )
+
+    assert qlSmileSectionAtmLevel(smile_section) == pytest.approx(0.025)
+    assert qlSmileSectionExerciseDate(smile_section) == qlDate(2027, 1, 2)
+    assert qlSmileSectionExerciseTime(smile_section) == pytest.approx(1.0)
+    assert qlSmileSectionMinStrike(smile_section) < 0.025
+    assert qlSmileSectionMaxStrike(smile_section) > 0.025
+    assert qlSmileSectionVolatility(smile_section, 0.025) == pytest.approx(0.20)
+    assert qlSmileSectionVariance(smile_section, 0.025) == pytest.approx(0.04)
+    assert qlSmileSectionOptionPrice(smile_section, 0.025, "CALL") > 0.0
+    assert qlSmileSectionDigitalOptionPrice(smile_section, 0.025, "CALL") > 0.0
+    assert qlSmileSectionDensity(smile_section, 0.025) > 0.0
+    assert qlSmileSectionVega(smile_section, 0.025) > 0.0
+    assert qlSmileSectionShift(smile_section) == pytest.approx(0.0)
+    assert qlSmileSectionVolatilityType(smile_section) == ql.ShiftedLognormal
 
 
 def test_qlConstantYoYOptionletVolatility_creates_handle():
