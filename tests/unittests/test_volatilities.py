@@ -12,6 +12,7 @@ from quantlib_xloil.volatilities import (
     qlBlackVolTermStructureBlackVol,
     qlBlackVarianceCurve,
     qlBlackVarianceSurface,
+    qlBlackVolatilitySurfaceDelta,
     qlBlackVolTermStructureBlackVolFromTime,
     qlBlackVolTermStructureMaxStrike,
     qlBlackVolTermStructureMinStrike,
@@ -89,6 +90,8 @@ from quantlib_xloil.volatilities import (
     qlSmileSectionVolatilityType,
     qlSpreadedSwaptionVolatility,
     qBlackVarianceSurfaceExtrapolation,
+    qDeltaVolQuoteAtmType,
+    qDeltaVolQuoteDeltaType,
     qVolatilityType,
 )
 from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
@@ -264,6 +267,37 @@ def test_qlPiecewiseBlackVarianceSurfaceFromGrid_creates_handle():
 
     assert isinstance(vol_tsh, ql.BlackVolTermStructureHandle)
     assert vol_tsh.blackVol(expiry_dates[0], strikes[0]) == pytest.approx(0.20)
+
+
+def test_qlBlackVolatilitySurfaceDelta_creates_handle():
+    reference_date = qlDate(2024, 1, 2)
+    day_counter = qlDayCounter("ACTUAL365FIXED")
+    spot = qQuoteHandle.__wrapped__(1.10)
+    domestic_ytsh = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.02, day_counter)
+    )
+    foreign_ytsh = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.01, day_counter)
+    )
+
+    vol_tsh = qlBlackVolatilitySurfaceDelta(
+        reference_date,
+        [qlDate(2025, 1, 2), qlDate(2026, 1, 2)],
+        [-0.25],
+        [0.25],
+        True,
+        [[0.22, 0.20, 0.19], [0.23, 0.21, 0.20]],
+        day_counter,
+        qlCalendar("TARGET"),
+        spot,
+        domestic_ytsh,
+        foreign_ytsh,
+        qDeltaVolQuoteDeltaType.__wrapped__("SPOT"),
+        qDeltaVolQuoteAtmType.__wrapped__("ATMDELTANEUTRAL"),
+    )
+
+    assert isinstance(vol_tsh, ql.BlackVolTermStructureHandle)
+    assert vol_tsh.blackVol(qlDate(2025, 1, 2), 1.10) > 0.0
 
 
 def test_qlHestonBlackVolSurface_creates_handle_with_positive_volatility():

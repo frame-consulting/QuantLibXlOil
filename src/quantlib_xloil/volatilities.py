@@ -46,6 +46,35 @@ QL_BLACK_VARIANCE_SURFACE_EXTRAPOLATION = {
 }
 
 
+QL_DELTA_VOL_QUOTE_DELTA_TYPE = {
+    "FWD": ql.DeltaVolQuote.Fwd,
+    "PASPOT": ql.DeltaVolQuote.PaSpot,
+    "PAFWD": ql.DeltaVolQuote.PaFwd,
+    "SPOT": ql.DeltaVolQuote.Spot,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
+QL_DELTA_VOL_QUOTE_ATM_TYPE = {
+    "ATMSPOT": ql.DeltaVolQuote.AtmSpot,
+    "ATMFWD": ql.DeltaVolQuote.AtmFwd,
+    "ATMDELTANEUTRAL": ql.DeltaVolQuote.AtmDeltaNeutral,
+    "ATMGAMMAMAX": ql.DeltaVolQuote.AtmGammaMax,
+    "ATMVEGAMAX": ql.DeltaVolQuote.AtmVegaMax,
+    "ATMPUTCALL50": ql.DeltaVolQuote.AtmPutCall50,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
+QL_BLACK_VOLATILITY_SURFACE_DELTA_INTERPOLATION = {
+    "LINEAR": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_Linear,
+    "NATURALCUBIC": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_NaturalCubic,
+    "FINANCIALCUBIC": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_FinancialCubic,
+    "CUBICSPLINE": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_CubicSpline,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
 def _qVolatilityType(s: str) -> int:
     return enum_value(s, QL_VOLATILITY_TYPE)
 
@@ -71,6 +100,33 @@ def _qBlackVarianceSurfaceExtrapolation(s: str) -> int:
 @xlo.converter()
 def qBlackVarianceSurfaceExtrapolation(s: str) -> int:
     return _qBlackVarianceSurfaceExtrapolation(s)
+
+
+def _qDeltaVolQuoteDeltaType(s: str) -> int:
+    return enum_value(s, QL_DELTA_VOL_QUOTE_DELTA_TYPE)
+
+
+@xlo.converter()
+def qDeltaVolQuoteDeltaType(s: str) -> int:
+    return _qDeltaVolQuoteDeltaType(s)
+
+
+def _qDeltaVolQuoteAtmType(s: str) -> int:
+    return enum_value(s, QL_DELTA_VOL_QUOTE_ATM_TYPE)
+
+
+@xlo.converter()
+def qDeltaVolQuoteAtmType(s: str) -> int:
+    return _qDeltaVolQuoteAtmType(s)
+
+
+def _qBlackVolatilitySurfaceDeltaInterpolation(s: str) -> int:
+    return enum_value(s, QL_BLACK_VOLATILITY_SURFACE_DELTA_INTERPOLATION)
+
+
+@xlo.converter()
+def qBlackVolatilitySurfaceDeltaInterpolation(s: str) -> int:
+    return _qBlackVolatilitySurfaceDeltaInterpolation(s)
 
 
 # SABR volatility functions
@@ -1470,6 +1526,44 @@ def qlPiecewiseBlackVarianceSurfaceFromGrid(
         to_float_list(strikes),
         ql.Matrix(to_float_matrix(black_vols)),
         day_counter,
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a BlackVolatilitySurfaceDelta object and returns a handle to it.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolatilitySurfaceDelta(
+    reference_date: qDate,
+    dates: xlo.Array(dims=1),
+    put_deltas: xlo.Array(dims=1),
+    call_deltas: xlo.Array(dims=1),
+    has_atm: bool,
+    black_vol_matrix: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    calendar: qCalendar,
+    spot: qQuoteHandle,
+    domestic_ytsh: ql.YieldTermStructureHandle,
+    foreign_ytsh: ql.YieldTermStructureHandle,
+    delta_type: qDeltaVolQuoteDeltaType = ql.DeltaVolQuote.Spot,
+    atm_type: qDeltaVolQuoteAtmType = ql.DeltaVolQuote.AtmDeltaNeutral,
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    vol_ts = ql.BlackVolatilitySurfaceDelta(
+        reference_date,
+        _to_date_list(dates),
+        to_float_list(put_deltas),
+        to_float_list(call_deltas),
+        has_atm,
+        ql.Matrix(to_float_matrix(black_vol_matrix)),
+        day_counter,
+        calendar,
+        spot,
+        domestic_ytsh,
+        foreign_ytsh,
+        _qDeltaVolQuoteDeltaType(delta_type),
+        _qDeltaVolQuoteAtmType(atm_type),
     )
     return ql.BlackVolTermStructureHandle(vol_ts)
 
