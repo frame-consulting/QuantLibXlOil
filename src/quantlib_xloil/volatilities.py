@@ -5,6 +5,13 @@ from .calendars import qBusinessDayConvention, qCalendar
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, qFrequency, qPeriod, _to_date_list
 from .daycounters import qDayCounter
+from .options import (
+    _qAnalyticHestonComplexLogFormula,
+    _qAnalyticHestonEngineIntegration,
+    _to_analytic_heston_engine_integration,
+    qAnalyticHestonComplexLogFormula,
+    qAnalyticHestonEngineIntegration,
+)
 from .payoffs import _qOptionType, qOptionType
 from .ratehelpers import qQuoteHandle
 from .utilities import (
@@ -1145,6 +1152,39 @@ def qlBlackVarianceSurface(
         lower_extrapolation,
         upper_extrapolation,
         interpolator,
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a HestonBlackVolSurface object and returns a handle to it.",
+    args={
+        "heston_model": "Handle to a HestonModel object.",
+        "complex_log_formula": "Analytic Heston complex-log formula.",
+        "integration": "Analytic Heston integration method.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlHestonBlackVolSurface(
+    heston_model: ql.HestonModelHandle,
+    complex_log_formula: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.Gatheral,
+    integration: qAnalyticHestonEngineIntegration = ql.AnalyticHestonEngine_Integration.gaussLaguerre(
+        164
+    ),
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    if isinstance(integration, str):
+        integration = _to_analytic_heston_engine_integration(
+            _qAnalyticHestonEngineIntegration(integration),
+            164,
+            1.0e-8,
+            1.0e-8,
+            10000,
+        )
+    vol_ts = ql.HestonBlackVolSurface(
+        heston_model,
+        _qAnalyticHestonComplexLogFormula(complex_log_formula),
+        integration,
     )
     return ql.BlackVolTermStructureHandle(vol_ts)
 

@@ -54,6 +54,7 @@ from quantlib_xloil.volatilities import (
     qlSplineCubicInterpolatedSmileSection,
     qlFlatSmileSection,
     qlFlatSmileSectionFromTime,
+    qlHestonBlackVolSurface,
     qlKahaleSmileSection,
     qlNoArbSabrSmileSection,
     qlNoArbSabrSmileSectionFromTime,
@@ -232,6 +233,23 @@ def test_qlBlackVarianceSurface_creates_handle_with_optional_extrapolation():
     assert constant_extrapolation_surface.blackVol(
         expiry_dates[0], strikes[0]
     ) == pytest.approx(0.20)
+
+
+def test_qlHestonBlackVolSurface_creates_handle_with_positive_volatility():
+    spot = ql.QuoteHandle(ql.SimpleQuote(100.0))
+    risk_free = ql.YieldTermStructureHandle(
+        ql.FlatForward(qlDate(2026, 1, 2), 0.02, ql.Actual365Fixed())
+    )
+    dividend = ql.YieldTermStructureHandle(
+        ql.FlatForward(qlDate(2026, 1, 2), 0.01, ql.Actual365Fixed())
+    )
+    process = ql.HestonProcess(risk_free, dividend, spot, 0.04, 1.50, 0.04, 0.25, -0.60)
+    model_handle = ql.HestonModelHandle(ql.HestonModel(process))
+
+    vol_tsh = qlHestonBlackVolSurface(model_handle, "GATHERAL", "GAUSS_LAGUERRE")
+
+    assert isinstance(vol_tsh, ql.BlackVolTermStructureHandle)
+    assert vol_tsh.blackVol(1.0, 100.0) > 0.0
 
 
 def test_qlSabrVolatility_functions_and_guess():
