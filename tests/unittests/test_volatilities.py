@@ -16,6 +16,7 @@ from quantlib_xloil.volatilities import (
     qlBlackVolTermStructureMaxStrike,
     qlBlackVolTermStructureMinStrike,
     qlConstantOptionletVolatility,
+    qlConstantYoYOptionletVolatility,
     qlConstantSwaptionVolatility,
     qlLocalVolTermStructureLocalVol,
     qlLocalVolTermStructureLocalVolFromTime,
@@ -33,6 +34,19 @@ from quantlib_xloil.volatilities import (
     qlSwaptionVolatilityStructureVolatility,
     qlSwaptionVolatilityStructureVolatilityFromTime,
     qlSwaptionVolatilityMatrix,
+    qlSabrFlochKennedyVolatility,
+    qlSabrGuess,
+    qlSabrSmileSection,
+    qlSabrSmileSectionFromTime,
+    qlSabrVolatility,
+    qlShiftedSabrVolatility,
+    qlSviSmileSection,
+    qlSviSmileSectionFromTime,
+    qlFlatSmileSection,
+    qlFlatSmileSectionFromTime,
+    qlNoArbSabrSmileSection,
+    qlNoArbSabrSmileSectionFromTime,
+    qlSpreadedSwaptionVolatility,
     qBlackVarianceSurfaceExtrapolation,
     qVolatilityType,
 )
@@ -196,6 +210,110 @@ def test_qlBlackVarianceSurface_creates_handle_with_optional_extrapolation():
     ) == pytest.approx(0.20)
 
 
+def test_qlSabrVolatility_functions_and_guess():
+    sabr_volatility = qlSabrVolatility(0.025, 0.025, 2.0, 0.20, 0.50, 0.30, -0.20)
+    shifted_sabr_volatility = qlShiftedSabrVolatility(
+        0.025,
+        0.025,
+        2.0,
+        0.20,
+        0.50,
+        0.30,
+        -0.20,
+        0.0,
+        "SHIFTEDLOGNORMAL",
+    )
+    floch_kennedy_volatility = qlSabrFlochKennedyVolatility(
+        0.025, 0.025, 2.0, 0.20, 0.50, 0.30, -0.20
+    )
+    guess = qlSabrGuess(
+        0.020,
+        0.23,
+        0.025,
+        0.20,
+        0.030,
+        0.19,
+        0.025,
+        2.0,
+        0.50,
+        0.0,
+        "SHIFTEDLOGNORMAL",
+    )
+
+    assert sabr_volatility > 0.0
+    assert shifted_sabr_volatility == pytest.approx(sabr_volatility)
+    assert floch_kennedy_volatility > 0.0
+    assert len(guess) == 4
+    assert all(isinstance(parameter, float) for parameter in guess)
+
+
+def test_qlSabrSmileSection_creates_date_and_time_sections():
+    date_section = qlSabrSmileSection(
+        qlDate(2027, 1, 2), 0.025, [0.20, 0.50, 0.30, -0.20]
+    )
+    time_section = qlSabrSmileSectionFromTime(
+        1.0, 0.025, [0.20, 0.50, 0.30, -0.20], 0.0, "SHIFTEDLOGNORMAL"
+    )
+
+    assert date_section.volatility(0.025) > 0.0
+    assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlSviSmileSection_creates_date_and_time_sections():
+    date_section = qlSviSmileSection(
+        qlDate(2027, 1, 2), 0.025, [0.01, 0.10, 0.20, -0.20, 0.0]
+    )
+    time_section = qlSviSmileSectionFromTime(
+        1.0, 0.025, [0.01, 0.10, 0.20, -0.20, 0.0]
+    )
+
+    assert date_section.volatility(0.025) > 0.0
+    assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlFlatSmileSection_creates_date_and_time_sections():
+    date_section = qlFlatSmileSection(
+        qlDate(2027, 1, 2), 0.20, qlDayCounter("ACTUAL365FIXED")
+    )
+    time_section = qlFlatSmileSectionFromTime(
+        1.0, 0.20, qlDayCounter("ACTUAL365FIXED"), 0.025, "SHIFTEDLOGNORMAL"
+    )
+
+    assert date_section.volatility(0.025) == pytest.approx(0.20)
+    assert time_section.volatility(0.025) == pytest.approx(0.20)
+
+
+def test_qlNoArbSabrSmileSection_creates_date_and_time_sections():
+    date_section = qlNoArbSabrSmileSection(
+        qlDate(2027, 1, 2), 0.025, [0.02, 0.50, 0.30, -0.20]
+    )
+    time_section = qlNoArbSabrSmileSectionFromTime(
+        1.0, 0.025, [0.02, 0.50, 0.30, -0.20], 0.0, "SHIFTEDLOGNORMAL"
+    )
+
+    assert date_section.volatility(0.025) > 0.0
+    assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlConstantYoYOptionletVolatility_creates_handle():
+    handle = qlConstantYoYOptionletVolatility(
+        0.20,
+        2,
+        qlCalendar("TARGET"),
+        qBusinessDayConvention.__wrapped__("FOLLOWING"),
+        qlDayCounter("ACTUAL365FIXED"),
+        qlPeriod(3, ql.Months),
+        ql.Annual,
+        False,
+        0.0,
+        1.0,
+    )
+
+    assert isinstance(handle, ql.YoYOptionletVolatilitySurfaceHandle)
+    assert handle.minStrike() == pytest.approx(0.0)
+    assert handle.maxStrike() == pytest.approx(1.0)
+
+
 # Helper functions for optionlet and swaption volatility tests
 
 
@@ -274,6 +392,16 @@ def test_qlOptionletVolatilityStructure_black_variance():
 def test_qlConstantSwaptionVolatility_creates_handle():
     handle = _constant_swaption_vol_handle()
     assert isinstance(handle, ql.SwaptionVolatilityStructureHandle)
+
+
+def test_qlSpreadedSwaptionVolatility_adds_quote_spread():
+    base_handle = _constant_swaption_vol_handle(0.20)
+    handle = qlSpreadedSwaptionVolatility(base_handle, qQuoteHandle.__wrapped__(0.01))
+
+    assert isinstance(handle, ql.SwaptionVolatilityStructureHandle)
+    assert qlSwaptionVolatilityStructureVolatility(
+        handle, qlDate(2027, 1, 2), qlPeriod(5, ql.Years), 0.025
+    ) == pytest.approx(0.21)
 
 
 def test_qlSwaptionVolatilityStructure_volatility_constant_for_date_and_time():
