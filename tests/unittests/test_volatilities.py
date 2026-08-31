@@ -18,8 +18,11 @@ from quantlib_xloil.volatilities import (
     qlConstantOptionletVolatility,
     qlConstantYoYOptionletVolatility,
     qlConstantSwaptionVolatility,
+    qlCubicInterpolatedSmileSection,
     qlLocalVolTermStructureLocalVol,
     qlLocalVolTermStructureLocalVolFromTime,
+    qlLinearInterpolatedSmileSection,
+    qlMonotonicCubicInterpolatedSmileSection,
     qlOptionletVolatilityStructureBlackVariance,
     qlOptionletVolatilityStructureBlackVarianceFromTime,
     qlOptionletVolatilityStructureVolatility,
@@ -42,6 +45,7 @@ from quantlib_xloil.volatilities import (
     qlShiftedSabrVolatility,
     qlSviSmileSection,
     qlSviSmileSectionFromTime,
+    qlSplineCubicInterpolatedSmileSection,
     qlFlatSmileSection,
     qlFlatSmileSectionFromTime,
     qlNoArbSabrSmileSection,
@@ -276,9 +280,7 @@ def test_qlSviSmileSection_creates_date_and_time_sections():
     date_section = qlSviSmileSection(
         qlDate(2027, 1, 2), 0.025, [0.01, 0.10, 0.20, -0.20, 0.0]
     )
-    time_section = qlSviSmileSectionFromTime(
-        1.0, 0.025, [0.01, 0.10, 0.20, -0.20, 0.0]
-    )
+    time_section = qlSviSmileSectionFromTime(1.0, 0.025, [0.01, 0.10, 0.20, -0.20, 0.0])
 
     assert date_section.volatility(0.025) > 0.0
     assert time_section.volatility(0.025) > 0.0
@@ -308,9 +310,33 @@ def test_qlNoArbSabrSmileSection_creates_date_and_time_sections():
     assert time_section.volatility(0.025) > 0.0
 
 
+def test_qlInterpolatedSmileSections_create_sections_at_input_nodes():
+    constructors = (
+        qlLinearInterpolatedSmileSection,
+        qlCubicInterpolatedSmileSection,
+        qlMonotonicCubicInterpolatedSmileSection,
+        qlSplineCubicInterpolatedSmileSection,
+    )
+
+    for constructor in constructors:
+        smile_section = constructor(
+            1.0,
+            [0.02, 0.025, 0.03],
+            [0.21, 0.20, 0.19],
+            0.025,
+            qlDayCounter("ACTUAL365FIXED"),
+            "SHIFTEDLOGNORMAL",
+        )
+        assert smile_section.volatility(0.025) == pytest.approx(0.20)
+
+
 def test_qlSmileSection_accessors_and_evaluators():
     smile_section = qlFlatSmileSection(
-        qlDate(2027, 1, 2), 0.20, qlDayCounter("ACTUAL365FIXED"), qlDate(2026, 1, 2), 0.025
+        qlDate(2027, 1, 2),
+        0.20,
+        qlDayCounter("ACTUAL365FIXED"),
+        qlDate(2026, 1, 2),
+        0.025,
     )
 
     assert qlSmileSectionAtmLevel(smile_section) == pytest.approx(0.025)

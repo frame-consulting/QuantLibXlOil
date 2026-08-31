@@ -451,7 +451,134 @@ def qlNoArbSabrSmileSectionFromTime(
     )
 
 
-@xlo.func(help="Returns the at-the-money level for a smile section.", group=EXCEL_GROUP_NAME)
+def _interpolated_smile_section(
+    smile_section_class,
+    interpolator,
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter,
+    volatility_type: qVolatilityType,
+    shift: float,
+):
+    return smile_section_class(
+        expiry_time,
+        to_float_list(strikes),
+        to_float_list(std_devs),
+        atm_level,
+        interpolator,
+        day_counter,
+        _qVolatilityType(volatility_type),
+        shift,
+    )
+
+
+@xlo.func(help="Creates a LinearInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME)
+def qlLinearInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.LinearInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.LinearInterpolatedSmileSection,
+        ql.Linear(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(help="Creates a CubicInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME)
+def qlCubicInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.CubicInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.CubicInterpolatedSmileSection,
+        ql.Cubic(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a MonotonicCubicInterpolatedSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlMonotonicCubicInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.MonotonicCubicInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.MonotonicCubicInterpolatedSmileSection,
+        ql.MonotonicCubic(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a SplineCubicInterpolatedSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSplineCubicInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.SplineCubicInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.SplineCubicInterpolatedSmileSection,
+        ql.SplineCubic(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(
+    help="Returns the at-the-money level for a smile section.", group=EXCEL_GROUP_NAME
+)
 def qlSmileSectionAtmLevel(smile_section: ql.SmileSection, trigger=None) -> float:
     return smile_section.atmLevel()
 
@@ -466,31 +593,43 @@ def qlSmileSectionExerciseTime(smile_section: ql.SmileSection, trigger=None) -> 
     return smile_section.exerciseTime()
 
 
-@xlo.func(help="Returns the minimum strike for a smile section.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the minimum strike for a smile section.", group=EXCEL_GROUP_NAME
+)
 def qlSmileSectionMinStrike(smile_section: ql.SmileSection, trigger=None) -> float:
     return smile_section.minStrike()
 
 
-@xlo.func(help="Returns the maximum strike for a smile section.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the maximum strike for a smile section.", group=EXCEL_GROUP_NAME
+)
 def qlSmileSectionMaxStrike(smile_section: ql.SmileSection, trigger=None) -> float:
     return smile_section.maxStrike()
 
 
-@xlo.func(help="Returns the volatility for a smile section and strike.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the volatility for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSmileSectionVolatility(
     smile_section: ql.SmileSection, strike: float, trigger=None
 ) -> float:
     return smile_section.volatility(strike)
 
 
-@xlo.func(help="Returns the variance for a smile section and strike.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the variance for a smile section and strike.", group=EXCEL_GROUP_NAME
+)
 def qlSmileSectionVariance(
     smile_section: ql.SmileSection, strike: float, trigger=None
 ) -> float:
     return smile_section.variance(strike)
 
 
-@xlo.func(help="Returns the option price for a smile section and strike.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the option price for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSmileSectionOptionPrice(
     smile_section: ql.SmileSection,
     strike: float,
@@ -501,7 +640,10 @@ def qlSmileSectionOptionPrice(
     return smile_section.optionPrice(strike, _qOptionType(option_type), discount)
 
 
-@xlo.func(help="Returns the digital option price for a smile section and strike.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the digital option price for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSmileSectionDigitalOptionPrice(
     smile_section: ql.SmileSection,
     strike: float,
@@ -515,7 +657,10 @@ def qlSmileSectionDigitalOptionPrice(
     )
 
 
-@xlo.func(help="Returns the probability density for a smile section and strike.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the probability density for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
 def qlSmileSectionDensity(
     smile_section: ql.SmileSection,
     strike: float,
@@ -526,7 +671,9 @@ def qlSmileSectionDensity(
     return smile_section.density(strike, discount, gap)
 
 
-@xlo.func(help="Returns the vega for a smile section and strike.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the vega for a smile section and strike.", group=EXCEL_GROUP_NAME
+)
 def qlSmileSectionVega(
     smile_section: ql.SmileSection,
     strike: float,
@@ -536,12 +683,16 @@ def qlSmileSectionVega(
     return smile_section.vega(strike, discount)
 
 
-@xlo.func(help="Returns the volatility shift for a smile section.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the volatility shift for a smile section.", group=EXCEL_GROUP_NAME
+)
 def qlSmileSectionShift(smile_section: ql.SmileSection, trigger=None) -> float:
     return smile_section.shift()
 
 
-@xlo.func(help="Returns the volatility type for a smile section.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Returns the volatility type for a smile section.", group=EXCEL_GROUP_NAME
+)
 def qlSmileSectionVolatilityType(smile_section: ql.SmileSection, trigger=None) -> int:
     return smile_section.volatilityType()
 
