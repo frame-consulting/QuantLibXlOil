@@ -474,7 +474,9 @@ def _interpolated_smile_section(
     )
 
 
-@xlo.func(help="Creates a LinearInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Creates a LinearInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME
+)
 def qlLinearInterpolatedSmileSection(
     expiry_time: float,
     strikes: xlo.Array(dims=1),
@@ -498,7 +500,9 @@ def qlLinearInterpolatedSmileSection(
     )
 
 
-@xlo.func(help="Creates a CubicInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME)
+@xlo.func(
+    help="Creates a CubicInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME
+)
 def qlCubicInterpolatedSmileSection(
     expiry_time: float,
     strikes: xlo.Array(dims=1),
@@ -573,6 +577,46 @@ def qlSplineCubicInterpolatedSmileSection(
         day_counter,
         volatility_type,
         shift,
+    )
+
+
+@xlo.func(
+    help="Creates a KahaleSmileSection object.",
+    args={
+        "source": "Source SmileSection object.",
+        "atm": "At-the-money level.",
+        "interpolate": "Whether to interpolate the arbitrage-free smile.",
+        "exponential_extrapolation": "Whether to use exponential extrapolation.",
+        "delete_arbitrage_points": "Whether to remove arbitrage points.",
+        "moneyness_grid": "Optional moneyness grid.",
+        "gap": "Finite-difference gap.",
+        "forced_left_index": "Optional forced left wing index.",
+        "forced_right_index": "Optional forced right wing index.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlKahaleSmileSection(
+    source: ql.SmileSection,
+    atm: float = ql.nullDouble(),
+    interpolate: bool = False,
+    exponential_extrapolation: bool = False,
+    delete_arbitrage_points: bool = False,
+    moneyness_grid: xlo.Array(dims=1) = None,
+    gap: float = 1.0e-5,
+    forced_left_index: int = -1,
+    forced_right_index: int = 2147483647,
+    trigger=None,
+) -> ql.KahaleSmileSection:
+    return ql.KahaleSmileSection(
+        source,
+        atm,
+        interpolate,
+        exponential_extrapolation,
+        delete_arbitrage_points,
+        [] if moneyness_grid is None else to_float_list(moneyness_grid),
+        gap,
+        forced_left_index,
+        forced_right_index,
     )
 
 

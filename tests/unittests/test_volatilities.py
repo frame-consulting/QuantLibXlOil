@@ -48,6 +48,7 @@ from quantlib_xloil.volatilities import (
     qlSplineCubicInterpolatedSmileSection,
     qlFlatSmileSection,
     qlFlatSmileSectionFromTime,
+    qlKahaleSmileSection,
     qlNoArbSabrSmileSection,
     qlNoArbSabrSmileSectionFromTime,
     qlSmileSectionAtmLevel,
@@ -328,6 +329,18 @@ def test_qlInterpolatedSmileSections_create_sections_at_input_nodes():
             "SHIFTEDLOGNORMAL",
         )
         assert smile_section.volatility(0.025) == pytest.approx(0.20)
+
+
+def test_qlKahaleSmileSection_creates_arbitrage_free_smile():
+    source = qlFlatSmileSectionFromTime(
+        1.0, 0.20, qlDayCounter("ACTUAL365FIXED"), 0.025
+    )
+    smile_section = qlKahaleSmileSection(
+        source, 0.025, interpolate=True, moneyness_grid=[0.9, 1.0, 1.1]
+    )
+
+    assert isinstance(smile_section, ql.KahaleSmileSection)
+    assert smile_section.volatility(0.025) == pytest.approx(0.20)
 
 
 def test_qlSmileSection_accessors_and_evaluators():
