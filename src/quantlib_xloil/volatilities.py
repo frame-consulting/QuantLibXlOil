@@ -2270,6 +2270,38 @@ def qlSpreadedSwaptionVolatility(
     return ql.SwaptionVolatilityStructureHandle(vol_ts)
 
 
+def _to_quote_handle_matrix(values: xlo.Array(dims=2)) -> list[list[ql.QuoteHandle]]:
+    return [[qQuoteHandle.__wrapped__(value) for value in row] for row in values]
+
+
+@xlo.func(
+    help="Creates an InterpolatedSwaptionVolatilityCube object and returns a handle to it.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlInterpolatedSwaptionVolatilityCube(
+    atm_vol_tsh: ql.SwaptionVolatilityStructureHandle,
+    option_tenors: xlo.Array(dims=1),
+    swap_tenors: xlo.Array(dims=1),
+    strike_spreads: xlo.Array(dims=1),
+    vol_spreads: xlo.Array(dims=2),
+    swap_index: ql.SwapIndex,
+    short_swap_index: ql.SwapIndex,
+    vega_weighted_smile_fit: bool,
+    trigger=None,
+) -> ql.SwaptionVolatilityStructureHandle:
+    vol_ts = ql.InterpolatedSwaptionVolatilityCube(
+        atm_vol_tsh,
+        [qPeriod.__wrapped__(tenor) for tenor in option_tenors],
+        [qPeriod.__wrapped__(tenor) for tenor in swap_tenors],
+        to_float_list(strike_spreads),
+        _to_quote_handle_matrix(vol_spreads),
+        swap_index,
+        short_swap_index,
+        vega_weighted_smile_fit,
+    )
+    return ql.SwaptionVolatilityStructureHandle(vol_ts)
+
+
 @xlo.func(
     help="Creates a SwaptionVolatilityMatrix object and returns a handle to it.",
     args={

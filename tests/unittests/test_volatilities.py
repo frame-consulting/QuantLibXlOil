@@ -66,6 +66,7 @@ from quantlib_xloil.volatilities import (
     qlFlatSmileSection,
     qlFlatSmileSectionFromTime,
     qlHestonBlackVolSurface,
+    qlInterpolatedSwaptionVolatilityCube,
     qlKahaleSmileSection,
     qlNoArbSabrSmileSection,
     qlNoArbSabrSmileSectionFromTime,
@@ -649,6 +650,32 @@ def test_qlSpreadedSwaptionVolatility_adds_quote_spread():
     assert qlSwaptionVolatilityStructureVolatility(
         handle, qlDate(2027, 1, 2), qlPeriod(5, ql.Years), 0.025
     ) == pytest.approx(0.21)
+
+
+def test_qlInterpolatedSwaptionVolatilityCube_creates_handle():
+    reference_date = qlDate(2024, 1, 2)
+    day_counter = qlDayCounter("ACTUAL365FIXED")
+    curve = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.02, day_counter)
+    )
+    swap_index = ql.EuriborSwapIsdaFixA(qlPeriod(5, ql.Years), curve, curve)
+    swap_index.addFixing(qlDate(2025, 1, 2), 0.02)
+
+    cube = qlInterpolatedSwaptionVolatilityCube(
+        _constant_swaption_vol_handle(),
+        [qlPeriod(1, ql.Years), qlPeriod(2, ql.Years)],
+        [qlPeriod(5, ql.Years), qlPeriod(10, ql.Years)],
+        [-0.01, 0.01],
+        [[0.01, -0.01], [0.01, -0.01], [0.01, -0.01], [0.01, -0.01]],
+        swap_index,
+        swap_index,
+        False,
+    )
+
+    assert isinstance(cube, ql.SwaptionVolatilityStructureHandle)
+    assert qlSwaptionVolatilityStructureVolatilityFromTime(
+        cube, 1.0, 5.0, 0.02
+    ) == pytest.approx(0.20)
 
 
 def test_qlSwaptionVolatilityStructure_volatility_constant_for_date_and_time():
