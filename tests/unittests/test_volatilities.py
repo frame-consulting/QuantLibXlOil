@@ -11,6 +11,7 @@ from quantlib_xloil.volatilities import (
     qlBlackVolTermStructureBlackVarianceFromTime,
     qlBlackVolTermStructureBlackVol,
     qlBlackVarianceCurve,
+    qlBlackVarianceSurface,
     qlBlackVolTermStructureBlackVolFromTime,
     qlBlackVolTermStructureMaxStrike,
     qlBlackVolTermStructureMinStrike,
@@ -32,6 +33,7 @@ from quantlib_xloil.volatilities import (
     qlSwaptionVolatilityStructureVolatility,
     qlSwaptionVolatilityStructureVolatilityFromTime,
     qlSwaptionVolatilityMatrix,
+    qBlackVarianceSurfaceExtrapolation,
     qVolatilityType,
 )
 from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
@@ -159,6 +161,39 @@ def test_qlBlackVarianceCurve_creates_curve_from_dates_and_volatilities():
 
     assert isinstance(curve, ql.BlackVarianceCurve)
     assert curve.blackVol(qlDate(2024, 1, 2), 100.0, False) == pytest.approx(0.20)
+
+
+def test_qlBlackVarianceSurface_creates_handle_with_optional_extrapolation():
+    reference_date = qlDate(2024, 1, 2)
+    expiry_dates = [qlDate(2025, 1, 2), qlDate(2026, 1, 2)]
+    strikes = [90.0, 110.0]
+    black_vols = [[0.20, 0.21], [0.22, 0.23]]
+
+    default_surface = qlBlackVarianceSurface(
+        reference_date,
+        qlCalendar("TARGET"),
+        expiry_dates,
+        strikes,
+        black_vols,
+        qlDayCounter("ACTUAL365FIXED"),
+    )
+    constant_extrapolation_surface = qlBlackVarianceSurface(
+        reference_date,
+        qlCalendar("TARGET"),
+        expiry_dates,
+        strikes,
+        black_vols,
+        qlDayCounter("ACTUAL365FIXED"),
+        qBlackVarianceSurfaceExtrapolation.__wrapped__("CONSTANT"),
+        qBlackVarianceSurfaceExtrapolation.__wrapped__("CONSTANT"),
+        "",
+    )
+
+    assert isinstance(default_surface, ql.BlackVolTermStructureHandle)
+    assert default_surface.blackVol(expiry_dates[0], strikes[0]) == pytest.approx(0.20)
+    assert constant_extrapolation_surface.blackVol(
+        expiry_dates[0], strikes[0]
+    ) == pytest.approx(0.20)
 
 
 # Helper functions for optionlet and swaption volatility tests

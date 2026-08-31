@@ -31,6 +31,13 @@ QL_BLACK_VOL_TIME_EXTRAPOLATION = {
 }
 
 
+QL_BLACK_VARIANCE_SURFACE_EXTRAPOLATION = {
+    "CONSTANT": ql.BlackVarianceSurface.ConstantExtrapolation,
+    "DEFAULT": ql.BlackVarianceSurface.InterpolatorDefaultExtrapolation,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
 def _qVolatilityType(s: str) -> int:
     return enum_value(s, QL_VOLATILITY_TYPE)
 
@@ -47,6 +54,15 @@ def _qBlackVolTimeExtrapolation(s: str) -> int:
 @xlo.converter()
 def qBlackVolTimeExtrapolation(s: str) -> int:
     return _qBlackVolTimeExtrapolation(s)
+
+
+def _qBlackVarianceSurfaceExtrapolation(s: str) -> int:
+    return enum_value(s, QL_BLACK_VARIANCE_SURFACE_EXTRAPOLATION)
+
+
+@xlo.converter()
+def qBlackVarianceSurfaceExtrapolation(s: str) -> int:
+    return _qBlackVarianceSurfaceExtrapolation(s)
 
 
 # VolatilityTermStructure/BlackVolTermStructure interface
@@ -303,6 +319,47 @@ def qlBlackVarianceCurve(
         force_monotone_variance,
         time_extrapolation_type,
     )
+
+
+@xlo.func(
+    help="Creates a BlackVarianceSurface object and returns a handle to it.",
+    args={
+        "reference_date": "Reference date for the volatility surface.",
+        "calendar": "Calendar for the volatility surface.",
+        "dates": "Array of option expiry dates.",
+        "strikes": "Array of strikes.",
+        "black_vols": "2D array of Black volatilities with shape (#strikes, #dates).",
+        "day_counter": "Day count convention for the volatility surface.",
+        "lower_extrapolation": "Extrapolation below the minimum strike (default: DEFAULT).",
+        "upper_extrapolation": "Extrapolation above the maximum strike (default: DEFAULT).",
+        "interpolator": "Optional interpolation method.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVarianceSurface(
+    reference_date: qDate,
+    calendar: qCalendar,
+    dates: xlo.Array(dims=1),
+    strikes: xlo.Array(dims=1),
+    black_vols: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    lower_extrapolation: qBlackVarianceSurfaceExtrapolation = ql.BlackVarianceSurface.InterpolatorDefaultExtrapolation,
+    upper_extrapolation: qBlackVarianceSurfaceExtrapolation = ql.BlackVarianceSurface.InterpolatorDefaultExtrapolation,
+    interpolator: str = "",
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    vol_ts = ql.BlackVarianceSurface(
+        reference_date,
+        calendar,
+        _to_date_list(dates),
+        to_float_list(strikes),
+        ql.Matrix(to_float_matrix(black_vols)),
+        day_counter,
+        lower_extrapolation,
+        upper_extrapolation,
+        interpolator,
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
 
 
 # LocalVolTermStructure interface
