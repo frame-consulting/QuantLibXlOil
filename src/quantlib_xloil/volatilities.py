@@ -758,6 +758,106 @@ def qlNoArbSabrSmileSectionFromTime(
     )
 
 
+def _zabr_smile_section(
+    smile_section_class,
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1),
+    fd_refinement: int,
+):
+    return smile_section_class(
+        expiry_time,
+        forward,
+        to_float_list(zabr_parameters),
+        [] if moneyness is None else to_float_list(moneyness),
+        fd_refinement,
+    )
+
+
+@xlo.func(
+    help="Creates a ZabrShortMaturityLognormalSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlZabrShortMaturityLognormalSmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrShortMaturityLognormalSmileSection:
+    return _zabr_smile_section(
+        ql.ZabrShortMaturityLognormalSmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
+@xlo.func(
+    help="Creates a ZabrShortMaturityNormalSmileSection object.", group=EXCEL_GROUP_NAME
+)
+def qlZabrShortMaturityNormalSmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrShortMaturityNormalSmileSection:
+    return _zabr_smile_section(
+        ql.ZabrShortMaturityNormalSmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
+@xlo.func(
+    help="Creates a ZabrLocalVolatilitySmileSection object.", group=EXCEL_GROUP_NAME
+)
+def qlZabrLocalVolatilitySmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrLocalVolatilitySmileSection:
+    return _zabr_smile_section(
+        ql.ZabrLocalVolatilitySmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
+@xlo.func(help="Creates a ZabrFullFdSmileSection object.", group=EXCEL_GROUP_NAME)
+def qlZabrFullFdSmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrFullFdSmileSection:
+    return _zabr_smile_section(
+        ql.ZabrFullFdSmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
 def _interpolated_smile_section(
     smile_section_class,
     interpolator,

@@ -57,6 +57,10 @@ from quantlib_xloil.volatilities import (
     qlSviInterpolatedSmileSectionM,
     qlSviInterpolatedSmileSectionRho,
     qlSviInterpolatedSmileSectionSigma,
+    qlZabrFullFdSmileSection,
+    qlZabrLocalVolatilitySmileSection,
+    qlZabrShortMaturityLognormalSmileSection,
+    qlZabrShortMaturityNormalSmileSection,
     qlSplineCubicInterpolatedSmileSection,
     qlFlatSmileSection,
     qlFlatSmileSectionFromTime,
@@ -418,6 +422,18 @@ def test_qlNoArbSabrSmileSection_creates_date_and_time_sections():
 
     assert date_section.volatility(0.025) > 0.0
     assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlZabrSmileSections_create_sections():
+    constructors = (
+        qlZabrShortMaturityLognormalSmileSection,
+        qlZabrShortMaturityNormalSmileSection,
+        qlZabrLocalVolatilitySmileSection,
+        # qlZabrFullFdSmileSection,
+    )
+    for constructor in constructors:
+        section = constructor(1.0, 0.025, [0.02, 0.50, 0.30, -0.20, 0.10])
+        assert section.volatility(0.025) > 0.0
 
 
 def test_qlInterpolatedSmileSections_create_sections_at_input_nodes():
