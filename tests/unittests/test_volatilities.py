@@ -64,6 +64,11 @@ from quantlib_xloil.volatilities import (
     qlKahaleSmileSection,
     qlNoArbSabrSmileSection,
     qlNoArbSabrSmileSectionFromTime,
+    qlNoArbSabrInterpolatedSmileSection,
+    qlNoArbSabrInterpolatedSmileSectionAlpha,
+    qlNoArbSabrInterpolatedSmileSectionBeta,
+    qlNoArbSabrInterpolatedSmileSectionNu,
+    qlNoArbSabrInterpolatedSmileSectionRho,
     qlSmileSectionAtmLevel,
     qlSmileSectionDensity,
     qlSmileSectionDigitalOptionPrice,
@@ -342,9 +347,22 @@ def test_qlSviSmileSection_creates_date_and_time_sections():
 
 def test_qlSviInterpolatedSmileSection_returns_fixed_parameters():
     section = qlSviInterpolatedSmileSection(
-        qlDate(2027, 1, 2), 0.025, [0.02, 0.025, 0.03], False, 0.20,
-        [0.21, 0.20, 0.19], 0.01, 0.10, 0.20, -0.20, 0.0,
-        True, True, True, True, True,
+        qlDate(2027, 1, 2),
+        0.025,
+        [0.02, 0.025, 0.03],
+        False,
+        0.20,
+        [0.21, 0.20, 0.19],
+        0.01,
+        0.10,
+        0.20,
+        -0.20,
+        0.0,
+        True,
+        True,
+        True,
+        True,
+        True,
     )
 
     assert qlSviInterpolatedSmileSectionA(section) == pytest.approx(0.01)
@@ -352,6 +370,30 @@ def test_qlSviInterpolatedSmileSection_returns_fixed_parameters():
     assert qlSviInterpolatedSmileSectionSigma(section) == pytest.approx(0.20)
     assert qlSviInterpolatedSmileSectionRho(section) == pytest.approx(-0.20)
     assert qlSviInterpolatedSmileSectionM(section) == pytest.approx(0.0)
+
+
+def test_qlNoArbSabrInterpolatedSmileSection_returns_fixed_parameters():
+    section = qlNoArbSabrInterpolatedSmileSection(
+        qlDate(2027, 1, 2),
+        0.025,
+        [0.02, 0.025, 0.03],
+        False,
+        0.20,
+        [0.21, 0.20, 0.19],
+        0.02,
+        0.50,
+        0.30,
+        -0.20,
+        True,
+        True,
+        True,
+        True,
+    )
+
+    assert qlNoArbSabrInterpolatedSmileSectionAlpha(section) == pytest.approx(0.02)
+    assert qlNoArbSabrInterpolatedSmileSectionBeta(section) == pytest.approx(0.50)
+    assert qlNoArbSabrInterpolatedSmileSectionNu(section) == pytest.approx(0.30)
+    assert qlNoArbSabrInterpolatedSmileSectionRho(section) == pytest.approx(-0.20)
 
 
 def test_qlFlatSmileSection_creates_date_and_time_sections():

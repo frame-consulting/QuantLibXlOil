@@ -466,9 +466,7 @@ def qlSviSmileSectionFromTime(
     return ql.SviSmileSection(expiry_time, forward, to_float_list(svi_parameters))
 
 
-@xlo.func(
-    help="Creates a SviInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME
-)
+@xlo.func(help="Creates a SviInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME)
 def qlSviInterpolatedSmileSection(
     option_date: qDate,
     forward: float,
@@ -490,36 +488,150 @@ def qlSviInterpolatedSmileSection(
     trigger=None,
 ) -> ql.SviInterpolatedSmileSection:
     return ql.SviInterpolatedSmileSection(
-        option_date, forward, to_float_list(strikes), has_floating_strikes,
-        atm_volatility, to_float_list(volatilities), a, b, sigma, rho, m,
-        a_is_fixed, b_is_fixed, sigma_is_fixed, rho_is_fixed, m_is_fixed,
+        option_date,
+        forward,
+        to_float_list(strikes),
+        has_floating_strikes,
+        atm_volatility,
+        to_float_list(volatilities),
+        a,
+        b,
+        sigma,
+        rho,
+        m,
+        a_is_fixed,
+        b_is_fixed,
+        sigma_is_fixed,
+        rho_is_fixed,
+        m_is_fixed,
         vega_weighted,
     )
 
 
-@xlo.func(help="Returns the a parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
-def qlSviInterpolatedSmileSectionA(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+@xlo.func(
+    help="Returns the a parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionA(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
     return section.a()
 
 
-@xlo.func(help="Returns the b parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
-def qlSviInterpolatedSmileSectionB(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+@xlo.func(
+    help="Returns the b parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionB(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
     return section.b()
 
 
-@xlo.func(help="Returns the sigma parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
-def qlSviInterpolatedSmileSectionSigma(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+@xlo.func(
+    help="Returns the sigma parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionSigma(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
     return section.sigma()
 
 
-@xlo.func(help="Returns the rho parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
-def qlSviInterpolatedSmileSectionRho(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+@xlo.func(
+    help="Returns the rho parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionRho(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
     return section.rho()
 
 
-@xlo.func(help="Returns the m parameter of an SVI smile section.", group=EXCEL_GROUP_NAME)
-def qlSviInterpolatedSmileSectionM(section: ql.SviInterpolatedSmileSection, trigger=None) -> float:
+@xlo.func(
+    help="Returns the m parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionM(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
     return section.m()
+
+
+@xlo.func(
+    help="Creates a NoArbSabrInterpolatedSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSection(
+    option_date: qDate,
+    forward: float,
+    strikes: xlo.Array(dims=1),
+    has_floating_strikes: bool,
+    atm_volatility: float,
+    volatilities: xlo.Array(dims=1),
+    alpha: float,
+    beta: float,
+    nu: float,
+    rho: float,
+    alpha_is_fixed: bool = False,
+    beta_is_fixed: bool = False,
+    nu_is_fixed: bool = False,
+    rho_is_fixed: bool = False,
+    vega_weighted: bool = True,
+    trigger=None,
+) -> ql.NoArbSabrInterpolatedSmileSection:
+    return ql.NoArbSabrInterpolatedSmileSection(
+        option_date,
+        forward,
+        to_float_list(strikes),
+        has_floating_strikes,
+        atm_volatility,
+        to_float_list(volatilities),
+        alpha,
+        beta,
+        nu,
+        rho,
+        alpha_is_fixed,
+        beta_is_fixed,
+        nu_is_fixed,
+        rho_is_fixed,
+        vega_weighted,
+    )
+
+
+@xlo.func(
+    help="Returns alpha for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionAlpha(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.alpha()
+
+
+@xlo.func(
+    help="Returns beta for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionBeta(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.beta()
+
+
+@xlo.func(
+    help="Returns nu for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionNu(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.nu()
+
+
+@xlo.func(
+    help="Returns rho for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionRho(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.rho()
 
 
 @xlo.func(
