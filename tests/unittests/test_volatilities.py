@@ -11,13 +11,19 @@ from quantlib_xloil.volatilities import (
     qlBlackVolTermStructureBlackVarianceFromTime,
     qlBlackVolTermStructureBlackVol,
     qlBlackVarianceCurve,
+    qlBlackVarianceSurface,
+    qlBlackVolatilitySurfaceDelta,
     qlBlackVolTermStructureBlackVolFromTime,
     qlBlackVolTermStructureMaxStrike,
     qlBlackVolTermStructureMinStrike,
     qlConstantOptionletVolatility,
+    qlConstantYoYOptionletVolatility,
     qlConstantSwaptionVolatility,
+    qlCubicInterpolatedSmileSection,
     qlLocalVolTermStructureLocalVol,
     qlLocalVolTermStructureLocalVolFromTime,
+    qlLinearInterpolatedSmileSection,
+    qlMonotonicCubicInterpolatedSmileSection,
     qlOptionletVolatilityStructureBlackVariance,
     qlOptionletVolatilityStructureBlackVarianceFromTime,
     qlOptionletVolatilityStructureVolatility,
@@ -32,6 +38,61 @@ from quantlib_xloil.volatilities import (
     qlSwaptionVolatilityStructureVolatility,
     qlSwaptionVolatilityStructureVolatilityFromTime,
     qlSwaptionVolatilityMatrix,
+    qlSabrFlochKennedyVolatility,
+    qlSabrGuess,
+    qlSABRInterpolation,
+    qlSABRInterpolationAlpha,
+    qlSABRInterpolationBeta,
+    qlSABRInterpolationNu,
+    qlSABRInterpolationRho,
+    qlSABRInterpolationValue,
+    qlSabrSmileSection,
+    qlSabrSmileSectionFromTime,
+    qlSabrVolatility,
+    qlShiftedSabrVolatility,
+    qlSviSmileSection,
+    qlSviSmileSectionFromTime,
+    qlSviInterpolatedSmileSection,
+    qlSviInterpolatedSmileSectionA,
+    qlSviInterpolatedSmileSectionB,
+    qlSviInterpolatedSmileSectionM,
+    qlSviInterpolatedSmileSectionRho,
+    qlSviInterpolatedSmileSectionSigma,
+    qlZabrFullFdSmileSection,
+    qlZabrLocalVolatilitySmileSection,
+    qlZabrShortMaturityLognormalSmileSection,
+    qlZabrShortMaturityNormalSmileSection,
+    qlSplineCubicInterpolatedSmileSection,
+    qlFlatSmileSection,
+    qlFlatSmileSectionFromTime,
+    qlHestonBlackVolSurface,
+    qlInterpolatedSwaptionVolatilityCube,
+    qlKahaleSmileSection,
+    qlNoArbSabrSmileSection,
+    qlNoArbSabrSmileSectionFromTime,
+    qlNoArbSabrInterpolatedSmileSection,
+    qlNoArbSabrInterpolatedSmileSectionAlpha,
+    qlNoArbSabrInterpolatedSmileSectionBeta,
+    qlNoArbSabrInterpolatedSmileSectionNu,
+    qlNoArbSabrInterpolatedSmileSectionRho,
+    qlPiecewiseBlackVarianceSurfaceFromGrid,
+    qlSmileSectionAtmLevel,
+    qlSmileSectionDensity,
+    qlSmileSectionDigitalOptionPrice,
+    qlSmileSectionExerciseDate,
+    qlSmileSectionExerciseTime,
+    qlSmileSectionMaxStrike,
+    qlSmileSectionMinStrike,
+    qlSmileSectionOptionPrice,
+    qlSmileSectionShift,
+    qlSmileSectionVariance,
+    qlSmileSectionVega,
+    qlSmileSectionVolatility,
+    qlSmileSectionVolatilityType,
+    qlSpreadedSwaptionVolatility,
+    qBlackVarianceSurfaceExtrapolation,
+    qDeltaVolQuoteAtmType,
+    qDeltaVolQuoteDeltaType,
     qVolatilityType,
 )
 from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
@@ -161,6 +222,346 @@ def test_qlBlackVarianceCurve_creates_curve_from_dates_and_volatilities():
     assert curve.blackVol(qlDate(2024, 1, 2), 100.0, False) == pytest.approx(0.20)
 
 
+def test_qlBlackVarianceSurface_creates_handle_with_optional_extrapolation():
+    reference_date = qlDate(2024, 1, 2)
+    expiry_dates = [qlDate(2025, 1, 2), qlDate(2026, 1, 2)]
+    strikes = [90.0, 110.0]
+    black_vols = [[0.20, 0.21], [0.22, 0.23]]
+
+    default_surface = qlBlackVarianceSurface(
+        reference_date,
+        qlCalendar("TARGET"),
+        expiry_dates,
+        strikes,
+        black_vols,
+        qlDayCounter("ACTUAL365FIXED"),
+    )
+    constant_extrapolation_surface = qlBlackVarianceSurface(
+        reference_date,
+        qlCalendar("TARGET"),
+        expiry_dates,
+        strikes,
+        black_vols,
+        qlDayCounter("ACTUAL365FIXED"),
+        qBlackVarianceSurfaceExtrapolation.__wrapped__("CONSTANT"),
+        qBlackVarianceSurfaceExtrapolation.__wrapped__("CONSTANT"),
+        "",
+    )
+
+    assert isinstance(default_surface, ql.BlackVolTermStructureHandle)
+    assert default_surface.blackVol(expiry_dates[0], strikes[0]) == pytest.approx(0.20)
+    assert constant_extrapolation_surface.blackVol(
+        expiry_dates[0], strikes[0]
+    ) == pytest.approx(0.20)
+
+
+def test_qlPiecewiseBlackVarianceSurfaceFromGrid_creates_handle():
+    expiry_dates = [qlDate(2025, 1, 2), qlDate(2026, 1, 2)]
+    strikes = [90.0, 110.0]
+    vol_tsh = qlPiecewiseBlackVarianceSurfaceFromGrid(
+        qlDate(2024, 1, 2),
+        expiry_dates,
+        strikes,
+        [[0.20, 0.21], [0.22, 0.23]],
+        qlDayCounter("ACTUAL365FIXED"),
+    )
+
+    assert isinstance(vol_tsh, ql.BlackVolTermStructureHandle)
+    assert vol_tsh.blackVol(expiry_dates[0], strikes[0]) == pytest.approx(0.20)
+
+
+def test_qlBlackVolatilitySurfaceDelta_creates_handle():
+    reference_date = qlDate(2024, 1, 2)
+    day_counter = qlDayCounter("ACTUAL365FIXED")
+    spot = qQuoteHandle.__wrapped__(1.10)
+    domestic_ytsh = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.02, day_counter)
+    )
+    foreign_ytsh = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.01, day_counter)
+    )
+
+    vol_tsh = qlBlackVolatilitySurfaceDelta(
+        reference_date,
+        [qlDate(2025, 1, 2), qlDate(2026, 1, 2)],
+        [-0.25],
+        [0.25],
+        True,
+        [[0.22, 0.20, 0.19], [0.23, 0.21, 0.20]],
+        day_counter,
+        qlCalendar("TARGET"),
+        spot,
+        domestic_ytsh,
+        foreign_ytsh,
+        qDeltaVolQuoteDeltaType.__wrapped__("SPOT"),
+        qDeltaVolQuoteAtmType.__wrapped__("ATMDELTANEUTRAL"),
+    )
+
+    assert isinstance(vol_tsh, ql.BlackVolTermStructureHandle)
+    assert vol_tsh.blackVol(qlDate(2025, 1, 2), 1.10) > 0.0
+
+
+def test_qlHestonBlackVolSurface_creates_handle_with_positive_volatility():
+    spot = ql.QuoteHandle(ql.SimpleQuote(100.0))
+    risk_free = ql.YieldTermStructureHandle(
+        ql.FlatForward(qlDate(2026, 1, 2), 0.02, ql.Actual365Fixed())
+    )
+    dividend = ql.YieldTermStructureHandle(
+        ql.FlatForward(qlDate(2026, 1, 2), 0.01, ql.Actual365Fixed())
+    )
+    process = ql.HestonProcess(risk_free, dividend, spot, 0.04, 1.50, 0.04, 0.25, -0.60)
+    model_handle = ql.HestonModelHandle(ql.HestonModel(process))
+
+    vol_tsh = qlHestonBlackVolSurface(model_handle, "GATHERAL", "GAUSS_LAGUERRE")
+
+    assert isinstance(vol_tsh, ql.BlackVolTermStructureHandle)
+    assert vol_tsh.blackVol(1.0, 100.0) > 0.0
+
+
+def test_qlSabrVolatility_functions_and_guess():
+    sabr_volatility = qlSabrVolatility(0.025, 0.025, 2.0, 0.20, 0.50, 0.30, -0.20)
+    shifted_sabr_volatility = qlShiftedSabrVolatility(
+        0.025,
+        0.025,
+        2.0,
+        0.20,
+        0.50,
+        0.30,
+        -0.20,
+        0.0,
+        "SHIFTEDLOGNORMAL",
+    )
+    floch_kennedy_volatility = qlSabrFlochKennedyVolatility(
+        0.025, 0.025, 2.0, 0.20, 0.50, 0.30, -0.20
+    )
+    guess = qlSabrGuess(
+        0.020,
+        0.23,
+        0.025,
+        0.20,
+        0.030,
+        0.19,
+        0.025,
+        2.0,
+        0.50,
+        0.0,
+        "SHIFTEDLOGNORMAL",
+    )
+
+    assert sabr_volatility > 0.0
+    assert shifted_sabr_volatility == pytest.approx(sabr_volatility)
+    assert floch_kennedy_volatility > 0.0
+    assert len(guess) == 4
+    assert all(isinstance(parameter, float) for parameter in guess)
+
+
+def test_qlSABRInterpolation_evaluates_fixed_parameters():
+    interpolation = qlSABRInterpolation(
+        [0.02, 0.025, 0.03],
+        [0.21, 0.20, 0.19],
+        1.0,
+        0.025,
+        0.02,
+        0.50,
+        0.30,
+        -0.20,
+        True,
+        True,
+        True,
+        True,
+    )
+
+    assert qlSABRInterpolationAlpha(interpolation) == pytest.approx(0.02)
+    assert qlSABRInterpolationBeta(interpolation) == pytest.approx(0.50)
+    assert qlSABRInterpolationNu(interpolation) == pytest.approx(0.30)
+    assert qlSABRInterpolationRho(interpolation) == pytest.approx(-0.20)
+    assert qlSABRInterpolationValue(interpolation, 0.025) > 0.0
+
+
+def test_qlSabrSmileSection_creates_date_and_time_sections():
+    date_section = qlSabrSmileSection(
+        qlDate(2027, 1, 2), 0.025, [0.20, 0.50, 0.30, -0.20]
+    )
+    time_section = qlSabrSmileSectionFromTime(
+        1.0, 0.025, [0.20, 0.50, 0.30, -0.20], 0.0, "SHIFTEDLOGNORMAL"
+    )
+
+    assert date_section.volatility(0.025) > 0.0
+    assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlSviSmileSection_creates_date_and_time_sections():
+    date_section = qlSviSmileSection(
+        qlDate(2027, 1, 2), 0.025, [0.01, 0.10, 0.20, -0.20, 0.0]
+    )
+    time_section = qlSviSmileSectionFromTime(1.0, 0.025, [0.01, 0.10, 0.20, -0.20, 0.0])
+
+    assert date_section.volatility(0.025) > 0.0
+    assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlSviInterpolatedSmileSection_returns_fixed_parameters():
+    section = qlSviInterpolatedSmileSection(
+        qlDate(2027, 1, 2),
+        0.025,
+        [0.02, 0.025, 0.03],
+        False,
+        0.20,
+        [0.21, 0.20, 0.19],
+        0.01,
+        0.10,
+        0.20,
+        -0.20,
+        0.0,
+        True,
+        True,
+        True,
+        True,
+        True,
+    )
+
+    assert qlSviInterpolatedSmileSectionA(section) == pytest.approx(0.01)
+    assert qlSviInterpolatedSmileSectionB(section) == pytest.approx(0.10)
+    assert qlSviInterpolatedSmileSectionSigma(section) == pytest.approx(0.20)
+    assert qlSviInterpolatedSmileSectionRho(section) == pytest.approx(-0.20)
+    assert qlSviInterpolatedSmileSectionM(section) == pytest.approx(0.0)
+
+
+def test_qlNoArbSabrInterpolatedSmileSection_returns_fixed_parameters():
+    section = qlNoArbSabrInterpolatedSmileSection(
+        qlDate(2027, 1, 2),
+        0.025,
+        [0.02, 0.025, 0.03],
+        False,
+        0.20,
+        [0.21, 0.20, 0.19],
+        0.02,
+        0.50,
+        0.30,
+        -0.20,
+        True,
+        True,
+        True,
+        True,
+    )
+
+    assert qlNoArbSabrInterpolatedSmileSectionAlpha(section) == pytest.approx(0.02)
+    assert qlNoArbSabrInterpolatedSmileSectionBeta(section) == pytest.approx(0.50)
+    assert qlNoArbSabrInterpolatedSmileSectionNu(section) == pytest.approx(0.30)
+    assert qlNoArbSabrInterpolatedSmileSectionRho(section) == pytest.approx(-0.20)
+
+
+def test_qlFlatSmileSection_creates_date_and_time_sections():
+    date_section = qlFlatSmileSection(
+        qlDate(2027, 1, 2), 0.20, qlDayCounter("ACTUAL365FIXED")
+    )
+    time_section = qlFlatSmileSectionFromTime(
+        1.0, 0.20, qlDayCounter("ACTUAL365FIXED"), 0.025, "SHIFTEDLOGNORMAL"
+    )
+
+    assert date_section.volatility(0.025) == pytest.approx(0.20)
+    assert time_section.volatility(0.025) == pytest.approx(0.20)
+
+
+def test_qlNoArbSabrSmileSection_creates_date_and_time_sections():
+    date_section = qlNoArbSabrSmileSection(
+        qlDate(2027, 1, 2), 0.025, [0.02, 0.50, 0.30, -0.20]
+    )
+    time_section = qlNoArbSabrSmileSectionFromTime(
+        1.0, 0.025, [0.02, 0.50, 0.30, -0.20], 0.0, "SHIFTEDLOGNORMAL"
+    )
+
+    assert date_section.volatility(0.025) > 0.0
+    assert time_section.volatility(0.025) > 0.0
+
+
+def test_qlZabrSmileSections_create_sections():
+    constructors = (
+        qlZabrShortMaturityLognormalSmileSection,
+        qlZabrShortMaturityNormalSmileSection,
+        qlZabrLocalVolatilitySmileSection,
+        # qlZabrFullFdSmileSection,
+    )
+    for constructor in constructors:
+        section = constructor(1.0, 0.025, [0.02, 0.50, 0.30, -0.20, 0.10])
+        assert section.volatility(0.025) > 0.0
+
+
+def test_qlInterpolatedSmileSections_create_sections_at_input_nodes():
+    constructors = (
+        qlLinearInterpolatedSmileSection,
+        qlCubicInterpolatedSmileSection,
+        qlMonotonicCubicInterpolatedSmileSection,
+        qlSplineCubicInterpolatedSmileSection,
+    )
+
+    for constructor in constructors:
+        smile_section = constructor(
+            1.0,
+            [0.02, 0.025, 0.03],
+            [0.21, 0.20, 0.19],
+            0.025,
+            qlDayCounter("ACTUAL365FIXED"),
+            "SHIFTEDLOGNORMAL",
+        )
+        assert smile_section.volatility(0.025) == pytest.approx(0.20)
+
+
+def test_qlKahaleSmileSection_creates_arbitrage_free_smile():
+    source = qlFlatSmileSectionFromTime(
+        1.0, 0.20, qlDayCounter("ACTUAL365FIXED"), 0.025
+    )
+    smile_section = qlKahaleSmileSection(
+        source, 0.025, interpolate=True, moneyness_grid=[0.9, 1.0, 1.1]
+    )
+
+    assert isinstance(smile_section, ql.KahaleSmileSection)
+    assert smile_section.volatility(0.025) == pytest.approx(0.20)
+
+
+def test_qlSmileSection_accessors_and_evaluators():
+    smile_section = qlFlatSmileSection(
+        qlDate(2027, 1, 2),
+        0.20,
+        qlDayCounter("ACTUAL365FIXED"),
+        qlDate(2026, 1, 2),
+        0.025,
+    )
+
+    assert qlSmileSectionAtmLevel(smile_section) == pytest.approx(0.025)
+    assert qlSmileSectionExerciseDate(smile_section) == qlDate(2027, 1, 2)
+    assert qlSmileSectionExerciseTime(smile_section) == pytest.approx(1.0)
+    assert qlSmileSectionMinStrike(smile_section) < 0.025
+    assert qlSmileSectionMaxStrike(smile_section) > 0.025
+    assert qlSmileSectionVolatility(smile_section, 0.025) == pytest.approx(0.20)
+    assert qlSmileSectionVariance(smile_section, 0.025) == pytest.approx(0.04)
+    assert qlSmileSectionOptionPrice(smile_section, 0.025, "CALL") > 0.0
+    assert qlSmileSectionDigitalOptionPrice(smile_section, 0.025, "CALL") > 0.0
+    assert qlSmileSectionDensity(smile_section, 0.025) > 0.0
+    assert qlSmileSectionVega(smile_section, 0.025) > 0.0
+    assert qlSmileSectionShift(smile_section) == pytest.approx(0.0)
+    assert qlSmileSectionVolatilityType(smile_section) == ql.ShiftedLognormal
+
+
+def test_qlConstantYoYOptionletVolatility_creates_handle():
+    handle = qlConstantYoYOptionletVolatility(
+        0.20,
+        2,
+        qlCalendar("TARGET"),
+        qBusinessDayConvention.__wrapped__("FOLLOWING"),
+        qlDayCounter("ACTUAL365FIXED"),
+        qlPeriod(3, ql.Months),
+        ql.Annual,
+        False,
+        0.0,
+        1.0,
+    )
+
+    assert isinstance(handle, ql.YoYOptionletVolatilitySurfaceHandle)
+    assert handle.minStrike() == pytest.approx(0.0)
+    assert handle.maxStrike() == pytest.approx(1.0)
+
+
 # Helper functions for optionlet and swaption volatility tests
 
 
@@ -239,6 +640,42 @@ def test_qlOptionletVolatilityStructure_black_variance():
 def test_qlConstantSwaptionVolatility_creates_handle():
     handle = _constant_swaption_vol_handle()
     assert isinstance(handle, ql.SwaptionVolatilityStructureHandle)
+
+
+def test_qlSpreadedSwaptionVolatility_adds_quote_spread():
+    base_handle = _constant_swaption_vol_handle(0.20)
+    handle = qlSpreadedSwaptionVolatility(base_handle, qQuoteHandle.__wrapped__(0.01))
+
+    assert isinstance(handle, ql.SwaptionVolatilityStructureHandle)
+    assert qlSwaptionVolatilityStructureVolatility(
+        handle, qlDate(2027, 1, 2), qlPeriod(5, ql.Years), 0.025
+    ) == pytest.approx(0.21)
+
+
+def test_qlInterpolatedSwaptionVolatilityCube_creates_handle():
+    reference_date = qlDate(2024, 1, 2)
+    day_counter = qlDayCounter("ACTUAL365FIXED")
+    curve = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.02, day_counter)
+    )
+    swap_index = ql.EuriborSwapIsdaFixA(qlPeriod(5, ql.Years), curve, curve)
+    swap_index.addFixing(qlDate(2025, 1, 2), 0.02)
+
+    cube = qlInterpolatedSwaptionVolatilityCube(
+        _constant_swaption_vol_handle(),
+        [qlPeriod(1, ql.Years), qlPeriod(2, ql.Years)],
+        [qlPeriod(5, ql.Years), qlPeriod(10, ql.Years)],
+        [-0.01, 0.01],
+        [[0.01, -0.01], [0.01, -0.01], [0.01, -0.01], [0.01, -0.01]],
+        swap_index,
+        swap_index,
+        False,
+    )
+
+    assert isinstance(cube, ql.SwaptionVolatilityStructureHandle)
+    assert qlSwaptionVolatilityStructureVolatilityFromTime(
+        cube, 1.0, 5.0, 0.02
+    ) == pytest.approx(0.20)
 
 
 def test_qlSwaptionVolatilityStructure_volatility_constant_for_date_and_time():
