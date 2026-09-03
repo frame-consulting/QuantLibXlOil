@@ -151,3 +151,25 @@ def qlLevenbergMarquardt(
     trigger=None,
 ) -> ql.LevenbergMarquardt:
     return ql.LevenbergMarquardt(epsfcn, xtol, gtol, use_cost_functions_jacobian)
+
+
+@xlo.func(
+    help="Create a QuantLib LBFGSB optimization method.",
+    args={
+        "memory": "The number of correction terms used by the limited-memory matrix.",
+        "epsilon": "Function value tolerance.",
+        "xtol": "Projected gradient tolerance.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlLBFGSB(
+    memory: int = 10,
+    epsilon: float | None = None,
+    xtol: float | None = None,
+    trigger=None,
+) -> ql.LBFGSB:
+    if epsilon is None:
+        return ql.LBFGSB(memory)
+    if xtol is None:
+        return ql.LBFGSB(memory, epsilon)
+    return ql.LBFGSB(memory, epsilon, xtol)

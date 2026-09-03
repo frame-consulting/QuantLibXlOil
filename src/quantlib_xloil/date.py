@@ -276,6 +276,7 @@ def qlDateTodaysDate(trigger=None) -> ql.Date:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateStartOfMonth(date: qDate, trigger=None) -> ql.Date:
     return ql.Date.startOfMonth(date)
@@ -286,6 +287,7 @@ def qlDateStartOfMonth(date: qDate, trigger=None) -> ql.Date:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateEndOfMonth(date: qDate, trigger=None) -> ql.Date:
     return ql.Date.endOfMonth(date)
@@ -296,6 +298,7 @@ def qlDateEndOfMonth(date: qDate, trigger=None) -> ql.Date:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateIsStartOfMonth(date: qDate, trigger=None) -> bool:
     return ql.Date.isStartOfMonth(date)
@@ -306,6 +309,7 @@ def qlDateIsStartOfMonth(date: qDate, trigger=None) -> bool:
     args={
         "date": "QuantLib Date.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateIsEndOfMonth(date: qDate, trigger=None) -> bool:
     return ql.Date.isEndOfMonth(date)
@@ -317,6 +321,7 @@ def qlDateIsEndOfMonth(date: qDate, trigger=None) -> bool:
         "date": "QuantLib Date.",
         "weekday": "The weekday.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateNextWeekday(date: qDate, weekday: qWeekday, trigger=None) -> ql.Date:
     return ql.Date.nextWeekday(date, weekday)
@@ -330,6 +335,7 @@ def qlDateNextWeekday(date: qDate, weekday: qWeekday, trigger=None) -> ql.Date:
         "month": "The month.",
         "year": "The year.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateNthWeekday(
     n: int, weekday: qWeekday, month: int, year: int, trigger=None
@@ -338,11 +344,149 @@ def qlDateNthWeekday(
 
 
 @xlo.func(
+    help="Return whether a date is an ECB meeting date.",
+    args={
+        "date": "QuantLib Date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBIsECBDate(date: qDate, trigger=None) -> bool:
+    return ql.ECB.isECBdate(date)
+
+
+@xlo.func(
+    help="Return whether a string is a valid ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBIsECBCode(ecb_code: str, trigger=None) -> bool:
+    return ql.ECB.isECBcode(ecb_code)
+
+
+@xlo.func(
+    help="Return ECB date code for a QuantLib Date.",
+    args={
+        "date": "QuantLib Date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBCode(date: qDate, trigger=None) -> str:
+    return ql.ECB.code(date)
+
+
+@xlo.func(
+    help="Return ECB date for a month and year.",
+    args={
+        "month": "Month number.",
+        "year": "Year.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBDate(month: int, year: int, trigger=None) -> ql.Date:
+    return ql.ECB.date(month, year)
+
+
+@xlo.func(
+    help="Return ECB date for an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+        "reference_date": "Optional reference date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBDateFromCode(
+    ecb_code: str,
+    reference_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.Date:
+    return ql.ECB.date(ecb_code, reference_date)
+
+
+@xlo.func(
+    help="Return next ECB date from a reference date.",
+    args={
+        "date": "Optional reference date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBNextDate(date: qDate = ql.Date(), trigger=None) -> ql.Date:
+    return ql.ECB.nextDate(date)
+
+
+@xlo.func(
+    help="Return next ECB date from an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+        "reference_date": "Optional reference date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBNextDateFromCode(
+    ecb_code: str,
+    reference_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.Date:
+    return ql.ECB.nextDate(ecb_code, reference_date)
+
+
+@xlo.func(
+    help="Return all next ECB dates from a reference date.",
+    args={
+        "date": "Optional reference date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBNextDates(date: qDate = ql.Date(), trigger=None) -> list:
+    return list(ql.ECB.nextDates(date))
+
+
+@xlo.func(
+    help="Return all next ECB dates from an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+        "reference_date": "Optional reference date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBNextDatesFromCode(
+    ecb_code: str,
+    reference_date: qDate = ql.Date(),
+    trigger=None,
+) -> list:
+    return list(ql.ECB.nextDates(ecb_code, reference_date))
+
+
+@xlo.func(
+    help="Return next ECB date code from a reference date.",
+    args={
+        "date": "Optional reference date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBNextCode(date: qDate = ql.Date(), trigger=None) -> str:
+    return ql.ECB.nextCode(date)
+
+
+@xlo.func(
+    help="Return next ECB date code from an ECB date code.",
+    args={
+        "ecb_code": "ECB date code string.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlECBNextCodeFromCode(ecb_code: str, trigger=None) -> str:
+    return ql.ECB.nextCode(ecb_code)
+
+
+@xlo.func(
     help="Parse a date string using a specified format.",
     args={
         "date_string": "The date string to parse.",
         "format_string": 'The format string (e.g. "YYYY-MM-DD").',
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateParserParseFormatted(
     date_string: str, format_string: str, trigger=None
@@ -355,6 +499,7 @@ def qlDateParserParseFormatted(
     args={
         "date_string": "The date string to parse.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlDateParserParseISO(date_string: str, trigger=None) -> ql.Date:
     return ql.DateParser.parseISO(date_string)
@@ -365,6 +510,7 @@ def qlDateParserParseISO(date_string: str, trigger=None) -> ql.Date:
     args={
         "period_string": "The period string to parse.",
     },
+    group=EXCEL_GROUP_NAME,
 )
 def qlPeriodParserParse(period_string: str, trigger=None) -> ql.Period:
     return ql.PeriodParser.parse(period_string)

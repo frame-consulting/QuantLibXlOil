@@ -1,4 +1,5 @@
 import QuantLib as ql
+import math
 import pytest
 
 from quantlib_xloil.stochasticprocess import (
@@ -11,8 +12,12 @@ from quantlib_xloil.stochasticprocess import (
     qlExtendedOrnsteinUhlenbeckProcess,
     qlExtOUWithJumpsProcess,
     qlG2ForwardProcess,
+    qlG2ForwardProcessPhi,
+    qlG2ForwardProcessShortRate,
     qlG2ForwardProcessSetForwardMeasureTime,
     qlG2Process,
+    qlG2ProcessPhi,
+    qlG2ProcessShortRate,
     qlGJRGARCHProcess,
     qlGJRGARCHProcessDividendYield,
     qlGJRGARCHProcessRiskFreeRate,
@@ -236,12 +241,16 @@ def test_forward_and_gsr_process_wrappers():
     assert qlHullWhiteForwardProcessB(hwf, 0.0, 1.0) > 0.0
     assert qlHullWhiteForwardProcessSetForwardMeasureTime(hwf, 1.0) is True
 
-    g2f = qlG2ForwardProcess(0.10, 0.01, 0.20, 0.02, -0.3)
+    g2f = qlG2ForwardProcess(0.10, 0.01, 0.20, 0.02, -0.3, risk_free)
     assert qlG2ForwardProcessSetForwardMeasureTime(g2f, 1.0) is True
     assert qlStochasticProcessSize(g2f) == 2
+    assert qlG2ForwardProcessPhi(g2f, 0.5) > 0.0
+    assert math.isfinite(qlG2ForwardProcessShortRate(g2f, 0.5, 0.0, 0.0))
 
-    g2 = qlG2Process(0.10, 0.01, 0.20, 0.02, -0.3)
+    g2 = qlG2Process(0.10, 0.01, 0.20, 0.02, -0.3, risk_free)
     assert qlStochasticProcessSize(g2) == 2
+    assert qlG2ProcessPhi(g2, 0.5) > 0.0
+    assert math.isfinite(qlG2ProcessShortRate(g2, 0.5, 0.0, 0.0))
 
     # GsrProcess::setForwardMeasureTime(Time t) errors and kills Python process occasionally.
     # gsr = qlGsrProcess([0.0, 1.0], [0.01, 0.02, 0.03], [0.03, 0.04, 0.05], 10.0)

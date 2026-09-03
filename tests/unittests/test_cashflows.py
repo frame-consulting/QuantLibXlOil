@@ -80,6 +80,7 @@ from quantlib_xloil.cashflows import (
     qlOvernightIndexedCoupon,
     qlOvernightIndexedCouponApplyObservationShift,
     qlOvernightIndexedCouponAveragingMethod,
+    qlOvernightLeg,
     qlOvernightIndexedCouponCanApplyTelescopicFormula,
     qlOvernightIndexedCouponCompoundSpreadDaily,
     qlOvernightIndexedCouponDt,
@@ -550,6 +551,35 @@ def test_overnight_cappedfloored_coupon_and_casts():
 
     assert qlAsOvernightIndexedCoupon(underlying) is not None
     assert qlAsCappedFlooredOvernightIndexedCoupon(capped_floored) is not None
+
+
+def test_overnightcoupon_and_leg_1_43_optional_arguments():
+    start = qlDate(2024, 1, 2)
+    end = qlDate(2024, 7, 2)
+    ex_coupon_date = qlDate(2024, 6, 28)
+    curve = _curve(start, 0.03)
+    index = qlSofr(curve)
+
+    coupon = qlOvernightIndexedCoupon(
+        end,
+        100.0,
+        start,
+        end,
+        index,
+        ex_coupon_date=ex_coupon_date,
+        rounding_precision=5,
+    )
+    assert coupon is not None
+    assert coupon.exCouponDate() == ex_coupon_date
+
+    schedule = _schedule(start, end)
+    leg = qlOvernightLeg(
+        [100.0],
+        schedule,
+        index,
+        rounding_precision=5,
+    )
+    assert len(leg) > 0
 
 
 def test_additional_pricer_constructors():

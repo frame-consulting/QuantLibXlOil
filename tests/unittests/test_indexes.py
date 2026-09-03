@@ -4,6 +4,7 @@ import quantlib_xloil as qlx
 
 
 from quantlib_xloil.indexes import (
+    qlBMAIndex,
     qlEquityIndex,
     qlIborIndex,
     qlIndexAddFixing,
@@ -144,10 +145,12 @@ def test_predefined_ibor_index_constructors(ctor_name):
         "qlKofr",
         "qlNzocr",
         "qlSaron",
+        "qlShir",
         "qlSofr",
         "qlSonia",
         "qlSwestr",
         "qlTonar",
+        "qlZaronia",
     ],
 )
 def test_predefined_overnight_index_constructors(ctor_name):
@@ -191,3 +194,8 @@ def test_qlEquityIndex_constructor():
     assert qlIndexName(index) == "TEST-EQUITY"
     assert isinstance(qlIndexFixingCalendar(index), ql.Calendar)
     assert index.currency().code() == "USD"
+
+
+def test_qlBMAIndex_constructor():
+    index = qlBMAIndex()
+    assert isinstance(index, ql.BMAIndex)

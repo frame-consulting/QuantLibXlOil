@@ -253,6 +253,58 @@ def qlBlackVolTermStructureBlackForwardVarianceFromTime(
 
 
 @xlo.func(
+    help="Returns the smile section for a given BlackVolTermStructure and maturity date.",
+    args={
+        "vol_tsh": "Handle to a BlackVolTermStructure object.",
+        "maturity_date": "Maturity date.",
+        "extrapolate": "Whether to extrapolate if needed.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolTermStructureSmileSection(
+    vol_tsh: ql.BlackVolTermStructureHandle,
+    maturity_date: qDate,
+    extrapolate: bool = False,
+    trigger=None,
+) -> ql.SmileSection:
+    return vol_tsh.smileSection(maturity_date, extrapolate)
+
+
+@xlo.func(
+    help="Returns the smile section for a given BlackVolTermStructure and maturity time.",
+    args={
+        "vol_tsh": "Handle to a BlackVolTermStructure object.",
+        "maturity_time": "Maturity time.",
+        "extrapolate": "Whether to extrapolate if needed.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolTermStructureSmileSectionFromTime(
+    vol_tsh: ql.BlackVolTermStructureHandle,
+    maturity_time: float,
+    extrapolate: bool = False,
+    trigger=None,
+) -> ql.SmileSection:
+    return vol_tsh.smileSection(maturity_time, extrapolate)
+
+
+@xlo.func(
+    help="Returns the ATM level for a given BlackVolTermStructure and time.",
+    args={
+        "vol_tsh": "Handle to a BlackVolTermStructure object.",
+        "maturity_time": "Maturity time.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolTermStructureAtmLevel(
+    vol_tsh: ql.BlackVolTermStructureHandle,
+    maturity_time: float,
+    trigger=None,
+) -> float:
+    return vol_tsh.atmLevel(maturity_time)
+
+
+@xlo.func(
     help="Creates a BlackConstantVol object and returns a handle to it.",
     args={
         "reference_date": "Reference date for the volatility.",

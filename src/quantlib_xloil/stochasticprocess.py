@@ -823,9 +823,10 @@ def qlG2Process(
     b: float,
     eta: float,
     rho: float,
+    forwarding_term_structure: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
 ) -> ql.G2Process:
-    return ql.G2Process(a, sigma, b, eta, rho)
+    return ql.G2Process(a, sigma, b, eta, rho, forwarding_term_structure)
 
 
 @xlo.func(
@@ -845,9 +846,68 @@ def qlG2ForwardProcess(
     b: float,
     eta: float,
     rho: float,
+    forwarding_term_structure: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
 ) -> ql.G2ForwardProcess:
-    return ql.G2ForwardProcess(a, sigma, b, eta, rho)
+    return ql.G2ForwardProcess(a, sigma, b, eta, rho, forwarding_term_structure)
+
+
+@xlo.func(
+    help="Return phi from a QuantLib G2Process.",
+    args={
+        "process": "QuantLib G2Process.",
+        "t": "Time.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ProcessPhi(process: ql.G2Process, t: float, trigger=None) -> float:
+    return process.phi(t)
+
+
+@xlo.func(
+    help="Return short rate from a QuantLib G2Process.",
+    args={
+        "process": "QuantLib G2Process.",
+        "t": "Time.",
+        "x": "First factor state.",
+        "y": "Second factor state.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ProcessShortRate(
+    process: ql.G2Process, t: float, x: float, y: float, trigger=None
+) -> float:
+    return process.shortRate(t, x, y)
+
+
+@xlo.func(
+    help="Return phi from a QuantLib G2ForwardProcess.",
+    args={
+        "process": "QuantLib G2ForwardProcess.",
+        "t": "Time.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ForwardProcessPhi(
+    process: ql.G2ForwardProcess, t: float, trigger=None
+) -> float:
+    return process.phi(t)
+
+
+@xlo.func(
+    help="Return short rate from a QuantLib G2ForwardProcess.",
+    args={
+        "process": "QuantLib G2ForwardProcess.",
+        "t": "Time.",
+        "x": "First factor state.",
+        "y": "Second factor state.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ForwardProcessShortRate(
+    process: ql.G2ForwardProcess, t: float, x: float, y: float, trigger=None
+) -> float:
+    return process.shortRate(t, x, y)
 
 
 @xlo.func(

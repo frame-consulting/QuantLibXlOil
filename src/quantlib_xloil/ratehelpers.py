@@ -1247,6 +1247,46 @@ def qlMultipleResetsSwapRateHelper(
 
 
 @xlo.func(
+    help="Create a QuantLib BMASwapRateHelper object.",
+    args={
+        "libor_fraction": "LIBOR fraction quote handle.",
+        "tenor": "The tenor period.",
+        "settlement_days": "Settlement days.",
+        "calendar": "Calendar used for date adjustments.",
+        "bma_period": "BMA index period.",
+        "bma_convention": "Business-day convention for the BMA leg.",
+        "bma_day_count": "Day-count convention for the BMA leg.",
+        "bma_index": "BMA index.",
+        "ibor_index": "IBOR index.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapRateHelper(
+    libor_fraction: qQuoteHandle,
+    tenor: qPeriod,
+    settlement_days: int,
+    calendar: qCalendar,
+    bma_period: qPeriod,
+    bma_convention: qBusinessDayConvention,
+    bma_day_count: qDayCounter,
+    bma_index: ql.BMAIndex,
+    ibor_index: ql.IborIndex,
+    trigger=None,
+) -> ql.BMASwapRateHelper:
+    return ql.BMASwapRateHelper(
+        libor_fraction,
+        tenor,
+        settlement_days,
+        calendar,
+        bma_period,
+        bma_convention,
+        bma_day_count,
+        bma_index,
+        ibor_index,
+    )
+
+
+@xlo.func(
     help="Create a QuantLib ConstNotionalCrossCurrencySwapRateHelper object for cross-currency swap rate curve building.",
     args={
         "fixed_rate": "The fixed rate quote handle for the cross-currency swap.",
@@ -1311,6 +1351,7 @@ def qlConstNotionalCrossCurrencySwapRateHelper(
         "is_basis_on_fx_base_currency_leg": "Flag indicating if the basis is on the FX base currency leg.",
         "payment_frequency": "The payment frequency (default: NoFrequency).",
         "payment_lag": "The payment lag in days (default: 0).",
+        "quote_currency_payment_frequency": "The payment frequency for the quote currency leg (default: NoFrequency).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1328,6 +1369,7 @@ def qlConstNotionalCrossCurrencyBasisSwapRateHelper(
     is_basis_on_fx_base_currency_leg: bool,
     payment_frequency: qFrequency = ql.NoFrequency,
     payment_lag: int = 0,
+    quote_currency_payment_frequency: qFrequency = ql.NoFrequency,
     trigger=None,
 ) -> ql.ConstNotionalCrossCurrencyBasisSwapRateHelper:
     return ql.ConstNotionalCrossCurrencyBasisSwapRateHelper(
@@ -1344,6 +1386,7 @@ def qlConstNotionalCrossCurrencyBasisSwapRateHelper(
         is_basis_on_fx_base_currency_leg,
         payment_frequency,
         payment_lag,
+        quote_currency_payment_frequency,
     )
 
 
@@ -1364,6 +1407,7 @@ def qlConstNotionalCrossCurrencyBasisSwapRateHelper(
         "is_fx_base_currency_leg_resettable": "Flag indicating if the FX base-currency leg is resettable.",
         "payment_frequency": "The payment frequency.",
         "payment_lag": "The payment lag in days (default: 0).",
+        "quote_currency_payment_frequency": "The payment frequency for the quote currency leg (default: NoFrequency).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1382,6 +1426,7 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
     is_fx_base_currency_leg_resettable: bool,
     payment_frequency: qFrequency = ql.NoFrequency,
     payment_lag: int = 0,
+    quote_currency_payment_frequency: qFrequency = ql.NoFrequency,
     trigger=None,
 ) -> ql.MtMCrossCurrencyBasisSwapRateHelper:
     return ql.MtMCrossCurrencyBasisSwapRateHelper(
@@ -1399,6 +1444,7 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
         is_fx_base_currency_leg_resettable,
         payment_frequency,
         payment_lag,
+        quote_currency_payment_frequency,
     )
 
 

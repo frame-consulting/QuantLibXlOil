@@ -3,6 +3,7 @@ import pytest
 
 from quantlib_xloil.optimizers import (
     qEndCriteriaType,
+    qlLBFGSB,
     qlBoundaryConstraint,
     qlCompositeConstraint,
     qlEndCriteria,
@@ -70,3 +71,11 @@ def test_qlEndCriteria_constructor_and_succeeded_wrapper():
         qlEndCriteriaSucceded(end_criteria, qEndCriteriaType.__wrapped__("UNKNOWN"))
         is False
     )
+
+
+def test_qlLBFGSB_constructor_overloads():
+    default_solver = qlLBFGSB()
+    tuned_solver = qlLBFGSB(12, 1.0e-8, 1.0e-8)
+
+    assert isinstance(default_solver, ql.LBFGSB)
+    assert isinstance(tuned_solver, ql.LBFGSB)
