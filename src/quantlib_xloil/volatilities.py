@@ -3,8 +3,16 @@ import xloil as xlo
 
 from .calendars import qBusinessDayConvention, qCalendar
 from .config import EXCEL_GROUP_NAME
-from .date import qDate, qPeriod, _to_date_list
+from .date import qDate, qFrequency, qPeriod, _to_date_list
 from .daycounters import qDayCounter
+from .options import (
+    _qAnalyticHestonComplexLogFormula,
+    _qAnalyticHestonEngineIntegration,
+    _to_analytic_heston_engine_integration,
+    qAnalyticHestonComplexLogFormula,
+    qAnalyticHestonEngineIntegration,
+)
+from .payoffs import _qOptionType, qOptionType
 from .ratehelpers import qQuoteHandle
 from .utilities import (
     enum_value,
@@ -31,6 +39,42 @@ QL_BLACK_VOL_TIME_EXTRAPOLATION = {
 }
 
 
+QL_BLACK_VARIANCE_SURFACE_EXTRAPOLATION = {
+    "CONSTANT": ql.BlackVarianceSurface.ConstantExtrapolation,
+    "DEFAULT": ql.BlackVarianceSurface.InterpolatorDefaultExtrapolation,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
+QL_DELTA_VOL_QUOTE_DELTA_TYPE = {
+    "FWD": ql.DeltaVolQuote.Fwd,
+    "PASPOT": ql.DeltaVolQuote.PaSpot,
+    "PAFWD": ql.DeltaVolQuote.PaFwd,
+    "SPOT": ql.DeltaVolQuote.Spot,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
+QL_DELTA_VOL_QUOTE_ATM_TYPE = {
+    "ATMSPOT": ql.DeltaVolQuote.AtmSpot,
+    "ATMFWD": ql.DeltaVolQuote.AtmFwd,
+    "ATMDELTANEUTRAL": ql.DeltaVolQuote.AtmDeltaNeutral,
+    "ATMGAMMAMAX": ql.DeltaVolQuote.AtmGammaMax,
+    "ATMVEGAMAX": ql.DeltaVolQuote.AtmVegaMax,
+    "ATMPUTCALL50": ql.DeltaVolQuote.AtmPutCall50,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
+QL_BLACK_VOLATILITY_SURFACE_DELTA_INTERPOLATION = {
+    "LINEAR": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_Linear,
+    "NATURALCUBIC": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_NaturalCubic,
+    "FINANCIALCUBIC": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_FinancialCubic,
+    "CUBICSPLINE": ql.BlackVolatilitySurfaceDelta.SmileInterpolationMethod_CubicSpline,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
+
 def _qVolatilityType(s: str) -> int:
     return enum_value(s, QL_VOLATILITY_TYPE)
 
@@ -47,6 +91,1117 @@ def _qBlackVolTimeExtrapolation(s: str) -> int:
 @xlo.converter()
 def qBlackVolTimeExtrapolation(s: str) -> int:
     return _qBlackVolTimeExtrapolation(s)
+
+
+def _qBlackVarianceSurfaceExtrapolation(s: str) -> int:
+    return enum_value(s, QL_BLACK_VARIANCE_SURFACE_EXTRAPOLATION)
+
+
+@xlo.converter()
+def qBlackVarianceSurfaceExtrapolation(s: str) -> int:
+    return _qBlackVarianceSurfaceExtrapolation(s)
+
+
+def _qDeltaVolQuoteDeltaType(s: str) -> int:
+    return enum_value(s, QL_DELTA_VOL_QUOTE_DELTA_TYPE)
+
+
+@xlo.converter()
+def qDeltaVolQuoteDeltaType(s: str) -> int:
+    return _qDeltaVolQuoteDeltaType(s)
+
+
+def _qDeltaVolQuoteAtmType(s: str) -> int:
+    return enum_value(s, QL_DELTA_VOL_QUOTE_ATM_TYPE)
+
+
+@xlo.converter()
+def qDeltaVolQuoteAtmType(s: str) -> int:
+    return _qDeltaVolQuoteAtmType(s)
+
+
+def _qBlackVolatilitySurfaceDeltaInterpolation(s: str) -> int:
+    return enum_value(s, QL_BLACK_VOLATILITY_SURFACE_DELTA_INTERPOLATION)
+
+
+@xlo.converter()
+def qBlackVolatilitySurfaceDeltaInterpolation(s: str) -> int:
+    return _qBlackVolatilitySurfaceDeltaInterpolation(s)
+
+
+# SABR volatility functions
+
+
+@xlo.func(
+    help="Returns the SABR volatility for a given strike and forward.",
+    args={
+        "strike": "Option strike price.",
+        "forward": "Forward price.",
+        "expiry_time": "Time to expiry.",
+        "alpha": "SABR alpha parameter.",
+        "beta": "SABR beta parameter.",
+        "nu": "SABR nu parameter.",
+        "rho": "SABR rho parameter.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrVolatility(
+    strike: float,
+    forward: float,
+    expiry_time: float,
+    alpha: float,
+    beta: float,
+    nu: float,
+    rho: float,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> float:
+    return ql.sabrVolatility(
+        strike,
+        forward,
+        expiry_time,
+        alpha,
+        beta,
+        nu,
+        rho,
+        _qVolatilityType(volatility_type),
+    )
+
+
+@xlo.func(
+    help="Returns the shifted SABR volatility for a given strike and forward.",
+    args={
+        "strike": "Option strike price.",
+        "forward": "Forward price.",
+        "expiry_time": "Time to expiry.",
+        "alpha": "SABR alpha parameter.",
+        "beta": "SABR beta parameter.",
+        "nu": "SABR nu parameter.",
+        "rho": "SABR rho parameter.",
+        "shift": "Shift applied to strike and forward.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlShiftedSabrVolatility(
+    strike: float,
+    forward: float,
+    expiry_time: float,
+    alpha: float,
+    beta: float,
+    nu: float,
+    rho: float,
+    shift: float,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> float:
+    return ql.shiftedSabrVolatility(
+        strike,
+        forward,
+        expiry_time,
+        alpha,
+        beta,
+        nu,
+        rho,
+        shift,
+        _qVolatilityType(volatility_type),
+    )
+
+
+@xlo.func(
+    help="Returns the Floch-Kennedy SABR volatility approximation.",
+    args={
+        "strike": "Option strike price.",
+        "forward": "Forward price.",
+        "expiry_time": "Time to expiry.",
+        "alpha": "SABR alpha parameter.",
+        "beta": "SABR beta parameter.",
+        "nu": "SABR nu parameter.",
+        "rho": "SABR rho parameter.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrFlochKennedyVolatility(
+    strike: float,
+    forward: float,
+    expiry_time: float,
+    alpha: float,
+    beta: float,
+    nu: float,
+    rho: float,
+    trigger=None,
+) -> float:
+    return ql.sabrFlochKennedyVolatility(
+        strike, forward, expiry_time, alpha, beta, nu, rho
+    )
+
+
+@xlo.func(
+    help="Returns an initial SABR parameter guess from three volatility points.",
+    args={
+        "k_m": "Strike below the forward.",
+        "vol_m": "Volatility at k_m.",
+        "k_0": "At-the-money strike.",
+        "vol_0": "Volatility at k_0.",
+        "k_p": "Strike above the forward.",
+        "vol_p": "Volatility at k_p.",
+        "forward": "Forward price.",
+        "expiry_time": "Time to expiry.",
+        "beta": "SABR beta parameter.",
+        "shift": "Shift applied to strike and forward.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrGuess(
+    k_m: float,
+    vol_m: float,
+    k_0: float,
+    vol_0: float,
+    k_p: float,
+    vol_p: float,
+    forward: float,
+    expiry_time: float,
+    beta: float,
+    shift: float,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> list[float]:
+    return list(
+        ql.sabrGuess(
+            k_m,
+            vol_m,
+            k_0,
+            vol_0,
+            k_p,
+            vol_p,
+            forward,
+            expiry_time,
+            beta,
+            shift,
+            _qVolatilityType(volatility_type),
+        )
+    )
+
+
+@xlo.func(
+    help="Creates a SABRInterpolation object.",
+    args={
+        "strikes": "Array of option strikes.",
+        "volatilities": "Array of market volatilities.",
+        "expiry_time": "Time to expiry.",
+        "forward": "Forward price.",
+        "alpha": "Initial SABR alpha parameter.",
+        "beta": "Initial SABR beta parameter.",
+        "nu": "Initial SABR nu parameter.",
+        "rho": "Initial SABR rho parameter.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolation(
+    strikes: xlo.Array(dims=1),
+    volatilities: xlo.Array(dims=1),
+    expiry_time: float,
+    forward: float,
+    alpha: float,
+    beta: float,
+    nu: float,
+    rho: float,
+    alpha_is_fixed: bool = False,
+    beta_is_fixed: bool = False,
+    nu_is_fixed: bool = False,
+    rho_is_fixed: bool = False,
+    vega_weighted: bool = True,
+    end_criteria: ql.EndCriteria = None,
+    optimization_method: ql.OptimizationMethod = None,
+    error_accept: float = 0.0020,
+    use_max_error: bool = False,
+    max_guesses: int = 50,
+    shift: float = 0.0,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> ql.SABRInterpolation:
+    arguments = [
+        to_float_list(strikes),
+        to_float_list(volatilities),
+        expiry_time,
+        forward,
+        alpha,
+        beta,
+        nu,
+        rho,
+        alpha_is_fixed,
+        beta_is_fixed,
+        nu_is_fixed,
+        rho_is_fixed,
+        vega_weighted,
+    ]
+    if (
+        end_criteria is None
+        and optimization_method is None
+        and error_accept == 0.0020
+        and not use_max_error
+        and max_guesses == 50
+        and shift == 0.0
+        and _qVolatilityType(volatility_type) == ql.ShiftedLognormal
+    ):
+        return ql.SABRInterpolation(*arguments)
+
+    arguments.extend(
+        [
+            (
+                end_criteria
+                if end_criteria is not None
+                else ql.EndCriteria(1000, 100, 1.0e-8, 1.0e-8, 1.0e-8)
+            ),
+            (
+                optimization_method
+                if optimization_method is not None
+                else ql.LevenbergMarquardt()
+            ),
+            error_accept,
+            use_max_error,
+            max_guesses,
+            shift,
+            _qVolatilityType(volatility_type),
+        ]
+    )
+    return ql.SABRInterpolation(*arguments)
+
+
+@xlo.func(
+    help="Returns the alpha parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolationAlpha(
+    interpolation: ql.SABRInterpolation, trigger=None
+) -> float:
+    return interpolation.alpha()
+
+
+@xlo.func(
+    help="Returns the beta parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolationBeta(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+    return interpolation.beta()
+
+
+@xlo.func(
+    help="Returns the nu parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolationNu(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+    return interpolation.nu()
+
+
+@xlo.func(
+    help="Returns the rho parameter of a SABRInterpolation object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolationRho(interpolation: ql.SABRInterpolation, trigger=None) -> float:
+    return interpolation.rho()
+
+
+@xlo.func(
+    help="Returns the interpolated volatility for a given strike.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSABRInterpolationValue(
+    interpolation: ql.SABRInterpolation,
+    strike: float,
+    allow_extrapolation: bool = False,
+    trigger=None,
+) -> float:
+    return interpolation(strike, allow_extrapolation)
+
+
+# SmileSection constructors
+
+
+@xlo.func(
+    help="Creates a SabrSmileSection object.",
+    args={
+        "expiry_date": "Option expiry date.",
+        "forward": "Forward price.",
+        "sabr_parameters": "Array containing alpha, beta, nu, and rho.",
+        "reference_date": "Reference date for time calculations.",
+        "day_counter": "Day count convention for time calculations.",
+        "shift": "Shift applied to strike and forward.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSmileSection(
+    expiry_date: qDate,
+    forward: float,
+    sabr_parameters: xlo.Array(dims=1),
+    reference_date: qDate = ql.Date(),
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    shift: float = 0.0,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> ql.SabrSmileSection:
+    return ql.SabrSmileSection(
+        expiry_date,
+        forward,
+        to_float_list(sabr_parameters),
+        reference_date,
+        day_counter,
+        shift,
+        _qVolatilityType(volatility_type),
+    )
+
+
+@xlo.func(
+    help="Creates a SabrSmileSection object from an expiry time.",
+    args={
+        "expiry_time": "Time to option expiry.",
+        "forward": "Forward price.",
+        "sabr_parameters": "Array containing alpha, beta, nu, and rho.",
+        "shift": "Shift applied to strike and forward.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSmileSectionFromTime(
+    expiry_time: float,
+    forward: float,
+    sabr_parameters: xlo.Array(dims=1),
+    shift: float = 0.0,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> ql.SabrSmileSection:
+    return ql.SabrSmileSection(
+        expiry_time,
+        forward,
+        to_float_list(sabr_parameters),
+        shift,
+        _qVolatilityType(volatility_type),
+    )
+
+
+@xlo.func(
+    help="Creates a SviSmileSection object.",
+    args={
+        "expiry_date": "Option expiry date.",
+        "forward": "Forward price.",
+        "svi_parameters": "Array containing a, b, sigma, rho, and m.",
+        "day_counter": "Day count convention for time calculations.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSviSmileSection(
+    expiry_date: qDate,
+    forward: float,
+    svi_parameters: xlo.Array(dims=1),
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    trigger=None,
+) -> ql.SviSmileSection:
+    return ql.SviSmileSection(
+        expiry_date, forward, to_float_list(svi_parameters), day_counter
+    )
+
+
+@xlo.func(
+    help="Creates a SviSmileSection object from an expiry time.",
+    args={
+        "expiry_time": "Time to option expiry.",
+        "forward": "Forward price.",
+        "svi_parameters": "Array containing a, b, sigma, rho, and m.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSviSmileSectionFromTime(
+    expiry_time: float,
+    forward: float,
+    svi_parameters: xlo.Array(dims=1),
+    trigger=None,
+) -> ql.SviSmileSection:
+    return ql.SviSmileSection(expiry_time, forward, to_float_list(svi_parameters))
+
+
+@xlo.func(help="Creates a SviInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME)
+def qlSviInterpolatedSmileSection(
+    option_date: qDate,
+    forward: float,
+    strikes: xlo.Array(dims=1),
+    has_floating_strikes: bool,
+    atm_volatility: float,
+    volatilities: xlo.Array(dims=1),
+    a: float,
+    b: float,
+    sigma: float,
+    rho: float,
+    m: float,
+    a_is_fixed: bool,
+    b_is_fixed: bool,
+    sigma_is_fixed: bool,
+    rho_is_fixed: bool,
+    m_is_fixed: bool,
+    vega_weighted: bool = True,
+    trigger=None,
+) -> ql.SviInterpolatedSmileSection:
+    return ql.SviInterpolatedSmileSection(
+        option_date,
+        forward,
+        to_float_list(strikes),
+        has_floating_strikes,
+        atm_volatility,
+        to_float_list(volatilities),
+        a,
+        b,
+        sigma,
+        rho,
+        m,
+        a_is_fixed,
+        b_is_fixed,
+        sigma_is_fixed,
+        rho_is_fixed,
+        m_is_fixed,
+        vega_weighted,
+    )
+
+
+@xlo.func(
+    help="Returns the a parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionA(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.a()
+
+
+@xlo.func(
+    help="Returns the b parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionB(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.b()
+
+
+@xlo.func(
+    help="Returns the sigma parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionSigma(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.sigma()
+
+
+@xlo.func(
+    help="Returns the rho parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionRho(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.rho()
+
+
+@xlo.func(
+    help="Returns the m parameter of an SVI smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSviInterpolatedSmileSectionM(
+    section: ql.SviInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.m()
+
+
+@xlo.func(
+    help="Creates a NoArbSabrInterpolatedSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSection(
+    option_date: qDate,
+    forward: float,
+    strikes: xlo.Array(dims=1),
+    has_floating_strikes: bool,
+    atm_volatility: float,
+    volatilities: xlo.Array(dims=1),
+    alpha: float,
+    beta: float,
+    nu: float,
+    rho: float,
+    alpha_is_fixed: bool = False,
+    beta_is_fixed: bool = False,
+    nu_is_fixed: bool = False,
+    rho_is_fixed: bool = False,
+    vega_weighted: bool = True,
+    trigger=None,
+) -> ql.NoArbSabrInterpolatedSmileSection:
+    return ql.NoArbSabrInterpolatedSmileSection(
+        option_date,
+        forward,
+        to_float_list(strikes),
+        has_floating_strikes,
+        atm_volatility,
+        to_float_list(volatilities),
+        alpha,
+        beta,
+        nu,
+        rho,
+        alpha_is_fixed,
+        beta_is_fixed,
+        nu_is_fixed,
+        rho_is_fixed,
+        vega_weighted,
+    )
+
+
+@xlo.func(
+    help="Returns alpha for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionAlpha(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.alpha()
+
+
+@xlo.func(
+    help="Returns beta for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionBeta(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.beta()
+
+
+@xlo.func(
+    help="Returns nu for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionNu(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.nu()
+
+
+@xlo.func(
+    help="Returns rho for a no-arbitrage SABR smile section.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrInterpolatedSmileSectionRho(
+    section: ql.NoArbSabrInterpolatedSmileSection, trigger=None
+) -> float:
+    return section.rho()
+
+
+@xlo.func(
+    help="Creates a FlatSmileSection object.",
+    args={
+        "expiry_date": "Option expiry date.",
+        "volatility": "Constant volatility value.",
+        "day_counter": "Day count convention for time calculations.",
+        "reference_date": "Reference date for time calculations.",
+        "atm_level": "At-the-money level.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+        "shift": "Shift applied to strike and forward.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFlatSmileSection(
+    expiry_date: qDate,
+    volatility: float,
+    day_counter: qDayCounter,
+    reference_date: qDate = ql.Date(),
+    atm_level: float = ql.nullDouble(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.FlatSmileSection:
+    return ql.FlatSmileSection(
+        expiry_date,
+        volatility,
+        day_counter,
+        reference_date,
+        atm_level,
+        _qVolatilityType(volatility_type),
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a FlatSmileSection object from an expiry time.",
+    args={
+        "expiry_time": "Time to option expiry.",
+        "volatility": "Constant volatility value.",
+        "day_counter": "Day count convention for time calculations.",
+        "atm_level": "At-the-money level.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+        "shift": "Shift applied to strike and forward.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFlatSmileSectionFromTime(
+    expiry_time: float,
+    volatility: float,
+    day_counter: qDayCounter,
+    atm_level: float = ql.nullDouble(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.FlatSmileSection:
+    return ql.FlatSmileSection(
+        expiry_time,
+        volatility,
+        day_counter,
+        atm_level,
+        _qVolatilityType(volatility_type),
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a NoArbSabrSmileSection object.",
+    args={
+        "expiry_date": "Option expiry date.",
+        "forward": "Forward price.",
+        "sabr_parameters": "Array containing alpha, beta, nu, and rho.",
+        "day_counter": "Day count convention for time calculations.",
+        "shift": "Shift applied to strike and forward.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrSmileSection(
+    expiry_date: qDate,
+    forward: float,
+    sabr_parameters: xlo.Array(dims=1),
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    shift: float = 0.0,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> ql.NoArbSabrSmileSection:
+    return ql.NoArbSabrSmileSection(
+        expiry_date,
+        forward,
+        to_float_list(sabr_parameters),
+        day_counter,
+        shift,
+        _qVolatilityType(volatility_type),
+    )
+
+
+@xlo.func(
+    help="Creates a NoArbSabrSmileSection object from an expiry time.",
+    args={
+        "expiry_time": "Time to option expiry.",
+        "forward": "Forward price.",
+        "sabr_parameters": "Array containing alpha, beta, nu, and rho.",
+        "shift": "Shift applied to strike and forward.",
+        "volatility_type": "Volatility type (e.g. 'NORMAL' or 'SHIFTEDLOGNORMAL').",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlNoArbSabrSmileSectionFromTime(
+    expiry_time: float,
+    forward: float,
+    sabr_parameters: xlo.Array(dims=1),
+    shift: float = 0.0,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    trigger=None,
+) -> ql.NoArbSabrSmileSection:
+    return ql.NoArbSabrSmileSection(
+        expiry_time,
+        forward,
+        to_float_list(sabr_parameters),
+        shift,
+        _qVolatilityType(volatility_type),
+    )
+
+
+def _zabr_smile_section(
+    smile_section_class,
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1),
+    fd_refinement: int,
+):
+    return smile_section_class(
+        expiry_time,
+        forward,
+        to_float_list(zabr_parameters),
+        [] if moneyness is None else to_float_list(moneyness),
+        fd_refinement,
+    )
+
+
+@xlo.func(
+    help="Creates a ZabrShortMaturityLognormalSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlZabrShortMaturityLognormalSmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrShortMaturityLognormalSmileSection:
+    return _zabr_smile_section(
+        ql.ZabrShortMaturityLognormalSmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
+@xlo.func(
+    help="Creates a ZabrShortMaturityNormalSmileSection object.", group=EXCEL_GROUP_NAME
+)
+def qlZabrShortMaturityNormalSmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrShortMaturityNormalSmileSection:
+    return _zabr_smile_section(
+        ql.ZabrShortMaturityNormalSmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
+@xlo.func(
+    help="Creates a ZabrLocalVolatilitySmileSection object.", group=EXCEL_GROUP_NAME
+)
+def qlZabrLocalVolatilitySmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrLocalVolatilitySmileSection:
+    return _zabr_smile_section(
+        ql.ZabrLocalVolatilitySmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
+@xlo.func(help="Creates a ZabrFullFdSmileSection object.", group=EXCEL_GROUP_NAME)
+def qlZabrFullFdSmileSection(
+    expiry_time: float,
+    forward: float,
+    zabr_parameters: xlo.Array(dims=1),
+    moneyness: xlo.Array(dims=1) = None,
+    fd_refinement: int = 5,
+    trigger=None,
+) -> ql.ZabrFullFdSmileSection:
+    return _zabr_smile_section(
+        ql.ZabrFullFdSmileSection,
+        expiry_time,
+        forward,
+        zabr_parameters,
+        moneyness,
+        fd_refinement,
+    )
+
+
+def _interpolated_smile_section(
+    smile_section_class,
+    interpolator,
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter,
+    volatility_type: qVolatilityType,
+    shift: float,
+):
+    return smile_section_class(
+        expiry_time,
+        to_float_list(strikes),
+        to_float_list(std_devs),
+        atm_level,
+        interpolator,
+        day_counter,
+        _qVolatilityType(volatility_type),
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a LinearInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME
+)
+def qlLinearInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.LinearInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.LinearInterpolatedSmileSection,
+        ql.Linear(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a CubicInterpolatedSmileSection object.", group=EXCEL_GROUP_NAME
+)
+def qlCubicInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.CubicInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.CubicInterpolatedSmileSection,
+        ql.Cubic(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a MonotonicCubicInterpolatedSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlMonotonicCubicInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.MonotonicCubicInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.MonotonicCubicInterpolatedSmileSection,
+        ql.MonotonicCubic(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a SplineCubicInterpolatedSmileSection object.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSplineCubicInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    std_devs: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    trigger=None,
+) -> ql.SplineCubicInterpolatedSmileSection:
+    return _interpolated_smile_section(
+        ql.SplineCubicInterpolatedSmileSection,
+        ql.SplineCubic(),
+        expiry_time,
+        strikes,
+        std_devs,
+        atm_level,
+        day_counter,
+        volatility_type,
+        shift,
+    )
+
+
+@xlo.func(
+    help="Creates a KahaleSmileSection object.",
+    args={
+        "source": "Source SmileSection object.",
+        "atm": "At-the-money level.",
+        "interpolate": "Whether to interpolate the arbitrage-free smile.",
+        "exponential_extrapolation": "Whether to use exponential extrapolation.",
+        "delete_arbitrage_points": "Whether to remove arbitrage points.",
+        "moneyness_grid": "Optional moneyness grid.",
+        "gap": "Finite-difference gap.",
+        "forced_left_index": "Optional forced left wing index.",
+        "forced_right_index": "Optional forced right wing index.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlKahaleSmileSection(
+    source: ql.SmileSection,
+    atm: float = ql.nullDouble(),
+    interpolate: bool = False,
+    exponential_extrapolation: bool = False,
+    delete_arbitrage_points: bool = False,
+    moneyness_grid: xlo.Array(dims=1) = None,
+    gap: float = 1.0e-5,
+    forced_left_index: int = -1,
+    forced_right_index: int = 2147483647,
+    trigger=None,
+) -> ql.KahaleSmileSection:
+    return ql.KahaleSmileSection(
+        source,
+        atm,
+        interpolate,
+        exponential_extrapolation,
+        delete_arbitrage_points,
+        [] if moneyness_grid is None else to_float_list(moneyness_grid),
+        gap,
+        forced_left_index,
+        forced_right_index,
+    )
+
+
+@xlo.func(
+    help="Returns the at-the-money level for a smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSmileSectionAtmLevel(smile_section: ql.SmileSection, trigger=None) -> float:
+    return smile_section.atmLevel()
+
+
+@xlo.func(help="Returns the exercise date for a smile section.", group=EXCEL_GROUP_NAME)
+def qlSmileSectionExerciseDate(smile_section: ql.SmileSection, trigger=None) -> ql.Date:
+    return smile_section.exerciseDate()
+
+
+@xlo.func(help="Returns the exercise time for a smile section.", group=EXCEL_GROUP_NAME)
+def qlSmileSectionExerciseTime(smile_section: ql.SmileSection, trigger=None) -> float:
+    return smile_section.exerciseTime()
+
+
+@xlo.func(
+    help="Returns the minimum strike for a smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSmileSectionMinStrike(smile_section: ql.SmileSection, trigger=None) -> float:
+    return smile_section.minStrike()
+
+
+@xlo.func(
+    help="Returns the maximum strike for a smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSmileSectionMaxStrike(smile_section: ql.SmileSection, trigger=None) -> float:
+    return smile_section.maxStrike()
+
+
+@xlo.func(
+    help="Returns the volatility for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionVolatility(
+    smile_section: ql.SmileSection, strike: float, trigger=None
+) -> float:
+    return smile_section.volatility(strike)
+
+
+@xlo.func(
+    help="Returns the variance for a smile section and strike.", group=EXCEL_GROUP_NAME
+)
+def qlSmileSectionVariance(
+    smile_section: ql.SmileSection, strike: float, trigger=None
+) -> float:
+    return smile_section.variance(strike)
+
+
+@xlo.func(
+    help="Returns the option price for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionOptionPrice(
+    smile_section: ql.SmileSection,
+    strike: float,
+    option_type: qOptionType = ql.Option.Call,
+    discount: float = 1.0,
+    trigger=None,
+) -> float:
+    return smile_section.optionPrice(strike, _qOptionType(option_type), discount)
+
+
+@xlo.func(
+    help="Returns the digital option price for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionDigitalOptionPrice(
+    smile_section: ql.SmileSection,
+    strike: float,
+    option_type: qOptionType = ql.Option.Call,
+    discount: float = 1.0,
+    gap: float = 1.0e-5,
+    trigger=None,
+) -> float:
+    return smile_section.digitalOptionPrice(
+        strike, _qOptionType(option_type), discount, gap
+    )
+
+
+@xlo.func(
+    help="Returns the probability density for a smile section and strike.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionDensity(
+    smile_section: ql.SmileSection,
+    strike: float,
+    discount: float = 1.0,
+    gap: float = 1.0e-4,
+    trigger=None,
+) -> float:
+    return smile_section.density(strike, discount, gap)
+
+
+@xlo.func(
+    help="Returns the vega for a smile section and strike.", group=EXCEL_GROUP_NAME
+)
+def qlSmileSectionVega(
+    smile_section: ql.SmileSection,
+    strike: float,
+    discount: float = 1.0,
+    trigger=None,
+) -> float:
+    return smile_section.vega(strike, discount)
+
+
+@xlo.func(
+    help="Returns the volatility shift for a smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSmileSectionShift(smile_section: ql.SmileSection, trigger=None) -> float:
+    return smile_section.shift()
+
+
+@xlo.func(
+    help="Returns the volatility type for a smile section.", group=EXCEL_GROUP_NAME
+)
+def qlSmileSectionVolatilityType(smile_section: ql.SmileSection, trigger=None) -> int:
+    return smile_section.volatilityType()
 
 
 # VolatilityTermStructure/BlackVolTermStructure interface
@@ -305,6 +1460,147 @@ def qlBlackVarianceCurve(
     )
 
 
+@xlo.func(
+    help="Creates a BlackVarianceSurface object and returns a handle to it.",
+    args={
+        "reference_date": "Reference date for the volatility surface.",
+        "calendar": "Calendar for the volatility surface.",
+        "dates": "Array of option expiry dates.",
+        "strikes": "Array of strikes.",
+        "black_vols": "2D array of Black volatilities with shape (#strikes, #dates).",
+        "day_counter": "Day count convention for the volatility surface.",
+        "lower_extrapolation": "Extrapolation below the minimum strike (default: DEFAULT).",
+        "upper_extrapolation": "Extrapolation above the maximum strike (default: DEFAULT).",
+        "interpolator": "Optional interpolation method.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVarianceSurface(
+    reference_date: qDate,
+    calendar: qCalendar,
+    dates: xlo.Array(dims=1),
+    strikes: xlo.Array(dims=1),
+    black_vols: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    lower_extrapolation: qBlackVarianceSurfaceExtrapolation = ql.BlackVarianceSurface.InterpolatorDefaultExtrapolation,
+    upper_extrapolation: qBlackVarianceSurfaceExtrapolation = ql.BlackVarianceSurface.InterpolatorDefaultExtrapolation,
+    interpolator: str = "",
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    vol_ts = ql.BlackVarianceSurface(
+        reference_date,
+        calendar,
+        _to_date_list(dates),
+        to_float_list(strikes),
+        ql.Matrix(to_float_matrix(black_vols)),
+        day_counter,
+        lower_extrapolation,
+        upper_extrapolation,
+        interpolator,
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a PiecewiseBlackVarianceSurface object from a volatility grid.",
+    args={
+        "reference_date": "Reference date for the volatility surface.",
+        "dates": "Array of option expiry dates.",
+        "strikes": "Array of strikes.",
+        "black_vols": "2D array of Black volatilities with shape (#strikes, #dates).",
+        "day_counter": "Day count convention for the volatility surface.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseBlackVarianceSurfaceFromGrid(
+    reference_date: qDate,
+    dates: xlo.Array(dims=1),
+    strikes: xlo.Array(dims=1),
+    black_vols: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    vol_ts = ql.PiecewiseBlackVarianceSurface.makeFromGrid(
+        reference_date,
+        _to_date_list(dates),
+        to_float_list(strikes),
+        ql.Matrix(to_float_matrix(black_vols)),
+        day_counter,
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a BlackVolatilitySurfaceDelta object and returns a handle to it.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolatilitySurfaceDelta(
+    reference_date: qDate,
+    dates: xlo.Array(dims=1),
+    put_deltas: xlo.Array(dims=1),
+    call_deltas: xlo.Array(dims=1),
+    has_atm: bool,
+    black_vol_matrix: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    calendar: qCalendar,
+    spot: qQuoteHandle,
+    domestic_ytsh: ql.YieldTermStructureHandle,
+    foreign_ytsh: ql.YieldTermStructureHandle,
+    delta_type: qDeltaVolQuoteDeltaType = ql.DeltaVolQuote.Spot,
+    atm_type: qDeltaVolQuoteAtmType = ql.DeltaVolQuote.AtmDeltaNeutral,
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    vol_ts = ql.BlackVolatilitySurfaceDelta(
+        reference_date,
+        _to_date_list(dates),
+        to_float_list(put_deltas),
+        to_float_list(call_deltas),
+        has_atm,
+        ql.Matrix(to_float_matrix(black_vol_matrix)),
+        day_counter,
+        calendar,
+        spot,
+        domestic_ytsh,
+        foreign_ytsh,
+        _qDeltaVolQuoteDeltaType(delta_type),
+        _qDeltaVolQuoteAtmType(atm_type),
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a HestonBlackVolSurface object and returns a handle to it.",
+    args={
+        "heston_model": "Handle to a HestonModel object.",
+        "complex_log_formula": "Analytic Heston complex-log formula.",
+        "integration": "Analytic Heston integration method.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlHestonBlackVolSurface(
+    heston_model: ql.HestonModelHandle,
+    complex_log_formula: qAnalyticHestonComplexLogFormula = ql.AnalyticHestonEngine.Gatheral,
+    integration: qAnalyticHestonEngineIntegration = ql.AnalyticHestonEngine_Integration.gaussLaguerre(
+        164
+    ),
+    trigger=None,
+) -> ql.BlackVolTermStructureHandle:
+    if isinstance(integration, str):
+        integration = _to_analytic_heston_engine_integration(
+            _qAnalyticHestonEngineIntegration(integration),
+            164,
+            1.0e-8,
+            1.0e-8,
+            10000,
+        )
+    vol_ts = ql.HestonBlackVolSurface(
+        heston_model,
+        _qAnalyticHestonComplexLogFormula(complex_log_formula),
+        integration,
+    )
+    return ql.BlackVolTermStructureHandle(vol_ts)
+
+
 # LocalVolTermStructure interface
 
 
@@ -471,6 +1767,50 @@ def qlConstantOptionletVolatility(
         shift,
     )
     return ql.OptionletVolatilityStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a ConstantYoYOptionletVolatility object and returns a handle to it.",
+    args={
+        "volatility": "Constant volatility value.",
+        "settlement_days": "Number of settlement days.",
+        "calendar": "Calendar for the volatility surface.",
+        "business_day_convention": "Business day convention for the volatility surface.",
+        "day_counter": "Day count convention for the volatility surface.",
+        "observation_lag": "Observation lag for the YoY index.",
+        "frequency": "Frequency of the YoY index.",
+        "index_is_interpolated": "Whether the YoY index is interpolated.",
+        "min_strike": "Minimum strike for the surface.",
+        "max_strike": "Maximum strike for the surface.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstantYoYOptionletVolatility(
+    volatility: float,
+    settlement_days: int,
+    calendar: qCalendar,
+    business_day_convention: qBusinessDayConvention,
+    day_counter: qDayCounter,
+    observation_lag: qPeriod,
+    frequency: qFrequency,
+    index_is_interpolated: bool,
+    min_strike: float = -1.0,
+    max_strike: float = 100.0,
+    trigger=None,
+) -> ql.YoYOptionletVolatilitySurfaceHandle:
+    vol_ts = ql.ConstantYoYOptionletVolatility(
+        volatility,
+        settlement_days,
+        calendar,
+        business_day_convention,
+        day_counter,
+        observation_lag,
+        frequency,
+        index_is_interpolated,
+        min_strike,
+        max_strike,
+    )
+    return ql.YoYOptionletVolatilitySurfaceHandle(vol_ts)
 
 
 # YoYOptionletVolatilitySurface interface
@@ -909,6 +2249,55 @@ def qlConstantSwaptionVolatility(
         day_counter,
         volatility_type,
         shift,
+    )
+    return ql.SwaptionVolatilityStructureHandle(vol_ts)
+
+
+@xlo.func(
+    help="Creates a SpreadedSwaptionVolatility object and returns a handle to it.",
+    args={
+        "vol_tsh": "Handle to the base SwaptionVolatilityStructure object.",
+        "spread": "Handle to the additive volatility spread quote.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedSwaptionVolatility(
+    vol_tsh: ql.SwaptionVolatilityStructureHandle,
+    spread: qQuoteHandle,
+    trigger=None,
+) -> ql.SwaptionVolatilityStructureHandle:
+    vol_ts = ql.SpreadedSwaptionVolatility(vol_tsh, spread)
+    return ql.SwaptionVolatilityStructureHandle(vol_ts)
+
+
+def _to_quote_handle_matrix(values: xlo.Array(dims=2)) -> list[list[ql.QuoteHandle]]:
+    return [[qQuoteHandle.__wrapped__(value) for value in row] for row in values]
+
+
+@xlo.func(
+    help="Creates an InterpolatedSwaptionVolatilityCube object and returns a handle to it.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlInterpolatedSwaptionVolatilityCube(
+    atm_vol_tsh: ql.SwaptionVolatilityStructureHandle,
+    option_tenors: xlo.Array(dims=1),
+    swap_tenors: xlo.Array(dims=1),
+    strike_spreads: xlo.Array(dims=1),
+    vol_spreads: xlo.Array(dims=2),
+    swap_index: ql.SwapIndex,
+    short_swap_index: ql.SwapIndex,
+    vega_weighted_smile_fit: bool,
+    trigger=None,
+) -> ql.SwaptionVolatilityStructureHandle:
+    vol_ts = ql.InterpolatedSwaptionVolatilityCube(
+        atm_vol_tsh,
+        [qPeriod.__wrapped__(tenor) for tenor in option_tenors],
+        [qPeriod.__wrapped__(tenor) for tenor in swap_tenors],
+        to_float_list(strike_spreads),
+        _to_quote_handle_matrix(vol_spreads),
+        swap_index,
+        short_swap_index,
+        vega_weighted_smile_fit,
     )
     return ql.SwaptionVolatilityStructureHandle(vol_ts)
 
