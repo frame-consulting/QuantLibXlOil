@@ -34,7 +34,7 @@ from quantlib_xloil.creditdefaultswap import (
     qlCreditDefaultSwapUpfrontBPS,
     qlCreditDefaultswapUpfrontPayment,
     qlCreditDefaultSwapUpfrontNPV,
-    qlCreditDefaultSwapWithUpfront,
+    qlCreditDefaultSwap2,
     qlFaceValueClaim,
     qlIntegralCdsEngine,
     qlIsdaCdsEngine,
@@ -96,7 +96,7 @@ def test_creditdefaultswap_construction_accessors_and_midpoint_pricing():
             True,
             reference_date,
             qlFaceValueClaim(),
-            None,
+            ql.Actual360(),
             True,
             reference_date,
         )
@@ -151,7 +151,7 @@ def test_creditdefaultswap_upfront_and_option_engine_wrappers():
     default_curve, discount_curve = _curves(reference_date)
     schedule = _cds_schedule(reference_date, end)
 
-    cds = qlCreditDefaultSwapWithUpfront(
+    cds = qlCreditDefaultSwap2(
         ql.Protection.Seller,
         2_000_000.0,
         0.02,
@@ -164,7 +164,7 @@ def test_creditdefaultswap_upfront_and_option_engine_wrappers():
         reference_date,
         reference_date,
         qlFaceValueClaim(),
-        None,
+        ql.Actual360(),
         True,
         reference_date,
         3,
@@ -202,7 +202,7 @@ def test_creditdefaultswap_upfront_and_option_engine_wrappers():
         True,
         reference_date,
         qlFaceValueClaim(),
-        None,
+        ql.Actual360(),
         True,
         reference_date,
     )

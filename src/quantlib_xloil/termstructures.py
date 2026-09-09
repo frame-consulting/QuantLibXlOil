@@ -290,21 +290,46 @@ def qlYieldTermStructureForwardRateFromTime(
         "daycounter": "The day count convention to use for the curve.",
         "compounding": "The compounding convention to use for the curve.",
         "frequency": "The frequency to use for the curve.",
-        "calendar": "The calendar to use for the curve.",
     },
     group=EXCEL_GROUP_NAME,
 )
 def qlFlatForward(
     reference_date: qDate,
     forward_rate: float,
-    daycounter: qDayCounter = ql.Actual365Fixed(),
+    daycounter: qDayCounter,
     compounding: qCompounding = ql.Continuous,
-    frequency: qFrequency = ql.NoFrequency,
-    calendar: qCalendar = ql.NullCalendar(),
+    frequency: qFrequency = ql.Annual,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
     yts = ql.FlatForward(
         reference_date, forward_rate, daycounter, compounding, frequency
+    )
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a flat forward curve from settlement days, a calendar and a forward rate.",
+    args={
+        "settlement_days": "The number of settlement days for the curve.",
+        "calendar": "The calendar to use for the curve.",
+        "forward_rate": "The forward rate for the curve.",
+        "daycounter": "The day count convention to use for the curve.",
+        "compounding": "The compounding convention to use for the curve.",
+        "frequency": "The frequency to use for the curve.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFlatForward2(
+    settlement_days: int,
+    calendar: qCalendar,
+    forward_rate: float,
+    daycounter: qDayCounter,
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.Annual,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    yts = ql.FlatForward(
+        settlement_days, calendar, forward_rate, daycounter, compounding, frequency
     )
     return ql.YieldTermStructureHandle(yts)
 
@@ -346,15 +371,19 @@ def qlImpliedTermStructure(
 def qlZeroSpreadedTermStructure(
     base: ql.YieldTermStructureHandle,
     spread: float,
-    compounding: qCompounding = ql.Compounded,
+    compounding: qCompounding = ql.Continuous,
     frequency: qFrequency = ql.NoFrequency,
-    daycounter: qDayCounter = ql.Actual365Fixed(),
+    daycounter=None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
-    sprad_qh = ql.QuoteHandle(ql.SimpleQuote(spread))
-    yts = ql.ZeroSpreadedTermStructure(
-        base, sprad_qh, compounding, frequency, daycounter
-    )
+    spread_handle = ql.QuoteHandle(ql.SimpleQuote(spread))
+    args = [base, spread_handle, compounding, frequency]
+
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+
+    yts = ql.ZeroSpreadedTermStructure(*args)
     return ql.YieldTermStructureHandle(yts)
 
 
@@ -371,8 +400,8 @@ def qlForwardSpreadedTermStructure(
     spread: float,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
-    sprad_qh = ql.QuoteHandle(ql.SimpleQuote(spread))
-    yts = ql.ForwardSpreadedTermStructure(base, sprad_qh)
+    spread_handle = ql.QuoteHandle(ql.SimpleQuote(spread))
+    yts = ql.ForwardSpreadedTermStructure(base, spread_handle)
     return ql.YieldTermStructureHandle(yts)
 
 
@@ -400,4 +429,393 @@ def qlCompositeZeroYieldStructure(
         )
     else:
         raise ValueError("Invalid operator. Valid values are: +, -")
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct an ultimate forward term structure with smoothing between liquid and ultimate rates.",
+    args={
+        "ytsh": "The base yield term structure handle.",
+        "last_liquid_forward": "The last liquid forward rate (as a float, internally converted to QuoteHandle).",
+        "ultimate_forward": "The ultimate forward rate (as a float, internally converted to QuoteHandle).",
+        "first_smoothing_point": "The period from the reference date after which smoothing begins (e.g., 1Y).",
+        "alpha": "The smoothing parameter (0 = abrupt transition, higher values = smoother transition).",
+        "rounding_digits": "Optional number of digits for rounding (default: None).",
+        "compounding": "The compounding convention (default: COMPOUNDED).",
+        "frequency": "The frequency for compounding (default: ANNUAL).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlUltimateForwardTermStructure(
+    ytsh: ql.YieldTermStructureHandle,
+    last_liquid_forward: float,
+    ultimate_forward: float,
+    first_smoothing_point: ql.Period,
+    alpha: float,
+    rounding_digits: int = None,
+    compounding: qCompounding = ql.Compounded,
+    frequency: qFrequency = ql.Annual,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    last_liquid_handle = ql.QuoteHandle(ql.SimpleQuote(last_liquid_forward))
+    ultimate_handle = ql.QuoteHandle(ql.SimpleQuote(ultimate_forward))
+    yts = ql.UltimateForwardTermStructure(
+        ytsh,
+        last_liquid_handle,
+        ultimate_handle,
+        first_smoothing_point,
+        alpha,
+        rounding_digits,
+        compounding,
+        frequency,
+    )
+    return ql.YieldTermStructureHandle(yts)
+
+
+## Interpolated Piecewise Zero Spreaded Term Structures
+
+
+@xlo.func(
+    help="Construct a piecewise zero spreaded term structure with linear interpolation.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseZeroSpreadedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.PiecewiseZeroSpreadedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a spreaded linear zero interpolated term structure.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedLinearZeroInterpolatedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.SpreadedLinearZeroInterpolatedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a spreaded backward-flat zero interpolated term structure.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedBackwardFlatZeroInterpolatedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.SpreadedBackwardFlatZeroInterpolatedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a spreaded cubic zero interpolated term structure.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedCubicZeroInterpolatedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.SpreadedCubicZeroInterpolatedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a spreaded Kruger zero interpolated term structure (monotone convex).",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedKrugerZeroInterpolatedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.SpreadedKrugerZeroInterpolatedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a spreaded spline cubic zero interpolated term structure.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedSplineCubicZeroInterpolatedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.SpreadedSplineCubicZeroInterpolatedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a spreaded parabolic cubic zero interpolated term structure.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedParabolicCubicZeroInterpolatedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.SpreadedParabolicCubicZeroInterpolatedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a spreaded monotonic parabolic cubic zero interpolated term structure.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "compounding": "Compounding convention (default: CONTINUOUS).",
+        "frequency": "Frequency for compounding (default: NOFREQUENCY).",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSpreadedMonotonicParabolicCubicZeroInterpolatedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.NoFrequency,
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates, compounding, frequency]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.SpreadedMonotonicParabolicCubicZeroInterpolatedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+## Piecewise Forward Spreaded Term Structures
+
+
+@xlo.func(
+    help="Construct a piecewise forward spreaded term structure with backward-flat interpolation.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseForwardSpreadedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.PiecewiseForwardSpreadedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a piecewise linear forward spreaded term structure.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "spreads": "List of spread values (floats) for each date.",
+        "dates": "List of dates (as qDate) corresponding to the spreads.",
+        "daycounter": "Day counter for the spreads (default: base curve's day counter).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseLinearForwardSpreadedTermStructure(
+    base_curve: ql.YieldTermStructureHandle,
+    spreads: xlo.Array(dims=1),
+    dates: xlo.Array(dims=1),
+    daycounter=None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    spread_handles = [ql.QuoteHandle(ql.SimpleQuote(s)) for s in spreads]
+    ql_dates = [d if isinstance(d, ql.Date) else qDate.__wrapped__(d) for d in dates]
+    args = [base_curve, spread_handles, ql_dates]
+    if daycounter is not None:
+        daycounter = qDayCounter.__wrapped__(daycounter)
+        args.append(daycounter)
+    yts = ql.PiecewiseLinearForwardSpreadedTermStructure(*args)
+    return ql.YieldTermStructureHandle(yts)
+
+
+## Quanto Term Structure
+
+
+@xlo.func(
+    help="Construct a quanto term structure for cross-currency derivatives pricing.",
+    args={
+        "underlying_dividend_ts": "The yield term structure for the underlying dividend (domestic).",
+        "risk_free_ts": "The risk-free yield term structure (domestic).",
+        "foreign_risk_free_ts": "The risk-free yield term structure (foreign).",
+        "underlying_black_vol_ts": "The black volatility term structure for the underlying.",
+        "strike": "The strike price for the quanto adjustment.",
+        "exch_rate_black_vol_ts": "The black volatility term structure for the exchange rate.",
+        "exch_rate_atm_level": "The at-the-money level for the exchange rate.",
+        "underlying_exch_rate_correlation": "The correlation between the underlying and exchange rate.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlQuantoTermStructure(
+    underlying_dividend_ts: ql.YieldTermStructureHandle,
+    risk_free_ts: ql.YieldTermStructureHandle,
+    foreign_risk_free_ts: ql.YieldTermStructureHandle,
+    underlying_black_vol_ts: ql.BlackVolTermStructureHandle,
+    strike: float,
+    exch_rate_black_vol_ts: ql.BlackVolTermStructureHandle,
+    exch_rate_atm_level: float,
+    underlying_exch_rate_correlation: float,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    yts = ql.QuantoTermStructure(
+        underlying_dividend_ts,
+        risk_free_ts,
+        foreign_risk_free_ts,
+        underlying_black_vol_ts,
+        strike,
+        exch_rate_black_vol_ts,
+        exch_rate_atm_level,
+        underlying_exch_rate_correlation,
+    )
     return ql.YieldTermStructureHandle(yts)

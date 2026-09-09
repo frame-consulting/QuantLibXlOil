@@ -120,6 +120,8 @@ def qlFaceValueAccrualClaim(
     return ql.FaceValueAccrualClaim(bond)
 
 
+# To prevent incorrect default values from being set due to the lack of kwargs implementation in SWIG,
+# settles_accrual (True), pays_at_default (True), protection_start_date (ql.Date()), claim ({}), last_period_day_counter (qlDayCounter()) have no default values.
 @xlo.func(
     help="Creates an AtDefaultClaim object, which pays the value of the claim at the time of default.",
     args={
@@ -146,20 +148,15 @@ def qlCreditDefaultSwap(
     schedule: ql.Schedule,
     payment_convention: qBusinessDayConvention,
     day_counter: qDayCounter,
-    settles_accrual: bool = True,
-    pays_at_default: bool = True,
-    protection_start_date: qDate = ql.Date(),
-    claim: ql.Claim = None,
-    last_period_day_counter: str = None,  # cannot use ql.DayCounter(),
+    settles_accrual: bool,
+    pays_at_default: bool,
+    protection_start_date: qDate,
+    claim: ql.Claim,
+    last_period_day_counter: qDayCounter,
     rebates_accrual: bool = True,
     trade_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.CreditDefaultSwap:
-    if last_period_day_counter is None:
-        last_period_day_counter = day_counter
-    else:
-        last_period_day_counter = qDayCounter.__wrapped__(last_period_day_counter)
-    #
     return ql.CreditDefaultSwap(
         protection_side,
         notional,
@@ -177,6 +174,9 @@ def qlCreditDefaultSwap(
     )
 
 
+# To prevent incorrect default values from being set due to the lack of kwargs implementation in SWIG,
+# settles_accrual (True), pays_at_default (True), protection_start_date (ql.Date()),
+# up_front_date (ql.Date()) claim ({}), last_period_day_counter (qlDayCounter()) have no default values.
 @xlo.func(
     help="Creates a CreditDefaultSwap object with an upfront payment.",
     args={
@@ -199,7 +199,7 @@ def qlCreditDefaultSwap(
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlCreditDefaultSwapWithUpfront(
+def qlCreditDefaultSwap2(
     protection_side: qProtectionSide,
     notional: float,
     upfront: float,
@@ -207,22 +207,17 @@ def qlCreditDefaultSwapWithUpfront(
     schedule: ql.Schedule,
     payment_convention: qBusinessDayConvention,
     day_counter: qDayCounter,
-    settles_accrual: bool = True,
-    pays_at_default: bool = True,
-    protection_start_date: qDate = ql.Date(),
-    upfront_date: qDate = ql.Date(),
-    claim: ql.Claim = None,
-    last_period_day_counter: str = None,  # cannot use ql.DayCounter(),
+    settles_accrual: bool,
+    pays_at_default: bool,
+    protection_start_date: qDate,
+    upfront_date: qDate,
+    claim: ql.Claim,
+    last_period_day_counter: qDayCounter,
     rebates_accrual: bool = True,
     trade_date: qDate = ql.Date(),
     cash_settlement_days: int = 3,
     trigger=None,
 ) -> ql.CreditDefaultSwap:
-    if last_period_day_counter is None:
-        last_period_day_counter = day_counter
-    else:
-        last_period_day_counter = qDayCounter.__wrapped__(last_period_day_counter)
-    #
     return ql.CreditDefaultSwap(
         protection_side,
         notional,

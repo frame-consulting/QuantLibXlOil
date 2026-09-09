@@ -305,14 +305,14 @@ def test_option_converters_and_margrabe_engine_wrapper():
 
     p1 = qlGeneralizedBlackScholesProcess(
         ql.QuoteHandle(ql.SimpleQuote(100.0)),
-        qlFlatForward(reference_date, 0.01),
-        qlFlatForward(reference_date, 0.03),
+        qlFlatForward(reference_date, 0.01, ql.Actual365Fixed()),
+        qlFlatForward(reference_date, 0.03, ql.Actual365Fixed()),
         qlBlackConstantVol(reference_date, ql.TARGET(), 0.20, ql.Actual365Fixed()),
     )
     p2 = qlGeneralizedBlackScholesProcess(
         ql.QuoteHandle(ql.SimpleQuote(90.0)),
-        qlFlatForward(reference_date, 0.01),
-        qlFlatForward(reference_date, 0.03),
+        qlFlatForward(reference_date, 0.01, ql.Actual365Fixed()),
+        qlFlatForward(reference_date, 0.03, ql.Actual365Fixed()),
         qlBlackConstantVol(reference_date, ql.TARGET(), 0.25, ql.Actual365Fixed()),
     )
 

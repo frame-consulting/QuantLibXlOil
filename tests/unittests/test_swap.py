@@ -4,10 +4,15 @@ import pytest
 from quantlib_xloil.calendars import qlCalendar
 from quantlib_xloil.date import qlDate
 from quantlib_xloil.swap import (
+    qlAssetSwap,
+    qlMakeMultipleResetsSwap,
+    qlMultipleResetsSwap,
+    qlMultipleResetsSwapAveragingMethod,
+    qlMultipleResetsSwapFullResetSchedule,
+    qlMultipleResetsSwapResetsPerCoupon,
     qSwapType,
     qlAsOvernightSwapIndex,
     qlEquityTotalReturnSwap,
-    qlEquityTotalReturnSwap2,
     qlEquityTotalReturnSwapDayCounter,
     qlEquityTotalReturnSwapEquityIndex,
     qlEquityTotalReturnSwapEquityLeg,
@@ -173,7 +178,7 @@ def test_vanilla_swap_pricing_and_wrapper_parity():
             ql.Following,
         )
 
-        engine = qlDiscountingSwapEngine(discount_curve)
+        engine = qlDiscountingSwapEngine(discount_curve, True)
         swap.setPricingEngine(engine)
 
         assert isinstance(swap, ql.VanillaSwap)
@@ -301,81 +306,6 @@ def test_nonstandard_swap_wrapper_accessors():
     assert len(qlNonstandardSwapFloatingLeg(swap)) > 0
 
 
-def test_overnight_swap_and_make_ois_wrappers():
-    original_eval = ql.Settings.instance().evaluationDate
-    try:
-        eval_date = qlDate(2024, 1, 2)
-        ql.Settings.instance().evaluationDate = eval_date
-
-        discount_curve = ql.YieldTermStructureHandle(
-            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
-        )
-        overnight_curve = ql.YieldTermStructureHandle(
-            ql.FlatForward(eval_date, 0.021, ql.Actual365Fixed())
-        )
-        sofr = ql.Sofr(overnight_curve)
-        sched = _schedule(qlDate(2024, 1, 4), qlDate(2029, 1, 4), ql.Period("1Y"))
-
-        ois = qlOvernightIndexedSwap(
-            qSwapType.__wrapped__("PAYER"),
-            1_000_000.0,
-            sched,
-            0.023,
-            ql.Actual360(),
-            sofr,
-            spread=0.0005,
-            payment_lag=2,
-            payment_adjustment=ql.Following,
-            averaging_method=ql.RateAveraging.Compound,
-            lookback_days=0,
-            lockout_days=0,
-            apply_observation_shift=False,
-        )
-        ois.setPricingEngine(qlDiscountingSwapEngine(discount_curve))
-
-        assert isinstance(ois, ql.OvernightIndexedSwap)
-        assert qlOvernightIndexedSwapOvernightLegBPS(ois) == pytest.approx(
-            ois.overnightLegBPS()
-        )
-        assert qlOvernightIndexedSwapOvernightLegNPV(ois) == pytest.approx(
-            ois.overnightLegNPV()
-        )
-        assert qlOvernightIndexedSwapPaymentFrequency(ois) == "ANNUAL"
-        assert qlOvernightIndexedSwapOvernightIndex(ois).name() == sofr.name()
-        assert len(qlOvernightIndexedSwapOvernightLeg(ois)) > 0
-        assert qlOvernightIndexedSwapAveragingMethod(ois) == "COMPOUND"
-        assert qlOvernightIndexedSwapLookbackDays(ois) == 0
-        assert qlOvernightIndexedSwapLockoutDays(ois) == 0
-        assert qlOvernightIndexedSwapApplyObservationShift(ois) is False
-
-        ois2 = qlOvernightIndexedSwap2(
-            qSwapType.__wrapped__("PAYER"),
-            [1_000_000.0],
-            sched,
-            0.023,
-            ql.Actual360(),
-            [1_000_000.0],
-            sched,
-            sofr,
-        )
-        assert isinstance(ois2, ql.OvernightIndexedSwap)
-
-        made_ois = qlMakeOIS(
-            ql.Period("5Y"),
-            sofr,
-            fixed_rate=0.023,
-            nominal=1_000_000.0,
-            effective_date=qlDate(2024, 1, 4),
-            termination_date=qlDate(2029, 1, 4),
-            discounting_term_structure=discount_curve,
-            payment_frequency=ql.Annual,
-            averaging_method=ql.RateAveraging.Compound,
-        )
-        assert isinstance(made_ois, ql.OvernightIndexedSwap)
-    finally:
-        ql.Settings.instance().evaluationDate = original_eval
-
-
 def test_overnight_swap_index_wrappers():
     eval_date = qlDate(2024, 1, 2)
     overnight_curve = ql.YieldTermStructureHandle(
@@ -465,7 +395,7 @@ def test_zero_coupon_swap_wrappers_and_accessors():
             index6m,
             qlCalendar("TARGET"),
         )
-        zc_rate.setPricingEngine(qlDiscountingSwapEngine(curve))
+        zc_rate.setPricingEngine(qlDiscountingSwapEngine(curve, True))
 
         assert isinstance(zc_rate, ql.ZeroCouponSwap)
         assert qlZeroCouponSwapType(zc_rate) == "PAYER"
@@ -494,88 +424,508 @@ def test_zero_coupon_swap_wrappers_and_accessors():
         ql.Settings.instance().evaluationDate = original_eval
 
 
-def test_equity_total_return_swap_wrappers_and_accessors():
+def test_asset_swap_wrapper():
     original_eval = ql.Settings.instance().evaluationDate
     try:
         eval_date = qlDate(2024, 1, 2)
         ql.Settings.instance().evaluationDate = eval_date
 
+        curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        ibor_index = ql.USDLibor(ql.Period("6M"), curve)
+        ibor_index.addFixing(ql.Date(28, 12, 2023), 0.02, True)
+
+        issue_date = qlDate(2024, 1, 2)
+        maturity_date = qlDate(2028, 1, 2)
+        bond_schedule = _schedule(issue_date, maturity_date, ql.Period("1Y"))
+
+        bond = ql.FixedRateBond(
+            2,
+            1_000_000.0,
+            bond_schedule,
+            [0.03],
+            ql.ActualActual(ql.ActualActual.Bond),
+        )
+
+        float_schedule = _schedule(eval_date, qlDate(2028, 1, 2), ql.Period("6M"))
+
+        asset_swap = qlAssetSwap(
+            pay_fixed_rate=True,
+            bond=bond,
+            bond_clean_price=100.0,
+            index=ibor_index,
+            spread=0.005,
+            float_schedule=float_schedule,
+            par_asset_swap=True,
+        )
+
+        assert isinstance(asset_swap, ql.AssetSwap)
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_overnight_indexed_swap_constructor_and_accessors():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        ql.Settings.instance().evaluationDate = eval_date
+
+        overnight_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.021, ql.Actual365Fixed())
+        )
+        sofr = ql.Sofr(overnight_curve)
+        sofr.addFixing(ql.Date(29, 12, 2023), 0.021)
+
+        ois_schedule = _schedule(eval_date, qlDate(2026, 1, 2), ql.Period("3M"))
+
+        ois = qlOvernightIndexedSwap(
+            qSwapType.__wrapped__("PAYER"),
+            nominal=1_000_000.0,
+            schedule=ois_schedule,
+            fixed_rate=0.025,
+            fixed_dc=ql.Actual360(),
+            index=sofr,
+            spread=0.001,
+            payment_lag=2,
+            payment_adjustment=ql.Following,
+            payment_calendar=qlCalendar("TARGET"),
+            averaging_method=ql.RateAveraging.Compound,
+            lookback_days=1,
+            lockout_days=1,
+            apply_observation_shift=True,
+        )
+
+        assert isinstance(ois, ql.OvernightIndexedSwap)
+
+        assert qlSwapNumberOfLegs(ois) == 2
+        assert qlSwapStartDate(ois) == eval_date
+        assert qlSwapMaturityDate(ois) == ois_schedule.endDate()
+        assert qlSwapPayer(ois, 0) is True
+        assert qlSwapPayer(ois, 1) is False
+
+        assert qlOvernightIndexedSwapOvernightIndex(ois).name() == sofr.name()
+        assert qlOvernightIndexedSwapAveragingMethod(ois) == "COMPOUND"
+        assert qlOvernightIndexedSwapLookbackDays(ois) == 1
+        assert qlOvernightIndexedSwapLockoutDays(ois) == 1
+        assert qlOvernightIndexedSwapApplyObservationShift(ois) is True
+        assert qlOvernightIndexedSwapPaymentFrequency(ois) == "QUARTERLY"
+
+        overnight_leg = qlOvernightIndexedSwapOvernightLeg(ois)
+        assert len(overnight_leg) > 0
+
         discount_curve = ql.YieldTermStructureHandle(
             ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
         )
+        engine = qlDiscountingSwapEngine(discount_curve, False)
+        ois.setPricingEngine(engine)
+
+        assert qlOvernightIndexedSwapOvernightLegNPV(ois) == pytest.approx(
+            ois.overnightLegNPV()
+        )
+        assert qlOvernightIndexedSwapOvernightLegBPS(ois) == pytest.approx(
+            ois.overnightLegBPS()
+        )
+
+        assert qlSwapLegNPV(ois, 1) == pytest.approx(ois.legNPV(1))
+        assert qlSwapLegBPS(ois, 1) == pytest.approx(ois.legBPS(1))
+
+        assert isinstance(ois.NPV(), float)
+
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_multiple_resets_swap_constructor_and_accessors():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        ql.Settings.instance().evaluationDate = eval_date
+
         forecast_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        ibor_index = ql.USDLibor(ql.Period("6M"), forecast_curve)
+        ibor_index.addFixing(ql.Date(28, 12, 2023), 0.02)
+
+        fixed_schedule = _schedule(eval_date, qlDate(2026, 1, 2), ql.Period("1Y"))
+        full_reset_schedule = _schedule(eval_date, qlDate(2026, 1, 2), ql.Period("3M"))
+
+        mrs = qlMultipleResetsSwap(
+            qSwapType.__wrapped__("PAYER"),
+            nominal=1_000_000.0,
+            fixed_schedule=fixed_schedule,
+            fixed_rate=0.025,
+            fixed_day_count=ql.Thirty360(ql.Thirty360.BondBasis),
+            full_reset_schedule=full_reset_schedule,
+            ibor_index=ibor_index,
+            resets_per_coupon=4,
+            spread=0.001,
+            averaging_method=ql.RateAveraging.Compound,
+            payment_convention=ql.Following,
+            payment_lag=2,
+            payment_calendar=qlCalendar("TARGET"),
+        )
+
+        assert isinstance(mrs, ql.MultipleResetsSwap)
+
+        assert qlSwapNumberOfLegs(mrs) == 2
+        assert qlSwapStartDate(mrs) == eval_date
+        assert qlSwapMaturityDate(mrs) == full_reset_schedule.endDate()
+        assert qlSwapPayer(mrs, 0) is True
+        assert qlSwapPayer(mrs, 1) is False
+
+        full_reset_schedule_result = qlMultipleResetsSwapFullResetSchedule(mrs)
+        assert full_reset_schedule_result.startDate() == full_reset_schedule.startDate()
+        assert full_reset_schedule_result.endDate() == full_reset_schedule.endDate()
+        assert qlMultipleResetsSwapResetsPerCoupon(mrs) == 4
+        assert qlMultipleResetsSwapAveragingMethod(mrs) == "COMPOUND"
+
+        fixed_leg = qlSwapLeg(mrs, 0)
+        assert len(fixed_leg) > 0
+
+        floating_leg = qlSwapLeg(mrs, 1)
+        assert len(floating_leg) > 0
+
+        discount_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.019, ql.Actual365Fixed())
+        )
+        engine = qlDiscountingSwapEngine(discount_curve, True)
+        mrs.setPricingEngine(engine)
+
+        assert qlSwapLegNPV(mrs, 0) == pytest.approx(mrs.legNPV(0))
+        assert qlSwapLegNPV(mrs, 1) == pytest.approx(mrs.legNPV(1))
+        assert qlSwapLegBPS(mrs, 0) == pytest.approx(mrs.legBPS(0))
+        assert qlSwapLegBPS(mrs, 1) == pytest.approx(mrs.legBPS(1))
+
+        assert isinstance(mrs.NPV(), float)
+
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_make_multiple_resets_swap_helper():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        ql.Settings.instance().evaluationDate = eval_date
+
+        forecast_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        ibor_index = ql.USDLibor(ql.Period("6M"), forecast_curve)
+        ibor_index.addFixing(ql.Date(28, 12, 2023), 0.02)
+
+        discount_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.019, ql.Actual365Fixed())
+        )
+
+        mrs = qlMakeMultipleResetsSwap(
+            swap_tenor=ql.Period("1Y"),
+            ibor_index=ibor_index,
+            resets_per_coupon=3,
+            receive_fixed=True,
+            nominal=1_000_000.0,
+            fixed_rate=0.025,
+            fixed_leg_frequency=ql.Annual,
+            fixed_leg_day_count=ql.Thirty360(ql.Thirty360.BondBasis),
+            floating_leg_spread=0.001,
+            averaging_method=ql.RateAveraging.Compound,
+            discounting_term_structure=discount_curve,
+        )
+
+        assert isinstance(mrs, ql.MultipleResetsSwap)
+
+        assert qlSwapNumberOfLegs(mrs) == 2
+        assert (
+            qlSwapStartDate(mrs) >= eval_date
+        )  # Start date may be adjusted by settlement days
+        assert qlSwapPayer(mrs, 0) is False  # receive fixed
+        assert qlSwapPayer(mrs, 1) is True
+
+        assert qlMultipleResetsSwapResetsPerCoupon(mrs) == 3
+        assert qlMultipleResetsSwapAveragingMethod(mrs) == "COMPOUND"
+
+        full_reset_schedule = qlMultipleResetsSwapFullResetSchedule(mrs)
+        assert (
+            full_reset_schedule.startDate() >= eval_date
+        )  # May be adjusted by settlement days
+        assert full_reset_schedule.endDate() > eval_date
+
+        fixed_leg = qlSwapLeg(mrs, 0)
+        assert len(fixed_leg) > 0
+
+        floating_leg = qlSwapLeg(mrs, 1)
+        assert len(floating_leg) > 0
+
+        engine = qlDiscountingSwapEngine(discount_curve, True)
+        mrs.setPricingEngine(engine)
+
+        assert qlSwapLegNPV(mrs, 0) == pytest.approx(mrs.legNPV(0))
+        assert qlSwapLegNPV(mrs, 1) == pytest.approx(mrs.legNPV(1))
+        assert qlSwapLegBPS(mrs, 0) == pytest.approx(mrs.legBPS(0))
+        assert qlSwapLegBPS(mrs, 1) == pytest.approx(mrs.legBPS(1))
+
+        assert isinstance(mrs.NPV(), float)
+
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_equity_total_return_swap_constructor_and_accessors():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        ql.Settings.instance().evaluationDate = eval_date
+
+        curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        ibor_index = ql.USDLibor(ql.Period("6M"), curve)
+        ibor_index.addFixing(ql.Date(28, 12, 2023), 0.02)
+
+        schedule = _schedule(eval_date, qlDate(2026, 1, 2), ql.Period("1Y"))
+
+        # Create a simple equity index with interest rate term structure
+        equity_ts = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.015, ql.Actual365Fixed())
+        )
+        equity_index = ql.EquityIndex(
+            "TEST_INDEX",
+            ql.TARGET(),  # fixing calendar
+            ql.USDCurrency(),
+            equity_ts,  # interest rate term structure
+        )
+        equity_index.addFixing(ql.Date(2, 1, 2024), 100.0)
+        equity_index.addFixing(ql.Date(2, 1, 2025), 105.0)
+
+        etrs = qlEquityTotalReturnSwap(
+            qSwapType.__wrapped__("PAYER"),
+            nominal=1_000_000.0,
+            schedule=schedule,
+            equity_index=equity_index,
+            interest_rate_index=ibor_index,
+            day_counter=ql.Actual365Fixed(),
+            margin=0.01,
+            gearing=1.0,
+            payment_calendar=qlCalendar("TARGET"),
+            payment_convention=ql.Following,
+            payment_delay=2,
+        )
+
+        assert isinstance(etrs, ql.EquityTotalReturnSwap)
+
+        assert qlEquityTotalReturnSwapType(etrs) == "PAYER"
+        assert qlEquityTotalReturnSwapNominal(etrs) == pytest.approx(1_000_000.0)
+        assert qlEquityTotalReturnSwapMargin(etrs) == pytest.approx(0.01)
+        assert qlEquityTotalReturnSwapGearing(etrs) == pytest.approx(1.0)
+
+        assert qlEquityTotalReturnSwapEquityIndex(etrs).name() == "TEST_INDEX"
+        assert (
+            qlEquityTotalReturnSwapInterestRateIndex(etrs).name() == ibor_index.name()
+        )
+        assert (
+            qlEquityTotalReturnSwapDayCounter(etrs).name() == ql.Actual365Fixed().name()
+        )
+        assert qlEquityTotalReturnSwapSchedule(etrs).startDate() == eval_date
+
+        assert qlEquityTotalReturnSwapPaymentCalendar(etrs).name() == "TARGET"
+        assert qlEquityTotalReturnSwapPaymentConvention(etrs) == "FOLLOWING"
+        assert qlEquityTotalReturnSwapPaymentDelay(etrs) == 2
+
+        equity_leg = qlEquityTotalReturnSwapEquityLeg(etrs)
+        assert len(equity_leg) > 0
+
+        interest_leg = qlEquityTotalReturnSwapInterestRateLeg(etrs)
+        assert len(interest_leg) > 0
+
+        discount_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.019, ql.Actual365Fixed())
+        )
+        engine = qlDiscountingSwapEngine(discount_curve, True)
+        etrs.setPricingEngine(engine)
+
+        assert qlEquityTotalReturnSwapEquityLegNPV(etrs) == pytest.approx(
+            etrs.equityLegNPV()
+        )
+        assert qlEquityTotalReturnSwapInterestRateLegNPV(etrs) == pytest.approx(
+            etrs.interestRateLegNPV()
+        )
+        assert qlEquityTotalReturnSwapFairMargin(etrs) == pytest.approx(
+            etrs.fairMargin()
+        )
+
+        assert isinstance(etrs.NPV(), float)
+
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_overnight_indexed_swap2_constructor_and_accessors():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        ql.Settings.instance().evaluationDate = eval_date
+
+        overnight_curve = ql.YieldTermStructureHandle(
             ql.FlatForward(eval_date, 0.021, ql.Actual365Fixed())
         )
-        div_curve = ql.YieldTermStructureHandle(
-            ql.FlatForward(eval_date, 0.01, ql.Actual365Fixed())
-        )
+        sofr = ql.Sofr(overnight_curve)
+        sofr.addFixing(ql.Date(29, 12, 2023), 0.021)
 
-        ibor = ql.USDLibor(ql.Period("6M"), forecast_curve)
-        sofr = ql.Sofr(forecast_curve)
-        schedule = _schedule(qlDate(2024, 1, 4), qlDate(2026, 1, 4), ql.Period("6M"))
+        fixed_schedule = _schedule(eval_date, qlDate(2026, 1, 2), ql.Period("1Y"))
+        overnight_schedule = _schedule(eval_date, qlDate(2026, 1, 2), ql.Period("3M"))
 
-        equity_index = ql.EquityIndex(
-            "SPX",
-            qlCalendar("TARGET"),
-            ql.USDCurrency(),
-            discount_curve,
-            div_curve,
-            ql.QuoteHandle(ql.SimpleQuote(100.0)),
-        )
+        n_fixed = len(fixed_schedule) - 1
+        n_overnight = len(overnight_schedule) - 1
 
-        trs = qlEquityTotalReturnSwap(
-            qSwapType.__wrapped__("PAYER"),
-            1_000_000.0,
-            schedule,
-            equity_index,
-            ibor,
-            ql.Actual360(),
-            0.001,
-        )
-        trs.setPricingEngine(qlDiscountingSwapEngine(discount_curve))
-
-        assert isinstance(trs, ql.EquityTotalReturnSwap)
-        assert qlEquityTotalReturnSwapType(trs) == "PAYER"
-        assert qlEquityTotalReturnSwapNominal(trs) == pytest.approx(trs.nominal())
-        assert (
-            qlEquityTotalReturnSwapEquityIndex(trs).name() == trs.equityIndex().name()
-        )
-        assert (
-            qlEquityTotalReturnSwapInterestRateIndex(trs).name()
-            == trs.interestRateIndex().name()
-        )
-        assert (
-            qlEquityTotalReturnSwapSchedule(trs).startDate()
-            == trs.schedule().startDate()
-        )
-        assert qlEquityTotalReturnSwapDayCounter(trs).name() == trs.dayCounter().name()
-        assert qlEquityTotalReturnSwapMargin(trs) == pytest.approx(trs.margin())
-        assert qlEquityTotalReturnSwapGearing(trs) == pytest.approx(trs.gearing())
-        assert (
-            qlEquityTotalReturnSwapPaymentCalendar(trs).name()
-            == trs.paymentCalendar().name()
-        )
-        assert qlEquityTotalReturnSwapPaymentConvention(trs) == "UNADJUSTED"
-        assert qlEquityTotalReturnSwapPaymentDelay(trs) == trs.paymentDelay()
-        assert len(qlEquityTotalReturnSwapEquityLeg(trs)) > 0
-        assert len(qlEquityTotalReturnSwapInterestRateLeg(trs)) > 0
-        assert qlEquityTotalReturnSwapEquityLegNPV(trs) == pytest.approx(
-            trs.equityLegNPV()
-        )
-        assert qlEquityTotalReturnSwapInterestRateLegNPV(trs) == pytest.approx(
-            trs.interestRateLegNPV()
-        )
-        assert qlEquityTotalReturnSwapFairMargin(trs) == pytest.approx(trs.fairMargin())
-
-        trs_overnight = qlEquityTotalReturnSwap2(
+        ois = qlOvernightIndexedSwap2(
             qSwapType.__wrapped__("RECEIVER"),
-            1_000_000.0,
-            schedule,
-            equity_index,
-            sofr,
-            ql.Actual360(),
-            0.001,
+            fixed_nominals=[1_000_000.0] * n_fixed,
+            fixed_schedule=fixed_schedule,
+            fixed_rate=0.025,
+            fixed_dc=ql.Actual360(),
+            overnight_nominals=[1_000_000.0] * n_overnight,
+            overnight_schedule=overnight_schedule,
+            overnight_index=sofr,
+            spread=0.0,
+            payment_lag=0,
+            payment_adjustment=ql.Following,
+            payment_calendar=ql.TARGET(),
         )
-        assert isinstance(trs_overnight, ql.EquityTotalReturnSwap)
+
+        assert isinstance(ois, ql.OvernightIndexedSwap)
+
+        assert qlSwapNumberOfLegs(ois) == 2
+        assert qlSwapStartDate(ois) == eval_date
+        assert qlSwapMaturityDate(ois) == overnight_schedule.endDate()
+        assert qlSwapPayer(ois, 0) is False
+        assert qlSwapPayer(ois, 1) is True
+
+        assert qlOvernightIndexedSwapOvernightIndex(ois).name() == sofr.name()
+        assert qlOvernightIndexedSwapAveragingMethod(ois) == "COMPOUND"
+
+        overnight_leg = qlOvernightIndexedSwapOvernightLeg(ois)
+        assert len(overnight_leg) > 0
+
+        fixed_leg = qlSwapLeg(ois, 0)
+        assert len(fixed_leg) == n_fixed
+
+        discount_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        engine = qlDiscountingSwapEngine(discount_curve, True)
+        ois.setPricingEngine(engine)
+
+        assert qlOvernightIndexedSwapOvernightLegNPV(ois) == pytest.approx(
+            ois.overnightLegNPV()
+        )
+        assert qlOvernightIndexedSwapOvernightLegBPS(ois) == pytest.approx(
+            ois.overnightLegBPS()
+        )
+
+        assert qlSwapLegNPV(ois, 0) == pytest.approx(ois.legNPV(0))
+        assert qlSwapLegNPV(ois, 1) == pytest.approx(ois.legNPV(1))
+        assert qlSwapLegBPS(ois, 0) == pytest.approx(ois.legBPS(0))
+        assert qlSwapLegBPS(ois, 1) == pytest.approx(ois.legBPS(1))
+
+        assert isinstance(ois.NPV(), float)
+
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_ql_make_ois_constructor_and_pricing():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        ql.Settings.instance().evaluationDate = eval_date
+
+        overnight_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.021, ql.Actual365Fixed())
+        )
+        discount_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        sofr = ql.Sofr(overnight_curve)
+        sofr.addFixing(ql.Date(29, 12, 2023), 0.021)
+
+        ois = qlMakeOIS(
+            swap_tenor=ql.Period("2Y"),
+            overnight_index=sofr,
+            fixed_rate=0.025,
+        )
+
+        assert isinstance(ois, ql.OvernightIndexedSwap)
+        assert qlSwapNumberOfLegs(ois) == 2
+        assert qlSwapStartDate(ois) >= eval_date
+        assert qlSwapMaturityDate(ois) > eval_date
+        assert qlSwapPayer(ois, 0) is True
+        assert qlSwapPayer(ois, 1) is False
+
+        engine = qlDiscountingSwapEngine(discount_curve, True)
+        ois.setPricingEngine(engine)
+        assert isinstance(ois.NPV(), float)
+
+        ois_custom = qlMakeOIS(
+            swap_tenor=ql.Period("3Y"),
+            overnight_index=sofr,
+            fixed_rate=0.028,
+            receive_fixed=False,
+            nominal=2_000_000.0,
+            settlement_days=2,
+            payment_frequency=ql.Semiannual,
+            fixed_leg_day_count=ql.Actual360(),
+            overnight_leg_spread=0.001,
+            averaging_method=ql.RateAveraging.Compound,
+            payment_lag=2,
+            payment_calendar=qlCalendar("TARGET"),
+            payment_adjustment_convention=ql.Following,
+            end_of_month=True,
+            discounting_term_structure=discount_curve,
+            pricing_engine=engine,
+        )
+
+        assert isinstance(ois_custom, ql.OvernightIndexedSwap)
+        assert qlSwapNumberOfLegs(ois_custom) == 2
+        assert qlSwapPayer(ois_custom, 0) is True
+        assert qlSwapPayer(ois_custom, 1) is False
+
+        # Verify the overnight index
+        assert qlOvernightIndexedSwapOvernightIndex(ois_custom).name() == sofr.name()
+        assert qlOvernightIndexedSwapAveragingMethod(ois_custom) == "COMPOUND"
+
+        # Test leg accessors
+        overnight_leg = qlOvernightIndexedSwapOvernightLeg(ois_custom)
+        assert len(overnight_leg) > 0
+
+        # Test NPV and BPS calculations
+        assert qlOvernightIndexedSwapOvernightLegNPV(ois_custom) == pytest.approx(
+            ois_custom.overnightLegNPV()
+        )
+        assert qlOvernightIndexedSwapOvernightLegBPS(ois_custom) == pytest.approx(
+            ois_custom.overnightLegBPS()
+        )
+        assert qlSwapLegNPV(ois_custom, 0) == pytest.approx(ois_custom.legNPV(0))
+        assert qlSwapLegNPV(ois_custom, 1) == pytest.approx(ois_custom.legNPV(1))
+        assert qlSwapLegBPS(ois_custom, 0) == pytest.approx(ois_custom.legBPS(0))
+        assert qlSwapLegBPS(ois_custom, 1) == pytest.approx(ois_custom.legBPS(1))
+
+        # Test 3: OIS with swap_type parameter
+        ois_type = qlMakeOIS(
+            swap_tenor=ql.Period("1Y"),
+            overnight_index=sofr,
+            fixed_rate=0.022,
+            swap_type="RECEIVER",
+            nominal=1_000_000.0,
+            discounting_term_structure=discount_curve,
+            pricing_engine=engine,
+        )
+
+        assert isinstance(ois_type, ql.OvernightIndexedSwap)
+        assert qlSwapPayer(ois_type, 0) is False
+
+        assert isinstance(ois_type.NPV(), float)
+
     finally:
         ql.Settings.instance().evaluationDate = original_eval

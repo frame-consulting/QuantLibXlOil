@@ -29,12 +29,10 @@ def qlFxForward(
     maturity_date: qDate,
     pay_source_currency: bool,
     settlement_days: int = 2,
-    payment_calendar: qCalendar = ql.NullCalendar(),
+    payment_calendar=None,
     trigger=None,
 ) -> ql.FxForward:
-    if payment_calendar is None:
-        payment_calendar = ql.NullCalendar()
-    return ql.FxForward(
+    args = [
         source_nominal,
         source_currency,
         target_nominal,
@@ -42,8 +40,11 @@ def qlFxForward(
         maturity_date,
         pay_source_currency,
         settlement_days,
-        payment_calendar,
-    )
+    ]
+    if payment_calendar is not None:
+        payment_calendar = qCalendar.__wrapped__(payment_calendar)
+        args.append(payment_calendar)
+    return ql.FxForward(*args)
 
 
 @xlo.func(
@@ -68,12 +69,10 @@ def qlFxForward2(
     maturity_date: qDate,
     pay_source_currency: bool,
     settlement_days: int = 2,
-    payment_calendar: qCalendar = ql.NullCalendar(),
+    payment_calendar=None,
     trigger=None,
 ) -> ql.FxForward:
-    if payment_calendar is None:
-        payment_calendar = ql.NullCalendar()
-    return ql.FxForward(
+    args = [
         source_nominal,
         source_currency,
         target_currency,
@@ -81,8 +80,11 @@ def qlFxForward2(
         maturity_date,
         pay_source_currency,
         settlement_days,
-        payment_calendar,
-    )
+    ]
+    if payment_calendar is not None:
+        payment_calendar = qCalendar.__wrapped__(payment_calendar)
+        args.append(payment_calendar)
+    return ql.FxForward(*args)
 
 
 @xlo.func(

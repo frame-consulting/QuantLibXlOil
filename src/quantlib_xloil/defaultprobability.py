@@ -220,6 +220,7 @@ def qlFlatHazardRate(
     return ql.DefaultProbabilityTermStructureHandle(ts)
 
 
+# uses BackwardFlat interpolator internally
 @xlo.func(
     help="Construct a hazard rate curve with linear interpolation.",
     args={
@@ -234,15 +235,18 @@ def qlHazardRateCurve(
     dates: xlo.Array(dims=1),
     hazard_rates: xlo.Array(dims=1),
     day_counter: qDayCounter,
-    calendar: qCalendar = ql.NullCalendar(),
+    calendar=None,
     trigger=None,
 ) -> ql.DefaultProbabilityTermStructureHandle:
-    ts = ql.HazardRateCurve(
-        _to_date_list(dates), to_float_list(hazard_rates), day_counter, calendar
-    )
+    args = [_to_date_list(dates), to_float_list(hazard_rates), day_counter]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    ts = ql.HazardRateCurve(*args)
     return ql.DefaultProbabilityTermStructureHandle(ts)
 
 
+# uses Linear interpolator internally
 @xlo.func(
     help="Construct a default density curve with linear interpolation.",
     args={
@@ -257,15 +261,18 @@ def qlDefaultDensityCurve(
     dates: xlo.Array(dims=1),
     default_densities: xlo.Array(dims=1),
     day_counter: qDayCounter,
-    calendar: qCalendar = ql.NullCalendar(),
+    calendar=None,
     trigger=None,
 ) -> ql.DefaultProbabilityTermStructureHandle:
-    ts = ql.DefaultDensityCurve(
-        _to_date_list(dates), to_float_list(default_densities), day_counter, calendar
-    )
+    args = [_to_date_list(dates), to_float_list(default_densities), day_counter]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    ts = ql.DefaultDensityCurve(*args)
     return ql.DefaultProbabilityTermStructureHandle(ts)
 
 
+# uses Linear interpolator internally
 @xlo.func(
     help="Construct a survival probability curve with linear interpolation.",
     args={
@@ -280,15 +287,14 @@ def qlSurvivalProbabilityCurve(
     dates: xlo.Array(dims=1),
     survival_probabilities: xlo.Array(dims=1),
     day_counter: qDayCounter,
-    calendar: qCalendar = ql.NullCalendar(),
+    calendar=None,
     trigger=None,
 ) -> ql.DefaultProbabilityTermStructureHandle:
-    ts = ql.SurvivalProbabilityCurve(
-        _to_date_list(dates),
-        to_float_list(survival_probabilities),
-        day_counter,
-        calendar,
-    )
+    args = [_to_date_list(dates), to_float_list(survival_probabilities), day_counter]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    ts = ql.SurvivalProbabilityCurve(*args)
     return ql.DefaultProbabilityTermStructureHandle(ts)
 
 
@@ -430,14 +436,14 @@ def qlSpreadCdsHelper(
     calendar: qCalendar,
     frequency: qFrequency,
     payment_convention: qBusinessDayConvention,
-    date_generation: qDateGenerationRule,  # ql.DateGeneration.TwentiethIMM
+    date_generation: qDateGenerationRule,
     day_counter: qDayCounter,
     recovery_rate: float,
     discount_curve: ql.YieldTermStructureHandle,
     settles_accrual: bool = True,
     pays_at_default: bool = True,
     start_date: qDate = ql.Date(),
-    last_period_day_counter: str = None,  # cannot use ql.DayCounter(),
+    last_period_day_counter=None,
     rebates_accrual: bool = True,
     model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.Midpoint,
     trigger=None,
@@ -446,7 +452,23 @@ def qlSpreadCdsHelper(
         last_period_day_counter = day_counter
     else:
         last_period_day_counter = qDayCounter.__wrapped__(last_period_day_counter)
-    #
+    _SPREAD_CDS_HELPER_KWARGS = {
+        "settles_accrual": "settlesAccrual",
+        "pays_at_default": "paysAtDefaultTime",
+        "start_date": "startDate",
+        "last_period_day_counter": "lastPeriodDayCounter",
+        "rebates_accrual": "rebatesAccrual",
+        "model": "model",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _SPREAD_CDS_HELPER_KWARGS.items():
+        value = locals()[param_name]
+        if param_name in ["settles_accrual", "pays_at_default", "rebates_accrual"]:
+            kwargs[kw_name] = value
+        elif value is not None:
+            kwargs[kw_name] = value
+
     return ql.SpreadCdsHelper(
         spread,
         tenor,
@@ -458,12 +480,7 @@ def qlSpreadCdsHelper(
         day_counter,
         recovery_rate,
         discount_curve,
-        settles_accrual,
-        pays_at_default,
-        start_date,
-        last_period_day_counter,
-        rebates_accrual,
-        model,
+        **kwargs,
     )
 
 
@@ -499,7 +516,7 @@ def qlUpfrontCdsHelper(
     calendar: qCalendar,
     frequency: qFrequency,
     payment_convention: qBusinessDayConvention,
-    date_generation: qDateGenerationRule,  # ql.DateGeneration.TwentiethIMM
+    date_generation: qDateGenerationRule,
     day_counter: qDayCounter,
     recovery_rate: float,
     discount_curve: ql.YieldTermStructureHandle,
@@ -507,16 +524,29 @@ def qlUpfrontCdsHelper(
     settles_accrual: bool = True,
     pays_at_default: bool = True,
     start_date: qDate = ql.Date(),
-    last_period_day_counter: str = None,  # cannot use ql.DayCounter(),
+    last_period_day_counter=None,
     rebates_accrual: bool = True,
     model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.Midpoint,
     trigger=None,
 ) -> ql.UpfrontCdsHelper:
-    if last_period_day_counter is None:
-        last_period_day_counter = day_counter
-    else:
+    if last_period_day_counter is not None:
         last_period_day_counter = qDayCounter.__wrapped__(last_period_day_counter)
-    #
+    _UPFRONT_CDS_HELPER_KWARGS = {
+        "upfront_settlement_days": "upfrontSettlementDays",
+        "settles_accrual": "settlesAccrual",
+        "pays_at_default": "paysAtDefaultTime",
+        "start_date": "startDate",
+        "last_period_day_counter": "lastPeriodDayCounter",
+        "rebates_accrual": "rebatesAccrual",
+        "model": "model",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _UPFRONT_CDS_HELPER_KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.UpfrontCdsHelper(
         upfront,
         spread,
@@ -529,13 +559,7 @@ def qlUpfrontCdsHelper(
         day_counter,
         recovery_rate,
         discount_curve,
-        upfront_settlement_days,
-        settles_accrual,
-        pays_at_default,
-        start_date,
-        last_period_day_counter,
-        rebates_accrual,
-        model,
+        **kwargs,
     )
 
 

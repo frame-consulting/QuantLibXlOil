@@ -9,6 +9,21 @@ from .daycounters import qDayCounter
 from .scheduler import qDateGenerationRule
 from .utilities import enum_value
 
+QL_BOND_PRICE_TYPE = {
+    "CLEAN": ql.BondPrice.Dirty,
+    "DIRTY": ql.BondPrice.Clean,
+}
+
+
+def _qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
+    return enum_value(bond_price_type, QL_BOND_PRICE_TYPE)
+
+
+@xlo.converter()
+def qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
+    return _qBondPriceType(bond_price_type)
+
+
 QL_PILLAR_CHOICE = {
     "CUSTOMDATE": ql.Pillar.CustomDate,
     "LASTRELEVANTDATE": ql.Pillar.LastRelevantDate,
@@ -658,78 +673,99 @@ def qlSwapRateHelperSwap(
     return swap_rate_helper.swap()
 
 
-# /ToDo: bond.py needs to be implemented
-"""
 @xlo.func(
-    help='Create a QuantLib BondHelper object.',
+    help="Create a QuantLib BondHelper object.",
     args={
-        'Quote': 'The quote for the bond.',
-        'Bond': 'The QuantLib Bond object.',
-        'PriceType': 'The price type for the bond (optional).',
+        "quote": "The quote for the bond.",
+        "bond": "The QuantLib Bond object.",
+        "price_type": "The price type for the bond (optional).",
     },
     group=EXCEL_GROUP_NAME,
 )
-def qlBondHelper(quote: float, bond: ql.Bond, price_type: ql.BondHelper.PriceType = ql.Bond.Price.Clean, trigger = None) -> ql.BondHelper:
+def qlBondHelper(
+    quote: float,
+    bond: ql.Bond,
+    price_type: qBondPriceType = ql.BondPrice.Clean,
+    trigger=None,
+) -> ql.BondHelper:
     quote_handle = ql.QuoteHandle(ql.SimpleQuote(quote))
     return ql.BondHelper(quote_handle, bond, price_type)
 
+
+# TODO Missing %feature("kwargs") in SWIG and testing
 @xlo.func(
-    help='Create a QuantLib FixedRateBondHelper object.',
+    help="Create a QuantLib FixedRateBondHelper object.",
     args={
-        'clean_price': 'The clean price of the bond.',
-        'settlement_days': 'The number of settlement days for the bond.',
-        'face_amount': 'The face amount of the bond.',
-        'schedule': 'The schedule for the bond.',
-        'coupons': 'The list of coupon rates for the bond.',
-        'day_counter': 'The day counter for the bond.',
-        'business_day_convention': 'The business day convention for the bond.',
-        'redemption': 'The redemption value of the bond (optional).',
-        'issue_date': 'The issue date of the bond (optional).',
-        'payment_calendar': 'The payment calendar for the bond (optional).',
-        'ex_coupon_period': 'The ex-coupon period for the bond (optional).',
-        'ex_coupon_calendar': 'The ex-coupon calendar for the bond (optional).',
-        'ex_coupon_convention': 'The ex-coupon business day convention for the bond (optional).',
-        'ex_coupon_end_of_month': 'Whether to use end of month convention for ex-coupon dates (optional).',
-        'price_type': 'The price type for the bond helper (optional).',
+        "clean_price": "The clean price of the bond.",
+        "settlement_days": "The number of settlement days for the bond.",
+        "face_amount": "The face amount of the bond.",
+        "schedule": "The schedule for the bond.",
+        "coupons": "The list of coupon rates for the bond.",
+        "day_counter": "The day counter for the bond.",
+        "business_day_convention": "The business day convention for the bond.",
+        "redemption": "The redemption value of the bond (optional).",
+        "issue_date": "The issue date of the bond (optional).",
+        "payment_calendar": "The payment calendar for the bond (optional).",
+        "ex_coupon_period": "The ex-coupon period for the bond (optional).",
+        "ex_coupon_calendar": "The ex-coupon calendar for the bond (optional).",
+        "ex_coupon_convention": "The ex-coupon business day convention for the bond (optional).",
+        "ex_coupon_end_of_month": "Whether to use end of month convention for ex-coupon dates (optional).",
+        "price_type": "The price type for the bond helper (optional).",
     },
-        group=EXCEL_GROUP_NAME,
+    group=EXCEL_GROUP_NAME,
 )
 def qlFixedRateBondHelper(
-        clean_price: float, 
-        settlement_days: int, 
-        face_amount: float, 
-        schedule: ql.Schedule, 
-        coupons: list[float], 
-        day_counter: qDayCounter, 
-        business_day_convention: qBusinessDayConvention = ql.Following, 
-        redemption: float = 100.0, 
-        issue_date: qDate = ql.Date(), 
-        payment_calendar: qCalendar = "NullCalendar()",
-        ex_coupon_period: qPeriod = ql.Period(0, ql.Days),
-        ex_coupon_calendar: qCalendar = "NullCalendar()",
-        ex_coupon_convention: qBusinessDayConvention = "UnAdjusted",
-        ex_coupon_end_of_month: bool = False,
-        price_type: ql.BondHelper.PriceType = ql.BondHelper.Clean, 
-        trigger = None) -> ql.BondHelper:
+    clean_price: float,
+    settlement_days: int,
+    face_amount: float,
+    schedule: ql.Schedule,
+    coupons: list[float],
+    day_counter: qDayCounter,
+    business_day_convention: qBusinessDayConvention = ql.Following,
+    redemption: float = 100.0,
+    issue_date: qDate = ql.Date(),
+    payment_calendar=None,
+    ex_coupon_period: qPeriod = ql.Period(),
+    ex_coupon_calendar=None,
+    ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted,
+    ex_coupon_end_of_month: bool = False,
+    price_type: qBondPriceType = ql.BondPrice.Clean,
+    trigger=None,
+) -> ql.BondHelper:
     quote_handle = ql.QuoteHandle(ql.SimpleQuote(clean_price))
+
+    if payment_calendar is not None:
+        payment_calendar = qCalendar.__wrapped__(payment_calendar)
+    if ex_coupon_calendar is not None:
+        ex_coupon_calendar = qCalendar.__wrapped__(ex_coupon_calendar)
+
+    _FIXED_RATE_BOND_HELPER_KWARGS = {
+        "business_day_convention": "paymentConvention",
+        "redemption": "redemption",
+        "issue_date": "issueDate",
+        "payment_calendar": "paymentCalendar",
+        "ex_coupon_period": "exCouponPeriod",
+        "ex_coupon_calendar": "exCouponCalendar",
+        "ex_coupon_convention": "exCouponConvention",
+        "ex_coupon_end_of_month": "exCouponEndOfMonth",
+        "price_type": "priceType",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _FIXED_RATE_BOND_HELPER_KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.FixedRateBondHelper(
-        quote_handle, 
-        settlement_days, 
-        face_amount, 
-        schedule, 
-        coupons, 
-        day_counter, 
-        business_day_convention, 
-        redemption, 
-        issue_date, 
-        payment_calendar, 
-        ex_coupon_period, 
-        ex_coupon_calendar, 
-        ex_coupon_convention, 
-        ex_coupon_end_of_month, 
-        price_type
-        )
-"""
+        quote_handle,
+        settlement_days,
+        face_amount,
+        schedule,
+        coupons,
+        day_counter,
+        **kwargs,
+    )
 
 
 # \ToDo pricer test case
@@ -774,55 +810,69 @@ def qlOISRateHelper(
     payment_lag: int = 0,
     payment_convention: qBusinessDayConvention = ql.Following,
     payment_frequency: qFrequency = ql.Annual,
-    payment_calendar: qCalendar = ql.NullCalendar(),
+    payment_calendar=None,
     forward_start: qPeriod = ql.Period(0, ql.Days),
     overnight_spread: float = 0.0,
     pillar: qPillarChoice = ql.Pillar.LastRelevantDate,
     custom_pillar_date: qDate = ql.Date(),
     averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
     end_of_month: bool = None,
-    fixed_payment_frequency: qFrequency = ql.NoFrequency,
-    fixed_calendar: qCalendar = ql.NullCalendar(),
-    look_back_days: int = 0,
+    fixed_payment_frequency=None,
+    fixed_calendar=None,
+    look_back_days: int = ql.nullInt(),
     lock_out_days: int = 0,
     apply_observation_shift: bool = False,
     pricer: ql.FloatingRateCouponPricer = None,
     rule: qDateGenerationRule = ql.DateGeneration.Backward,
-    overnight_calendar: qCalendar = ql.NullCalendar(),
+    overnight_calendar=None,
     convention: qBusinessDayConvention = ql.ModifiedFollowing,
     trigger=None,
 ) -> ql.OISRateHelper:
+    if payment_calendar is not None:
+        payment_calendar = qCalendar.__wrapped__(payment_calendar)
+    if fixed_payment_frequency is not None:
+        fixed_payment_frequency = qFrequency.__wrapped__(fixed_payment_frequency)
+    if fixed_calendar is not None:
+        fixed_calendar = qCalendar.__wrapped__(fixed_calendar)
+    if overnight_calendar is not None:
+        overnight_calendar = qCalendar.__wrapped__(overnight_calendar)
+
+    _OIS_RATE_HELPER_KWARGS = {
+        "discounting_curve": "discountingCurve",
+        "telescopic_value_dates": "telescopicValueDates",
+        "payment_lag": "paymentLag",
+        "payment_convention": "paymentConvention",
+        "payment_frequency": "paymentFrequency",
+        "payment_calendar": "paymentCalendar",
+        "forward_start": "forwardStart",
+        "overnight_spread": "overnightSpread",
+        "pillar": "pillar",
+        "custom_pillar_date": "customPillarDate",
+        "averaging_method": "averagingMethod",
+        "end_of_month": "endOfMonth",
+        "fixed_payment_frequency": "fixedPaymentFrequency",
+        "fixed_calendar": "fixedCalendar",
+        "look_back_days": "lookbackDays",
+        "lock_out_days": "lockoutDays",
+        "apply_observation_shift": "applyObservationShift",
+        "pricer": "pricer",
+        "rule": "rule",
+        "overnight_calendar": "overnightCalendar",
+        "convention": "convention",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _OIS_RATE_HELPER_KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.OISRateHelper(
-        settlement_days,
-        tenor,
-        fixed_rate,
-        overnight_index,
-        discounting_curve,
-        telescopic_value_dates,
-        payment_lag,
-        payment_convention,
-        payment_frequency,
-        payment_calendar,
-        forward_start,
-        overnight_spread,
-        pillar,
-        custom_pillar_date,
-        averaging_method,
-        end_of_month,
-        fixed_payment_frequency,
-        fixed_calendar,
-        look_back_days,
-        lock_out_days,
-        apply_observation_shift,
-        pricer,
-        rule,
-        overnight_calendar,
-        convention,
+        settlement_days, tenor, fixed_rate, overnight_index, **kwargs
     )
 
 
-# \ToDo to test
-"""
+# TODO to test
 @xlo.func(
     help="The OIS Rate Helper creates a rate helper using start and end dates instead of settlement days",
     args={
@@ -850,63 +900,83 @@ def qlOISRateHelper(
         "rule": "The DateGeneration rule (Backward, Forward, etc.)",
         "overnight_calendar": "The calendar for the overnight index",
         "convention": "The business day convention (Modified Following, etc.)",
-    }
+    },
 )
 def qlOISRateHelperForDates(
-        start_date: qDate,
-        end_date: qDate,
-        fixed_rate: float,
-        overnight_index: ql.OvernightIndex,
-        discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
-        telescopic_value_dates: bool = False,
-        payment_lag: int = 0,
-        payment_convention: qBusinessDayConvention = ql.Following,
-        payment_frequency: qFrequency = ql.Annual,
-        payment_calendar: qCalendar = "NullCalendar()",
-        overnight_spread: float = 0.0,
-        pillar: ql.Pillar = ql.Pillar.LastRelevantDate,
-        custom_pillar_date: qDate = ql.Date(),
-        averaging_method: ql.RateAveraging = ql.RateAveraging.Compound,
-        end_of_month: bool = False,
-        fixed_payment_frequency: qFrequency = "monthly",
-        fixed_calendar: qCalendar = "NullCalendar()",
-        look_back_days: int = 0,
-        lock_out_days: int = 0,
-        apply_observation_shift: bool = False,
-        pricer: ql.FloatingRateCouponPricer = {},
-        rule: ql.DateGeneration = ql.DateGeneration.Backward,
-        overnight_calendar: qCalendar = "NullCalendar()",
-        convention: qBusinessDayConvention = "Modified Following",
-        trigger = None
-        ) -> ql.OISRateHelper:
+    start_date: qDate,
+    end_date: qDate,
+    fixed_rate: float,
+    overnight_index: ql.OvernightIndex,
+    discounting_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    telescopic_value_dates: bool = False,
+    payment_lag: int = 0,
+    payment_convention: qBusinessDayConvention = ql.Following,
+    payment_frequency: qFrequency = ql.Annual,
+    payment_calendar=None,  # SWIG default: Calendar()
+    overnight_spread: float = 0.0,
+    pillar: ql.Pillar = ql.Pillar.LastRelevantDate,
+    custom_pillar_date: qDate = ql.Date(),
+    averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    end_of_month: bool = None,
+    fixed_payment_frequency=None,
+    fixed_calendar=None,
+    look_back_days: int = ql.nullInt(),
+    lock_out_days: int = ql.nullInt(),
+    apply_observation_shift: bool = False,
+    pricer: ql.FloatingRateCouponPricer = None,
+    rule: qDateGenerationRule = ql.DateGeneration.Backward,
+    overnight_calendar=None,
+    convention: qBusinessDayConvention = ql.ModifiedFollowing,
+    trigger=None,
+) -> ql.OISRateHelper:
     quote_handle = ql.QuoteHandle(ql.SimpleQuote(fixed_rate))
+
+    if payment_calendar is not None:
+        payment_calendar = qCalendar.__wrapped__(payment_calendar)
+    if fixed_payment_frequency is not None:
+        fixed_payment_frequency = qFrequency.__wrapped__(fixed_payment_frequency)
+    if fixed_calendar is not None:
+        fixed_calendar = qCalendar.__wrapped__(fixed_calendar)
+    if overnight_calendar is not None:
+        overnight_calendar = qCalendar.__wrapped__(overnight_calendar)
+
+    _OIS_RATE_HELPER_FOR_DATES_KWARGS = {
+        "discounting_curve": "discountingCurve",
+        "telescopic_value_dates": "telescopicValueDates",
+        "payment_lag": "paymentLag",
+        "payment_convention": "paymentConvention",
+        "payment_frequency": "paymentFrequency",
+        "payment_calendar": "paymentCalendar",
+        "overnight_spread": "overnightSpread",
+        "pillar": "pillar",
+        "custom_pillar_date": "customPillarDate",
+        "averaging_method": "averagingMethod",
+        "end_of_month": "endOfMonth",
+        "fixed_payment_frequency": "fixedPaymentFrequency",
+        "fixed_calendar": "fixedCalendar",
+        "look_back_days": "lookbackDays",
+        "lock_out_days": "lockoutDays",
+        "apply_observation_shift": "applyObservationShift",
+        "pricer": "pricer",
+        "rule": "rule",
+        "overnight_calendar": "overnightCalendar",
+        "convention": "convention",
+    }
+
+    eval_date = ql.Settings.instance().evaluationDate
+    settlement_days = int((start_date - eval_date))
+    tenor_days = int((end_date - start_date))
+    tenor = ql.Period(tenor_days, ql.Days)
+
+    kwargs = {}
+    for param_name, kw_name in _OIS_RATE_HELPER_FOR_DATES_KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.OISRateHelper(
-        start_date,
-        end_date,
-        quote_handle,
-        overnight_index,
-        discounting_curve,
-        telescopic_value_dates,
-        payment_lag,
-        payment_convention,
-        payment_frequency,
-        payment_calendar,
-        overnight_spread,
-        pillar,
-        custom_pillar_date,
-        averaging_method,
-        end_of_month,
-        fixed_payment_frequency,
-        fixed_calendar,
-        look_back_days,
-        lock_out_days,
-        apply_observation_shift,
-        pricer,
-        rule,
-        overnight_calendar,
-        convention,
+        settlement_days, tenor, quote_handle, overnight_index, **kwargs
     )
-"""
 
 
 @xlo.func(
@@ -949,10 +1019,11 @@ def qlFxSwapRateHelper(
     end_of_month: bool,
     is_fx_base_currency_collateral_currency: bool,
     collateral_curve: ql.YieldTermStructureHandle,
-    trading_calendar: qCalendar = ql.NullCalendar(),
+    trading_calendar=None,
     trigger=None,
 ) -> ql.FxSwapRateHelper:
-    return ql.FxSwapRateHelper(
+
+    args = [
         fwd_point,
         spot_fx,
         tenor,
@@ -962,11 +1033,14 @@ def qlFxSwapRateHelper(
         end_of_month,
         is_fx_base_currency_collateral_currency,
         collateral_curve,
-        trading_calendar,
-    )
+    ]
+    if trading_calendar is not None:
+        trading_calendar = qCalendar.__wrapped__(trading_calendar)
+        args.append(trading_calendar)
+    return ql.FxSwapRateHelper(*args)
 
 
-# \ToDo to test
+# TODO to test
 @xlo.func(
     help="Create a QuantLib FxSwapRateHelper object from dates for FX swap rate curve building.",
     args={
@@ -1050,7 +1124,7 @@ def qlFxSwapRateHelperCalendar(
     return fx_swap_rate_helper.calendar()
 
 
-# \ToDo Implementation of a returner for BDC
+# TODO Implementation of a returner for BDC
 @xlo.func(
     help="Get the business day convention from a FxSwapRateHelper object.",
     args={

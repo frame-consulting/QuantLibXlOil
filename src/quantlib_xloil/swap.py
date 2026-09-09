@@ -544,10 +544,24 @@ def qlVanillaSwap(
     index: ql.IborIndex,
     spread: float,
     floating_day_count: qDayCounter,
-    payment_convention: qBusinessDayConvention = ql.Following,  # TODO default value
-    with_indexed_coupons: Optional[bool] = None,
+    payment_convention=None,
+    with_indexed_coupons=None,
     trigger=None,
 ) -> ql.VanillaSwap:
+    if payment_convention is not None:
+        payment_convention = qBusinessDayConvention.__wrapped__(payment_convention)
+    if with_indexed_coupons is not None:
+        with_indexed_coupons = bool(with_indexed_coupons)
+
+    _KWARGS = {
+        "payment_convention": "paymentConvention",
+        "with_indexed_coupons": "withIndexedCoupons",
+    }
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
     return ql.VanillaSwap(
         type,
         nominal,
@@ -558,8 +572,7 @@ def qlVanillaSwap(
         index,
         spread,
         floating_day_count,
-        payment_convention,
-        with_indexed_coupons,
+        **kwargs,
     )
 
 
@@ -1018,7 +1031,7 @@ def qlNonstandardSwapFloatingLeg(swap: ql.NonstandardSwap, trigger=None) -> ql.L
 )
 def qlDiscountingSwapEngine(
     discount_curve: ql.YieldTermStructureHandle,
-    include_settlement_date_flows: bool = False,
+    include_settlement_date_flows: bool,
     settlement_date: qDate = ql.Date(),
     npv_date: qDate = ql.Date(),
     trigger=None,
@@ -1063,7 +1076,7 @@ def qlDiscountingSwapEngine2(
         "index": "The index for the floating leg.",
         "spread": "The spread for the floating leg.",
         "float_schedule": "The schedule for floating leg payments (default: empty schedule).",
-        "floating_day_count": "The day counter for the floating leg (default: act/360).",
+        "floating_day_count": "The day counter for the floating leg (default: DayCounter()).",
         "par_asset_swap": "Whether the asset swap is par (default: True).",
         "gearing": "The gearing for the floating leg (default: 1.0).",
         "non_par_repayment": "The non-par repayment amount (default: 0).",
@@ -1078,25 +1091,38 @@ def qlAssetSwap(
     index: ql.IborIndex,
     spread: float,
     float_schedule: ql.Schedule = ql.Schedule(),
-    floating_day_count: qDayCounter = ql.Actual360(),  # TODO default value
+    floating_day_count=None,
     par_asset_swap: bool = True,
     gearing: float = 1.0,
-    non_par_repayment: float = 0,  # TODO default value
+    non_par_repayment: float = 0,
     deal_maturity: qDate = ql.Date(),
     trigger=None,
 ) -> ql.AssetSwap:
+    if floating_day_count is not None:
+        floating_day_count = qDayCounter.__wrapped__(floating_day_count)
+
+    _ASSET_SWAP_KWARGS = {
+        "float_schedule": "floatSchedule",
+        "floating_day_count": "floatingDayCount",
+        "par_asset_swap": "parAssetSwap",
+        "gearing": "gearing",
+        "non_par_repayment": "nonParRepayment",
+        "deal_maturity": "dealMaturity",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _ASSET_SWAP_KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.AssetSwap(
         pay_fixed_rate,
         bond,
         bond_clean_price,
         index,
         spread,
-        float_schedule,
-        floating_day_count,
-        par_asset_swap,
-        gearing,
-        non_par_repayment,
-        deal_maturity,
+        **kwargs,
     )
 
 
@@ -1221,6 +1247,8 @@ def qlFloatFloatSwapFairSpread2(swap: ql.FloatFloatSwap, trigger=None) -> float:
     return swap.fairSpread2()
 
 
+# To prevent incorrect default values from being set due to the lack of kwargs implementation in SWIG,
+# spread (0.0), payment_lag (0), payment_adjustement (ql.Following), payment_calendar(ql.Calendar()) have no default values.
 @xlo.func(
     help="Create a QuantLib OvernightIndexedSwap object.",
     args={
@@ -1233,7 +1261,7 @@ def qlFloatFloatSwapFairSpread2(swap: ql.FloatFloatSwap, trigger=None) -> float:
         "spread": "The spread for the floating leg (default: 0.0).",
         "payment_lag": "The payment lag (default: 0).",
         "payment_adjustment": "The business day convention for payments (default: Following).",
-        "payment_calendar": "The calendar for payments (default: null calendar).",
+        "payment_calendar": "The calendar for payments (default: Calendar()).",
         "telescopic_value_dates": "Whether to use telescopic value dates (default: False).",
         "averaging_method": "The averaging method for the floating leg (default: Compound).",
         "lookback_days": "The number of lookback days (default: 0).",
@@ -1249,13 +1277,13 @@ def qlOvernightIndexedSwap(
     fixed_rate: float,
     fixed_dc: qDayCounter,
     index: ql.OvernightIndex,
-    spread: float = 0.0,
-    payment_lag: int = 0,
-    payment_adjustment: qBusinessDayConvention = ql.Following,
-    payment_calendar: qCalendar = ql.NullCalendar(),  # TODO default value
+    spread: float,
+    payment_lag: int,
+    payment_adjustment: qBusinessDayConvention,
+    payment_calendar: qCalendar,
     telescopic_value_dates: bool = False,
     averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
-    lookback_days: int = 0,  # TODO default value,
+    lookback_days: int = ql.nullInt(),
     lockout_days: int = 0,
     apply_observation_shift: bool = False,
     trigger=None,
@@ -1279,6 +1307,8 @@ def qlOvernightIndexedSwap(
     )
 
 
+# To prevent incorrect default values from being set due to the lack of kwargs implementation in SWIG,
+# spread (0.0), payment_lag (0), payment_adjustement (ql.Following), payment_calendar(ql.Calendar()) have no default values.
 @xlo.func(
     help="Create a QuantLib OvernightIndexedSwap object.",
     args={
@@ -1293,7 +1323,7 @@ def qlOvernightIndexedSwap(
         "spread": "The spread for the overnight leg (default: 0.0).",
         "payment_lag": "The payment lag (default: 0).",
         "payment_adjustment": "The business day convention for payments (default: Following).",
-        "payment_calendar": "The calendar for payments (default: null calendar).",
+        "payment_calendar": "The calendar for payments (default: Calendar()).",
         "telescopic_value_dates": "Whether to use telescopic value dates (default: False).",
         "averaging_method": "The averaging method for the overnight leg (default: Compound).",
         "lookback_days": "The number of lookback days (default: 0).",
@@ -1311,13 +1341,13 @@ def qlOvernightIndexedSwap2(
     overnight_nominals: xlo.Array(dims=1),
     overnight_schedule: ql.Schedule,
     overnight_index: ql.OvernightIndex,
-    spread: float = 0.0,
-    payment_lag: int = 0,
-    payment_adjustment: qBusinessDayConvention = ql.Following,
-    payment_calendar: qCalendar = ql.NullCalendar(),  # TODO default value
+    spread: float,
+    payment_lag: int,
+    payment_adjustment: qBusinessDayConvention,
+    payment_calendar: qCalendar,
     telescopic_value_dates: bool = False,
     averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
-    lookback_days: int = 0,  # TODO default value
+    lookback_days: int = ql.nullInt(),
     lockout_days: int = 0,
     apply_observation_shift: bool = False,
     trigger=None,
@@ -1697,6 +1727,212 @@ def qlMakeOIS(
 
 
 @xlo.func(
+    help="Create a QuantLib MultipleResetsSwap object.",
+    args={
+        "type": "The type of the swap (Payer or Receiver).",
+        "nominal": "The nominal amount of the swap.",
+        "fixed_schedule": "The schedule for fixed leg payments.",
+        "fixed_rate": "The fixed rate for the fixed leg.",
+        "fixed_day_count": "The day counter for the fixed leg.",
+        "full_reset_schedule": "The full reset schedule for the floating leg.",
+        "ibor_index": "The Ibor index for the floating leg.",
+        "resets_per_coupon": "The number of resets per coupon period.",
+        "spread": "The spread for the floating leg (default: 0.0).",
+        "averaging_method": "The averaging method for resets (default: Compound).",
+        "payment_convention": "The business day convention for payments (default: Following).",
+        "payment_lag": "The payment lag in days (default: 0).",
+        "payment_calendar": "The calendar for payments (default: Calendar()).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMultipleResetsSwap(
+    type: qSwapType,
+    nominal: float,
+    fixed_schedule: ql.Schedule,
+    fixed_rate: float,
+    fixed_day_count: qDayCounter,
+    full_reset_schedule: ql.Schedule,
+    ibor_index: ql.IborIndex,
+    resets_per_coupon: int,
+    spread: float = 0.0,
+    averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    payment_convention=None,
+    payment_lag: int = 0,
+    payment_calendar=None,
+    trigger=None,
+) -> ql.MultipleResetsSwap:
+    if payment_convention is not None:
+        payment_convention = qBusinessDayConvention.__wrapped__(payment_convention)
+    if payment_calendar is not None:
+        payment_calendar = qCalendar.__wrapped__(payment_calendar)
+    _KWARGS = {
+        "payment_convention": "paymentConvention",
+        "payment_lag": "paymentLag",
+        "payment_calendar": "paymentCalendar",
+    }
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+    return ql.MultipleResetsSwap(
+        type,
+        nominal,
+        fixed_schedule,
+        fixed_rate,
+        fixed_day_count,
+        full_reset_schedule,
+        ibor_index,
+        resets_per_coupon,
+        spread,
+        averaging_method,
+        **kwargs,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib MultipleResetsSwap using the MakeMultipleResetsSwap helper.",
+    args={
+        "swap_tenor": "The tenor of the swap.",
+        "ibor_index": "The Ibor index for the floating leg.",
+        "resets_per_coupon": "The number of resets per coupon period (e.g., 4 for quarterly resets).",
+        "receive_fixed": "Whether to receive fixed (default: None).",
+        "swap_type": "The swap type (Payer/Receiver, default: None).",
+        "nominal": "The nominal amount (default: None).",
+        "fixed_rate": "The fixed rate (default: None).",
+        "settlement_days": "The number of settlement days (default: None).",
+        "effective_date": "The effective date (default: None).",
+        "termination_date": "The termination date (default: None).",
+        "forward_start": "The forward start period (default: None).",
+        "fixed_leg_frequency": "The fixed leg payment frequency (default: None).",
+        "fixed_leg_day_count": "The day counter for the fixed leg (default: None).",
+        "fixed_leg_convention": "The business day convention for the fixed leg (default: None).",
+        "floating_leg_spread": "The spread for the floating leg (default: None).",
+        "averaging_method": "The averaging method for resets (default: None).",
+        "discounting_term_structure": "The yield term structure for discounting (default: None).",
+        "pricing_engine": "The pricing engine (default: None).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMakeMultipleResetsSwap(
+    swap_tenor: qPeriod,
+    ibor_index: ql.IborIndex,
+    resets_per_coupon: int,
+    receive_fixed=None,
+    swap_type=None,
+    nominal=None,
+    fixed_rate=None,
+    settlement_days=None,
+    effective_date=None,
+    termination_date=None,
+    forward_start=None,
+    fixed_leg_frequency=None,
+    fixed_leg_day_count=None,
+    fixed_leg_convention=None,
+    floating_leg_spread=None,
+    averaging_method=None,
+    discounting_term_structure=None,
+    pricing_engine=None,
+    trigger=None,
+) -> ql.MultipleResetsSwap:
+    if swap_tenor is not None:
+        swap_tenor = qPeriod.__wrapped__(swap_tenor)
+    if resets_per_coupon is not None:
+        resets_per_coupon = int(resets_per_coupon)
+    if receive_fixed is not None:
+        receive_fixed = bool(receive_fixed)
+    if swap_type is not None:
+        swap_type = qSwapType.__wrapped__(swap_type)
+    if nominal is not None:
+        nominal = float(nominal)
+    if fixed_rate is not None:
+        fixed_rate = float(fixed_rate)
+    if settlement_days is not None:
+        settlement_days = int(settlement_days)
+    if effective_date is not None:
+        effective_date = qDate.__wrapped__(effective_date)
+    if termination_date is not None:
+        termination_date = qDate.__wrapped__(termination_date)
+    if forward_start is not None:
+        forward_start = qPeriod.__wrapped__(forward_start)
+    if fixed_leg_frequency is not None:
+        fixed_leg_frequency = qFrequency.__wrapped__(fixed_leg_frequency)
+    if fixed_leg_day_count is not None:
+        fixed_leg_day_count = qDayCounter.__wrapped__(fixed_leg_day_count)
+    if fixed_leg_convention is not None:
+        fixed_leg_convention = qBusinessDayConvention.__wrapped__(fixed_leg_convention)
+    if floating_leg_spread is not None:
+        floating_leg_spread = float(floating_leg_spread)
+    if averaging_method is not None:
+        averaging_method = qRateAveragingType.__wrapped__(averaging_method)
+    if discounting_term_structure is not None:
+        discounting_term_structure = discounting_term_structure
+    if pricing_engine is not None:
+        pricing_engine = pricing_engine
+
+    _MAKEMRS_KWARGS = {
+        "receive_fixed": "receiveFixed",
+        "swap_type": "swapType",
+        "nominal": "nominal",
+        "fixed_rate": "fixedRate",
+        "settlement_days": "settlementDays",
+        "effective_date": "effectiveDate",
+        "termination_date": "terminationDate",
+        "forward_start": "forwardStart",
+        "fixed_leg_frequency": "fixedLegFrequency",
+        "fixed_leg_day_count": "fixedLegDayCount",
+        "fixed_leg_convention": "fixedLegConvention",
+        "floating_leg_spread": "floatingLegSpread",
+        "averaging_method": "averagingMethod",
+        "discounting_term_structure": "discountingTermStructure",
+        "pricing_engine": "pricingEngine",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _MAKEMRS_KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
+    return ql.MakeMultipleResetsSwap(
+        swap_tenor, ibor_index, resets_per_coupon, **kwargs
+    )
+
+
+@xlo.func(
+    help="Get the full reset schedule of a MultipleResetsSwap.",
+    args={"swap": "The MultipleResetsSwap object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMultipleResetsSwapFullResetSchedule(
+    swap: ql.MultipleResetsSwap, trigger=None
+) -> ql.Schedule:
+    return swap.fullResetSchedule()
+
+
+@xlo.func(
+    help="Get the number of resets per coupon of a MultipleResetsSwap.",
+    args={"swap": "The MultipleResetsSwap object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMultipleResetsSwapResetsPerCoupon(
+    swap: ql.MultipleResetsSwap, trigger=None
+) -> int:
+    return swap.resetsPerCoupon()
+
+
+@xlo.func(
+    help="Get the averaging method of a MultipleResetsSwap.",
+    args={"swap": "The MultipleResetsSwap object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMultipleResetsSwapAveragingMethod(
+    swap: ql.MultipleResetsSwap, trigger=None
+) -> str:
+    return first_key(QL_RATE_AVERAGING_TYPE, swap.averagingMethod())
+
+
+@xlo.func(
     help="Create a QuantLib OvernightIndexedSwapIndex object.",
     args={
         "family_name": "The family name of the index.",
@@ -1967,6 +2203,8 @@ def qlZeroCouponSwapFairFixedRate(
     return swap.fairFixedRate(day_counter)
 
 
+# To prevent incorrect default values from being set due to the lack of kwargs implementation in SWIG,
+# gearing (1.0), payment_calendar(ql.Calendar()) have no default values.
 @xlo.func(
     help="Create a QuantLib EquityTotalReturnSwap object with Ibor index.",
     args={
@@ -1977,8 +2215,8 @@ def qlZeroCouponSwapFairFixedRate(
         "interest_rate_index": "The ibor interest rate index.",
         "day_counter": "The day counter.",
         "margin": "The margin.",
-        "gearing": "The gearing (default: 1.0).",
-        "payment_calendar": "The payment calendar (default: null calendar).",
+        "gearing": "The gearing .",
+        "payment_calendar": "The payment calendar.",
         "payment_convention": "The business day convention for payments (default: Unadjusted).",
         "payment_delay": "The payment delay (default: 0).",
     },
@@ -1992,54 +2230,8 @@ def qlEquityTotalReturnSwap(
     interest_rate_index: ql.IborIndex,
     day_counter: qDayCounter,
     margin: float,
-    gearing: float = 1.0,
-    payment_calendar: qCalendar = ql.NullCalendar(),  # TODO default value
-    payment_convention: qBusinessDayConvention = ql.Unadjusted,
-    payment_delay: int = 0,
-    trigger=None,
-) -> ql.EquityTotalReturnSwap:
-    return ql.EquityTotalReturnSwap(
-        type,
-        nominal,
-        schedule,
-        equity_index,
-        interest_rate_index,
-        day_counter,
-        margin,
-        gearing,
-        payment_calendar,
-        payment_convention,
-        payment_delay,
-    )
-
-
-@xlo.func(
-    help="Create a QuantLib EquityTotalReturnSwap object with Overnight index.",
-    args={
-        "type": "The type of the swap (Payer or Receiver).",
-        "nominal": "The nominal amount.",
-        "schedule": "The schedule for payments.",
-        "equity_index": "The equity index.",
-        "interest_rate_index": "The overnight index.",
-        "day_counter": "The day counter.",
-        "margin": "The margin.",
-        "gearing": "The gearing (default: 1.0).",
-        "payment_calendar": "The payment calendar (default: null calendar).",
-        "payment_convention": "The business day convention for payments (default: Unadjusted).",
-        "payment_delay": "The payment delay (default: 0).",
-    },
-    group=EXCEL_GROUP_NAME,
-)
-def qlEquityTotalReturnSwap2(
-    type: qSwapType,
-    nominal: float,
-    schedule: ql.Schedule,
-    equity_index: ql.EquityIndex,
-    interest_rate_index: ql.OvernightIndex,
-    day_counter: qDayCounter,
-    margin: float,
-    gearing: float = 1.0,
-    payment_calendar: qCalendar = ql.NullCalendar(),  # TODO default value
+    gearing: float,
+    payment_calendar: qCalendar,
     payment_convention: qBusinessDayConvention = ql.Unadjusted,
     payment_delay: int = 0,
     trigger=None,

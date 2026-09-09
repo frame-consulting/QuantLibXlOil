@@ -96,6 +96,7 @@ def qlInterpolatedYieldCurve(
     return ql.YieldTermStructureHandle(yts)
 
 
+# uses LogLinear interpolator internally
 @xlo.func(
     help="Construct a log-linear interpolated discount curve.",
     args={
@@ -109,16 +110,23 @@ def qlInterpolatedYieldCurve(
 def qlDiscountCurve(
     dates: xlo.Array(dims=1),
     discounts: xlo.Array(dims=1),
-    daycounter: qDayCounter = ql.Actual365Fixed(),
-    calendar: qCalendar = ql.NullCalendar(),
+    daycounter: qDayCounter,
+    calendar=None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
-    yts = ql.DiscountCurve(
-        _to_date_list(dates), to_float_list(discounts), daycounter, calendar
-    )
+    args = [
+        _to_date_list(dates),
+        to_float_list(discounts),
+        daycounter,
+    ]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    yts = ql.DiscountCurve(*args)
     return ql.YieldTermStructureHandle(yts)
 
 
+# uses BackwardFlat interpolator internally
 @xlo.func(
     help="Construct a backward-flat interpolated forward rate curve.",
     args={
@@ -132,16 +140,23 @@ def qlDiscountCurve(
 def qlForwardCurve(
     dates: xlo.Array(dims=1),
     forwards: xlo.Array(dims=1),
-    daycounter: qDayCounter = ql.Actual365Fixed(),
-    calendar: qCalendar = ql.NullCalendar(),
+    daycounter: qDayCounter,
+    calendar=None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
-    yts = ql.ForwardCurve(
-        _to_date_list(dates), to_float_list(forwards), daycounter, calendar
-    )
+    args = [
+        _to_date_list(dates),
+        to_float_list(forwards),
+        daycounter,
+    ]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    yts = ql.ForwardCurve(*args)
     return ql.YieldTermStructureHandle(yts)
 
 
+# uses Linear interpolator internally
 @xlo.func(
     help="Construct a linear interpolated zero rate curve.",
     args={
@@ -156,10 +171,16 @@ def qlZeroCurve(
     dates: xlo.Array(dims=1),
     zerorates: xlo.Array(dims=1),
     daycounter: qDayCounter = ql.Actual365Fixed(),
-    calendar: qCalendar = ql.NullCalendar(),
+    calendar=None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
-    yts = ql.ZeroCurve(
-        _to_date_list(dates), to_float_list(zerorates), daycounter, calendar
-    )
+    args = [
+        _to_date_list(dates),
+        to_float_list(zerorates),
+        daycounter,
+    ]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    yts = ql.ZeroCurve(*args)
     return ql.YieldTermStructureHandle(yts)

@@ -47,6 +47,8 @@ def qlConvertibleZeroCouponBond(
     )
 
 
+# To prevent incorrect default values from being set due to the lack of kwargs implementation in SWIG,
+# redemption (100), ex_coupon_period (ql.Period()) and ex_coupon_calendar (ql.Calendar()) have no default values.
 @xlo.func(
     help="Create a QuantLib ConvertibleFixedCouponBond object.",
     args={
@@ -74,9 +76,9 @@ def qlConvertibleFixedCouponBond(
     coupons: xlo.Array(dims=1),
     day_counter: qDayCounter,
     schedule: ql.Schedule,
-    redemption: float = 100.0,
-    ex_coupon_period: qPeriod = ql.Period(),
-    ex_coupon_calendar: qCalendar = ql.NullCalendar(),
+    redemption: float,
+    ex_coupon_period: qPeriod,
+    ex_coupon_calendar: qCalendar,
     ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted,
     ex_coupon_end_of_month: bool = False,
     callability: xlo.Array(dims=1) = None,
@@ -99,6 +101,8 @@ def qlConvertibleFixedCouponBond(
     )
 
 
+# To prevent incorrect default values from being set due to the lack of kwargs implementation in SWIG,
+# redemption (100), ex_coupon_period (ql.Period()) and ex_coupon_calendar (ql.Calendar()) have no default values.
 @xlo.func(
     help="Create a QuantLib ConvertibleFloatingRateBond object.",
     args={
@@ -130,9 +134,9 @@ def qlConvertibleFloatingRateBond(
     spreads: xlo.Array(dims=1),
     day_counter: qDayCounter,
     schedule: ql.Schedule,
-    redemption: float = 100.0,
-    ex_coupon_period: qPeriod = ql.Period(),
-    ex_coupon_calendar: qCalendar = ql.NullCalendar(),
+    redemption: float,
+    ex_coupon_period: qPeriod,
+    ex_coupon_calendar: qCalendar,
     ex_coupon_convention: qBusinessDayConvention = ql.Unadjusted,
     ex_coupon_end_of_month: bool = False,
     callability: xlo.Array(dims=1) = None,
