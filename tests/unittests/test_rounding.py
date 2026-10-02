@@ -14,7 +14,7 @@ def test_qRoundingMethod_case_insensitive_and_passthrough():
 
 
 def test_qRoundingMethod_invalid_raises():
-    with pytest.raises(ValueError, match="Unknown rounding method"):
+    with pytest.raises(ValueError, match="Unknown type: BAD-METHOD"):
         qRoundingMethod.__wrapped__("bad-method")
 
 

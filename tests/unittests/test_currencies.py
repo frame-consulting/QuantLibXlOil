@@ -28,7 +28,7 @@ def test__qCurrency_case_insensitive_and_passthrough():
 
 
 def test__qCurrency_invalid_raises():
-    with pytest.raises(ValueError, match="Unknown currency code"):
+    with pytest.raises(ValueError, match="Unknown currency"):
         qCurrency.__wrapped__("NOT_A_CCY")
 
 

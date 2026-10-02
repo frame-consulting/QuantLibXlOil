@@ -1,6 +1,8 @@
 import QuantLib as ql
 import xloil as xlo
 
+from quantlib_xloil.utilities import enum_class
+
 from .config import EXCEL_GROUP_NAME
 
 QL_ROUNDING_METHODS = {
@@ -15,13 +17,7 @@ QL_ROUNDING_METHODS = {
 def _qRoundingMethod(method: str):
     if isinstance(method, type):  # capture default value as type not object here
         return method
-    if isinstance(method, str):
-        method = method.strip().upper()
-        if method in QL_ROUNDING_METHODS:
-            return QL_ROUNDING_METHODS[
-                method
-            ]  # do not call the constructor here, as rounding types require arguments
-    raise ValueError(f"Unknown rounding method: {method}")
+    return enum_class(method, QL_ROUNDING_METHODS, type)
 
 
 @xlo.converter()

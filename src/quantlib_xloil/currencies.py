@@ -2,6 +2,7 @@ import QuantLib as ql
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
+from .utilities import enum_instance
 
 QL_CURRENCIES = {
     "AED": ql.AEDCurrency,
@@ -118,12 +119,7 @@ QL_CURRENCIES = {
 
 
 def _qCurrency(code: str) -> ql.Currency:
-    if isinstance(code, ql.Currency):  # capture default value
-        return code
-    code = code.strip().upper()
-    if code in QL_CURRENCIES:
-        return QL_CURRENCIES[code]()
-    raise ValueError(f"Unknown currency code: {code}")
+    return enum_instance(code, QL_CURRENCIES, ql.Currency)
 
 
 @xlo.converter()

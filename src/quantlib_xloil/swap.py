@@ -67,7 +67,7 @@ def _to_ql_legs(legs) -> tuple[ql.Leg, ...]:
 
 
 @xlo.converter()
-def qSwapType(swap_type: str | int | float):
+def qSwapType(swap_type: str | int | float) -> bool:
     return _qSwapType(swap_type)
 
 

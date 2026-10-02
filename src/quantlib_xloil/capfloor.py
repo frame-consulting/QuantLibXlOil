@@ -17,12 +17,12 @@ QL_CAPFLOOR_TYPE = {
 }
 
 
-def _qCapFloorType(type: str):
+def _qCapFloorType(type: str) -> int:
     return enum_value(type, QL_CAPFLOOR_TYPE)
 
 
 @xlo.converter()
-def qCapFloorType(type: str):
+def qCapFloorType(type: str) -> int:
     return _qCapFloorType(type)
 
 

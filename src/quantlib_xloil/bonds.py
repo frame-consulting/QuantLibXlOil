@@ -16,8 +16,8 @@ from .utilities import (
 )
 
 QL_BOND_PRICE_TYPE = {
-    "CLEAN": ql.BondPrice.Dirty,
-    "DIRTY": ql.BondPrice.Clean,
+    "CLEAN": ql.BondPrice.Clean,
+    "DIRTY": ql.BondPrice.Dirty,
 }
 
 QL_CALLABILITY_TYPE = {
@@ -26,21 +26,21 @@ QL_CALLABILITY_TYPE = {
 }
 
 
-def _qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
+def _qBondPriceType(bond_price_type: str) -> int:
     return enum_value(bond_price_type, QL_BOND_PRICE_TYPE)
 
 
-def _qCallabilityType(callability_type: str) -> ql.Callability.Type:
+def _qCallabilityType(callability_type: str) -> int:
     return enum_value(callability_type, QL_CALLABILITY_TYPE)
 
 
 @xlo.converter()
-def qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
+def qBondPriceType(bond_price_type: str) -> int:
     return _qBondPriceType(bond_price_type)
 
 
 @xlo.converter()
-def qCallabilityType(callability_type: str) -> ql.Callability.Type:
+def qCallabilityType(callability_type: str) -> int:
     return _qCallabilityType(callability_type)
 
 

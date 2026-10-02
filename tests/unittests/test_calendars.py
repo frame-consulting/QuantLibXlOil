@@ -20,6 +20,9 @@ from quantlib_xloil.calendars import (
     qlCalendarIsStartOfMonth,
     qlCalendarisWeekend,
     qlCalendarJointCalendar,
+    qlCalendarJointCalendar2,
+    qlCalendarJointCalendar3,
+    qlCalendarJointCalendarN,
     qlCalendarName,
     qlCalendarRemoveHoliday,
     qlCalendarResetAddedAndRemovedHolidays,
@@ -404,3 +407,139 @@ def test_qlCalendarJointCalendar2():
     calendar3 = qlCalendar("Sweden")
     joint_calendar = qlCalendarJointCalendar(calendar1, calendar2, calendar3)
     assert joint_calendar is not None
+
+
+# ========== NEUE TESTS FÜR JOINTCALENDAR-KONSTRUKTOREN UND KONVERTER ==========
+
+
+def test_qlCalendarJointCalendar3():
+    """Test JointCalendar mit 4 Calendars (direkter Konstruktoraufruf)."""
+    calendar1 = qlCalendar("TARGET")
+    calendar2 = qlCalendar("UnitedKingdom")
+    calendar3 = qlCalendar("Germany")
+    calendar4 = qlCalendar("France")
+    rule = qJointCalendarRule.__wrapped__("JOINHOLIDAYS")
+
+    joint_calendar = qlCalendarJointCalendar3(
+        calendar1, calendar2, calendar3, calendar4, rule
+    )
+    assert joint_calendar is not None
+    assert isinstance(joint_calendar, ql.JointCalendar)
+
+
+def test_qlCalendarJointCalendarN_2_calendars():
+    """Test JointCalendar mit Vektor und 2 Calendars."""
+    calendars = [qlCalendar("TARGET"), qlCalendar("UnitedKingdom")]
+    joint_calendar = qlCalendarJointCalendarN(calendars)
+    assert joint_calendar is not None
+    assert isinstance(joint_calendar, ql.JointCalendar)
+
+
+def test_qlCalendarJointCalendarN_3_calendars():
+    """Test JointCalendar mit Vektor und 3 Calendars."""
+    calendars = [
+        qlCalendar("TARGET"),
+        qlCalendar("UnitedKingdom"),
+        qlCalendar("Germany"),
+    ]
+    joint_calendar = qlCalendarJointCalendarN(calendars)
+    assert joint_calendar is not None
+
+
+def test_qlCalendarJointCalendarN_5_calendars():
+    """Test JointCalendar mit Vektor und 5+ Calendars."""
+    calendars = [
+        qlCalendar("TARGET"),
+        qlCalendar("UnitedKingdom"),
+        qlCalendar("Germany"),
+        qlCalendar("France"),
+        qlCalendar("Switzerland"),
+    ]
+    joint_calendar = qlCalendarJointCalendarN(calendars)
+    assert joint_calendar is not None
+
+
+def test_qlCalendarJointCalendarN_invalid_input():
+    """Test, dass weniger als 2 Calendars abgelehnt werden."""
+    try:
+        qlCalendarJointCalendarN([qlCalendar("TARGET")])
+        assert False, "Expected ValueError for less than 2 calendars"
+    except ValueError as e:
+        assert "At least 2 calendars are required" in str(e)
+
+
+# ========== NEUE TESTS FÜR _qCalendar-KONVERTER MIT JOINTCALENDAR-SYNTAX ==========
+
+
+def test_qCalendar_JointCalendar_2_calendars():
+    """Test JOINTCALENDAR-Syntax mit 2 Calendars."""
+    joint_cal = qCalendar.__wrapped__("JOINTCALENDAR(TARGET,UNITEDKINGDOM)")
+    assert joint_cal is not None
+    assert isinstance(joint_cal, ql.JointCalendar)
+
+
+def test_qCalendar_JointCalendar_3_calendars():
+    joint_cal = qCalendar.__wrapped__("JOINTCALENDAR(TARGET,UNITEDKINGDOM,GERMANY)")
+    assert joint_cal is not None
+
+
+def test_qCalendar_JointCalendar_4_calendars():
+    joint_cal = qCalendar.__wrapped__(
+        "JOINTCALENDAR(TARGET,UNITEDKINGDOM,GERMANY,FRANCE)"
+    )
+    assert joint_cal is not None
+
+
+def test_qCalendar_JointCalendar_5_calendars():
+    joint_cal = qCalendar.__wrapped__(
+        "JOINTCALENDAR(TARGET,UNITEDKINGDOM,GERMANY,FRANCE,SWITZERLAND)"
+    )
+    assert joint_cal is not None
+
+
+def test_qCalendar_JointCalendar_with_rule_JOINHOLIDAYS():
+    joint_cal = qCalendar.__wrapped__(
+        "JOINTCALENDAR(TARGET,UNITEDKINGDOM,rule=JOINHOLIDAYS)"
+    )
+    assert joint_cal is not None
+
+
+def test_qCalendar_JointCalendar_with_rule_JOINBUSINESSDAYS():
+    joint_cal = qCalendar.__wrapped__(
+        "JOINTCALENDAR(TARGET,UNITEDKINGDOM,rule=JOINBUSINESSDAYS)"
+    )
+    assert joint_cal is not None
+
+
+def test_qCalendar_JointCalendar_rule_case_insensitive():
+    joint_cal1 = qCalendar.__wrapped__(
+        "JOINTCALENDAR(TARGET,UNITEDKINGDOM,rule=joinbusinessdays)"
+    )
+    assert joint_cal1 is not None
+    joint_cal2 = qCalendar.__wrapped__(
+        "JOINTCALENDAR(TARGET,UNITEDKINGDOM,rule=JoinHolidays)"
+    )
+    assert joint_cal2 is not None
+
+
+def test_qCalendar_JointCalendar_functionality():
+    joint_cal = qCalendar.__wrapped__("JOINTCALENDAR(TARGET,UNITEDKINGDOM)")
+    christmas = qlDate(2023, 12, 25)
+    assert joint_cal.isHoliday(christmas) == True
+
+
+def test_qCalendar_JointCalendar_different_rules():
+    joint_holidays = qCalendar.__wrapped__("JOINTCALENDAR(TARGET,UNITEDKINGDOM)")
+    joint_business = qCalendar.__wrapped__(
+        "JOINTCALENDAR(TARGET,UNITEDKINGDOM,rule=JOINBUSINESSDAYS)"
+    )
+    assert joint_holidays is not None
+    assert joint_business is not None
+
+
+def test_qCalendar_JointCalendar_invalid_rule():
+    try:
+        qCalendar.__wrapped__("JOINTCALENDAR(TARGET,UNITEDKINGDOM,rule=INVALID)")
+        assert False, "Expected ValueError for invalid rule"
+    except ValueError:
+        pass

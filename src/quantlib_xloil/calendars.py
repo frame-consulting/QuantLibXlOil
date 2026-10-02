@@ -1,11 +1,12 @@
 import QuantLib as ql
+import re
 import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, qPeriod, qTimeUnit, qWeekday
 from .utilities import enum_value, UNKNOWN_KEY, UNKNOWN_VALUE
 
-# TODO BespokeCalendars, explicit JointCalendars, JointCalenders
+# TODO BespokeCalendars
 
 QL_CALENDAR = {
     "ARGENTINA": ql.Argentina,
@@ -122,26 +123,59 @@ QL_JOINTCALENDARRULE = {
 }
 
 
+def _to_calendar_list(values) -> list[ql.Calendar]:
+    return [_qCalendar(v) for v in values]
+
+
 def _qBusinessDayConvention(conventionname: str):
     return enum_value(conventionname, QL_BUSINESSDAYCONVENTION)
 
 
-# TODO use regex nad rule and second constructor for JointCalendars
 def _qCalendar(name: str) -> ql.Calendar:
-    if isinstance(name, ql.Calendar):  # capture default argument values
+    if isinstance(name, ql.Calendar):
         return name
     if isinstance(name, str):
-        cal_str = name.strip()
-        if "(" in cal_str and cal_str.endswith(")"):
-            rule = cal_str[: cal_str.index("(")].strip()
-            inside = cal_str[cal_str.index("(") + 1 : -1]
-            cals = [c.strip() for c in inside.split(",") if c.strip()]
-            return qlCalendarJointCalendar(
-                qlCalendar.__wrapped__(cals[0]), qlCalendar.__wrapped__(cals[1])
+        cal_str = name.strip().upper()
+
+        if cal_str.startswith("JOINTCALENDAR(") and cal_str.endswith(")"):
+            inside = cal_str[len("JOINTCALENDAR(") : -1].strip()
+            rule = ql.JoinHolidays
+            valid_rules = "|".join(QL_JOINTCALENDARRULE.keys())
+            rule_match = re.search(
+                rf"rule\s*=\s*({valid_rules})", inside, re.IGNORECASE
             )
-        name = cal_str.strip().upper()
-        if name in QL_CALENDAR:
-            return QL_CALENDAR[name]()
+            if rule_match:
+                rule_str = rule_match.group(1).upper()
+                inside = re.sub(
+                    rf"rule\s*=\s*({valid_rules})", "", inside, flags=re.IGNORECASE
+                ).strip()
+                rule = QL_JOINTCALENDARRULE[rule_str]
+
+            cal_names = [c.strip().upper() for c in inside.split(",") if c.strip()]
+            if not cal_names:
+                raise ValueError(f"Invalid JointCalendar syntax: {name}")
+
+            calendars = _to_calendar_list(cal_names)
+
+            if len(calendars) == 2:
+                return ql.JointCalendar(calendars[0], calendars[1], rule)
+            elif len(calendars) == 3:
+                return ql.JointCalendar(calendars[0], calendars[1], calendars[2], rule)
+            elif len(calendars) == 4:
+                return ql.JointCalendar(
+                    calendars[0], calendars[1], calendars[2], calendars[3], rule
+                )
+            elif len(calendars) > 4:
+                return ql.JointCalendar(calendars, rule)
+            else:
+                raise ValueError(
+                    f"JointCalendar requires at least 2 calendars (got {len(calendars)})."
+                )
+
+        if cal_str in QL_CALENDAR:
+            entry = QL_CALENDAR[cal_str]
+            return entry() if callable(entry) else entry
+
     raise ValueError(f"Unknown calendar: {name}")
 
 
@@ -155,7 +189,7 @@ def qCalendar(calendarname: str) -> ql.Calendar:
 
 
 @xlo.converter()
-def qBusinessDayConvention(conventionname: str):
+def qBusinessDayConvention(conventionname: str) -> int:
     return _qBusinessDayConvention(conventionname)
 
 
@@ -460,3 +494,47 @@ def qlCalendarJointCalendar2(
     trigger=None,
 ) -> ql.Calendar:
     return ql.JointCalendar(calendar1, calendar2, calendar3, rule)
+
+
+@xlo.func(
+    help="Return a calendar that represents the union of four calendars.",
+    args={
+        "calendar1": "The first calendar.",
+        "calendar2": "The second calendar.",
+        "calendar3": "The third calendar.",
+        "calendar4": "The fourth calendar.",
+        "rule": "The rule for combining the calendars (JOINHOLIDAYS or JOINBUSINESSDAYS).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCalendarJointCalendar3(
+    calendar1: qCalendar,
+    calendar2: qCalendar,
+    calendar3: qCalendar,
+    calendar4: qCalendar,
+    rule: qJointCalendarRule = ql.JoinHolidays,
+    trigger=None,
+) -> ql.Calendar:
+    return ql.JointCalendar(calendar1, calendar2, calendar3, calendar4, rule)
+
+
+@xlo.func(
+    help="Return a calendar that represents the union of multiple calendars (2+).",
+    args={
+        "calendars": "A list of calendars to combine (e.g., [GERMANY, TARGET]).",
+        "rule": "The rule for combining the calendars.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCalendarJointCalendarN(
+    calendars: xlo.Array(dims=1),
+    rule: qJointCalendarRule = ql.JoinHolidays,
+    trigger=None,
+) -> ql.Calendar:
+    if len(calendars) < 2:
+        raise ValueError("At least 2 calendars are required for JointCalendar.")
+    calendars_list = _to_calendar_list(calendars)
+    if rule == ql.JoinHolidays:
+        return ql.JointCalendar(calendars_list)
+    else:
+        return ql.JointCalendar(calendars_list, rule)

@@ -13,6 +13,12 @@ from .utilities import (
     UNKNOWN_VALUE,
 )
 
+QL_FIXEDLOCALVOL_SURFACE_EXTRAPOLATION = {
+    "CONSTANT": ql.FixedLocalVolSurface.ConstantExtrapolation,
+    "DEFAULT": ql.FixedLocalVolSurface.InterpolatorDefaultExtrapolation,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
 
 def _qFixedLocalVolSurfaceExtrapolation(s: str) -> int:
     return enum_value(s, QL_FIXEDLOCALVOL_SURFACE_EXTRAPOLATION)
@@ -92,13 +98,6 @@ def qlNoExceptLocalVolSurface(
         illegal_local_vol_overwrite,
     )
     return ql.LocalVolTermStructureHandle(local_vol_surface)
-
-
-QL_FIXEDLOCALVOL_SURFACE_EXTRAPOLATION = {
-    "CONSTANT": ql.FixedLocalVolSurface.ConstantExtrapolation,
-    "DEFAULT": ql.FixedLocalVolSurface.InterpolatorDefaultExtrapolation,
-    UNKNOWN_KEY: UNKNOWN_VALUE,
-}
 
 
 @xlo.func(

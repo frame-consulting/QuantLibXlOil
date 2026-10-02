@@ -52,17 +52,17 @@ def _qDiscountingPerpetualFuturesEngineInterpolationType(
 
 
 @xlo.converter()
-def qPerpetualFuturesPayoffType(payoff_type: str | int | float):
+def qPerpetualFuturesPayoffType(payoff_type: str | int | float) -> int:
     return _qPerpetualFuturesPayoffType(payoff_type)
 
 
 @xlo.converter()
-def qPerpetualFuturesFundingType(funding_type: str):
+def qPerpetualFuturesFundingType(funding_type: str) -> int:
     return _qPerpetualFuturesFundingType(funding_type)
 
 
 @xlo.converter()
-def qDiscountingPerpetualFuturesEngineInterpolationType(interp_type: str):
+def qDiscountingPerpetualFuturesEngineInterpolationType(interp_type: str) -> int:
     return _qDiscountingPerpetualFuturesEngineInterpolationType(interp_type)
 
 

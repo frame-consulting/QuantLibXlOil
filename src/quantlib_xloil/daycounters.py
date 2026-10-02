@@ -3,7 +3,7 @@ import xloil as xlo
 
 from .config import EXCEL_GROUP_NAME
 from .date import qDate
-from .utilities import UNKNOWN_KEY, UNKNOWN_VALUE
+from .utilities import enum_instance, UNKNOWN_KEY, UNKNOWN_VALUE
 
 QL_DAYCOUNTER = {
     "ACTUAL360": ql.Actual360,
@@ -39,13 +39,7 @@ QL_DAYCOUNTER = {
 
 
 def _qDayCounter(name: str) -> ql.DayCounter:
-    if isinstance(name, ql.DayCounter):  # capture default argument values
-        return name
-    if isinstance(name, str):
-        name = name.strip().upper()
-        if name in QL_DAYCOUNTER:
-            return QL_DAYCOUNTER[name]()
-    raise ValueError(f"Unknown day counter: {name}")
+    return enum_instance(name, QL_DAYCOUNTER, ql.DayCounter)
 
 
 @xlo.converter()

@@ -233,16 +233,10 @@ def qAnalyticPTDHestonComplexLogFormula(s: str) -> int:
 
 def _qAnalyticHestonEngineIntegration(name: str) -> ql.AnalyticHestonEngine_Integration:
     if name is None:
-        # capture optional argument
         return None
-    if isinstance(name, ql.AnalyticHestonEngine_Integration):
-        # capture default argument values
-        return name
-    if isinstance(name, str):
-        name = name.strip().upper()
-        if name in QL_ANALYTIC_HESTON_ENGINE_INTEGRATION:
-            return QL_ANALYTIC_HESTON_ENGINE_INTEGRATION[name]
-    raise ValueError(f"Unknown AnalyticHestonEngineIntegration: {name}")
+    return enum_value(
+        name, QL_ANALYTIC_HESTON_ENGINE_INTEGRATION, ql.AnalyticHestonEngine_Integration
+    )
 
 
 @xlo.converter()

@@ -27,6 +27,32 @@ def enum_value(key: str, enum_dict: dict, value_type=int):
     raise ValueError(f"Cannot convert {key} using {str(enum_dict)}.")
 
 
+def enum_instance(key, enum_dict: dict, value_type):
+    """Converts a string to an instance using a dictionary of classes/factories."""
+    if isinstance(key, value_type):
+        return key
+    if isinstance(key, str):
+        key = key.strip().upper()
+        if key in enum_dict:
+            return enum_dict[key]()  # Call factory to create instance
+    # Extract clean type name (e.g., "Currency" from "QuantLib.QuantLib.Currency")
+    type_name = getattr(value_type, "__name__", str(value_type))
+    type_name = type_name.split(".")[-1] if "." in type_name else type_name
+    raise ValueError(f"Unknown {type_name.lower()}: {key}")
+
+
+def enum_class(key, enum_dict: dict, value_type):
+    """Converts a string to a class using a dictionary of classes."""
+    if isinstance(key, value_type):
+        return key
+    if isinstance(key, str):
+        key = key.strip().upper()
+        if key in enum_dict:
+            return enum_dict[key]
+    type_name = getattr(value_type, "__name__", str(value_type)).split(".")[-1]
+    raise ValueError(f"Unknown {type_name.lower()}: {key}")
+
+
 def to_float_list(values) -> list[float]:
     if values is None:
         return []

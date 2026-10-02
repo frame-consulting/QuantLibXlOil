@@ -21,12 +21,12 @@ QL_COMPOUNDING = {
 }
 
 
-def _qCompounding(compounding: str) -> ql.Compounding:
+def _qCompounding(compounding: str) -> int:
     return enum_value(compounding, QL_COMPOUNDING)
 
 
 @xlo.converter()
-def qCompounding(compounding: str):
+def qCompounding(compounding: str) -> int:
     return _qCompounding(compounding)
 
 
