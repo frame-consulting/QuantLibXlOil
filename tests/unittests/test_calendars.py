@@ -4,6 +4,8 @@ from quantlib_xloil.calendars import (
     qBusinessDayConvention,
     qCalendar,
     qJointCalendarRule,
+    qlBespokeCalendar,
+    qlBespokeCalendarAddWeekend,
     qlCalendar,
     qlCalendarAddHoliday,
     qlCalendarAdjust,
@@ -350,15 +352,15 @@ def test_qlCalendarResetAddedAndRemovedHolidays():
 
 def test_qlCalendarAdjust():
     calendar = qlCalendar("TARGET")
-    date = qlDate(2026, 1, 31)  # This is a Saturday
+    date = qlDate(2026, 1, 31)  # Saturday
     convention = qBusinessDayConvention.__wrapped__("Following")
     adjusted_date = qlCalendarAdjust(calendar, date, convention)
-    assert adjusted_date == qlDate(2026, 2, 2)  # This is the following Monday
+    assert adjusted_date == qlDate(2026, 2, 2)  # following Monday
 
 
 def test_qlCalendarAdvance():
     calendar = qlCalendar("TARGET")
-    date = qlDate(2026, 1, 31)  # This is a Saturday
+    date = qlDate(2026, 1, 31)  # Saturday
     period = qlPeriod(3, ql.Months)
     convention = qBusinessDayConvention.__wrapped__("Following")
     advanced_date = qlCalendarAdvance(calendar, date, period, convention)
@@ -367,7 +369,7 @@ def test_qlCalendarAdvance():
 
 def test_qlCalendarAdvance2():
     calendar = qlCalendar("TARGET")
-    date = qlDate(2026, 1, 31)  # This is a Saturday
+    date = qlDate(2026, 1, 31)  # Saturday
     n = 10
     unit = qTimeUnit.__wrapped__("DAYS")
     convention = qBusinessDayConvention.__wrapped__("Following")
@@ -405,15 +407,11 @@ def test_qlCalendarJointCalendar2():
     calendar1 = qlCalendar("TARGET")
     calendar2 = qlCalendar("UnitedKingdom")
     calendar3 = qlCalendar("Sweden")
-    joint_calendar = qlCalendarJointCalendar(calendar1, calendar2, calendar3)
+    joint_calendar = qlCalendarJointCalendar2(calendar1, calendar2, calendar3)
     assert joint_calendar is not None
 
 
-# ========== NEUE TESTS FÜR JOINTCALENDAR-KONSTRUKTOREN UND KONVERTER ==========
-
-
 def test_qlCalendarJointCalendar3():
-    """Test JointCalendar mit 4 Calendars (direkter Konstruktoraufruf)."""
     calendar1 = qlCalendar("TARGET")
     calendar2 = qlCalendar("UnitedKingdom")
     calendar3 = qlCalendar("Germany")
@@ -428,7 +426,6 @@ def test_qlCalendarJointCalendar3():
 
 
 def test_qlCalendarJointCalendarN_2_calendars():
-    """Test JointCalendar mit Vektor und 2 Calendars."""
     calendars = [qlCalendar("TARGET"), qlCalendar("UnitedKingdom")]
     joint_calendar = qlCalendarJointCalendarN(calendars)
     assert joint_calendar is not None
@@ -436,7 +433,6 @@ def test_qlCalendarJointCalendarN_2_calendars():
 
 
 def test_qlCalendarJointCalendarN_3_calendars():
-    """Test JointCalendar mit Vektor und 3 Calendars."""
     calendars = [
         qlCalendar("TARGET"),
         qlCalendar("UnitedKingdom"),
@@ -447,7 +443,6 @@ def test_qlCalendarJointCalendarN_3_calendars():
 
 
 def test_qlCalendarJointCalendarN_5_calendars():
-    """Test JointCalendar mit Vektor und 5+ Calendars."""
     calendars = [
         qlCalendar("TARGET"),
         qlCalendar("UnitedKingdom"),
@@ -460,7 +455,6 @@ def test_qlCalendarJointCalendarN_5_calendars():
 
 
 def test_qlCalendarJointCalendarN_invalid_input():
-    """Test, dass weniger als 2 Calendars abgelehnt werden."""
     try:
         qlCalendarJointCalendarN([qlCalendar("TARGET")])
         assert False, "Expected ValueError for less than 2 calendars"
@@ -468,11 +462,7 @@ def test_qlCalendarJointCalendarN_invalid_input():
         assert "At least 2 calendars are required" in str(e)
 
 
-# ========== NEUE TESTS FÜR _qCalendar-KONVERTER MIT JOINTCALENDAR-SYNTAX ==========
-
-
 def test_qCalendar_JointCalendar_2_calendars():
-    """Test JOINTCALENDAR-Syntax mit 2 Calendars."""
     joint_cal = qCalendar.__wrapped__("JOINTCALENDAR(TARGET,UNITEDKINGDOM)")
     assert joint_cal is not None
     assert isinstance(joint_cal, ql.JointCalendar)
@@ -543,3 +533,112 @@ def test_qCalendar_JointCalendar_invalid_rule():
         assert False, "Expected ValueError for invalid rule"
     except ValueError:
         pass
+
+
+def test_qlBespokeCalendar():
+    calendar = qlBespokeCalendar("MyCustomCalendar")
+    assert calendar is not None
+    assert isinstance(calendar, ql.Calendar)
+    assert calendar.name() == "MyCustomCalendar"
+
+
+def test_qlBespokeCalendar_multiple_names():
+    cal1 = qlBespokeCalendar("Calendar1")
+    cal2 = qlBespokeCalendar("Calendar2")
+    assert cal1 is not None
+    assert cal2 is not None
+    assert cal1.name() == "Calendar1"
+    assert cal2.name() == "Calendar2"
+
+
+def test_qlBespokeCalendar_default_behavior():
+    calendar = qlBespokeCalendar("TestCalendar")
+    for day in range(7):
+        dates = [
+            qlDate(2026, 10, 4),  # Sunday
+            qlDate(2026, 10, 5),  # Monday
+            qlDate(2026, 10, 6),  # Tuesday
+            qlDate(2026, 10, 7),  # Wednesday
+            qlDate(2026, 10, 8),  # Thursday
+            qlDate(2026, 10, 9),  # Friday
+            qlDate(2026, 10, 10),  # Saturday
+        ]
+        assert calendar.isBusinessDay(dates[day]) == True
+
+
+def test_qlBespokeCalendarAddWeekend_single():
+    calendar = qlBespokeCalendar("TestCalendar")
+    monday = ql.Monday
+    result = qlBespokeCalendarAddWeekend(calendar, monday)
+    assert result == True
+    monday_date = qlDate(2026, 10, 5)  # Monday
+    assert calendar.isBusinessDay(monday_date) == False
+    tuesday_date = qlDate(2026, 10, 6)  # Tuesday
+    assert calendar.isBusinessDay(tuesday_date) == True
+
+
+def test_qlBespokeCalendarAddWeekend_multiple():
+    calendar = qlBespokeCalendar("TestCalendar")
+    monday = ql.Monday
+    friday = ql.Friday
+    qlBespokeCalendarAddWeekend(calendar, monday)
+    qlBespokeCalendarAddWeekend(calendar, friday)
+
+    monday_date = qlDate(2026, 10, 5)  # Monday
+    friday_date = qlDate(2026, 10, 9)  # Friday
+    assert calendar.isBusinessDay(monday_date) == False
+    assert calendar.isBusinessDay(friday_date) == False
+
+    tuesday_date = qlDate(2026, 10, 6)  # Tuesday
+    assert calendar.isBusinessDay(tuesday_date) == True
+
+
+def test_qlBespokeCalendarAddWeekend_all_days():
+    calendar = qlBespokeCalendar("AllWeekendCalendar")
+    weekdays = [
+        ql.Sunday,
+        ql.Monday,
+        ql.Tuesday,
+        ql.Wednesday,
+        ql.Thursday,
+        ql.Friday,
+        ql.Saturday,
+    ]
+    for weekday in weekdays:
+        qlBespokeCalendarAddWeekend(calendar, weekday)
+
+    for day in range(7):
+        dates = [
+            qlDate(2026, 10, 4),  # Sunday
+            qlDate(2026, 10, 5),  # Monday
+            qlDate(2026, 10, 6),  # Tuesday
+            qlDate(2026, 10, 7),  # Wednesday
+            qlDate(2026, 10, 8),  # Thursday
+            qlDate(2026, 10, 9),  # Friday
+            qlDate(2026, 10, 10),  # Saturday
+        ]
+        assert calendar.isBusinessDay(dates[day]) == False
+
+
+def test_qlBespokeCalendar_with_qCalendar_converter():
+    """Test creating a bespoke calendar via qCalendar converter with BESPOKECALENDAR syntax."""
+    calendar = qCalendar.__wrapped__("BESPOKECALENDAR(MyCustomCalendar)")
+    assert calendar is not None
+    assert isinstance(calendar, ql.Calendar)
+    assert calendar.name() == "MYCUSTOMCALENDAR"
+
+
+def test_qlBespokeCalendarAddWeekend_return_value():
+    calendar = qlBespokeCalendar("TestCalendar")
+    monday = ql.Monday
+    result = qlBespokeCalendarAddWeekend(calendar, monday)
+    assert result == True
+
+
+def test_qlBespokeCalendar_with_qWeekday_converter():
+    calendar = qlBespokeCalendar("TestCalendar")
+    monday = qWeekday.__wrapped__("MONDAY")
+    result = qlBespokeCalendarAddWeekend(calendar, monday)
+    assert result == True
+    monday_date = qlDate(2026, 10, 5)  # Monday
+    assert calendar.isBusinessDay(monday_date) == False

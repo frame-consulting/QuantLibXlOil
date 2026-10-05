@@ -6,58 +6,121 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate, qPeriod, qTimeUnit, qWeekday
 from .utilities import enum_value, UNKNOWN_KEY, UNKNOWN_VALUE
 
-# TODO BespokeCalendars
+# JointCalendar and BespokeCalendar should cache by name so that instances
+# with identical parameters reuse the same implementation instead of creating
+# a new calendar each time.
+
+_BESPOKE_CALENDAR_REGISTRY = {}
+_JOINT_CALENDAR_REGISTRY = {}
+
+
+def _get_or_create_bespoke_calendar(name: str) -> ql.BespokeCalendar:
+    if name not in _BESPOKE_CALENDAR_REGISTRY:
+        _BESPOKE_CALENDAR_REGISTRY[name] = ql.BespokeCalendar(name)
+    return _BESPOKE_CALENDAR_REGISTRY[name]
+
+
+def _get_or_create_joint_calendar(calendar_str: str) -> ql.Calendar:
+    if calendar_str not in _JOINT_CALENDAR_REGISTRY:
+        inside = calendar_str[len("JOINTCALENDAR(") : -1].strip()
+        rule = ql.JoinHolidays
+        valid_rules = "|".join(QL_JOINTCALENDARRULE.keys())
+        rule_match = re.search(rf"rule\s*=\s*({valid_rules})", inside, re.IGNORECASE)
+        if rule_match:
+            rule_str = rule_match.group(1).upper()
+            inside = re.sub(
+                rf"rule\s*=\s*({valid_rules})", "", inside, flags=re.IGNORECASE
+            ).strip()
+            rule = QL_JOINTCALENDARRULE[rule_str]
+
+        cal_names = [c.strip().upper() for c in inside.split(",") if c.strip()]
+        if not cal_names:
+            raise ValueError(f"Invalid JointCalendar syntax: {calendar_str}")
+
+        calendars = _to_calendar_list(cal_names)
+
+        if len(calendars) >= 2:
+            _JOINT_CALENDAR_REGISTRY[calendar_str] = ql.JointCalendar(
+                _to_calendar_list(cal_names), rule
+            )
+        else:
+            raise ValueError(
+                f"JointCalendar requires at least 2 calendars (got {len(calendars)})."
+            )
+    return _JOINT_CALENDAR_REGISTRY[calendar_str]
+
 
 QL_CALENDAR = {
     "ARGENTINA": ql.Argentina,
+    "BUENOS AIRES STOCK EXCHANGE": ql.Argentina,
     "AUSTRALIA": ql.Australia,
+    "AUSTRALIA SETTLEMENT": ql.Australia,
     "AUSTRIA": ql.Austria,
+    "AUSTRIAN SETTLEMENT": ql.Austria,
     "BOTSWANA": ql.Botswana,
     "BRAZIL": ql.Brazil,
     "CANADA": ql.Canada,
     "CHILE": ql.Chile,
+    "SANTIAGO STOCK EXCHANGE": ql.Chile,
     "CHINA": ql.China,
+    "SHANGHAI STOCK EXCHANGE": ql.China,
     "CZECHREPUBLIC": ql.CzechRepublic,
+    "PRAGUE STOCK EXCHANGE": ql.CzechRepublic,
     "DENMARK": ql.Denmark,
     "FINLAND": ql.Finland,
     "FRANCE": ql.France,
+    "FRENCH SETTLEMENT": ql.France,
     "GERMANY": ql.Germany,
+    "FRANKFURT STOCK EXCHANGE": ql.Germany,
     "HONGKONG": ql.HongKong,
+    "HONG KONG STOCK EXCHANGE": ql.HongKong,
     "HUNGARY": ql.Hungary,
     "ICELAND": ql.Iceland,
+    "ICELAND STOCK EXCHANGE": ql.Iceland,
     "INDIA": ql.India,
+    "NATIONAL STOCK EXCHANGE OF INDIA": ql.India,
     "INDONESIA": ql.Indonesia,
+    "JAKARTA STOCK EXCHANGE": ql.Indonesia,
     "ISRAEL": ql.Israel,
+    "TEL AVIV STOCK EXCHANGE": ql.Israel,
     "ITALY": ql.Italy,
+    "ITALIAN SETTLEMENT": ql.Italy,
     "JAPAN": ql.Japan,
-    # "MALTA": ql.Malta,
     "MEXICO": ql.Mexico,
-    # "MONTENEGRO": ql.Montenegro,
+    "MEXICAN STOCK EXCHANGE": ql.Mexico,
     "NEWZEALAND": ql.NewZealand,
-    # "NORTHMACEDONIA": ql.NorthMacedonia,
+    "NEW ZEALAND (WELLINGTON)": ql.NewZealand,
     "NORWAY": ql.Norway,
     "POLAND": ql.Poland,
+    "POLAND SETTLEMENT": ql.Poland,
     "ROMANIA": ql.Romania,
+    "BUCHAREST STOCK EXCHANGE": ql.Romania,
     "RUSSIA": ql.Russia,
+    "RUSSIAN SETTLEMENT": ql.Russia,
     "SAUDIARABIA": ql.SaudiArabia,
-    # "SERBIA": ql.Serbia,
     "SINGAPORE": ql.Singapore,
+    "SINGAPORE EXCHANGE": ql.Singapore,
     "SLOVAKIA": ql.Slovakia,
-    # "SLOVENIA": ql.Slovenia,
+    "BRATISLAVA STOCK EXCHANGE": ql.Slovakia,
     "SOUTHAFRICA": ql.SouthAfrica,
+    "SOUTH AFRICA": ql.SouthAfrica,
     "SOUTHKOREA": ql.SouthKorea,
+    "SOUTH-KOREA EXCHANGE": ql.SouthKorea,
     "SWEDEN": ql.Sweden,
     "SWITZERLAND": ql.Switzerland,
     "TAIWAN": ql.Taiwan,
+    "TAIWAN STOCK EXCHANGE": ql.Taiwan,
     "TARGET": ql.TARGET,
     "THAILAND": ql.Thailand,
+    "THAILAND STOCK EXCHANGE": ql.Thailand,
     "TURKEY": ql.Turkey,
     "UKRAINE": ql.Ukraine,
+    "UKRAINIAN STOCK EXCHANGE": ql.Ukraine,
     "UNITEDSTATES": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
     "UNITEDKINGDOM": ql.UnitedKingdom,
-    # "UZBEKISTAN": ql.Uzbekistan,
     "NULLCALENDAR": ql.NullCalendar,
     "WEEKENDSONLY": ql.WeekendsOnly,
+    "BESPOKECALENDAR": ql.BespokeCalendar,
     "JOINTCALENDAR": ql.JointCalendar,
     #
     "LONDON": ql.UnitedKingdom,
@@ -136,41 +199,20 @@ def _qCalendar(name: str) -> ql.Calendar:
         return name
     if isinstance(name, str):
         cal_str = name.strip().upper()
+        if cal_str.startswith("BESPOKECALENDAR(") and cal_str.endswith(")"):
+            inside = cal_str[len("BESPOKECALENDAR(") : -1].strip()
+            if not inside:
+                raise ValueError("BespokeCalendar requires a name")
+            return _get_or_create_bespoke_calendar(inside)
+        for rule_name, rule_value in QL_JOINTCALENDARRULE.items():
+            prefix = rule_name + "("
+            if cal_str.startswith(prefix) and cal_str.endswith(")"):
+                inside = cal_str[len(prefix) : -1].strip()
+                joint_cal_str = f"JOINTCALENDAR({inside}, rule={rule_name})"
+                return _get_or_create_joint_calendar(joint_cal_str)
 
         if cal_str.startswith("JOINTCALENDAR(") and cal_str.endswith(")"):
-            inside = cal_str[len("JOINTCALENDAR(") : -1].strip()
-            rule = ql.JoinHolidays
-            valid_rules = "|".join(QL_JOINTCALENDARRULE.keys())
-            rule_match = re.search(
-                rf"rule\s*=\s*({valid_rules})", inside, re.IGNORECASE
-            )
-            if rule_match:
-                rule_str = rule_match.group(1).upper()
-                inside = re.sub(
-                    rf"rule\s*=\s*({valid_rules})", "", inside, flags=re.IGNORECASE
-                ).strip()
-                rule = QL_JOINTCALENDARRULE[rule_str]
-
-            cal_names = [c.strip().upper() for c in inside.split(",") if c.strip()]
-            if not cal_names:
-                raise ValueError(f"Invalid JointCalendar syntax: {name}")
-
-            calendars = _to_calendar_list(cal_names)
-
-            if len(calendars) == 2:
-                return ql.JointCalendar(calendars[0], calendars[1], rule)
-            elif len(calendars) == 3:
-                return ql.JointCalendar(calendars[0], calendars[1], calendars[2], rule)
-            elif len(calendars) == 4:
-                return ql.JointCalendar(
-                    calendars[0], calendars[1], calendars[2], calendars[3], rule
-                )
-            elif len(calendars) > 4:
-                return ql.JointCalendar(calendars, rule)
-            else:
-                raise ValueError(
-                    f"JointCalendar requires at least 2 calendars (got {len(calendars)})."
-                )
+            return _get_or_create_joint_calendar(cal_str)
 
         if cal_str in QL_CALENDAR:
             entry = QL_CALENDAR[cal_str]
@@ -200,6 +242,20 @@ def qJointCalendarRule(rule_name: str):
 
 @xlo.returner(target=ql.Calendar, register=True)
 def xCalendar(calendar: ql.Calendar):
+    if isinstance(calendar, ql.BespokeCalendar):
+        if calendar.name() not in _BESPOKE_CALENDAR_REGISTRY:
+            _BESPOKE_CALENDAR_REGISTRY[calendar.name()] = calendar
+        return f"BESPOKECALENDAR({calendar.name()})"
+    elif isinstance(calendar, ql.JointCalendar):
+        try:
+            component_calendars = calendar.calendars()
+            cal_names = [c.name() for c in component_calendars]
+            cal_str = f"JOINTCALENDAR({','.join(cal_names)})"
+            if cal_str not in _JOINT_CALENDAR_REGISTRY:
+                _JOINT_CALENDAR_REGISTRY[cal_str] = calendar
+            return cal_str
+        except (AttributeError, TypeError):
+            pass
     return calendar.name()
 
 
@@ -538,3 +594,29 @@ def qlCalendarJointCalendarN(
         return ql.JointCalendar(calendars_list)
     else:
         return ql.JointCalendar(calendars_list, rule)
+
+
+@xlo.func(
+    help="Create a bespoke calendar with a given name.",
+    args={
+        "name": "The name of the bespoke calendar.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBespokeCalendar(name: str, trigger=None) -> ql.Calendar:
+    return ql.BespokeCalendar(name)
+
+
+@xlo.func(
+    help="Add a weekday as a weekend day to a bespoke calendar.",
+    args={
+        "calendar": "The bespoke calendar to modify.",
+        "weekday": "The weekday to add as a weekend (0=Sunday, 1=Monday, ..., 6=Saturday).",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBespokeCalendarAddWeekend(
+    calendar: qCalendar, weekday: qWeekday, trigger=None
+) -> bool:
+    calendar.addWeekend(weekday)
+    return True
