@@ -662,10 +662,18 @@ def test_qlYoYInflationIndex2():
         qFrequency.__wrapped__("ANNUAL"),
         qPeriod.__wrapped__("3M"),
         _currency(),
-        interpolated=True,
     )
     assert isinstance(index, ql.YoYInflationIndex)
-    assert qlYoYInflationIndexInterpolated(index) is True
+    with pytest.raises(ValueError, match="no longer supports overriding"):
+        qlYoYInflationIndex2(
+            "TEST-YOY-INTERPOLATED",
+            _region(),
+            False,
+            qFrequency.__wrapped__("ANNUAL"),
+            qPeriod.__wrapped__("3M"),
+            _currency(),
+            interpolated=True,
+        )
 
 
 def test_qlYoYInflationIndexRatio():
@@ -676,8 +684,8 @@ def test_qlYoYInflationIndexRatio():
 
 def test_qlYoYInflationIndexInterpolated():
     index = _yoy_inflation_index()
-    result = qlYoYInflationIndexInterpolated(index)
-    assert isinstance(result, bool)
+    with pytest.raises(NotImplementedError, match="no longer exposes"):
+        qlYoYInflationIndexInterpolated(index)
 
 
 def test_qlYoYInflationIndexUnderlyingIndex():
@@ -883,7 +891,7 @@ def test_qlYYEUHICP_with_term_structure():
 
 
 def test_qlYYEUHICP2():
-    index = qlYYEUHICP2(True)
+    index = qlYYEUHICP2(False)
     assert isinstance(index, ql.YYEUHICP)
 
 
@@ -891,7 +899,6 @@ def test_qlYYEUHICP2_with_term_structure():
     ts_handle = _yoyindexinflationcurve()
     yy_index = qlYYEUHICP2(False, ts_handle)
     assert isinstance(yy_index, ql.YYEUHICP)
-    assert qlYoYInflationIndexInterpolated(yy_index) is False
 
 
 def test_qlYYEUHICPXT():
@@ -906,15 +913,14 @@ def test_qlYYEUHICPXT_with_term_structure():
 
 
 def test_qlYYEUHICPXT2():
-    index = qlYYEUHICPXT2(True)
+    index = qlYYEUHICPXT2(False)
     assert isinstance(index, ql.YYEUHICPXT)
 
 
 def test_qlYYEUHICPXT2_with_term_structure():
     ts_handle = _yoyindexinflationcurve()
-    yy_index = qlYYEUHICPXT2(True, ts_handle)
+    yy_index = qlYYEUHICPXT2(False, ts_handle)
     assert isinstance(yy_index, ql.YYEUHICPXT)
-    assert qlYoYInflationIndexInterpolated(yy_index) is True
 
 
 def test_qlYYFRHICP():
@@ -935,9 +941,8 @@ def test_qlYYFRHICP2():
 
 def test_qlYYFRHICP2_with_term_structure():
     ts_handle = _yoyindexinflationcurve()
-    yy_index = qlYYFRHICP2(True, ts_handle)
+    yy_index = qlYYFRHICP2(False, ts_handle)
     assert isinstance(yy_index, ql.YYFRHICP)
-    assert qlYoYInflationIndexInterpolated(yy_index) is True
 
 
 def test_qlYYUKRPI():
@@ -952,7 +957,7 @@ def test_qlYYUKRPI_with_term_structure():
 
 
 def test_qlYYUKRPI2():
-    index = qlYYUKRPI2(True)
+    index = qlYYUKRPI2(False)
     assert isinstance(index, ql.YYUKRPI)
 
 
@@ -960,7 +965,6 @@ def test_qlYYUKRPI2_with_term_structure():
     ts_handle = _yoyindexinflationcurve()
     yy_index = qlYYUKRPI2(False, ts_handle)
     assert isinstance(yy_index, ql.YYUKRPI)
-    assert qlYoYInflationIndexInterpolated(yy_index) is False
 
 
 def test_qlYYUSCPI():
@@ -981,9 +985,8 @@ def test_qlYYUSCPI2():
 
 def test_qlYYUSCPI2_with_term_structure():
     ts_handle = _yoyindexinflationcurve()
-    yy_index = qlYYUSCPI2(True, ts_handle)
+    yy_index = qlYYUSCPI2(False, ts_handle)
     assert isinstance(yy_index, ql.YYUSCPI)
-    assert qlYoYInflationIndexInterpolated(yy_index) is True
 
 
 def test_qlYYZACPI():
@@ -998,7 +1001,7 @@ def test_qlYYZACPI_with_term_structure():
 
 
 def test_qlYYZACPI2():
-    index = qlYYZACPI2(True)
+    index = qlYYZACPI2(False)
     assert isinstance(index, ql.YYZACPI)
 
 
@@ -1006,7 +1009,6 @@ def test_qlYYZACPI2_with_term_structure():
     ts_handle = _yoyindexinflationcurve()
     yy_index = qlYYZACPI2(False, ts_handle)
     assert isinstance(yy_index, ql.YYZACPI)
-    assert qlYoYInflationIndexInterpolated(yy_index) is False
 
 
 # =============================================================================

@@ -64,6 +64,7 @@ QL_CALENDAR = {
     "SANTIAGO STOCK EXCHANGE": ql.Chile,
     "CHINA": ql.China,
     "SHANGHAI STOCK EXCHANGE": ql.China,
+    "CROATIA": ql.Croatia,
     "CZECHREPUBLIC": ql.CzechRepublic,
     "PRAGUE STOCK EXCHANGE": ql.CzechRepublic,
     "DENMARK": ql.Denmark,
@@ -83,12 +84,16 @@ QL_CALENDAR = {
     "JAKARTA STOCK EXCHANGE": ql.Indonesia,
     "ISRAEL": ql.Israel,
     "TEL AVIV STOCK EXCHANGE": ql.Israel,
+    "ISRAEL TELBOR": lambda: ql.Israel(ql.Israel.Telbor),
     "ITALY": ql.Italy,
     "ITALIAN SETTLEMENT": ql.Italy,
     "JAPAN": ql.Japan,
     "MEXICO": ql.Mexico,
     "MEXICAN STOCK EXCHANGE": ql.Mexico,
+    "MALTA": ql.Malta,
+    "MONTENEGRO": ql.Montenegro,
     "NEWZEALAND": ql.NewZealand,
+    "NORTHMACEDONIA": ql.NorthMacedonia,
     "NEW ZEALAND (WELLINGTON)": ql.NewZealand,
     "NORWAY": ql.Norway,
     "POLAND": ql.Poland,
@@ -98,10 +103,12 @@ QL_CALENDAR = {
     "RUSSIA": ql.Russia,
     "RUSSIAN SETTLEMENT": ql.Russia,
     "SAUDIARABIA": ql.SaudiArabia,
+    "SERBIA": ql.Serbia,
     "SINGAPORE": ql.Singapore,
     "SINGAPORE EXCHANGE": ql.Singapore,
     "SLOVAKIA": ql.Slovakia,
     "BRATISLAVA STOCK EXCHANGE": ql.Slovakia,
+    "SLOVENIA": ql.Slovenia,
     "SOUTHAFRICA": ql.SouthAfrica,
     "SOUTH AFRICA": ql.SouthAfrica,
     "SOUTHKOREA": ql.SouthKorea,
@@ -118,6 +125,7 @@ QL_CALENDAR = {
     "UKRAINIAN STOCK EXCHANGE": ql.Ukraine,
     "UNITEDSTATES": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
     "UNITEDKINGDOM": ql.UnitedKingdom,
+    "UZBEKISTAN": ql.Uzbekistan,
     "NULLCALENDAR": ql.NullCalendar,
     "WEEKENDSONLY": ql.WeekendsOnly,
     "BESPOKECALENDAR": ql.BespokeCalendar,
@@ -379,6 +387,24 @@ def qlCalendarRemoveHoliday(calendar: qCalendar, date: qDate, trigger=None) -> b
 def qlCalendarResetAddedAndRemovedHolidays(calendar: qCalendar, trigger=None) -> bool:
     calendar.resetAddedAndRemovedHolidays()
     return True
+
+
+@xlo.func(
+    help="Return holidays added to the calendar.",
+    args={"calendar": "The calendar to query."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlCalendarAddedHolidays(calendar: qCalendar, trigger=None) -> list:
+    return list(calendar.addedHolidays())
+
+
+@xlo.func(
+    help="Return holidays removed from the calendar.",
+    args={"calendar": "The calendar to query."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlCalendarRemovedHolidays(calendar: qCalendar, trigger=None) -> list:
+    return list(calendar.removedHolidays())
 
 
 @xlo.func(

@@ -8,6 +8,8 @@ from quantlib_xloil.ratehelpers import (
     qlDepositRateHelper,
     qlDepositRateHelper2,
     qlDepositRateHelper3,
+    qlBMASwapRateHelper,
+    qlConstNotionalCrossCurrencyBasisSwapRateHelper,
     qlFRARateHelper2,
     qlFRARateHelper3,
     qlFRARateHelper4,
@@ -24,6 +26,7 @@ from quantlib_xloil.ratehelpers import (
     qlFxSwapRateHelperTenor,
     qlFxSwapRateHelperTradingCalendar,
     qlMultipleResetsSwapRateHelper,
+    qlMtMCrossCurrencyBasisSwapRateHelper,
     qlOISRateHelper,
     qlOISRateHelperSwap,
     qlOvernightIndexFutureRateHelper,
@@ -47,7 +50,13 @@ from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
 from quantlib_xloil.cashflows import qRateAveragingType
 from quantlib_xloil.date import qFrequency, qlDate
 from quantlib_xloil.daycounters import qlDayCounter
-from quantlib_xloil.indexes import qlSofr, qlUSDLibor, qlUsdLiborSwapIsdaFixAm
+from quantlib_xloil.indexes import (
+    qlBMAIndex,
+    qlEuribor,
+    qlSofr,
+    qlUSDLibor,
+    qlUsdLiborSwapIsdaFixAm,
+)
 from quantlib_xloil.scheduler import qDateGenerationRule
 from quantlib_xloil.termstructures import qCompounding, qlFlatForward
 
@@ -271,6 +280,60 @@ def test_multiple_resets_swap_rate_helper_constructs():
     )
 
     assert isinstance(helper, ql.MultipleResetsSwapRateHelper)
+
+
+def test_bma_swap_rate_helper_constructs():
+    _set_eval_date()
+    helper = qlBMASwapRateHelper(
+        qQuoteHandle.__wrapped__(0.5),
+        ql.Period("1Y"),
+        2,
+        qlCalendar("TARGET"),
+        ql.Period("3M"),
+        qBusinessDayConvention.__wrapped__("MODIFIEDFOLLOWING"),
+        qlDayCounter("ACTUAL360"),
+        qlBMAIndex(),
+        qlUSDLibor(ql.Period("3M")),
+    )
+
+    assert isinstance(helper, ql.BMASwapRateHelper)
+
+
+def test_cross_currency_basis_helpers_accept_quote_payment_frequency():
+    _set_eval_date()
+    curve = ql.YieldTermStructureHandle(
+        ql.FlatForward(qlDate(2024, 1, 2), 0.03, ql.Actual365Fixed())
+    )
+    base_index = qlUSDLibor(ql.Period("3M"))
+    quote_index = qlEuribor(ql.Period("3M"))
+    common = (
+        qQuoteHandle.__wrapped__(0.001),
+        ql.Period("1Y"),
+        2,
+        qlCalendar("TARGET"),
+        qBusinessDayConvention.__wrapped__("MODIFIEDFOLLOWING"),
+        False,
+        base_index,
+        quote_index,
+        curve,
+        True,
+        True,
+    )
+
+    const_notional = qlConstNotionalCrossCurrencyBasisSwapRateHelper(
+        *common,
+        payment_frequency=qFrequency.__wrapped__("SEMIANNUAL"),
+        quote_currency_payment_frequency=qFrequency.__wrapped__("QUARTERLY"),
+    )
+    mark_to_market = qlMtMCrossCurrencyBasisSwapRateHelper(
+        *common,
+        True,
+        payment_frequency=qFrequency.__wrapped__("SEMIANNUAL"),
+        quote_currency_payment_frequency=qFrequency.__wrapped__("QUARTERLY"),
+    )
+
+    assert isinstance(const_notional, ql.ConstNotionalCrossCurrencyBasisSwapRateHelper)
+    assert isinstance(mark_to_market, ql.MtMCrossCurrencyBasisSwapRateHelper)
 
 
 def test_overnight_and_sofr_future_helpers():

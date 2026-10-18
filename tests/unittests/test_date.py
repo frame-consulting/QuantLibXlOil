@@ -24,6 +24,17 @@ from quantlib_xloil.date import (
     qlDateWeekday,
     qlDateYear,
     qlDateNextWeekday,
+    qlECBCode,
+    qlECBDate,
+    qlECBDateFromCode,
+    qlECBIsCode,
+    qlECBIsDate,
+    qlECBNextCode,
+    qlECBNextCodeFromCode,
+    qlECBNextDate,
+    qlECBNextDateFromCode,
+    qlECBNextDates,
+    qlECBNextDatesFromCode,
     qlPeriod,
     qlPeriodFrequency,
     qlPeriodLength,
@@ -196,3 +207,21 @@ def test_qlDateParserParseISO():
     date_str = "2020-01-15"
     date = qlDateParserParseISO(date_str)
     assert date == ql.Date(15, 1, 2020)
+
+
+def test_qlECB_date_helpers():
+    date = qlECBDate(ql.January, 2024)
+    code = qlECBCode(date)
+
+    assert qlECBIsDate(date)
+    assert qlECBIsCode(code)
+    assert qlECBDateFromCode(code, date) == date
+    next_date = qlECBNextDate(date)
+    next_code = qlECBNextCode(date)
+    assert isinstance(next_date, ql.Date)
+    assert qlECBIsCode(next_code)
+    assert qlECBDateFromCode(next_code, date) == next_date
+    assert qlECBNextDateFromCode(code, date) == next_date
+    assert qlECBNextDates(date)
+    assert qlECBNextDatesFromCode(code, date)
+    assert qlECBIsCode(qlECBNextCodeFromCode(code))

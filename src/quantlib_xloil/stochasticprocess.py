@@ -814,6 +814,7 @@ def qlHullWhiteForwardProcessSetForwardMeasureTime(
         "b": "Second mean reversion speed.",
         "eta": "Second volatility.",
         "rho": "Correlation.",
+        "term_structure": "Optional yield term structure.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -823,9 +824,35 @@ def qlG2Process(
     b: float,
     eta: float,
     rho: float,
+    term_structure: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
 ) -> ql.G2Process:
-    return ql.G2Process(a, sigma, b, eta, rho)
+    return ql.G2Process(a, sigma, b, eta, rho, term_structure)
+
+
+@xlo.func(
+    help="Return the G2 short-rate adjustment at a time.",
+    args={"process": "The G2 process.", "t": "The time."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ProcessPhi(process: ql.G2Process, t: float, trigger=None) -> float:
+    return process.phi(t)
+
+
+@xlo.func(
+    help="Return the G2 short rate at a time and factor values.",
+    args={
+        "process": "The G2 process.",
+        "t": "The time.",
+        "x": "The first factor value.",
+        "y": "The second factor value.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ProcessShortRate(
+    process: ql.G2Process, t: float, x: float, y: float, trigger=None
+) -> float:
+    return process.shortRate(t, x, y)
 
 
 @xlo.func(
@@ -836,6 +863,7 @@ def qlG2Process(
         "b": "Second mean reversion speed.",
         "eta": "Second volatility.",
         "rho": "Correlation.",
+        "term_structure": "Optional yield term structure.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -845,9 +873,37 @@ def qlG2ForwardProcess(
     b: float,
     eta: float,
     rho: float,
+    term_structure: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
 ) -> ql.G2ForwardProcess:
-    return ql.G2ForwardProcess(a, sigma, b, eta, rho)
+    return ql.G2ForwardProcess(a, sigma, b, eta, rho, term_structure)
+
+
+@xlo.func(
+    help="Return the G2 forward-process short-rate adjustment at a time.",
+    args={"process": "The G2 forward process.", "t": "The time."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ForwardProcessPhi(
+    process: ql.G2ForwardProcess, t: float, trigger=None
+) -> float:
+    return process.phi(t)
+
+
+@xlo.func(
+    help="Return the G2 forward-process short rate at a time and factor values.",
+    args={
+        "process": "The G2 forward process.",
+        "t": "The time.",
+        "x": "The first factor value.",
+        "y": "The second factor value.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlG2ForwardProcessShortRate(
+    process: ql.G2ForwardProcess, t: float, x: float, y: float, trigger=None
+) -> float:
+    return process.shortRate(t, x, y)
 
 
 @xlo.func(

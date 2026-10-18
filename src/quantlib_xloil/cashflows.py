@@ -762,6 +762,8 @@ def qlCappedFlooredCouponIsFloored(
         "compound_spread": "Compound spread daily.",
         "rate_computation_start_date": "Rate computation start date.",
         "rate_computation_end_date": "Rate computation end date.",
+        "ex_coupon_date": "Ex-coupon date.",
+        "rounding_precision": "Optional rounding precision for the coupon rate.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -784,6 +786,8 @@ def qlOvernightIndexedCoupon(
     compound_spread: bool = False,
     rate_computation_start_date: qDate = ql.Date(),
     rate_computation_end_date: qDate = ql.Date(),
+    ex_coupon_date: qDate = ql.Date(),
+    rounding_precision: int = None,
     trigger=None,
 ) -> ql.OvernightIndexedCoupon:
     if day_counter is not None:
@@ -799,6 +803,8 @@ def qlOvernightIndexedCoupon(
         "compound_spread": "compoundSpread",
         "rate_computation_start_date": "rateComputationStartDate",
         "rate_computation_end_date": "rateComputationEndDate",
+        "ex_coupon_date": "exCouponDate",
+        "rounding_precision": "roundingPrecision",
     }
 
     kwargs = {}
@@ -2473,6 +2479,7 @@ def qlIborLeg(
         "in_arrears": "Whether coupons are in arrears.",
         "naked_option": "Whether to use naked option payoff.",
         "payment_dates": "Payment dates.",
+        "rounding_precision": "Optional rounding precision for coupon rates.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -2498,6 +2505,7 @@ def qlOvernightLeg(
     in_arrears: bool = True,
     naked_option: bool = False,
     payment_dates: xlo.Array(dims=1) = None,
+    rounding_precision: int = None,
     trigger=None,
 ):
     if payment_day_counter is not None:
@@ -2530,6 +2538,7 @@ def qlOvernightLeg(
         "in_arrears": "inArrears",
         "naked_option": "nakedOption",
         "payment_dates": "paymentDates",
+        "rounding_precision": "roundingPrecision",
     }
 
     kwargs = {}

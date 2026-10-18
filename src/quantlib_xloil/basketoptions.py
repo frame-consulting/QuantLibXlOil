@@ -234,6 +234,57 @@ def qlBjerksundStenslandSpreadEngine(
 
 
 @xlo.func(
+    help="Create a QuantLib PearsonSpreadEngine object.",
+    args={
+        "process1": "First generalized Black-Scholes process.",
+        "process2": "Second generalized Black-Scholes process.",
+        "correlation": "Correlation between processes.",
+        "integration_tolerance": "Integration tolerance.",
+        "max_integration_iterations": "Maximum integration iterations.",
+        "n_std": "Number of standard deviations for integration.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlPearsonSpreadEngine(
+    process1: ql.GeneralizedBlackScholesProcess,
+    process2: ql.GeneralizedBlackScholesProcess,
+    correlation: float,
+    integration_tolerance: float = 1.0e-10,
+    max_integration_iterations: int = 10000,
+    n_std: float = 8.0,
+    trigger=None,
+) -> ql.PearsonSpreadEngine:
+    return ql.PearsonSpreadEngine(
+        process1,
+        process2,
+        correlation,
+        integration_tolerance,
+        max_integration_iterations,
+        n_std,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib GaussianCopulaSpreadEngine object.",
+    args={
+        "process1": "First generalized Black-Scholes process.",
+        "process2": "Second generalized Black-Scholes process.",
+        "correlation": "Correlation between processes.",
+        "n_points": "Number of points used by the integration.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlGaussianCopulaSpreadEngine(
+    process1: ql.GeneralizedBlackScholesProcess,
+    process2: ql.GeneralizedBlackScholesProcess,
+    correlation: float,
+    n_points: int = 64,
+    trigger=None,
+) -> ql.GaussianCopulaSpreadEngine:
+    return ql.GaussianCopulaSpreadEngine(process1, process2, correlation, n_points)
+
+
+@xlo.func(
     help="Create a QuantLib OperatorSplittingSpreadEngine object.",
     args={
         "process1": "First generalized Black-Scholes process.",

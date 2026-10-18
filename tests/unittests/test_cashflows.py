@@ -2651,8 +2651,11 @@ def test_qlOvernightIndexedCoupon_constructor_with_and_without_optionals():
             compound_spread=False,
             rate_computation_start_date=ql.Date(),
             rate_computation_end_date=ql.Date(),
+            ex_coupon_date=qlDate(2024, 6, 20),
+            rounding_precision=2,
         )
         assert coupon2 is not None
+        assert coupon2.exCouponDate() == qlDate(2024, 6, 20)
         assert qlOvernightIndexedCouponEffectiveSpread(coupon2) == 0.01
     finally:
         ql.Settings.instance().evaluationDate = ql.Date()
@@ -2953,6 +2956,7 @@ def test_qlOvernightLeg_constructor_with_and_without_optionals():
         daily_cap_floor=False,
         in_arrears=True,
         naked_option=False,
+        rounding_precision=2,
     )
     assert len(leg2) == 2
 

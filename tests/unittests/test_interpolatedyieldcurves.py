@@ -2,6 +2,7 @@ import QuantLib as ql
 import pytest
 
 from quantlib_xloil.interpolatedyieldcurves import (
+    qlLogCubicSpreadDiscountCurve,
     qlDiscountCurve,
     qlForwardCurve,
     qlInterpolatedYieldCurve,
@@ -179,3 +180,15 @@ def test_qlZeroCurve_constructor():
 
     assert isinstance(handle, ql.YieldTermStructureHandle)
     assert handle.currentLink() is not None
+
+
+def test_qlLogCubicSpreadDiscountCurve_constructor():
+    reference_date = qlDate(2025, 1, 2)
+    base_curve = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.03, ql.Actual365Fixed())
+    )
+    dates = [reference_date, qlDate(2026, 1, 2), qlDate(2027, 1, 4)]
+    curve = qlLogCubicSpreadDiscountCurve(base_curve, dates, [1.0, 0.99, 0.97])
+
+    assert isinstance(curve, ql.LogCubicSpreadDiscountCurve)
+    assert curve.discount(dates[-1]) > 0.0

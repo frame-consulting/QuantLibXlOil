@@ -7,6 +7,8 @@ from quantlib_xloil.optimizers import (
     qlCompositeConstraint,
     qlEndCriteria,
     qlEndCriteriaSucceded,
+    qlLBFGSB,
+    qlLBFGSBBounded,
     qlNoConstraint,
     qlNonhomogeneousBoundaryConstraint,
     qlPositiveConstraint,
@@ -25,6 +27,14 @@ def test_constraint_constructors_return_expected_types():
     assert isinstance(positive_constraint, ql.PositiveConstraint)
     assert isinstance(boundary_constraint, ql.BoundaryConstraint)
     assert isinstance(composite_constraint, ql.CompositeConstraint)
+
+
+def test_lbfgsb_constructor_overloads():
+    unbounded = qlLBFGSB()
+    bounded = qlLBFGSBBounded([-1.0, 0.0], [1.0, 2.0])
+
+    assert isinstance(unbounded, ql.LBFGSB)
+    assert isinstance(bounded, ql.LBFGSB)
 
 
 def test_qlNonhomogeneousBoundaryConstraint_converts_inputs_and_constructs():

@@ -12,10 +12,14 @@ from quantlib_xloil.volatilities import (
     qlBlackVolTermStructureBlackVol,
     qlBlackVarianceCurve,
     qlBlackVolTermStructureBlackVolFromTime,
+    qlBlackVolTermStructureAtmLevel,
     qlBlackVolTermStructureMaxStrike,
     qlBlackVolTermStructureMinStrike,
+    qlBlackVolTermStructureSmileSection,
+    qlBlackVolTermStructureSmileSectionFromTime,
     qlConstantOptionletVolatility,
     qlConstantSwaptionVolatility,
+    qlLinearInterpolatedSmileSection,
     qlLocalVolTermStructureLocalVol,
     qlLocalVolTermStructureLocalVolFromTime,
     qlOptionletVolatilityStructureBlackVariance,
@@ -31,6 +35,17 @@ from quantlib_xloil.volatilities import (
     qlSwaptionVolatilityStructureSmileSectionFromTime,
     qlSwaptionVolatilityStructureVolatility,
     qlSwaptionVolatilityStructureVolatilityFromTime,
+    qlSmileSectionAtmLevel,
+    qlSmileSectionDensity,
+    qlSmileSectionMaxStrike,
+    qlSmileSectionMinStrike,
+    qlSmileSectionOptionPrice,
+    qlSmileSectionRNDCalculator,
+    qlSmileSectionRNDCalculatorCDF,
+    qlSmileSectionRNDCalculatorInverseCDF,
+    qlSmileSectionRNDCalculatorPDF,
+    qlSmileSectionVariance,
+    qlSmileSectionVolatility,
     qlSwaptionVolatilityMatrix,
     qVolatilityType,
 )
@@ -68,6 +83,38 @@ def test_qlBlackVolTermStructure_black_vol_is_constant_for_date_and_time():
 
     assert by_date == pytest.approx(volatility)
     assert by_time == pytest.approx(volatility)
+
+
+def test_black_volatility_smile_and_nullable_atm_level():
+    handle = _constant_vol_handle(0.20)
+    smile_by_date = qlBlackVolTermStructureSmileSection(handle, qlDate(2025, 1, 2))
+    smile_by_time = qlBlackVolTermStructureSmileSectionFromTime(handle, 1.0)
+
+    assert isinstance(smile_by_date, ql.SmileSection)
+    assert isinstance(smile_by_time, ql.SmileSection)
+    assert qlBlackVolTermStructureAtmLevel(handle, 1.0) is None
+    assert qlSmileSectionVolatility(smile_by_time, 100.0) == pytest.approx(0.20)
+    assert qlSmileSectionVariance(smile_by_time, 100.0) == pytest.approx(0.04)
+    assert qlSmileSectionMinStrike(smile_by_time) < qlSmileSectionMaxStrike(smile_by_time)
+    assert qlSmileSectionAtmLevel(smile_by_time) == ql.nullDouble()
+
+
+def test_interpolated_smile_flat_strike_extrapolation_and_density_calculator():
+    smile = qlLinearInterpolatedSmileSection(
+        1.0,
+        [80.0, 90.0, 100.0, 110.0, 120.0],
+        [0.18, 0.19, 0.20, 0.21, 0.22],
+        100.0,
+        flat_strike_extrapolation=True,
+    )
+    calculator = qlSmileSectionRNDCalculator(smile)
+
+    assert qlSmileSectionVolatility(smile, 130.0) == pytest.approx(0.22)
+    assert qlSmileSectionOptionPrice(smile, 100.0) > 0.0
+    assert qlSmileSectionDensity(smile, 100.0) > 0.0
+    median = qlSmileSectionRNDCalculatorInverseCDF(calculator, 0.5)
+    assert qlSmileSectionRNDCalculatorPDF(calculator, median) > 0.0
+    assert qlSmileSectionRNDCalculatorCDF(calculator, median) == pytest.approx(0.5)
 
 
 def test_qlBlackVolTermStructure_black_variance_for_time_and_date():

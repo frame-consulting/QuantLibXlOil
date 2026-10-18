@@ -8,6 +8,7 @@ from quantlib_xloil.calendars import (
     qlBespokeCalendarAddWeekend,
     qlCalendar,
     qlCalendarAddHoliday,
+    qlCalendarAddedHolidays,
     qlCalendarAdjust,
     qlCalendarAdvance,
     qlCalendarAdvance2,
@@ -27,6 +28,7 @@ from quantlib_xloil.calendars import (
     qlCalendarJointCalendarN,
     qlCalendarName,
     qlCalendarRemoveHoliday,
+    qlCalendarRemovedHolidays,
     qlCalendarResetAddedAndRemovedHolidays,
     qlCalendarStartOfMonth,
 )
@@ -76,6 +78,20 @@ def test_qlCalendar_Canada():
 def test_qlCalendar_Chile():
     calendar = qlCalendar("Chile")
     assert calendar is not None
+
+
+def test_qlCalendar_new_143_calendars():
+    for name in (
+        "Croatia",
+        "Israel Telbor",
+        "Malta",
+        "Montenegro",
+        "NorthMacedonia",
+        "Serbia",
+        "Slovenia",
+        "Uzbekistan",
+    ):
+        assert qlCalendar(name) is not None
 
 
 def test_qlCalendar_China():
@@ -341,6 +357,18 @@ def test_qlCalendarResetAddedAndRemovedHolidays():
     date_removed = qlDate(2026, 1, 1)
     assert qlCalendarIsHoliday(calendar, date_added) == False
     assert qlCalendarIsHoliday(calendar, date_removed) == True
+
+
+def test_qlCalendarAddedAndRemovedHolidays():
+    calendar = qlCalendar("TARGET")
+    date_added = qlDate(2026, 5, 29)
+    date_removed = qlDate(2026, 1, 1)
+    qlCalendarAddHoliday(calendar, date_added)
+    qlCalendarRemoveHoliday(calendar, date_removed)
+
+    assert date_added in qlCalendarAddedHolidays(calendar)
+    assert date_removed in qlCalendarRemovedHolidays(calendar)
+    qlCalendarResetAddedAndRemovedHolidays(calendar)
     qlCalendarAddHoliday(calendar, date_added)
     qlCalendarRemoveHoliday(calendar, date_removed)
     assert qlCalendarIsHoliday(calendar, date_added) == True

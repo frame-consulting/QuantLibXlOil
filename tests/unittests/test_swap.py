@@ -5,6 +5,17 @@ from quantlib_xloil.calendars import qlCalendar
 from quantlib_xloil.date import qlDate
 from quantlib_xloil.swap import (
     qlAssetSwap,
+    qlConstNotionalCrossCurrencyBasisSwap,
+    qlConstNotionalCrossCurrencyBasisSwapFairPaySpread,
+    qlConstNotionalCrossCurrencyBasisSwapFairReceiveSpread,
+    qlConstNotionalCrossCurrencyFixedVsFloatingSwap,
+    qlConstNotionalCrossCurrencyFixedVsFloatingSwapFairRate,
+    qlConstNotionalCrossCurrencyFixedVsFloatingSwapFairSpread,
+    qlConstNotionalCrossCurrencySwap,
+    qlConstNotionalCrossCurrencySwapLegCurrency,
+    qlConstNotionalCrossCurrencySwapInCcyLegNPV,
+    qlConstNotionalCrossCurrencySwapN,
+    qlDiscountingConstNotionalCrossCurrencySwapEngine,
     qlMakeMultipleResetsSwap,
     qlMultipleResetsSwap,
     qlMultipleResetsSwapAveragingMethod,
@@ -757,6 +768,98 @@ def test_equity_total_return_swap_constructor_and_accessors():
 
         assert isinstance(etrs.NPV(), float)
 
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_const_notional_cross_currency_swaps_and_discounting_engine():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        end_date = qlDate(2026, 1, 2)
+        ql.Settings.instance().evaluationDate = eval_date
+        calendar = qlCalendar("TARGET")
+        usd = ql.USDCurrency()
+        eur = ql.EURCurrency()
+        usd_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.03, ql.Actual365Fixed())
+        )
+        eur_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        fixed_schedule = _schedule(eval_date, end_date, ql.Period("1Y"))
+        float_schedule = _schedule(eval_date, end_date, ql.Period("6M"))
+        euribor = ql.Euribor(ql.Period("6M"), eur_curve)
+        euribor.addFixing(qlDate(2023, 12, 28), 0.02)
+        usd_libor = ql.USDLibor(ql.Period("6M"), usd_curve)
+        usd_libor.addFixing(qlDate(2023, 12, 28), 0.03, True)
+
+        swap = qlConstNotionalCrossCurrencyFixedVsFloatingSwap(
+            qSwapType.__wrapped__("PAYER"),
+            1_000_000.0,
+            usd,
+            fixed_schedule,
+            0.03,
+            ql.Actual365Fixed(),
+            ql.Following,
+            0,
+            calendar,
+            900_000.0,
+            eur,
+            float_schedule,
+            euribor,
+            0.001,
+            ql.Following,
+            0,
+            calendar,
+        )
+        engine = qlDiscountingConstNotionalCrossCurrencySwapEngine(
+            usd,
+            usd_curve,
+            eur,
+            eur_curve,
+            ql.QuoteHandle(ql.SimpleQuote(1.1)),
+        )
+        swap.setPricingEngine(engine)
+
+        assert isinstance(swap, ql.ConstNotionalCrossCurrencyFixedVsFloatingSwap)
+        assert qlConstNotionalCrossCurrencySwapLegCurrency(swap, 0).code() == "USD"
+        assert qlConstNotionalCrossCurrencySwapLegCurrency(swap, 1).code() == "EUR"
+        assert isinstance(swap.NPV(), float)
+        assert isinstance(qlConstNotionalCrossCurrencySwapInCcyLegNPV(swap, 0), float)
+        assert isinstance(qlConstNotionalCrossCurrencyFixedVsFloatingSwapFairRate(swap), float)
+        assert isinstance(qlConstNotionalCrossCurrencyFixedVsFloatingSwapFairSpread(swap), float)
+
+        basis_swap = qlConstNotionalCrossCurrencyBasisSwap(
+            1_000_000.0,
+            usd,
+            float_schedule,
+            usd_libor,
+            0.001,
+            1.0,
+            900_000.0,
+            eur,
+            float_schedule,
+            euribor,
+            0.0,
+            1.0,
+        )
+        basis_swap.setPricingEngine(engine)
+        assert isinstance(basis_swap, ql.ConstNotionalCrossCurrencyBasisSwap)
+        assert isinstance(qlConstNotionalCrossCurrencyBasisSwapFairPaySpread(basis_swap), float)
+        assert isinstance(qlConstNotionalCrossCurrencyBasisSwapFairReceiveSpread(basis_swap), float)
+
+        first_leg = [ql.SimpleCashFlow(100.0, end_date)]
+        second_leg = [ql.SimpleCashFlow(90.0, end_date)]
+        generic_swap = qlConstNotionalCrossCurrencySwap(
+            first_leg, usd, second_leg, eur
+        )
+        assert isinstance(generic_swap, ql.ConstNotionalCrossCurrencySwap)
+        assert qlConstNotionalCrossCurrencySwapLegCurrency(generic_swap, 1).code() == "EUR"
+        generic_multi_swap = qlConstNotionalCrossCurrencySwapN(
+            [first_leg, second_leg], [True, False], [usd, eur]
+        )
+        assert isinstance(generic_multi_swap, ql.ConstNotionalCrossCurrencySwap)
     finally:
         ql.Settings.instance().evaluationDate = original_eval
 

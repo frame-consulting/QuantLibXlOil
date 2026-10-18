@@ -10,6 +10,7 @@ from quantlib_xloil.basketoptions import (
     qlEverestOption,
     qlFd2dBlackScholesVanillaEngine,
     qlFdndimBlackScholesVanillaEngine,
+    qlGaussianCopulaSpreadEngine,
     qlHimalayaOption,
     qlKirkEngine,
     qlMCAmericanBasketEngine,
@@ -19,6 +20,7 @@ from quantlib_xloil.basketoptions import (
     qlMaxBasketPayoff,
     qlMinBasketPayoff,
     qlOperatorSplittingSpreadEngine,
+    qlPearsonSpreadEngine,
     qlSpreadBasketPayoff,
     qlStulzEngine,
 )
@@ -30,20 +32,25 @@ from quantlib_xloil.payoffs import qlPlainVanillaPayoff
 from quantlib_xloil.stochasticprocess import qlStochasticProcessArray
 
 
-def _process(spot_value: float, volatility: float = 0.20):
+def _process(
+    spot_value: float,
+    volatility: float = 0.20,
+    risk_free_curve: ql.YieldTermStructureHandle = None,
+):
     reference_date = qlDate(2024, 1, 2)
     day_counter = ql.Actual365Fixed()
     spot = ql.QuoteHandle(ql.SimpleQuote(spot_value))
-    risk_free = ql.YieldTermStructureHandle(
-        ql.FlatForward(reference_date, 0.03, day_counter)
-    )
+    if risk_free_curve is None:
+        risk_free_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(reference_date, 0.03, day_counter)
+        )
     dividend = ql.YieldTermStructureHandle(
         ql.FlatForward(reference_date, 0.01, day_counter)
     )
     black_vol = ql.BlackVolTermStructureHandle(
         ql.BlackConstantVol(reference_date, ql.TARGET(), volatility, day_counter)
     )
-    return ql.BlackScholesMertonProcess(spot, dividend, risk_free, black_vol)
+    return ql.BlackScholesMertonProcess(spot, dividend, risk_free_curve, black_vol)
 
 
 def _process_array():
@@ -76,14 +83,24 @@ def test_basket_payoff_and_option_construction():
 
 
 def test_two_asset_basket_engine_wrappers():
-    process1 = _process(100.0)
-    process2 = _process(95.0, 0.25)
+    shared_risk_free_curve = ql.YieldTermStructureHandle(
+        ql.FlatForward(qlDate(2024, 1, 2), 0.03, ql.Actual365Fixed())
+    )
+    process1 = _process(100.0, risk_free_curve=shared_risk_free_curve)
+    process2 = _process(95.0, 0.25, shared_risk_free_curve)
 
     assert isinstance(qlStulzEngine(process1, process2, 0.30), ql.StulzEngine)
     assert isinstance(qlKirkEngine(process1, process2, 0.30), ql.KirkEngine)
     assert isinstance(
         qlBjerksundStenslandSpreadEngine(process1, process2, 0.30),
         ql.BjerksundStenslandSpreadEngine,
+    )
+    assert isinstance(
+        qlPearsonSpreadEngine(process1, process2, 0.30), ql.PearsonSpreadEngine
+    )
+    assert isinstance(
+        qlGaussianCopulaSpreadEngine(process1, process2, 0.30),
+        ql.GaussianCopulaSpreadEngine,
     )
     assert isinstance(
         qlOperatorSplittingSpreadEngine(

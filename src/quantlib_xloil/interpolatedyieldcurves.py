@@ -184,3 +184,23 @@ def qlZeroCurve(
         args.append(calendar)
     yts = ql.ZeroCurve(*args)
     return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a log-cubic spread discount curve.",
+    args={
+        "base_curve": "The base yield term structure handle.",
+        "dates": "The dates corresponding to spread discount factors.",
+        "discount_factors": "The spread discount factors.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlLogCubicSpreadDiscountCurve(
+    base_curve: ql.YieldTermStructureHandle,
+    dates: xlo.Array(dims=1),
+    discount_factors: xlo.Array(dims=1),
+    trigger=None,
+) -> ql.LogCubicSpreadDiscountCurve:
+    return ql.LogCubicSpreadDiscountCurve(
+        base_curve, _to_date_list(dates), to_float_list(discount_factors)
+    )

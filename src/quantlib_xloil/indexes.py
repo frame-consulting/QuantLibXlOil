@@ -275,6 +275,44 @@ def qlInterestRateIndexValueDate(
     return index.valueDate(fixing_date)
 
 
+@xlo.func(
+    help="Create a QuantLib BMAIndex object.",
+    args={"projection_curve": "An optional projection curve for forecasting fixings."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMAIndex(
+    projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger=None,
+) -> ql.BMAIndex:
+    return ql.BMAIndex(projection_curve)
+
+
+@xlo.func(
+    help="Return the forwarding term structure of a BMA index.",
+    args={"index": "The BMA index to query."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMAIndexForwardingTermStructure(
+    index: ql.BMAIndex, trigger=None
+) -> ql.YieldTermStructureHandle:
+    return index.forwardingTermStructure()
+
+
+@xlo.func(
+    help="Return the fixing schedule of a BMA index between two dates.",
+    args={
+        "index": "The BMA index to query.",
+        "start_date": "The schedule start date.",
+        "end_date": "The schedule end date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMAIndexFixingSchedule(
+    index: ql.BMAIndex, start_date: qDate, end_date: qDate, trigger=None
+) -> ql.Schedule:
+    return index.fixingSchedule(start_date, end_date)
+
+
 ## Ibor index
 
 
@@ -718,6 +756,22 @@ def qlUSDLibor(
     return ql.USDLibor(tenor, projection_curve)
 
 
+@xlo.func(
+    help="Create a QuantLib Nibor index object.",
+    args={
+        "tenor": "The tenor of the Nibor index.",
+        "projection_curve": "An optional projection curve for forecasting fixings.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlNibor(
+    tenor: qPeriod,
+    projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger=None,
+) -> ql.IborIndex:
+    return ql.Nibor(tenor, projection_curve)
+
+
 ## Overnight index
 
 
@@ -941,6 +995,30 @@ def qlTonar(
     trigger=None,
 ) -> ql.IborIndex:
     return ql.Tonar(projection_curve)
+
+
+@xlo.func(
+    help="Create a QuantLib Shir index object.",
+    args={"projection_curve": "An optional projection curve for forecasting fixings."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlShir(
+    projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger=None,
+) -> ql.IborIndex:
+    return ql.Shir(projection_curve)
+
+
+@xlo.func(
+    help="Create a QuantLib Zaronia index object.",
+    args={"projection_curve": "An optional projection curve for forecasting fixings."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlZaronia(
+    projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger=None,
+) -> ql.IborIndex:
+    return ql.Zaronia(projection_curve)
 
 
 ## Swap index

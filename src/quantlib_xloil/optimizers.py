@@ -134,6 +134,52 @@ def qlEndCriteriaSucceded(
 
 
 @xlo.func(
+    help="Create a QuantLib LBFGSB optimization method.",
+    args={
+        "memory": "Number of limited-memory corrections.",
+        "pg_tol": "Projected-gradient convergence tolerance.",
+        "f_tol": "Function-value convergence tolerance.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlLBFGSB(
+    memory: int = 10,
+    pg_tol: float = 1.0e-8,
+    f_tol: float = 2.220446049250313e-9,
+    trigger=None,
+) -> ql.LBFGSB:
+    return ql.LBFGSB(memory, pg_tol, f_tol)
+
+
+@xlo.func(
+    help="Create a bounded QuantLib LBFGSB optimization method.",
+    args={
+        "lower_bound": "Array of lower bounds.",
+        "upper_bound": "Array of upper bounds.",
+        "memory": "Number of limited-memory corrections.",
+        "pg_tol": "Projected-gradient convergence tolerance.",
+        "f_tol": "Function-value convergence tolerance.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlLBFGSBBounded(
+    lower_bound: xlo.Array(dims=1),
+    upper_bound: xlo.Array(dims=1),
+    memory: int = 10,
+    pg_tol: float = 1.0e-8,
+    f_tol: float = 2.220446049250313e-9,
+    trigger=None,
+) -> ql.LBFGSB:
+    return ql.LBFGSB(
+        ql.Array(to_float_list(lower_bound)),
+        ql.Array(to_float_list(upper_bound)),
+        memory,
+        pg_tol,
+        f_tol,
+    )
+
+
+@xlo.func(
     help="Create a QuantLib LevenbergMarquardt optimization method.",
     args={
         "epsfcn": "The epsilon for the function value.",

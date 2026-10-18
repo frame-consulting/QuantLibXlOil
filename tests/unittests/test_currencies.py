@@ -27,6 +27,11 @@ def test__qCurrency_case_insensitive_and_passthrough():
     assert passthrough.code() == "USD"
 
 
+@pytest.mark.parametrize("code", ["MKD", "UZS"])
+def test_qCurrency_new_143_currencies(code):
+    assert qCurrency.__wrapped__(code).code() == code
+
+
 def test__qCurrency_invalid_raises():
     with pytest.raises(ValueError, match="Unknown currency"):
         qCurrency.__wrapped__("NOT_A_CCY")

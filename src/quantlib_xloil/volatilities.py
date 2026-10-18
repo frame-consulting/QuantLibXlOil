@@ -1,3 +1,5 @@
+from typing import Optional
+
 import QuantLib as ql
 import xloil as xlo
 
@@ -272,6 +274,218 @@ def qlBlackConstantVol(
     #
     volts = ql.BlackConstantVol(reference_date, calendar, volatility, day_counter)
     return ql.BlackVolTermStructureHandle(volts)
+
+
+@xlo.func(
+    help="Return the smile section for a Black volatility term structure.",
+    args={
+        "vol_tsh": "Handle to a BlackVolTermStructure object.",
+        "maturity": "The smile maturity date.",
+        "extrapolate": "Whether to allow extrapolation.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolTermStructureSmileSection(
+    vol_tsh: ql.BlackVolTermStructureHandle,
+    maturity: qDate,
+    extrapolate: bool = False,
+    trigger=None,
+) -> ql.SmileSection:
+    return vol_tsh.smileSection(maturity, extrapolate)
+
+
+@xlo.func(
+    help="Return the smile section for a Black volatility term structure at a time.",
+    args={
+        "vol_tsh": "Handle to a BlackVolTermStructure object.",
+        "maturity": "The smile maturity time.",
+        "extrapolate": "Whether to allow extrapolation.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolTermStructureSmileSectionFromTime(
+    vol_tsh: ql.BlackVolTermStructureHandle,
+    maturity: float,
+    extrapolate: bool = False,
+    trigger=None,
+) -> ql.SmileSection:
+    return vol_tsh.smileSection(maturity, extrapolate)
+
+
+@xlo.func(
+    help="Return the ATM level for a Black volatility term structure.",
+    args={
+        "vol_tsh": "Handle to a BlackVolTermStructure object.",
+        "time": "The maturity time.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBlackVolTermStructureAtmLevel(
+    vol_tsh: ql.BlackVolTermStructureHandle, time: float, trigger=None
+) -> Optional[float]:
+    return vol_tsh.atmLevel(time)
+
+
+@xlo.func(
+    help="Create a linear interpolated smile section.",
+    args={
+        "expiry_time": "The time to expiry.",
+        "strikes": "The smile strikes.",
+        "standard_deviations": "The Black standard deviations at each strike.",
+        "atm_level": "The at-the-money level.",
+        "day_counter": "The day counter for the smile.",
+        "volatility_type": "The volatility type.",
+        "shift": "The displacement for shifted-lognormal volatility.",
+        "flat_strike_extrapolation": "Whether to extrapolate flat in strike.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlLinearInterpolatedSmileSection(
+    expiry_time: float,
+    strikes: xlo.Array(dims=1),
+    standard_deviations: xlo.Array(dims=1),
+    atm_level: float,
+    day_counter: qDayCounter = ql.Actual365Fixed(),
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shift: float = 0.0,
+    flat_strike_extrapolation: bool = False,
+    trigger=None,
+) -> ql.SmileSection:
+    return ql.LinearInterpolatedSmileSection(
+        expiry_time,
+        to_float_list(strikes),
+        to_float_list(standard_deviations),
+        atm_level,
+        ql.Linear(),
+        day_counter,
+        volatility_type,
+        shift,
+        flat_strike_extrapolation,
+    )
+
+
+@xlo.func(
+    help="Return the minimum strike of a smile section.",
+    args={"smile": "The smile section to query."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionMinStrike(smile: ql.SmileSection, trigger=None) -> float:
+    return smile.minStrike()
+
+
+@xlo.func(
+    help="Return the maximum strike of a smile section.",
+    args={"smile": "The smile section to query."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionMaxStrike(smile: ql.SmileSection, trigger=None) -> float:
+    return smile.maxStrike()
+
+
+@xlo.func(
+    help="Return the ATM level of a smile section.",
+    args={"smile": "The smile section to query."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionAtmLevel(smile: ql.SmileSection, trigger=None) -> float:
+    return smile.atmLevel()
+
+
+@xlo.func(
+    help="Return the volatility of a smile section at a strike.",
+    args={"smile": "The smile section to query.", "strike": "The strike."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionVolatility(
+    smile: ql.SmileSection, strike: float, trigger=None
+) -> float:
+    return smile.volatility(strike)
+
+
+@xlo.func(
+    help="Return the variance of a smile section at a strike.",
+    args={"smile": "The smile section to query.", "strike": "The strike."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionVariance(smile: ql.SmileSection, strike: float, trigger=None) -> float:
+    return smile.variance(strike)
+
+
+@xlo.func(
+    help="Return the option price implied by a smile section.",
+    args={
+        "smile": "The smile section to query.",
+        "strike": "The option strike.",
+        "option_type": "The option type.",
+        "discount": "The discount factor.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionOptionPrice(
+    smile: ql.SmileSection,
+    strike: float,
+    option_type: int = ql.Option.Call,
+    discount: float = 1.0,
+    trigger=None,
+) -> float:
+    return smile.optionPrice(strike, option_type, discount)
+
+
+@xlo.func(
+    help="Return the density of a smile section at a strike.",
+    args={"smile": "The smile section to query.", "strike": "The strike."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionDensity(smile: ql.SmileSection, strike: float, trigger=None) -> float:
+    return smile.density(strike)
+
+
+@xlo.func(
+    help="Create a risk-neutral density calculator from a smile section.",
+    args={
+        "smile": "The smile section.",
+        "n_strikes": "Number of strikes used for the calculation.",
+        "n_std": "Number of standard deviations used for the calculation.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionRNDCalculator(
+    smile: ql.SmileSection, n_strikes: int = 200, n_std: float = 5.0, trigger=None
+) -> ql.SmileSectionRNDCalculator:
+    return ql.SmileSectionRNDCalculator(smile, n_strikes, n_std)
+
+
+@xlo.func(
+    help="Return the risk-neutral density at a value.",
+    args={"calculator": "The density calculator.", "value": "The value."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionRNDCalculatorPDF(
+    calculator: ql.SmileSectionRNDCalculator, value: float, trigger=None
+) -> float:
+    return calculator.pdf(value)
+
+
+@xlo.func(
+    help="Return the cumulative risk-neutral probability at a value.",
+    args={"calculator": "The density calculator.", "value": "The value."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionRNDCalculatorCDF(
+    calculator: ql.SmileSectionRNDCalculator, value: float, trigger=None
+) -> float:
+    return calculator.cdf(value)
+
+
+@xlo.func(
+    help="Return the inverse cumulative risk-neutral probability.",
+    args={"calculator": "The density calculator.", "probability": "The probability."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSmileSectionRNDCalculatorInverseCDF(
+    calculator: ql.SmileSectionRNDCalculator, probability: float, trigger=None
+) -> float:
+    return calculator.invcdf(probability)
 
 
 @xlo.func(

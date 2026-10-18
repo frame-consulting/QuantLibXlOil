@@ -658,9 +658,11 @@ def qlYoYInflationIndex(
     interpolated: bool = False,
     trigger=None,
 ) -> ql.YoYInflationIndex:
-    return ql.YoYInflationIndex(
-        underlying_index, interpolated, yoy_inflation_term_structure
-    )
+    if interpolated:
+        raise ValueError(
+            "QuantLib 1.43 no longer supports overriding YoY index interpolation."
+        )
+    return ql.YoYInflationIndex(underlying_index, yoy_inflation_term_structure)
 
 
 @xlo.func(
@@ -688,11 +690,14 @@ def qlYoYInflationIndex2(
     interpolated: bool = False,
     trigger=None,
 ) -> ql.YoYInflationIndex:
+    if interpolated:
+        raise ValueError(
+            "QuantLib 1.43 no longer supports overriding YoY index interpolation."
+        )
     return ql.YoYInflationIndex(
         family_name,
         region,
         revised,
-        interpolated,
         frequency,
         availability_lag,
         currency,
@@ -732,7 +737,9 @@ def qlYoYInflationIndexRatio(index: ql.YoYInflationIndex, trigger=None) -> bool:
     group=EXCEL_GROUP_NAME,
 )
 def qlYoYInflationIndexInterpolated(index: ql.YoYInflationIndex, trigger=None) -> bool:
-    return index.interpolated()
+    raise NotImplementedError(
+        "QuantLib 1.43 no longer exposes YoYInflationIndex.interpolated()."
+    )
 
 
 # ToDo
@@ -941,7 +948,9 @@ def qlYYEUHICP2(
     yoy_inflation_term_structure: ql.YoYInflationTermStructureHandle = ql.YoYInflationTermStructureHandle(),
     trigger=None,
 ) -> ql.YYEUHICP:
-    return ql.YYEUHICP(interpolated, yoy_inflation_term_structure)
+    if interpolated:
+        raise ValueError("QuantLib 1.43 no longer supports overriding YoY index interpolation.")
+    return ql.YYEUHICP(yoy_inflation_term_structure)
 
 
 @xlo.func(
@@ -971,7 +980,9 @@ def qlYYEUHICPXT2(
     yoy_inflation_term_structure: ql.YoYInflationTermStructureHandle = ql.YoYInflationTermStructureHandle(),
     trigger=None,
 ) -> ql.YYEUHICPXT:
-    return ql.YYEUHICPXT(interpolated, yoy_inflation_term_structure)
+    if interpolated:
+        raise ValueError("QuantLib 1.43 no longer supports overriding YoY index interpolation.")
+    return ql.YYEUHICPXT(yoy_inflation_term_structure)
 
 
 @xlo.func(
@@ -1001,7 +1012,9 @@ def qlYYFRHICP2(
     yoy_inflation_term_structure: ql.YoYInflationTermStructureHandle = ql.YoYInflationTermStructureHandle(),
     trigger=None,
 ) -> ql.YYFRHICP:
-    return ql.YYFRHICP(interpolated, yoy_inflation_term_structure)
+    if interpolated:
+        raise ValueError("QuantLib 1.43 no longer supports overriding YoY index interpolation.")
+    return ql.YYFRHICP(yoy_inflation_term_structure)
 
 
 @xlo.func(
@@ -1031,7 +1044,9 @@ def qlYYUKRPI2(
     yoy_inflation_term_structure: ql.YoYInflationTermStructureHandle = ql.YoYInflationTermStructureHandle(),
     trigger=None,
 ) -> ql.YYUKRPI:
-    return ql.YYUKRPI(interpolated, yoy_inflation_term_structure)
+    if interpolated:
+        raise ValueError("QuantLib 1.43 no longer supports overriding YoY index interpolation.")
+    return ql.YYUKRPI(yoy_inflation_term_structure)
 
 
 @xlo.func(
@@ -1061,7 +1076,9 @@ def qlYYUSCPI2(
     yoy_inflation_term_structure: ql.YoYInflationTermStructureHandle = ql.YoYInflationTermStructureHandle(),
     trigger=None,
 ) -> ql.YYUSCPI:
-    return ql.YYUSCPI(interpolated, yoy_inflation_term_structure)
+    if interpolated:
+        raise ValueError("QuantLib 1.43 no longer supports overriding YoY index interpolation.")
+    return ql.YYUSCPI(yoy_inflation_term_structure)
 
 
 @xlo.func(
@@ -1091,7 +1108,9 @@ def qlYYZACPI2(
     yoy_inflation_term_structure: ql.YoYInflationTermStructureHandle = ql.YoYInflationTermStructureHandle(),
     trigger=None,
 ) -> ql.YYZACPI:
-    return ql.YYZACPI(interpolated, yoy_inflation_term_structure)
+    if interpolated:
+        raise ValueError("QuantLib 1.43 no longer supports overriding YoY index interpolation.")
+    return ql.YYZACPI(yoy_inflation_term_structure)
 
 
 ## CPI Utilities

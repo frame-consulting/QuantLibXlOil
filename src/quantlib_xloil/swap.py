@@ -9,6 +9,7 @@ from .config import EXCEL_GROUP_NAME
 from .currencies import qCurrency
 from .date import qDate, qFrequency, qPeriod, QL_FREQUENCY
 from .daycounters import qDayCounter
+from .ratehelpers import qQuoteHandle
 from .scheduler import qDateGenerationRule
 from .utilities import (
     enum_value,
@@ -2442,6 +2443,340 @@ def qlEquityTotalReturnSwapInterestRateLegNPV(
     swap: ql.EquityTotalReturnSwap, trigger=None
 ) -> float:
     return swap.interestRateLegNPV()
+
+
+@xlo.func(
+    help="Create a two-leg QuantLib cross-currency swap.",
+    args={
+        "first_leg": "The first cash-flow leg.",
+        "first_currency": "The currency of the first leg.",
+        "second_leg": "The second cash-flow leg.",
+        "second_currency": "The currency of the second leg.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencySwap(
+    first_leg: xlo.Array(dims=1),
+    first_currency: qCurrency,
+    second_leg: xlo.Array(dims=1),
+    second_currency: qCurrency,
+    trigger=None,
+) -> ql.ConstNotionalCrossCurrencySwap:
+    return ql.ConstNotionalCrossCurrencySwap(
+        to_object_list(first_leg, ql.CashFlow),
+        first_currency,
+        to_object_list(second_leg, ql.CashFlow),
+        second_currency,
+    )
+
+
+@xlo.func(
+    help="Create a multi-leg QuantLib cross-currency swap.",
+    args={
+        "legs": "The swap's cash-flow legs.",
+        "payer": "Whether each leg is paid.",
+        "currencies": "The currency of each leg.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencySwapN(
+    legs: xlo.Array(dims=1),
+    payer: xlo.Array(dims=1),
+    currencies: xlo.Array(dims=1),
+    trigger=None,
+) -> ql.ConstNotionalCrossCurrencySwap:
+    return ql.ConstNotionalCrossCurrencySwap(
+        _to_ql_legs(legs),
+        to_bool_list(payer),
+        ql.CurrencyVector(to_object_list(currencies, ql.Currency)),
+    )
+
+
+@xlo.func(
+    help="Return the currency of a cross-currency swap leg.",
+    args={"swap": "The cross-currency swap.", "leg": "The leg number."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencySwapLegCurrency(
+    swap: ql.ConstNotionalCrossCurrencySwap, leg: int, trigger=None
+) -> ql.Currency:
+    return swap.legCurrency(leg)
+
+
+@xlo.func(
+    help="Return a cross-currency swap leg NPV in its own currency.",
+    args={"swap": "The cross-currency swap.", "leg": "The leg number."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencySwapInCcyLegNPV(
+    swap: ql.ConstNotionalCrossCurrencySwap, leg: int, trigger=None
+) -> float:
+    return swap.inCcyLegNPV(leg)
+
+
+@xlo.func(
+    help="Return a cross-currency swap leg BPS in its own currency.",
+    args={"swap": "The cross-currency swap.", "leg": "The leg number."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencySwapInCcyLegBPS(
+    swap: ql.ConstNotionalCrossCurrencySwap, leg: int, trigger=None
+) -> float:
+    return swap.inCcyLegBPS(leg)
+
+
+@xlo.func(
+    help="Create a fixed-versus-floating cross-currency swap.",
+    args={
+        "swap_type": "PAYER or RECEIVER.",
+        "fixed_nominal": "The fixed-leg nominal.",
+        "fixed_currency": "The fixed-leg currency.",
+        "fixed_schedule": "The fixed-leg schedule.",
+        "fixed_rate": "The fixed rate.",
+        "fixed_day_count": "The fixed-leg day counter.",
+        "fixed_payment_convention": "The fixed-leg payment convention.",
+        "fixed_payment_lag": "The fixed-leg payment lag.",
+        "fixed_payment_calendar": "The fixed-leg payment calendar.",
+        "float_nominal": "The floating-leg nominal.",
+        "float_currency": "The floating-leg currency.",
+        "float_schedule": "The floating-leg schedule.",
+        "float_index": "The floating-leg Ibor index.",
+        "float_spread": "The floating-leg spread.",
+        "float_payment_convention": "The floating-leg payment convention.",
+        "float_payment_lag": "The floating-leg payment lag.",
+        "float_payment_calendar": "The floating-leg payment calendar.",
+        "telescopic_value_dates": "Use telescopic value dates.",
+        "float_compound_spread": "Compound the floating spread.",
+        "float_lookback_days": "Floating-leg lookback days.",
+        "float_observation_shift": "Apply an observation shift.",
+        "float_lockout_days": "Floating-leg lockout days.",
+        "float_averaging_method": "Floating-leg rate averaging method.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencyFixedVsFloatingSwap(
+    swap_type: qSwapType,
+    fixed_nominal: float,
+    fixed_currency: qCurrency,
+    fixed_schedule: ql.Schedule,
+    fixed_rate: float,
+    fixed_day_count: qDayCounter,
+    fixed_payment_convention: qBusinessDayConvention,
+    fixed_payment_lag: int,
+    fixed_payment_calendar: qCalendar,
+    float_nominal: float,
+    float_currency: qCurrency,
+    float_schedule: ql.Schedule,
+    float_index: ql.IborIndex,
+    float_spread: float,
+    float_payment_convention: qBusinessDayConvention,
+    float_payment_lag: int,
+    float_payment_calendar: qCalendar,
+    telescopic_value_dates: bool = False,
+    float_compound_spread: bool = False,
+    float_lookback_days: int = ql.nullInt(),
+    float_observation_shift: bool = False,
+    float_lockout_days: int = 0,
+    float_averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    trigger=None,
+) -> ql.ConstNotionalCrossCurrencyFixedVsFloatingSwap:
+    return ql.ConstNotionalCrossCurrencyFixedVsFloatingSwap(
+        _qSwapType(swap_type),
+        fixed_nominal,
+        fixed_currency,
+        fixed_schedule,
+        fixed_rate,
+        fixed_day_count,
+        fixed_payment_convention,
+        fixed_payment_lag,
+        fixed_payment_calendar,
+        float_nominal,
+        float_currency,
+        float_schedule,
+        float_index,
+        float_spread,
+        float_payment_convention,
+        float_payment_lag,
+        float_payment_calendar,
+        telescopic_value_dates,
+        float_compound_spread,
+        float_lookback_days,
+        float_observation_shift,
+        float_lockout_days,
+        float_averaging_method,
+    )
+
+
+@xlo.func(
+    help="Return the fair fixed rate of a fixed-versus-floating cross-currency swap.",
+    args={"swap": "The cross-currency swap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencyFixedVsFloatingSwapFairRate(
+    swap: ql.ConstNotionalCrossCurrencyFixedVsFloatingSwap, trigger=None
+) -> float:
+    return swap.fairRate()
+
+
+@xlo.func(
+    help="Return the fair floating spread of a fixed-versus-floating cross-currency swap.",
+    args={"swap": "The cross-currency swap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencyFixedVsFloatingSwapFairSpread(
+    swap: ql.ConstNotionalCrossCurrencyFixedVsFloatingSwap, trigger=None
+) -> float:
+    return swap.fairSpread()
+
+
+@xlo.func(
+    help="Create a cross-currency basis swap.",
+    args={
+        "pay_nominal": "The paying-leg nominal.",
+        "pay_currency": "The paying-leg currency.",
+        "pay_schedule": "The paying-leg schedule.",
+        "pay_index": "The paying-leg Ibor index.",
+        "pay_spread": "The paying-leg spread.",
+        "pay_gearing": "The paying-leg gearing.",
+        "receive_nominal": "The receiving-leg nominal.",
+        "receive_currency": "The receiving-leg currency.",
+        "receive_schedule": "The receiving-leg schedule.",
+        "receive_index": "The receiving-leg Ibor index.",
+        "receive_spread": "The receiving-leg spread.",
+        "receive_gearing": "The receiving-leg gearing.",
+        "pay_payment_lag": "The paying-leg payment lag.",
+        "receive_payment_lag": "The receiving-leg payment lag.",
+        "pay_compound_spread": "Compound the paying-leg spread.",
+        "pay_lookback_days": "Paying-leg lookback days.",
+        "pay_observation_shift": "Apply a paying-leg observation shift.",
+        "pay_lockout_days": "Paying-leg lockout days.",
+        "pay_averaging_method": "Paying-leg averaging method.",
+        "receive_compound_spread": "Compound the receiving-leg spread.",
+        "receive_lookback_days": "Receiving-leg lookback days.",
+        "receive_observation_shift": "Apply a receiving-leg observation shift.",
+        "receive_lockout_days": "Receiving-leg lockout days.",
+        "receive_averaging_method": "Receiving-leg averaging method.",
+        "telescopic_value_dates": "Use telescopic value dates.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencyBasisSwap(
+    pay_nominal: float,
+    pay_currency: qCurrency,
+    pay_schedule: ql.Schedule,
+    pay_index: ql.IborIndex,
+    pay_spread: float,
+    pay_gearing: float,
+    receive_nominal: float,
+    receive_currency: qCurrency,
+    receive_schedule: ql.Schedule,
+    receive_index: ql.IborIndex,
+    receive_spread: float,
+    receive_gearing: float,
+    pay_payment_lag: int = 0,
+    receive_payment_lag: int = 0,
+    pay_compound_spread: bool = False,
+    pay_lookback_days: int = ql.nullInt(),
+    pay_observation_shift: bool = False,
+    pay_lockout_days: int = 0,
+    pay_averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    receive_compound_spread: bool = False,
+    receive_lookback_days: int = ql.nullInt(),
+    receive_observation_shift: bool = False,
+    receive_lockout_days: int = 0,
+    receive_averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    telescopic_value_dates: bool = False,
+    trigger=None,
+) -> ql.ConstNotionalCrossCurrencyBasisSwap:
+    return ql.ConstNotionalCrossCurrencyBasisSwap(
+        pay_nominal,
+        pay_currency,
+        pay_schedule,
+        pay_index,
+        pay_spread,
+        pay_gearing,
+        receive_nominal,
+        receive_currency,
+        receive_schedule,
+        receive_index,
+        receive_spread,
+        receive_gearing,
+        pay_payment_lag,
+        receive_payment_lag,
+        pay_compound_spread,
+        pay_lookback_days,
+        pay_observation_shift,
+        pay_lockout_days,
+        pay_averaging_method,
+        receive_compound_spread,
+        receive_lookback_days,
+        receive_observation_shift,
+        receive_lockout_days,
+        receive_averaging_method,
+        telescopic_value_dates,
+    )
+
+
+@xlo.func(
+    help="Return the fair paying-leg spread of a cross-currency basis swap.",
+    args={"swap": "The cross-currency basis swap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencyBasisSwapFairPaySpread(
+    swap: ql.ConstNotionalCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fairPaySpread()
+
+
+@xlo.func(
+    help="Return the fair receiving-leg spread of a cross-currency basis swap.",
+    args={"swap": "The cross-currency basis swap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencyBasisSwapFairReceiveSpread(
+    swap: ql.ConstNotionalCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fairRecSpread()
+
+
+@xlo.func(
+    help="Create a discounting engine for cross-currency swaps.",
+    args={
+        "domestic_currency": "The domestic currency.",
+        "domestic_discount_curve": "The domestic discount curve.",
+        "foreign_currency": "The foreign currency.",
+        "foreign_discount_curve": "The foreign discount curve.",
+        "spot_fx": "The spot FX quote handle.",
+        "include_settlement_date_flows": "Whether to include settlement-date flows.",
+        "settlement_date": "The settlement date.",
+        "npv_date": "The NPV date.",
+        "spot_fx_settle_date": "The spot FX settlement date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlDiscountingConstNotionalCrossCurrencySwapEngine(
+    domestic_currency: qCurrency,
+    domestic_discount_curve: ql.YieldTermStructureHandle,
+    foreign_currency: qCurrency,
+    foreign_discount_curve: ql.YieldTermStructureHandle,
+    spot_fx: qQuoteHandle,
+    include_settlement_date_flows=None,
+    settlement_date: qDate = ql.Date(),
+    npv_date: qDate = ql.Date(),
+    spot_fx_settle_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.DiscountingConstNotionalCrossCurrencySwapEngine:
+    return ql.DiscountingConstNotionalCrossCurrencySwapEngine(
+        domestic_currency,
+        domestic_discount_curve,
+        foreign_currency,
+        foreign_discount_curve,
+        spot_fx,
+        include_settlement_date_flows,
+        settlement_date,
+        npv_date,
+        spot_fx_settle_date,
+    )
 
 
 @xlo.func(
