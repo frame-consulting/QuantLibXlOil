@@ -59,20 +59,35 @@ QL_CALENDAR = {
     "AUSTRIAN SETTLEMENT": ql.Austria,
     "BOTSWANA": ql.Botswana,
     "BRAZIL": ql.Brazil,
+    "BRAZIL_EXCHANGE": lambda: ql.Brazil(ql.Brazil.Exchange),
+    "BOVESPA": lambda: ql.Brazil(ql.Brazil.Exchange),
     "CANADA": ql.Canada,
+    "CANADA_TSX": lambda: ql.Canada(ql.Canada.TSX),
+    "TSX": lambda: ql.Canada(ql.Canada.TSX),
     "CHILE": ql.Chile,
     "SANTIAGO STOCK EXCHANGE": ql.Chile,
     "CHINA": ql.China,
+    "CHINA_IB": lambda: ql.China(ql.China.IB),
+    "CHINA INTER BANK MARKET": lambda: ql.China(ql.China.IB),
     "SHANGHAI STOCK EXCHANGE": ql.China,
     "CROATIA": ql.Croatia,
+    "ZAGREB STOCK EXCHANGE": ql.Croatia,
     "CZECHREPUBLIC": ql.CzechRepublic,
     "PRAGUE STOCK EXCHANGE": ql.CzechRepublic,
     "DENMARK": ql.Denmark,
     "FINLAND": ql.Finland,
     "FRANCE": ql.France,
     "FRENCH SETTLEMENT": ql.France,
+    "FRANCE_EXCHANGE": lambda: ql.France(ql.France.Exchange),
+    "PARIS STOCK EXCHANGE": lambda: ql.France(ql.France.Exchange),
     "GERMANY": ql.Germany,
     "FRANKFURT STOCK EXCHANGE": ql.Germany,
+    "GERMANY_SETTLEMENT": lambda: ql.Germany(ql.Germany.Settlement),
+    "GERMAN SETTLEMENT": lambda: ql.Germany(ql.Germany.Settlement),
+    "GERMANY_XETRA": lambda: ql.Germany(ql.Germany.Xetra),
+    "XETRA": lambda: ql.Germany(ql.Germany.Xetra),
+    "GERMANY_EUREX": lambda: ql.Germany(ql.Germany.Eurex),
+    "EUREX": lambda: ql.Germany(ql.Germany.Eurex),
     "HONGKONG": ql.HongKong,
     "HONG KONG STOCK EXCHANGE": ql.HongKong,
     "HUNGARY": ql.Hungary,
@@ -84,35 +99,54 @@ QL_CALENDAR = {
     "JAKARTA STOCK EXCHANGE": ql.Indonesia,
     "ISRAEL": ql.Israel,
     "TEL AVIV STOCK EXCHANGE": ql.Israel,
-    "ISRAEL TELBOR": lambda: ql.Israel(ql.Israel.Telbor),
+    "ISRAEL_TASE": lambda: ql.Israel(ql.Israel.TASE),
+    "ISRAEL_SHIR": lambda: ql.Israel(ql.Israel.SHIR),
+    "SHIR FIXING CALENDAR": lambda: ql.Israel(ql.Israel.SHIR),
+    "ISRAEL_TELBOR": lambda: ql.Israel(ql.Israel.Telbor),
+    "TELBOR FIXING CALENDAR": lambda: ql.Israel(ql.Israel.Telbor),
     "ITALY": ql.Italy,
     "ITALIAN SETTLEMENT": ql.Italy,
+    "ITALY_EXCHANGE": lambda: ql.Italy(ql.Italy.Exchange),
+    "MILAN STOCK EXCHANGE": lambda: ql.Italy(ql.Italy.Exchange),
     "JAPAN": ql.Japan,
     "MEXICO": ql.Mexico,
     "MEXICAN STOCK EXCHANGE": ql.Mexico,
     "MALTA": ql.Malta,
+    "MALTA STOCK EXCHANGE": ql.Malta,
     "MONTENEGRO": ql.Montenegro,
-    "NEWZEALAND": ql.NewZealand,
+    "MONTENEGRO STOCK EXCHANGE": ql.Montenegro,
     "NORTHMACEDONIA": ql.NorthMacedonia,
+    "MACEDONIAN STOCK EXCHANGE": ql.NorthMacedonia,
+    "NEWZEALAND": ql.NewZealand,
     "NEW ZEALAND (WELLINGTON)": ql.NewZealand,
+    "NEWZEALAND_AUCKLAND": lambda: ql.NewZealand(ql.NewZealand.Auckland),
+    "NEW ZEALAND (AUCKLAND)": lambda: ql.NewZealand(ql.NewZealand.Auckland),
     "NORWAY": ql.Norway,
     "POLAND": ql.Poland,
     "POLAND SETTLEMENT": ql.Poland,
+    "POLAND_WSE": lambda: ql.Poland(ql.Poland.WSE),
+    "WARSAW STOCK EXCHANGE": lambda: ql.Poland(ql.Poland.WSE),
     "ROMANIA": ql.Romania,
     "BUCHAREST STOCK EXCHANGE": ql.Romania,
     "RUSSIA": ql.Russia,
     "RUSSIAN SETTLEMENT": ql.Russia,
+    "RUSSIA_MOEX": lambda: ql.Russia(ql.Russia.MOEX),
+    "MOSCOW EXCHANGE": lambda: ql.Russia(ql.Russia.MOEX),
     "SAUDIARABIA": ql.SaudiArabia,
     "SERBIA": ql.Serbia,
+    "BELGRADE STOCK EXCHANGE": ql.Serbia,
     "SINGAPORE": ql.Singapore,
     "SINGAPORE EXCHANGE": ql.Singapore,
     "SLOVAKIA": ql.Slovakia,
     "BRATISLAVA STOCK EXCHANGE": ql.Slovakia,
     "SLOVENIA": ql.Slovenia,
+    "LJUBLJANA STOCK EXCHANGE": ql.Slovenia,
     "SOUTHAFRICA": ql.SouthAfrica,
     "SOUTH AFRICA": ql.SouthAfrica,
     "SOUTHKOREA": ql.SouthKorea,
     "SOUTH-KOREA EXCHANGE": ql.SouthKorea,
+    "SOUTHKOREA_SETTLEMENT": lambda: ql.SouthKorea(ql.SouthKorea.Settlement),
+    "SOUTH-KOREAN SETTLEMENT": lambda: ql.SouthKorea(ql.SouthKorea.Settlement),
     "SWEDEN": ql.Sweden,
     "SWITZERLAND": ql.Switzerland,
     "TAIWAN": ql.Taiwan,
@@ -126,6 +160,7 @@ QL_CALENDAR = {
     "UNITEDSTATES": lambda: ql.UnitedStates(ql.UnitedStates.NYSE),
     "UNITEDKINGDOM": ql.UnitedKingdom,
     "UZBEKISTAN": ql.Uzbekistan,
+    "UZBEKISTAN STOCK EXCHANGE": ql.Uzbekistan,
     "NULLCALENDAR": ql.NullCalendar,
     "WEEKENDSONLY": ql.WeekendsOnly,
     "BESPOKECALENDAR": ql.BespokeCalendar,
@@ -395,7 +430,7 @@ def qlCalendarResetAddedAndRemovedHolidays(calendar: qCalendar, trigger=None) ->
     group=EXCEL_GROUP_NAME,
 )
 def qlCalendarAddedHolidays(calendar: qCalendar, trigger=None) -> list:
-    return list(calendar.addedHolidays())
+    return calendar.addedHolidays()
 
 
 @xlo.func(
@@ -404,7 +439,7 @@ def qlCalendarAddedHolidays(calendar: qCalendar, trigger=None) -> list:
     group=EXCEL_GROUP_NAME,
 )
 def qlCalendarRemovedHolidays(calendar: qCalendar, trigger=None) -> list:
-    return list(calendar.removedHolidays())
+    return calendar.removedHolidays()
 
 
 @xlo.func(
@@ -503,7 +538,7 @@ def qlCalendarBusinessDaysBetween(
 def qlCalendarHolidayList(
     calendar: qCalendar, from_date: qDate, to_date: qDate, trigger=None
 ) -> list:
-    return list(calendar.holidayList(from_date, to_date))
+    return calendar.holidayList(from_date, to_date)
 
 
 @xlo.func(
@@ -516,7 +551,7 @@ def qlCalendarHolidayList(
 def qlCalendarBusinessDayList(
     calendar: qCalendar, from_date: qDate, to_date: qDate, trigger=None
 ) -> list:
-    return list(calendar.businessDayList(from_date, to_date))
+    return calendar.businessDayList(from_date, to_date)
 
 
 @xlo.func(

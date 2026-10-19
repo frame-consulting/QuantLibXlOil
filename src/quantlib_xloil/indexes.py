@@ -811,7 +811,7 @@ def qlOvernightIndex(
 def qlAonia(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Aonia(projection_curve)
 
 
@@ -825,7 +825,7 @@ def qlAonia(
 def qlCdi(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Cdi(projection_curve)
 
 
@@ -839,7 +839,7 @@ def qlCdi(
 def qlCorra(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Corra(projection_curve)
 
 
@@ -853,7 +853,7 @@ def qlCorra(
 def qlDestr(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Destr(projection_curve)
 
 
@@ -867,7 +867,7 @@ def qlDestr(
 def qlEonia(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Eonia(projection_curve)
 
 
@@ -881,7 +881,7 @@ def qlEonia(
 def qlEstr(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Estr(projection_curve)
 
 
@@ -895,7 +895,7 @@ def qlEstr(
 def qlFedFunds(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.FedFunds(projection_curve)
 
 
@@ -909,7 +909,7 @@ def qlFedFunds(
 def qlKofr(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Kofr(projection_curve)
 
 
@@ -923,7 +923,7 @@ def qlKofr(
 def qlNzocr(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Nzocr(projection_curve)
 
 
@@ -937,7 +937,7 @@ def qlNzocr(
 def qlSaron(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Saron(projection_curve)
 
 
@@ -951,7 +951,7 @@ def qlSaron(
 def qlSofr(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Sofr(projection_curve)
 
 
@@ -965,7 +965,7 @@ def qlSofr(
 def qlSonia(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Sonia(projection_curve)
 
 
@@ -979,7 +979,7 @@ def qlSonia(
 def qlSwestr(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Swestr(projection_curve)
 
 
@@ -993,7 +993,7 @@ def qlSwestr(
 def qlTonar(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Tonar(projection_curve)
 
 
@@ -1005,7 +1005,7 @@ def qlTonar(
 def qlShir(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Shir(projection_curve)
 
 
@@ -1017,7 +1017,7 @@ def qlShir(
 def qlZaronia(
     projection_curve: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
     trigger=None,
-) -> ql.IborIndex:
+) -> ql.OvernightIndex:
     return ql.Zaronia(projection_curve)
 
 

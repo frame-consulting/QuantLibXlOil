@@ -446,7 +446,7 @@ def qlECBNextDate(date: qDate = ql.Date(), trigger=None) -> ql.Date:
     group=EXCEL_GROUP_NAME,
 )
 def qlECBNextDates(date: qDate = ql.Date(), trigger=None) -> list:
-    return list(ql.ECB.nextDates(date))
+    return ql.ECB.nextDates(date)
 
 
 @xlo.func(
@@ -474,7 +474,7 @@ def qlECBNextDateFromCode(
 def qlECBNextDatesFromCode(
     ecb_code: str, reference_date: qDate = ql.Date(), trigger=None
 ) -> list:
-    return list(ql.ECB.nextDates(ecb_code, reference_date))
+    return ql.ECB.nextDates(ecb_code, reference_date)
 
 
 @xlo.func(

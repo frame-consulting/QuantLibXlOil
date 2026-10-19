@@ -197,3 +197,343 @@ def qlLevenbergMarquardt(
     trigger=None,
 ) -> ql.LevenbergMarquardt:
     return ql.LevenbergMarquardt(epsfcn, xtol, gtol, use_cost_functions_jacobian)
+
+
+# 1D Solvers
+
+# TODO write excel tests
+
+
+@xlo.func(
+    help="Create a QuantLib Brent solver.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlBrent(trigger=None) -> ql.Brent:
+    return ql.Brent()
+
+
+@xlo.func(
+    help="Create a QuantLib Bisection solver.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlBisection(trigger=None) -> ql.Bisection:
+    return ql.Bisection()
+
+
+@xlo.func(
+    help="Create a QuantLib FalsePosition solver.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlFalsePosition(trigger=None) -> ql.FalsePosition:
+    return ql.FalsePosition()
+
+
+@xlo.func(
+    help="Create a QuantLib Ridder solver.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlRidder(trigger=None) -> ql.Ridder:
+    return ql.Ridder()
+
+
+@xlo.func(
+    help="Create a QuantLib Secant solver.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSecant(trigger=None) -> ql.Secant:
+    return ql.Secant()
+
+
+@xlo.func(
+    help="Create a QuantLib Newton solver.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNewton(trigger=None) -> ql.Newton:
+    return ql.Newton()
+
+
+@xlo.func(
+    help="Create a QuantLib NewtonSafe solver.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlNewtonSafe(trigger=None) -> ql.NewtonSafe:
+    return ql.NewtonSafe()
+
+
+# Additional Optimization Methods
+
+
+@xlo.func(
+    help="Create a QuantLib ConjugateGradient optimization method.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlConjugateGradient(trigger=None) -> ql.ConjugateGradient:
+    return ql.ConjugateGradient()
+
+
+@xlo.func(
+    help="Create a QuantLib Simplex optimization method.",
+    args={
+        "lambda": "The reflection coefficient.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSimplex(lambda_: float = 0.5, trigger=None) -> ql.Simplex:
+    return ql.Simplex(lambda_)
+
+
+@xlo.func(
+    help="Create a QuantLib SteepestDescent optimization method.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlSteepestDescent(trigger=None) -> ql.SteepestDescent:
+    return ql.SteepestDescent()
+
+
+@xlo.func(
+    help="Create a QuantLib BFGS optimization method.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlBFGS(trigger=None) -> ql.BFGS:
+    return ql.BFGS()
+
+
+@xlo.func(
+    help="Create a QuantLib DifferentialEvolution optimization method.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlDifferentialEvolution(trigger=None) -> ql.DifferentialEvolution:
+    return ql.DifferentialEvolution()
+
+
+# Simulated Annealing Helper Classes
+
+
+@xlo.func(
+    help="Create a QuantLib SamplerGaussian.",
+    args={
+        "seed": "The random seed.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSamplerGaussian(seed: int = 0, trigger=None) -> ql.SamplerGaussian:
+    return ql.SamplerGaussian(seed)
+
+
+@xlo.func(
+    help="Create a QuantLib SamplerLogNormal.",
+    args={
+        "seed": "The random seed.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSamplerLogNormal(seed: int = 0, trigger=None) -> ql.SamplerLogNormal:
+    return ql.SamplerLogNormal(seed)
+
+
+@xlo.func(
+    help="Create a QuantLib SamplerMirrorGaussian.",
+    args={
+        "lower": "Array of lower bounds.",
+        "upper": "Array of upper bounds.",
+        "seed": "The random seed.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSamplerMirrorGaussian(
+    lower: xlo.Array(dims=1),
+    upper: xlo.Array(dims=1),
+    seed: int = 0,
+    trigger=None,
+) -> ql.SamplerMirrorGaussian:
+    return ql.SamplerMirrorGaussian(
+        ql.Array(to_float_list(lower)),
+        ql.Array(to_float_list(upper)),
+        seed,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib ProbabilityBoltzmannDownhill.",
+    args={
+        "seed": "The random seed.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlProbabilityBoltzmannDownhill(
+    seed: int = 0, trigger=None
+) -> ql.ProbabilityBoltzmannDownhill:
+    return ql.ProbabilityBoltzmannDownhill(seed)
+
+
+@xlo.func(
+    help="Create a QuantLib TemperatureExponential.",
+    args={
+        "initial_temp": "The initial temperature.",
+        "dimension": "The dimension.",
+        "power": "The power factor.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlTemperatureExponential(
+    initial_temp: float,
+    dimension: int,
+    power: float = 0.95,
+    trigger=None,
+) -> ql.TemperatureExponential:
+    return ql.TemperatureExponential(initial_temp, dimension, power)
+
+
+@xlo.func(
+    help="Create a QuantLib ReannealingTrivial.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlReannealingTrivial(trigger=None) -> ql.ReannealingTrivial:
+    return ql.ReannealingTrivial()
+
+
+# Simulated Annealing ResetScheme Enum
+
+QL_RESET_SCHEME = {
+    "NO_RESET_SCHEME": ql.GaussianSimulatedAnnealing.NoResetScheme,
+    "RESET_TO_BEST_POINT": ql.GaussianSimulatedAnnealing.ResetToBestPoint,
+    "RESET_TO_ORIGIN": ql.GaussianSimulatedAnnealing.ResetToOrigin,
+}
+
+
+def _qResetScheme(s: str) -> int:
+    return enum_value(s, QL_RESET_SCHEME)
+
+
+@xlo.converter()
+def qResetScheme(s: str) -> int:
+    return _qResetScheme(s)
+
+
+# Simulated Annealing Optimization Methods
+
+
+@xlo.func(
+    help="Create a QuantLib GaussianSimulatedAnnealing optimization method.",
+    args={
+        "sampler": "The Gaussian sampler.",
+        "probability": "The probability function.",
+        "temperature": "The temperature schedule.",
+        "reannealing": "The reannealing strategy.",
+        "start_temperature": "The starting temperature.",
+        "end_temperature": "The ending temperature.",
+        "re_anneal_steps": "The number of re-annealing steps.",
+        "reset_scheme": "The reset scheme.",
+        "reset_steps": "The number of reset steps.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlGaussianSimulatedAnnealing(
+    sampler: ql.SamplerGaussian,
+    probability: ql.ProbabilityBoltzmannDownhill,
+    temperature: ql.TemperatureExponential,
+    reannealing: ql.ReannealingTrivial = None,
+    start_temperature: float = 200.0,
+    end_temperature: float = 0.01,
+    re_anneal_steps: int = 50,
+    reset_scheme: qResetScheme = ql.GaussianSimulatedAnnealing.ResetToBestPoint,
+    reset_steps: int = 150,
+    trigger=None,
+) -> ql.GaussianSimulatedAnnealing:
+    if reannealing is None:
+        reannealing = ql.ReannealingTrivial()
+    return ql.GaussianSimulatedAnnealing(
+        sampler,
+        probability,
+        temperature,
+        reannealing,
+        start_temperature,
+        end_temperature,
+        re_anneal_steps,
+        reset_scheme,
+        reset_steps,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib MirrorGaussianSimulatedAnnealing optimization method.",
+    args={
+        "sampler": "The mirror Gaussian sampler.",
+        "probability": "The probability function.",
+        "temperature": "The temperature schedule.",
+        "reannealing": "The reannealing strategy.",
+        "start_temperature": "The starting temperature.",
+        "end_temperature": "The ending temperature.",
+        "re_anneal_steps": "The number of re-annealing steps.",
+        "reset_scheme": "The reset scheme.",
+        "reset_steps": "The number of reset steps.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMirrorGaussianSimulatedAnnealing(
+    sampler: ql.SamplerMirrorGaussian,
+    probability: ql.ProbabilityBoltzmannDownhill,
+    temperature: ql.TemperatureExponential,
+    reannealing: ql.ReannealingTrivial = None,
+    start_temperature: float = 200.0,
+    end_temperature: float = 0.01,
+    re_anneal_steps: int = 50,
+    reset_scheme: qResetScheme = ql.MirrorGaussianSimulatedAnnealing.ResetToBestPoint,
+    reset_steps: int = 150,
+    trigger=None,
+) -> ql.MirrorGaussianSimulatedAnnealing:
+    if reannealing is None:
+        reannealing = ql.ReannealingTrivial()
+    return ql.MirrorGaussianSimulatedAnnealing(
+        sampler,
+        probability,
+        temperature,
+        reannealing,
+        start_temperature,
+        end_temperature,
+        re_anneal_steps,
+        reset_scheme,
+        reset_steps,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib LogNormalSimulatedAnnealing optimization method.",
+    args={
+        "sampler": "The log-normal sampler.",
+        "probability": "The probability function.",
+        "temperature": "The temperature schedule.",
+        "reannealing": "The reannealing strategy.",
+        "start_temperature": "The starting temperature.",
+        "end_temperature": "The ending temperature.",
+        "re_anneal_steps": "The number of re-annealing steps.",
+        "reset_scheme": "The reset scheme.",
+        "reset_steps": "The number of reset steps.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlLogNormalSimulatedAnnealing(
+    sampler: ql.SamplerLogNormal,
+    probability: ql.ProbabilityBoltzmannDownhill,
+    temperature: ql.TemperatureExponential,
+    reannealing: ql.ReannealingTrivial = None,
+    start_temperature: float = 10.0,
+    end_temperature: float = 0.01,
+    re_anneal_steps: int = 50,
+    reset_scheme: qResetScheme = ql.LogNormalSimulatedAnnealing.ResetToBestPoint,
+    reset_steps: int = 150,
+    trigger=None,
+) -> ql.LogNormalSimulatedAnnealing:
+    if reannealing is None:
+        reannealing = ql.ReannealingTrivial()
+    return ql.LogNormalSimulatedAnnealing(
+        sampler,
+        probability,
+        temperature,
+        reannealing,
+        start_temperature,
+        end_temperature,
+        re_anneal_steps,
+        reset_scheme,
+        reset_steps,
+    )

@@ -1,3 +1,5 @@
+from operator import index
+
 import QuantLib as ql
 import pytest
 
@@ -683,8 +685,8 @@ def test_qlYoYInflationIndexRatio():
 
 def test_qlYoYInflationIndexInterpolated():
     index = _yoy_inflation_index()
-    with pytest.raises(NotImplementedError, match="no longer exposes"):
-        qlYoYInflationIndexInterpolated(index)
+    qlYoYInflationIndexInterpolated(index)
+    assert qlYoYInflationIndexInterpolated(index) == False
 
 
 def test_qlYoYInflationIndexUnderlyingIndex():

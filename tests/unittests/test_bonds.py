@@ -262,7 +262,7 @@ def test_callable_bond():
     start = qlDate(2025, 1, 2)
     end = qlDate(2032, 1, 2)
     schedule = _fixed_schedule(start, end)
-    day_counter = qlDayCounter("ACTUAL365FIXED")
+    day_counter = qlDayCounter("30/360")
 
     callability = qlCallability(
         ql.BondPrice(101.0, ql.BondPrice.Clean),

@@ -6,7 +6,7 @@ from typing import Optional
 from .calendars import qBusinessDayConvention, qCalendar, QL_BUSINESSDAYCONVENTION
 from .cashflows import qRateAveragingType, QL_RATE_AVERAGING_TYPE
 from .config import EXCEL_GROUP_NAME
-from .currencies import qCurrency
+from .currencies import qCurrency, _to_currency_list
 from .date import qDate, qFrequency, qPeriod, QL_FREQUENCY
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
@@ -2488,7 +2488,7 @@ def qlConstNotionalCrossCurrencySwapN(
     return ql.ConstNotionalCrossCurrencySwap(
         _to_ql_legs(legs),
         to_bool_list(payer),
-        ql.CurrencyVector(to_object_list(currencies, ql.Currency)),
+        _to_currency_list(currencies),
     )
 
 

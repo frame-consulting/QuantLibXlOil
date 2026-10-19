@@ -725,9 +725,7 @@ def qlYoYInflationIndexRatio(index: ql.YoYInflationIndex, trigger=None) -> bool:
     group=EXCEL_GROUP_NAME,
 )
 def qlYoYInflationIndexInterpolated(index: ql.YoYInflationIndex, trigger=None) -> bool:
-    raise NotImplementedError(
-        "QuantLib 1.43 no longer exposes YoYInflationIndex.interpolated()."
-    )
+    return index.interpolated()
 
 
 # ToDo

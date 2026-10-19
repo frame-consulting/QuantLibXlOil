@@ -83,13 +83,30 @@ def test_qlCalendar_Chile():
 def test_qlCalendar_new_143_calendars():
     for name in (
         "Croatia",
-        "Israel Telbor",
+        "Israel_Telbor",
         "Malta",
         "Montenegro",
         "NorthMacedonia",
         "Serbia",
         "Slovenia",
         "Uzbekistan",
+    ):
+        assert qlCalendar(name) is not None
+
+
+def test_qlCalendar_missing_calendars():
+    for name in (
+        "China_ib",
+        "Germany_Settlement",
+        "Germany_Eurex",
+        "Germany_Xetra",
+        "Israel_Tase",
+        "Israel_Shir",
+        "Italy_Exchange",
+        "NewZealand_Auckland",
+        "Poland_WSE",
+        "Russia_MOEX",
+        "SouthKorea_Settlement",
     ):
         assert qlCalendar(name) is not None
 
@@ -322,7 +339,7 @@ def test_qlCalendarHolidayList():
     date_from = qlDate(2026, 1, 1)
     date_to = qlDate(2026, 1, 5)
     holidays = qlCalendarHolidayList(calendar, date_from, date_to)
-    assert holidays == [qlDate(2026, 1, 1)]
+    assert holidays == (qlDate(2026, 1, 1),)
 
 
 def test_qlCalendarBusinessDayList():
@@ -330,7 +347,7 @@ def test_qlCalendarBusinessDayList():
     date_from = qlDate(2026, 1, 1)
     date_to = qlDate(2026, 1, 5)
     business_days = qlCalendarBusinessDayList(calendar, date_from, date_to)
-    assert business_days == [qlDate(2026, 1, 2), qlDate(2026, 1, 5)]
+    assert business_days == (qlDate(2026, 1, 2), qlDate(2026, 1, 5))
 
 
 def test_qlCalendarAddHoliday():

@@ -2,9 +2,11 @@ import QuantLib as ql
 import pytest
 
 from quantlib_xloil.ratehelpers import (
+    qBondPriceType,
     qFuturesType,
     qPillarChoice,
     qQuoteHandle,
+    qlBondHelper,
     qlDepositRateHelper,
     qlDepositRateHelper2,
     qlDepositRateHelper3,
@@ -57,6 +59,7 @@ from quantlib_xloil.indexes import (
     qlUSDLibor,
     qlUsdLiborSwapIsdaFixAm,
 )
+from quantlib_xloil.bonds import qlFixedRateBond
 from quantlib_xloil.scheduler import qDateGenerationRule
 from quantlib_xloil.termstructures import qCompounding, qlFlatForward
 
@@ -358,3 +361,39 @@ def test_overnight_and_sofr_future_helpers():
         overnight
     ) == pytest.approx(0.0)
     assert isinstance(sofr, ql.SofrFutureRateHelper)
+
+
+def test_qlBondHelper_constructor_and_accessors():
+    _set_eval_date()
+    eval_date = qlDate(2024, 1, 2)
+
+    schedule = ql.Schedule(
+        eval_date,
+        qlDate(2029, 1, 2),
+        ql.Period(ql.Semiannual),
+        qlCalendar("TARGET"),
+        ql.Unadjusted,
+        ql.Unadjusted,
+        ql.DateGeneration.Backward,
+        False,
+    )
+
+    bond = qlFixedRateBond(
+        2,
+        100.0,
+        schedule,
+        [0.05],
+        qlDayCounter("ACTUAL365FIXED"),
+    )
+
+    helper_default = qlBondHelper(101.5, bond)
+    helper_clean = qlBondHelper(101.5, bond, qBondPriceType.__wrapped__("CLEAN"))
+    helper_dirty = qlBondHelper(102.0, bond, qBondPriceType.__wrapped__("DIRTY"))
+
+    assert isinstance(helper_default, ql.BondHelper)
+    assert isinstance(helper_clean, ql.BondHelper)
+    assert isinstance(helper_dirty, ql.BondHelper)
+
+    assert qlRateHelperQuote(helper_default).value() == pytest.approx(101.5)
+    assert qlRateHelperQuote(helper_clean).value() == pytest.approx(101.5)
+    assert qlRateHelperQuote(helper_dirty).value() == pytest.approx(102.0)

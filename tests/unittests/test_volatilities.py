@@ -19,33 +19,49 @@ from quantlib_xloil.volatilities import (
     qlBlackVolTermStructureSmileSectionFromTime,
     qlConstantOptionletVolatility,
     qlConstantSwaptionVolatility,
+    qlCubicInterpolatedSmileSection,
+    qlFlatSmileSection,
+    qlFlatSmileSection2,
     qlLinearInterpolatedSmileSection,
     qlLocalVolTermStructureLocalVol,
     qlLocalVolTermStructureLocalVolFromTime,
+    qlMonotonicCubicInterpolatedSmileSection,
     qlOptionletVolatilityStructureBlackVariance,
     qlOptionletVolatilityStructureBlackVarianceFromTime,
     qlOptionletVolatilityStructureVolatility,
     qlOptionletVolatilityStructureVolatilityFromTime,
+    qlSmileSectionAtmLevel,
+    qlSmileSectionDayCounter,
+    qlSmileSectionDensity,
+    qlSmileSectionDigitalOptionPrice,
+    qlSmileSectionExerciseDate,
+    qlSmileSectionExerciseTime,
+    qlSmileSectionMaxStrike,
+    qlSmileSectionMinStrike,
+    qlSmileSectionOptionPrice,
+    qlSmileSectionReferenceDate,
+    qlSmileSectionRNDCalculator,
+    qlSmileSectionRNDCalculatorCDF,
+    qlSmileSectionRNDCalculatorInverseCDF,
+    qlSmileSectionRNDCalculatorPDF,
+    qlSmileSectionShift,
+    qlSmileSectionVariance,
+    qlSmileSectionVega,
+    qlSmileSectionVolatility,
+    qlSmileSectionVolatility2,
+    qlSmileSectionVolatilityType,
+    qlSplineCubicInterpolatedSmileSection,
     qlSwaptionVolatilityStructureBlackVariance,
     qlSwaptionVolatilityStructureBlackVarianceFromTime,
     qlSwaptionVolatilityStructureOptionDateFromTenor,
     qlSwaptionVolatilityStructureShift,
     qlSwaptionVolatilityStructureShiftFromTime,
+    qlSwaptionVolatilityStructureShiftFromTime2,
     qlSwaptionVolatilityStructureSmileSection,
     qlSwaptionVolatilityStructureSmileSectionFromTime,
+    qlSwaptionVolatilityStructureSmileSectionFromTime2,
     qlSwaptionVolatilityStructureVolatility,
     qlSwaptionVolatilityStructureVolatilityFromTime,
-    qlSmileSectionAtmLevel,
-    qlSmileSectionDensity,
-    qlSmileSectionMaxStrike,
-    qlSmileSectionMinStrike,
-    qlSmileSectionOptionPrice,
-    qlSmileSectionRNDCalculator,
-    qlSmileSectionRNDCalculatorCDF,
-    qlSmileSectionRNDCalculatorInverseCDF,
-    qlSmileSectionRNDCalculatorPDF,
-    qlSmileSectionVariance,
-    qlSmileSectionVolatility,
     qlSwaptionVolatilityMatrix,
     qVolatilityType,
 )
@@ -95,7 +111,9 @@ def test_black_volatility_smile_and_nullable_atm_level():
     assert qlBlackVolTermStructureAtmLevel(handle, 1.0) is None
     assert qlSmileSectionVolatility(smile_by_time, 100.0) == pytest.approx(0.20)
     assert qlSmileSectionVariance(smile_by_time, 100.0) == pytest.approx(0.04)
-    assert qlSmileSectionMinStrike(smile_by_time) < qlSmileSectionMaxStrike(smile_by_time)
+    assert qlSmileSectionMinStrike(smile_by_time) < qlSmileSectionMaxStrike(
+        smile_by_time
+    )
     assert qlSmileSectionAtmLevel(smile_by_time) == ql.nullDouble()
 
 
@@ -363,7 +381,7 @@ def test_qlSwaptionVolatilityStructure_shift():
         option_date=qlDate(2024, 7, 2),
         swap_tenor=ql.Period("5Y"),
     )
-    shift_by_time = qlSwaptionVolatilityStructureShiftFromTime(
+    shift_by_time = qlSwaptionVolatilityStructureShiftFromTime2(
         handle, option_time=0.5, swap_length=5.0
     )
 
@@ -379,7 +397,7 @@ def test_qlSwaptionVolatilityStructure_smile_section():
         option_date=qlDate(2024, 7, 2),
         swap_tenor=qlPeriod(5, ql.Years),
     )
-    smile_by_time = qlSwaptionVolatilityStructureSmileSectionFromTime(
+    smile_by_time = qlSwaptionVolatilityStructureSmileSectionFromTime2(
         handle, option_time=0.5, swap_length=5.0
     )
 
@@ -437,3 +455,160 @@ def test_qlSwaptionVolatilityMatrix_creates_handle_and_interpolates():
 
     assert vol_1y_2y == pytest.approx(vols[0, 0], rel=1e-4)
     assert vol_2y_5y == pytest.approx(vols[1, 1], rel=1e-4)
+
+
+# SmileSection property tests
+
+
+def _create_test_smile_section():
+    handle = _constant_vol_handle(0.20)
+    return qlBlackVolTermStructureSmileSection(handle, qlDate(2025, 1, 2))
+
+
+def _create_test_smile_section_with_shift():
+    return qlLinearInterpolatedSmileSection(
+        expiry_time=1.0,
+        strikes=[80.0, 90.0, 100.0, 110.0, 120.0],
+        standard_deviations=[0.18, 0.19, 0.20, 0.21, 0.22],
+        atm_level=100.0,
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+        volatility_type=qVolatilityType.__wrapped__("SHIFTEDLOGNORMAL"),
+        shift=0.02,
+        flat_strike_extrapolation=True,
+    )
+
+
+def test_qlSmileSectionExerciseDate_returns_date():
+    smile = _create_test_smile_section()
+    exercise_date = qlSmileSectionExerciseDate(smile)
+    assert isinstance(exercise_date, ql.Date)
+
+
+def test_qlSmileSectionExerciseTime_returns_time():
+    smile = _create_test_smile_section()
+    exercise_time = qlSmileSectionExerciseTime(smile)
+    assert isinstance(exercise_time, float)
+
+
+def test_qlSmileSectionVolatilityType_returns_volatility_type_enum():
+    smile = _create_test_smile_section_with_shift()
+    vol_type = qlSmileSectionVolatilityType(smile)
+    assert vol_type in [ql.Normal, ql.ShiftedLognormal]
+
+
+def test_qlSmileSectionShift_returns_shift_value():
+    shift = 0.02
+    smile = _create_test_smile_section_with_shift()
+    returned_shift = qlSmileSectionShift(smile)
+    assert returned_shift == pytest.approx(shift)
+
+
+def test_qlSmileSectionDayCounter_returns_day_counter():
+    smile = _create_test_smile_section()
+    day_counter = qlSmileSectionDayCounter(smile)
+    assert isinstance(day_counter, ql.DayCounter)
+
+
+def test_qlSmileSectionVolatility2_returns_volatility():
+    smile = _create_test_smile_section()
+    strike = 100.0
+    volatility = qlSmileSectionVolatility2(
+        smile,
+        strike=strike,
+        volatility_type=qVolatilityType.__wrapped__("SHIFTEDLOGNORMAL"),
+        shift=0.02,
+    )
+    assert isinstance(volatility, float)
+    assert volatility > 0.0
+
+
+def test_qlSmileSectionDigitalOptionPrice_returns_positive_price():
+    smile = _create_test_smile_section_with_shift()
+    strike = 100.0
+    price = qlSmileSectionDigitalOptionPrice(
+        smile,
+        strike=strike,
+        option_type=ql.Option.Call,
+        discount=1.0,
+        gap=1e-4,
+    )
+    assert price > 0.0
+
+
+def test_qlSmileSectionVega_returns_positive_vega():
+    smile = _create_test_smile_section_with_shift()
+    strike = 100.0
+    vega = qlSmileSectionVega(smile, strike=strike, discount=1.0)
+    assert vega > 0.0
+
+
+# Flat Smile Section tests
+
+
+def test_qlFlatSmileSection_creates_valid_smile_with_date():
+    date = qlDate(2027, 1, 2)
+    vol = 0.20
+    smile = qlFlatSmileSection(
+        date=date,
+        volatility=vol,
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+    )
+    assert isinstance(smile, ql.SmileSection)
+    assert qlSmileSectionVolatility(smile, 100.0) == pytest.approx(vol)
+
+
+def test_qlFlatSmileSection2_creates_valid_smile_with_time():
+    expiry_time = 1.0
+    vol = 0.20
+    smile = qlFlatSmileSection2(
+        expiry_time=expiry_time,
+        volatility=vol,
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+    )
+    assert isinstance(smile, ql.SmileSection)
+    assert qlSmileSectionVolatility(smile, 100.0) == pytest.approx(vol)
+
+
+# Cubic Interpolated Smile Section tests
+
+
+def test_qlCubicInterpolatedSmileSection_creates_valid_smile():
+    smile = qlCubicInterpolatedSmileSection(
+        expiry_time=1.0,
+        strikes=[80.0, 90.0, 100.0, 110.0, 120.0],
+        standard_deviations=[0.18, 0.19, 0.20, 0.21, 0.22],
+        atm_level=100.0,
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+    )
+    assert isinstance(smile, ql.SmileSection)
+    assert qlSmileSectionVolatility(smile, 100.0) == pytest.approx(0.20)
+    assert qlSmileSectionMinStrike(smile) == pytest.approx(80.0)
+    assert qlSmileSectionMaxStrike(smile) == pytest.approx(120.0)
+
+
+def test_qlMonotonicCubicInterpolatedSmileSection_creates_valid_smile():
+    smile = qlMonotonicCubicInterpolatedSmileSection(
+        expiry_time=1.0,
+        strikes=[80.0, 90.0, 100.0, 110.0, 120.0],
+        standard_deviations=[0.18, 0.19, 0.20, 0.21, 0.22],
+        atm_level=100.0,
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+    )
+    assert isinstance(smile, ql.SmileSection)
+    assert qlSmileSectionVolatility(smile, 100.0) == pytest.approx(0.20)
+    assert qlSmileSectionMinStrike(smile) == pytest.approx(80.0)
+    assert qlSmileSectionMaxStrike(smile) == pytest.approx(120.0)
+
+
+def test_qlSplineCubicInterpolatedSmileSection_creates_valid_smile():
+    smile = qlSplineCubicInterpolatedSmileSection(
+        expiry_time=1.0,
+        strikes=[80.0, 90.0, 100.0, 110.0, 120.0],
+        standard_deviations=[0.18, 0.19, 0.20, 0.21, 0.22],
+        atm_level=100.0,
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+    )
+    assert isinstance(smile, ql.SmileSection)
+    assert qlSmileSectionVolatility(smile, 100.0) == pytest.approx(0.20)
+    assert qlSmileSectionMinStrike(smile) == pytest.approx(80.0)
+    assert qlSmileSectionMaxStrike(smile) == pytest.approx(120.0)

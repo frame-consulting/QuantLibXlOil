@@ -1274,6 +1274,7 @@ def qlSofrFutureRateHelper(
     )
 
 
+# TODO problem with fixed_frequency equal NoFrequency and default  vaue for fixed_day_count (DayCounter())
 @xlo.func(
     help="Create a QuantLib MultipleResetsSwapRateHelper object for rate curve building with multiple resets per coupon.",
     args={

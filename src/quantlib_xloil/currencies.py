@@ -129,6 +129,10 @@ def qCurrency(code: str) -> ql.Currency:
     return _qCurrency(code)
 
 
+def _to_currency_list(values) -> list[ql.Currency]:
+    return [_qCurrency(v) for v in values]
+
+
 @xlo.func(
     help="Create a QuantLib Currency object.",
     args={
