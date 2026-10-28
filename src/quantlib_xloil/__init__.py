@@ -20,6 +20,7 @@ from quantlib_xloil.daycounters import *
 from quantlib_xloil.defaultprobability import *
 from quantlib_xloil.dividends import *
 from quantlib_xloil.exercise import *
+from quantlib_xloil.fra import *
 from quantlib_xloil.futures import *
 from quantlib_xloil.fxforward import *
 from quantlib_xloil.gaussian1dmodel import *
@@ -29,6 +30,7 @@ from quantlib_xloil.indexes import *
 from quantlib_xloil.inflation import *
 from quantlib_xloil.instruments import *
 from quantlib_xloil.localvolatilities import *
+from quantlib_xloil.multicurve import *
 from quantlib_xloil.options import *
 from quantlib_xloil.optimizers import *
 from quantlib_xloil.parameter import *
@@ -45,6 +47,7 @@ from quantlib_xloil.swap import *
 from quantlib_xloil.termstructures import *
 from quantlib_xloil.swaption import *
 from quantlib_xloil.volatilities import *
+from quantlib_xloil.varianceswaps import *
 
 from quantlib_xloil.extras.alias_repository import *
 from quantlib_xloil.extras.cashflows_analysis import *

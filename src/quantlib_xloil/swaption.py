@@ -149,6 +149,42 @@ def qlSwaptionUnderlying(swaption: ql.Swaption, trigger=None):
 
 
 @xlo.func(
+    help="Return the strike reported by a swaption pricing engine.",
+    args={"swaption": "The QuantLib Swaption."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionStrike(swaption: ql.Swaption, trigger=None) -> float:
+    return swaption.strike()
+
+
+@xlo.func(
+    help="Return the at-the-money forward rate reported by a swaption pricing engine.",
+    args={"swaption": "The QuantLib Swaption."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionAtmForward(swaption: ql.Swaption, trigger=None) -> float:
+    return swaption.atmForward()
+
+
+@xlo.func(
+    help="Return the underlying swap length reported by a swaption pricing engine.",
+    args={"swaption": "The QuantLib Swaption."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionSwapLength(swaption: ql.Swaption, trigger=None) -> float:
+    return swaption.swapLength()
+
+
+@xlo.func(
+    help="Return the standard deviation reported by a swaption pricing engine.",
+    args={"swaption": "The QuantLib Swaption."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionStdDev(swaption: ql.Swaption, trigger=None) -> float:
+    return swaption.stdDev()
+
+
+@xlo.func(
     help="Calculate the implied volatility for a swaption.",
     args={
         "swaption": "QuantLib Swaption object.",

@@ -120,6 +120,35 @@ def qlEndCriteria(
 
 
 @xlo.func(
+    help="Create a QuantLib Cmaes optimization method.",
+    args={
+        "population_size": "The population size.",
+        "sigma": "The initial standard deviation.",
+        "seed": "The random-number generator seed.",
+        "lower_bound": "The lower bounds for the optimization variables.",
+        "upper_bound": "The upper bounds for the optimization variables.",
+        "initial_mean": "The initial mean for the optimization variables.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlCmaes(
+    population_size: int = 0,
+    sigma: float = 0.3,
+    seed: int = 0,
+    lower_bound: xlo.Array(dims=1) = None,
+    upper_bound: xlo.Array(dims=1) = None,
+    initial_mean: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.Cmaes:
+    lower_bound_ = ql.Array(to_float_list([] if lower_bound is None else lower_bound))
+    upper_bound_ = ql.Array(to_float_list([] if upper_bound is None else upper_bound))
+    initial_mean_ = ql.Array(to_float_list([] if initial_mean is None else initial_mean))
+    return ql.Cmaes(
+        population_size, sigma, seed, lower_bound_, upper_bound_, initial_mean_
+    )
+
+
+@xlo.func(
     help="Check if a given end criteria type was succeeded.",
     args={
         "end_criteria": "The end criteria to check.",

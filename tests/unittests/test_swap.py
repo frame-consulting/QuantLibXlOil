@@ -1,6 +1,8 @@
 import QuantLib as ql
 import pytest
 
+import quantlib_xloil.swap as swap_wrappers
+
 from quantlib_xloil.calendars import qlCalendar
 from quantlib_xloil.date import qlDate
 from quantlib_xloil.swap import (
@@ -60,6 +62,8 @@ from quantlib_xloil.swap import (
     qlNonstandardSwapGearings,
     qlNonstandardSwapFloatingDayCount,
     qlNonstandardSwapPaymentConvention,
+    qlNonstandardSwapPaymentLag,
+    qlNonstandardSwapPaymentCalendar,
     qlNonstandardSwapFixedLeg,
     qlNonstandardSwapFloatingLeg,
     qlOvernightIndexedSwap,
@@ -253,8 +257,8 @@ def test_make_vanilla_swap_and_discounting_engine2():
         assert isinstance(swap, ql.VanillaSwap)
         assert abs(swap.NPV()) > 0.0
 
-        with pytest.raises(TypeError, match="Wrong number or type of arguments"):
-            qlDiscountingSwapEngine2(discount_curve)
+        default_engine = qlDiscountingSwapEngine2(discount_curve)
+        assert isinstance(default_engine, ql.DiscountingSwapEngine)
     finally:
         ql.Settings.instance().evaluationDate = original_eval
 
@@ -284,6 +288,8 @@ def test_nonstandard_swap_wrapper_accessors():
         [1.0] * n_float,
         [0.001] * n_float,
         ql.Actual360(),
+        payment_lag=2,
+        payment_calendar=qlCalendar("TARGET"),
     )
 
     assert isinstance(swap, ql.NonstandardSwap)
@@ -313,6 +319,8 @@ def test_nonstandard_swap_wrapper_accessors():
         qlNonstandardSwapFloatingDayCount(swap).name() == swap.floatingDayCount().name()
     )
     assert qlNonstandardSwapPaymentConvention(swap) == "FOLLOWING"
+    assert qlNonstandardSwapPaymentLag(swap) == 2
+    assert qlNonstandardSwapPaymentCalendar(swap).name() == "TARGET"
     assert len(qlNonstandardSwapFixedLeg(swap)) > 0
     assert len(qlNonstandardSwapFloatingLeg(swap)) > 0
 
@@ -632,7 +640,7 @@ def test_make_multiple_resets_swap_helper():
         )
 
         mrs = qlMakeMultipleResetsSwap(
-            swap_tenor=ql.Period("1Y"),
+            swap_tenor=ql.Period("3Y"),
             ibor_index=ibor_index,
             resets_per_coupon=3,
             receive_fixed=True,
@@ -1030,5 +1038,158 @@ def test_ql_make_ois_constructor_and_pricing():
 
         assert isinstance(ois_type.NPV(), float)
 
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_bma_swap_construction_accessors_and_pricing():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        start = qlDate(2024, 1, 10)
+        end = qlDate(2026, 1, 10)
+        ql.Settings.instance().evaluationDate = eval_date
+        curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.03, ql.Actual365Fixed())
+        )
+        schedule = _schedule(start, end, ql.Period("3M"))
+        libor_index = ql.USDLibor(ql.Period("3M"), curve)
+        bma_index = ql.BMAIndex(curve)
+        swap = swap_wrappers.qlBMASwap(
+            qSwapType.__wrapped__("PAYER"),
+            1_000_000.0,
+            schedule,
+            0.8,
+            0.001,
+            libor_index,
+            ql.Actual360(),
+            schedule,
+            bma_index,
+            ql.Actual360(),
+        )
+        swap.setPricingEngine(ql.DiscountingSwapEngine(curve))
+
+        assert isinstance(swap, ql.BMASwap)
+        assert swap_wrappers.qlBMASwapLiborFraction(swap) == pytest.approx(0.8)
+        assert swap_wrappers.qlBMASwapLiborSpread(swap) == pytest.approx(0.001)
+        assert swap_wrappers.qlBMASwapNominal(swap) == pytest.approx(1_000_000.0)
+        assert swap_wrappers.qlBMASwapType(swap) == "PAYER"
+        assert len(swap_wrappers.qlBMASwapBmaLeg(swap)) > 0
+        assert len(swap_wrappers.qlBMASwapLiborLeg(swap)) > 0
+        assert isinstance(swap_wrappers.qlBMASwapLiborLegBPS(swap), float)
+        assert isinstance(swap_wrappers.qlBMASwapLiborLegNPV(swap), float)
+        assert isinstance(swap_wrappers.qlBMASwapFairLiborFraction(swap), float)
+        assert isinstance(swap_wrappers.qlBMASwapFairLiborSpread(swap), float)
+        assert isinstance(swap_wrappers.qlBMASwapBmaLegBPS(swap), float)
+        assert isinstance(swap_wrappers.qlBMASwapBmaLegNPV(swap), float)
+        assert isinstance(swap.NPV(), float)
+    finally:
+        ql.Settings.instance().evaluationDate = original_eval
+
+
+def test_mtm_cross_currency_basis_swap_accessors_and_engine():
+    original_eval = ql.Settings.instance().evaluationDate
+    try:
+        eval_date = qlDate(2024, 1, 2)
+        start = qlDate(2024, 1, 10)
+        end = qlDate(2026, 1, 10)
+        ql.Settings.instance().evaluationDate = eval_date
+        usd = ql.USDCurrency()
+        eur = ql.EURCurrency()
+        usd_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.03, ql.Actual365Fixed())
+        )
+        eur_curve = ql.YieldTermStructureHandle(
+            ql.FlatForward(eval_date, 0.02, ql.Actual365Fixed())
+        )
+        schedule = _schedule(start, end, ql.Period("6M"))
+        usd_index = ql.USDLibor(ql.Period("6M"), usd_curve)
+        eur_index = ql.Euribor(ql.Period("6M"), eur_curve)
+        swap = swap_wrappers.qlMtMCrossCurrencyBasisSwap(
+            swap_wrappers.qMtMCrossCurrencyBasisSwapType.__wrapped__(
+                "PAYFXBASECURRENCY"
+            ),
+            1_000_000.0,
+            usd,
+            schedule,
+            usd_index,
+            0.001,
+            1.0,
+            900_000.0,
+            eur,
+            schedule,
+            eur_index,
+            0.0,
+            1.0,
+            True,
+            fx_reset_fixing_days=2,
+            fx_reset_fixing_calendar=qlCalendar("TARGET"),
+            use_indexed_coupons=True,
+        )
+        engine = swap_wrappers.qlDiscountingMtMCrossCurrencyBasisSwapEngine(
+            usd,
+            usd_curve,
+            eur,
+            eur_curve,
+            ql.QuoteHandle(ql.SimpleQuote(1.1)),
+        )
+        swap.setPricingEngine(engine)
+
+        assert isinstance(swap, ql.MtMCrossCurrencyBasisSwap)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapType(swap) == (
+            "PAYFXBASECURRENCY"
+        )
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapPaysFxBaseCurrency(swap) is True
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBaseNominal(swap) == 1_000_000.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBaseCurrency(swap).code() == "USD"
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBaseSchedule(swap)) == len(schedule)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBaseIndex(swap).name() == usd_index.name()
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBaseSpread(swap) == pytest.approx(0.001)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBaseGearing(swap) == 1.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBaseStubIndexSelection(swap).empty()
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuoteStubIndexSelection(swap).empty()
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuoteNominal(swap) == 900_000.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuoteCurrency(swap).code() == "EUR"
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuoteSchedule(swap)) == len(schedule)
+        assert (
+            swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuoteIndex(swap).name()
+            == eur_index.name()
+        )
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuoteSpread(swap) == pytest.approx(0.0)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuoteGearing(swap) == 1.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapPayNominal(swap) == 1_000_000.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapPayCurrency(swap).code() == "USD"
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapPaySchedule(swap)) == len(schedule)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapPayIndex(swap).name() == usd_index.name()
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapPaySpread(swap) == pytest.approx(0.001)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapPayGearing(swap) == 1.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapRecNominal(swap) == 900_000.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapRecCurrency(swap).code() == "EUR"
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapRecSchedule(swap)) == len(schedule)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapRecIndex(swap).name() == eur_index.name()
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapRecSpread(swap) == pytest.approx(0.0)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapRecGearing(swap) == 1.0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapIsFxBaseCurrencyLegResettable(swap)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapResettingLegIndex(swap) == 0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapConstantLegIndex(swap) == 1
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapResettingLeg(swap)) > 0
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapConstantLeg(swap)) > 0
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapLegCurrency(swap, 0).code() == "USD"
+        assert isinstance(swap_wrappers.qlMtMCrossCurrencyBasisSwapInCcyLegNPV(swap, 0), float)
+        assert isinstance(swap_wrappers.qlMtMCrossCurrencyBasisSwapConstantLegNotional(swap), float)
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxResetFixingDays(swap) == 2
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxResetFixingCalendar(swap) is not None
+        assert swap_wrappers.qlMtMCrossCurrencyBasisSwapFxBasePaymentConvention(swap) == "FOLLOWING"
+        assert (
+            swap_wrappers.qlMtMCrossCurrencyBasisSwapFxQuotePaymentConvention(swap)
+            == "FOLLOWING"
+        )
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapFxResetRates(swap)) > 0
+        assert len(swap_wrappers.qlMtMCrossCurrencyBasisSwapFxResetNotionals(swap)) > 0
+        assert isinstance(swap_wrappers.qlMtMCrossCurrencyBasisSwapFairFxBaseSpread(swap), float)
+        assert isinstance(swap_wrappers.qlMtMCrossCurrencyBasisSwapFairFxQuoteSpread(swap), float)
+        assert isinstance(swap_wrappers.qlMtMCrossCurrencyBasisSwapFairPaySpread(swap), float)
+        assert isinstance(swap_wrappers.qlMtMCrossCurrencyBasisSwapFairRecSpread(swap), float)
+        assert isinstance(swap.NPV(), float)
     finally:
         ql.Settings.instance().evaluationDate = original_eval

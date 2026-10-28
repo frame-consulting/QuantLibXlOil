@@ -148,6 +148,7 @@ def test_default_probability_helpers_piecewise_and_risky_bond_engine():
             0.40,
             discount_curve,
             start_date=reference_date,
+            trade_date=reference_date,
         )
         upfront_helper = qlUpfrontCdsHelper(
             0.02,
@@ -162,6 +163,7 @@ def test_default_probability_helpers_piecewise_and_risky_bond_engine():
             0.40,
             discount_curve,
             start_date=reference_date,
+            trade_date=reference_date,
         )
 
         assert isinstance(spread_helper, ql.SpreadCdsHelper)

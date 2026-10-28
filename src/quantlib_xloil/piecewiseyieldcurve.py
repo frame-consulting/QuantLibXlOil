@@ -6,7 +6,7 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate, _to_date_list
 from .daycounters import qDayCounter
 from .interpolatedyieldcurves import QL_INTERPOLATION_TRAITS, QL_INTERPOLATORS
-from .utilities import to_object_list
+from .utilities import to_float_list, to_object_list
 
 QL_PIECEWISE_CURVES = {
     ("FORWARDRATE", "BACKWARDFLAT"): ql.PiecewiseFlatForward,
@@ -20,6 +20,28 @@ QL_PIECEWISE_CURVES = {
     ("ZERORATE", "CUBIC"): ql.PiecewiseNaturalCubicZero,
     ("ZERORATE", "LINEAR"): ql.PiecewiseLinearZero,
     ("ZERORATE", "MONOTONICCUBIC"): ql.PiecewiseConvexMonotoneZero,
+    ("SIMPLEZERORATE", "LINEAR"): ql.PiecewiseLinearSimpleZero,
+}
+
+QL_GLOBAL_PIECEWISE_CURVES = {
+    ("FORWARDRATE", "BACKWARDFLAT"): ql.GlobalPiecewiseFlatForward,
+    ("FORWARDRATE", "LINEAR"): ql.GlobalPiecewiseLinearForward,
+    ("FORWARDRATE", "CONVEXMONOTONE"): ql.GlobalPiecewiseConvexMonotoneForward,
+    ("LOGDISCOUNT", "LINEAR"): ql.GlobalPiecewiseLogLinearDiscount,
+    ("LOGDISCOUNT", "CUBIC"): ql.GlobalPiecewiseLogCubicDiscount,
+    ("LOGDISCOUNT", "SPLINECUBIC"): ql.GlobalPiecewiseSplineCubicDiscount,
+    ("LOGDISCOUNT", "KRUGER"): ql.GlobalPiecewiseKrugerLogDiscount,
+    ("LOGDISCOUNT", "LOGMIXEDLINEARCUBIC"): ql.GlobalPiecewiseLogMixedLinearCubicDiscount,
+    ("LOGDISCOUNT", "PARABOLICCUBIC"): ql.GlobalPiecewiseLogParabolicCubicDiscount,
+    ("LOGDISCOUNT", "MONOTONICPARABOLICCUBIC"): ql.GlobalPiecewiseMonotonicLogParabolicCubicDiscount,
+    ("ZERORATE", "LINEAR"): ql.GlobalPiecewiseLinearZero,
+    ("ZERORATE", "CUBIC"): ql.GlobalPiecewiseCubicZero,
+    ("ZERORATE", "NATURALCUBIC"): ql.GlobalPiecewiseNaturalCubicZero,
+    ("ZERORATE", "KRUGER"): ql.GlobalPiecewiseKrugerZero,
+    ("ZERORATE", "CONVEXMONOTONE"): ql.GlobalPiecewiseConvexMonotoneZero,
+    ("ZERORATE", "PARABOLICCUBIC"): ql.GlobalPiecewiseParabolicCubicZero,
+    ("ZERORATE", "MONOTONICPARABOLICCUBIC"): ql.GlobalPiecewiseMonotonicParabolicCubicZero,
+    ("SIMPLEZERORATE", "LINEAR"): ql.GlobalLinearSimpleZeroCurve,
 }
 
 QL_PIECEWISE_SPREAD_CURVES = {
@@ -85,6 +107,163 @@ def qlPiecewiseYieldCurveData(
     trigger=None,
 ) -> list[float]:
     return curve.data()
+
+
+@xlo.func(
+    help="Recalculate a piecewise yield curve.",
+    args={"curve": "The piecewise yield curve."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseYieldCurveRecalculate(curve: ql.YieldTermStructure, trigger=None) -> bool:
+    curve.recalculate()
+    return True
+
+
+@xlo.func(
+    help="Freeze recalculation of a piecewise yield curve.",
+    args={"curve": "The piecewise yield curve."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseYieldCurveFreeze(curve: ql.YieldTermStructure, trigger=None) -> bool:
+    curve.freeze()
+    return True
+
+
+@xlo.func(
+    help="Unfreeze recalculation of a piecewise yield curve.",
+    args={"curve": "The piecewise yield curve."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlPiecewiseYieldCurveUnfreeze(curve: ql.YieldTermStructure, trigger=None) -> bool:
+    curve.unfreeze()
+    return True
+
+
+@xlo.func(
+    help="Create a QuantLib GlobalBootstrap configuration.",
+    args={
+        "additional_helpers": "Optional additional rate helpers.",
+        "additional_dates": "Optional dates for additional curve constraints.",
+        "accuracy": "Bootstrap accuracy.",
+        "optimizer": "The optimization method.",
+        "end_criteria": "Optimization stopping criteria.",
+        "initial_guess": "Optional initial parameter values.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlGlobalBootstrap(
+    additional_helpers: xlo.Array(dims=1) = None,
+    additional_dates: xlo.Array(dims=1) = None,
+    accuracy: float = ql.nullDouble(),
+    optimizer: ql.OptimizationMethod = None,
+    end_criteria: ql.EndCriteria = None,
+    initial_guess: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.GlobalBootstrap:
+    guess = to_float_list(initial_guess) if initial_guess is not None else []
+    if additional_helpers is None and additional_dates is None:
+        return ql.GlobalBootstrap(accuracy, optimizer, end_criteria, guess)
+    if additional_helpers is None or additional_dates is None:
+        raise ValueError(
+            "additional_helpers and additional_dates must be provided together."
+        )
+    return ql.GlobalBootstrap(
+        to_object_list(additional_helpers, ql.RateHelper),
+        _to_date_list(additional_dates),
+        accuracy,
+        optimizer,
+        end_criteria,
+        guess,
+    )
+
+
+@xlo.func(
+    help="Construct a globally bootstrapped piecewise yield curve.",
+    args={
+        "reference_date": "The reference date for the curve.",
+        "instruments": "The rate helpers used to build the curve.",
+        "daycounter": "The day count convention.",
+        "traits": "Curve traits: ForwardRate, LogDiscount, ZeroRate, or SimpleZeroRate.",
+        "interpolator": "The interpolation method.",
+        "bootstrap": "The GlobalBootstrap configuration.",
+        "jumps": "Optional jump sizes.",
+        "jump_dates": "Dates corresponding to jump sizes.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlGlobalPiecewiseYieldCurveAsYts(
+    reference_date: qDate,
+    instruments: xlo.Array(dims=1),
+    daycounter: qDayCounter,
+    traits: str,
+    interpolator: str,
+    bootstrap: ql.GlobalBootstrap,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.YieldTermStructure:
+    key = (str(traits).strip().upper(), str(interpolator).strip().upper())
+    curve_class = QL_GLOBAL_PIECEWISE_CURVES.get(key)
+    if curve_class is None:
+        raise ValueError(
+            f"Global piecewise curve combination not implemented: "
+            f"{key[0]} / {key[1]}."
+        )
+    if (jumps is None) != (jump_dates is None):
+        raise ValueError("jumps and jump_dates must be provided together.")
+    jump_handles = (
+        [ql.QuoteHandle(ql.SimpleQuote(value)) for value in to_float_list(jumps)]
+        if jumps is not None
+        else []
+    )
+    dates = _to_date_list(jump_dates) if jump_dates is not None else []
+    return curve_class(
+        reference_date,
+        to_object_list(instruments, ql.RateHelper),
+        daycounter,
+        bootstrap,
+        jump_handles,
+        dates,
+    )
+
+
+@xlo.func(
+    help="Construct a handle to a globally bootstrapped piecewise yield curve.",
+    args={
+        "reference_date": "The reference date for the curve.",
+        "instruments": "The rate helpers used to build the curve.",
+        "daycounter": "The day count convention.",
+        "traits": "Curve traits: ForwardRate, LogDiscount, ZeroRate, or SimpleZeroRate.",
+        "interpolator": "The interpolation method.",
+        "bootstrap": "The GlobalBootstrap configuration.",
+        "jumps": "Optional jump sizes.",
+        "jump_dates": "Dates corresponding to jump sizes.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlGlobalPiecewiseYieldCurve(
+    reference_date: qDate,
+    instruments: xlo.Array(dims=1),
+    daycounter: qDayCounter,
+    traits: str,
+    interpolator: str,
+    bootstrap: ql.GlobalBootstrap,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    return ql.YieldTermStructureHandle(
+        qlGlobalPiecewiseYieldCurveAsYts(
+            reference_date,
+            instruments,
+            daycounter,
+            traits,
+            interpolator,
+            bootstrap,
+            jumps,
+            jump_dates,
+        )
+    )
 
 
 @xlo.func(

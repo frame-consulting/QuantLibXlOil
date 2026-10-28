@@ -60,6 +60,8 @@ from quantlib_xloil import (
     qlFFTVarianceGammaEngine,
     qlGJRGARCHModel,
     qlAnalyticHestonEngine,
+    qlAnalyticRoughHestonEngine,
+    qlAnalyticRoughHestonEngine2,
     qlAnalyticHestonEngineIntegrationAndersenPiterbargIntegrationLimit,
     qlAnalyticHestonEngineIntegrationGaussLaguerre,
     qlAnalyticHestonEngineIntegrationIsAdaptive,
@@ -108,6 +110,14 @@ from quantlib_xloil import (
     qlHestonModelSigma,
     qlHestonModelTheta,
     qlHestonModelV0,
+    qlRoughHestonModel,
+    qlRoughHestonModelHurst,
+    qlRoughHestonModelKappa,
+    qlRoughHestonModelProcess,
+    qlRoughHestonModelRho,
+    qlRoughHestonModelSigma,
+    qlRoughHestonModelTheta,
+    qlRoughHestonModelV0,
     qlHolderExtensibleOption,
     qlInstrumentNPV,
     qlInstrumentSetPricingEngine,
@@ -147,6 +157,7 @@ from quantlib_xloil import (
 )
 from quantlib_xloil.options import (
     _qAnalyticHestonComplexLogFormula,
+    _qAnalyticRoughHestonApproximation,
     _qAnalyticPTDHestonComplexLogFormula,
     _qAnalyticHestonEngineIntegration,
     _qBinomialEngineType,
@@ -389,6 +400,10 @@ def test_heston_analytic_engine_and_helpers_wrappers():
         integration=_qAnalyticHestonEngineIntegration("GAUSS_LAGUERRE"),
         andersen_piterbarg_epsilon=1.0e-8,
     )
+    engine_tanh_sinh = qlAnalyticHestonEngine(
+        model,
+        integration=_qAnalyticHestonEngineIntegration("TANH_SINH"),
+    )
 
     alpha = qlAnalyticHestonEngineOptimalAlpha(1.0, engine_default)
     alpha_value = qlAnalyticHestonEngineOptimalAlphaValue(alpha, 100.0)
@@ -402,6 +417,7 @@ def test_heston_analytic_engine_and_helpers_wrappers():
         engine_default,
         engine_tol,
         engine_custom,
+        engine_tanh_sinh,
         qlCOSHestonEngine(model, 16.0, 128),
         qlExponentialFittingHestonEngine(model),
         qlAnalyticPDFHestonEngine(model),
@@ -410,6 +426,39 @@ def test_heston_analytic_engine_and_helpers_wrappers():
         assert qlInstrumentNPV(option) > 0.0
 
     assert qlAnalyticHestonEngineNumberOfEvaluations(engine_default) >= 0
+
+
+def test_rough_heston_model_and_analytic_engine_wrappers():
+    _set_eval_date()
+    process, _, _, _, _ = _heston_process_and_model()
+    model = qlRoughHestonModel(process, 0.1)
+
+    assert qlRoughHestonModelTheta(model) == pytest.approx(0.04)
+    assert qlRoughHestonModelKappa(model) == pytest.approx(1.50)
+    assert qlRoughHestonModelSigma(model) == pytest.approx(0.25)
+    assert qlRoughHestonModelRho(model) == pytest.approx(-0.60)
+    assert qlRoughHestonModelV0(model) == pytest.approx(0.04)
+    assert qlRoughHestonModelHurst(model) == pytest.approx(0.1)
+    assert isinstance(qlRoughHestonModelProcess(model), ql.HestonProcess)
+    assert _qAnalyticRoughHestonApproximation("pade") == (
+        ql.AnalyticRoughHestonEngine.Pade
+    )
+
+    option = qlEuropeanOption(
+        qlPlainVanillaPayoff(ql.Option.Call, 100.0),
+        qlEuropeanExercise(qlDate(2025, 1, 2)),
+    )
+    engines = (
+        qlAnalyticRoughHestonEngine(model, integration_order=32, time_steps=64),
+        qlAnalyticRoughHestonEngine2(
+            model,
+            _qAnalyticHestonEngineIntegration("GAUSS_LAGUERRE"),
+            time_steps=64,
+        ),
+    )
+    for engine in engines:
+        assert qlInstrumentSetPricingEngine(option, engine) is True
+        assert qlInstrumentNPV(option) > 0.0
 
 
 def test_heston_hull_white_engine_wrappers():

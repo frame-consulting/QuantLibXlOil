@@ -101,3 +101,42 @@ def qlSettingsAnchorEvaluationDate(trigger=None) -> ql.Date:
 def qlSettingsResetEvaluationDate(trigger=None) -> ql.Date:
     ql.Settings.instance().resetEvaluationDate()
     return ql.Settings.instance().evaluationDate
+
+
+@xlo.func(
+    help="Disable updates to QuantLib observables.",
+    args={
+        "deferred": "Whether to defer updates until updates are enabled.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlObservableSettingsDisableUpdates(deferred: bool = False, trigger=None) -> bool:
+    settings = ql.ObservableSettings.instance()
+    settings.disableUpdates(deferred)
+    return settings.updatesEnabled()
+
+
+@xlo.func(
+    help="Enable updates to QuantLib observables.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlObservableSettingsEnableUpdates(trigger=None) -> bool:
+    settings = ql.ObservableSettings.instance()
+    settings.enableUpdates()
+    return settings.updatesEnabled()
+
+
+@xlo.func(
+    help="Get whether updates to QuantLib observables are enabled.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlObservableSettingsUpdatesEnabled(trigger=None) -> bool:
+    return ql.ObservableSettings.instance().updatesEnabled()
+
+
+@xlo.func(
+    help="Get whether updates to QuantLib observables are deferred.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlObservableSettingsUpdatesDeferred(trigger=None) -> bool:
+    return ql.ObservableSettings.instance().updatesDeferred()

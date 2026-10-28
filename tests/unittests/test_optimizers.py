@@ -8,6 +8,7 @@ from quantlib_xloil.optimizers import (
     qlBisection,
     qlBrent,
     qlBoundaryConstraint,
+    qlCmaes,
     qlCompositeConstraint,
     qlConjugateGradient,
     qlDifferentialEvolution,
@@ -58,6 +59,21 @@ def test_lbfgsb_constructor_overloads():
 
     assert isinstance(unbounded, ql.LBFGSB)
     assert isinstance(bounded, ql.LBFGSB)
+
+
+def test_qlCmaes_constructor():
+    default_method = qlCmaes()
+    bounded_method = qlCmaes(
+        population_size=8,
+        sigma=0.2,
+        seed=17,
+        lower_bound=[-1.0, -2.0],
+        upper_bound=[1.0, 2.0],
+        initial_mean=[0.0, 0.5],
+    )
+
+    assert isinstance(default_method, ql.Cmaes)
+    assert isinstance(bounded_method, ql.Cmaes)
 
 
 def test_qlNonhomogeneousBoundaryConstraint_converts_inputs_and_constructs():

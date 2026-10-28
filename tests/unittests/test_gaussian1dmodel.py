@@ -7,6 +7,7 @@ from quantlib_xloil.gaussian1dmodel import (
     qlGaussian1dFloatFloatSwaptionEngine,
     qlGaussian1dJamshidianSwaptionEngine,
     qlGaussian1dModelForwardRate,
+    qlGaussian1dModelCompoundedRate,
     qlGaussian1dModelNumeraire,
     qlGaussian1dModelNumeraireFromTime,
     qlGaussian1dModelStateProcess,
@@ -75,6 +76,10 @@ def test_gaussian1d_model_passthrough_wrappers_with_dummy_model():
             self.calls.append(("forwardRate", args))
             return 0.031
 
+        def compoundedRate(self, *args):
+            self.calls.append(("compoundedRate", args))
+            return 0.032
+
         def swapRate(self, *args):
             self.calls.append(("swapRate", args))
             return 0.029
@@ -124,6 +129,10 @@ def test_gaussian1d_model_passthrough_wrappers_with_dummy_model():
     )
 
     assert qlGaussian1dModelForwardRate(model, fixing, reference_date, 0.0) == 0.031
+    coupon = object()
+    assert (
+        qlGaussian1dModelCompoundedRate(model, coupon, reference_date, 0.1) == 0.032
+    )
     assert qlGaussian1dModelSwapRate(model, fixing, tenor, reference_date, 0.0) == 0.029
     assert (
         qlGaussian1dModelSwapAnnuity(model, fixing, tenor, reference_date, 0.0) == 4.2
@@ -135,9 +144,11 @@ def test_gaussian1d_model_passthrough_wrappers_with_dummy_model():
     assert put_args[0] == ql.Option.Put
 
     forward_args = model.calls[7][1]
-    swap_rate_args = model.calls[8][1]
-    swap_annuity_args = model.calls[9][1]
+    compounded_rate_args = model.calls[8][1]
+    swap_rate_args = model.calls[9][1]
+    swap_annuity_args = model.calls[10][1]
     assert isinstance(forward_args[3], ql.IborIndex)
+    assert compounded_rate_args[:3] == (coupon, reference_date, 0.1)
     assert isinstance(swap_rate_args[4], ql.SwapIndex)
     assert isinstance(swap_annuity_args[4], ql.SwapIndex)
 

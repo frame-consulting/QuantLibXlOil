@@ -510,6 +510,7 @@ def qlFuturesRateConvexityAdjustment(
         "custom_pillar_date": "The custom pillar date for the swap (if pillar choice is CustomDate, optional).",
         "end_of_month": "Whether to use end of month convention for the swap (optional).",
         "with_indexed_coupons": "Whether to use indexed coupons for the swap (optional).",
+        "float_convention": "The business-day convention for the floating leg (optional).",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -529,6 +530,7 @@ def qlSwapRateHelper(
     custom_pillar_date: qDate = ql.Date(),
     end_of_month: bool = False,
     with_indexed_coupons: bool = False,
+    float_convention: qBusinessDayConvention = None,
     trigger=None,
 ) -> ql.SwapRateHelper:
     spread_handle = ql.QuoteHandle(ql.SimpleQuote(spread))
@@ -548,6 +550,7 @@ def qlSwapRateHelper(
         custom_pillar_date,
         end_of_month,
         with_indexed_coupons,
+        float_convention,
     )
 
 
@@ -1241,6 +1244,20 @@ def qlOvernightIndexFutureRateHelperConvexityAdjustment(
 
 
 @xlo.func(
+    help="Get the overnight index future associated with a rate helper.",
+    args={
+        "overnight_index_future_rate_helper": "The QuantLib OvernightIndexFutureRateHelper object.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexFutureRateHelperFuture(
+    overnight_index_future_rate_helper: ql.OvernightIndexFutureRateHelper,
+    trigger=None,
+) -> ql.OvernightIndex:
+    return overnight_index_future_rate_helper.future()
+
+
+@xlo.func(
     help="Create a QuantLib SofrFutureRateHelper object for SOFR future rate curve building.",
     args={
         "price": "The price quote handle of the SOFR future.",
@@ -1322,6 +1339,17 @@ def qlMultipleResetsSwapRateHelper(
 
 
 @xlo.func(
+    help="Get the swap associated with a MultipleResetsSwapRateHelper.",
+    args={"helper": "The MultipleResetsSwapRateHelper object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMultipleResetsSwapRateHelperSwap(
+    helper: ql.MultipleResetsSwapRateHelper, trigger=None
+) -> ql.MultipleResetsSwap:
+    return helper.swap()
+
+
+@xlo.func(
     help="Create a QuantLib BMASwapRateHelper object.",
     args={
         "libor_fraction": "The LIBOR fraction quote handle.",
@@ -1362,6 +1390,15 @@ def qlBMASwapRateHelper(
 
 
 @xlo.func(
+    help="Get the BMA swap associated with a BMASwapRateHelper.",
+    args={"helper": "The BMASwapRateHelper object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapRateHelperSwap(helper: ql.BMASwapRateHelper, trigger=None) -> ql.BMASwap:
+    return helper.swap()
+
+
+@xlo.func(
     help="Create a QuantLib ConstNotionalCrossCurrencySwapRateHelper object for cross-currency swap rate curve building.",
     args={
         "fixed_rate": "The fixed rate quote handle for the cross-currency swap.",
@@ -1376,6 +1413,9 @@ def qlBMASwapRateHelper(
         "collateral_curve": "The yield term structure for collateral discounting.",
         "collateral_on_fixed_leg": "Flag indicating if collateral is on the fixed leg.",
         "paymentLag": "The payment lag in days (default: 0).",
+        "use_indexed_coupons": "Whether to use indexed coupons.",
+        "float_payment_frequency": "The floating-leg payment frequency.",
+        "float_stub_index_selection": "The floating-leg stub index selection.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1392,6 +1432,9 @@ def qlConstNotionalCrossCurrencySwapRateHelper(
     collateral_curve: ql.YieldTermStructureHandle,
     collateral_on_fixed_leg: bool,
     payment_lag: int = 0,
+    use_indexed_coupons: bool = None,
+    float_payment_frequency: qFrequency = None,
+    float_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.ConstNotionalCrossCurrencySwapRateHelper:
     return ql.ConstNotionalCrossCurrencySwapRateHelper(
@@ -1407,7 +1450,21 @@ def qlConstNotionalCrossCurrencySwapRateHelper(
         collateral_curve,
         collateral_on_fixed_leg,
         payment_lag,
+        use_indexed_coupons,
+        float_payment_frequency,
+        float_stub_index_selection,
     )
+
+
+@xlo.func(
+    help="Get the cross-currency swap associated with a rate helper.",
+    args={"helper": "The ConstNotionalCrossCurrencySwapRateHelper object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencySwapRateHelperSwap(
+    helper: ql.ConstNotionalCrossCurrencySwapRateHelper, trigger=None
+) -> ql.ConstNotionalCrossCurrencyFixedVsFloatingSwap:
+    return helper.swap()
 
 
 @xlo.func(
@@ -1427,6 +1484,10 @@ def qlConstNotionalCrossCurrencySwapRateHelper(
         "payment_frequency": "The payment frequency (default: NoFrequency).",
         "payment_lag": "The payment lag in days (default: 0).",
         "quote_currency_payment_frequency": "The payment frequency for the quote-currency leg.",
+        "use_indexed_coupons": "Whether to use indexed coupons.",
+        "payment_lag_on_notional_exchanges": "Whether payment lag applies to notional exchanges.",
+        "base_stub_index_selection": "The base-currency stub index selection.",
+        "quote_stub_index_selection": "The quote-currency stub index selection.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1445,6 +1506,10 @@ def qlConstNotionalCrossCurrencyBasisSwapRateHelper(
     payment_frequency: qFrequency = ql.NoFrequency,
     payment_lag: int = 0,
     quote_currency_payment_frequency: qFrequency = ql.NoFrequency,
+    use_indexed_coupons: bool = None,
+    payment_lag_on_notional_exchanges: bool = False,
+    base_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
+    quote_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.ConstNotionalCrossCurrencyBasisSwapRateHelper:
     return ql.ConstNotionalCrossCurrencyBasisSwapRateHelper(
@@ -1462,7 +1527,22 @@ def qlConstNotionalCrossCurrencyBasisSwapRateHelper(
         payment_frequency,
         payment_lag,
         quote_currency_payment_frequency,
+        use_indexed_coupons,
+        payment_lag_on_notional_exchanges,
+        base_stub_index_selection,
+        quote_stub_index_selection,
     )
+
+
+@xlo.func(
+    help="Get the cross-currency basis swap associated with a rate helper.",
+    args={"helper": "The ConstNotionalCrossCurrencyBasisSwapRateHelper object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlConstNotionalCrossCurrencyBasisSwapRateHelperSwap(
+    helper: ql.ConstNotionalCrossCurrencyBasisSwapRateHelper, trigger=None
+) -> ql.ConstNotionalCrossCurrencyBasisSwap:
+    return helper.swap()
 
 
 @xlo.func(
@@ -1483,6 +1563,11 @@ def qlConstNotionalCrossCurrencyBasisSwapRateHelper(
         "payment_frequency": "The payment frequency.",
         "payment_lag": "The payment lag in days (default: 0).",
         "quote_currency_payment_frequency": "The payment frequency for the quote-currency leg.",
+        "fx_reset_fixing_days": "The number of FX-reset fixing days.",
+        "fx_reset_fixing_calendar": "The calendar for FX-reset fixings.",
+        "use_indexed_coupons": "Whether to use indexed coupons.",
+        "base_stub_index_selection": "The base-currency stub index selection.",
+        "quote_stub_index_selection": "The quote-currency stub index selection.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1502,8 +1587,21 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
     payment_frequency: qFrequency = ql.NoFrequency,
     payment_lag: int = 0,
     quote_currency_payment_frequency: qFrequency = ql.NoFrequency,
+    fx_reset_fixing_days: int = 0,
+    fx_reset_fixing_calendar: qCalendar = None,
+    use_indexed_coupons: bool = None,
+    base_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
+    quote_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.MtMCrossCurrencyBasisSwapRateHelper:
+    optional_arguments = {
+        "fxResetFixingDays": fx_reset_fixing_days,
+        "useIndexedCoupons": use_indexed_coupons,
+        "baseStubIndexSelection": base_stub_index_selection,
+        "quoteStubIndexSelection": quote_stub_index_selection,
+    }
+    if fx_reset_fixing_calendar is not None:
+        optional_arguments["fxResetFixingCalendar"] = fx_reset_fixing_calendar
     return ql.MtMCrossCurrencyBasisSwapRateHelper(
         basis,
         tenor,
@@ -1520,7 +1618,41 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
         payment_frequency,
         payment_lag,
         quote_currency_payment_frequency,
+        **optional_arguments,
     )
+
+
+@xlo.func(
+    help="Get the mark-to-market cross-currency swap associated with a rate helper.",
+    args={"helper": "The MtMCrossCurrencyBasisSwapRateHelper object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRateHelperSwap(
+    helper: ql.MtMCrossCurrencyBasisSwapRateHelper, trigger=None
+) -> ql.MtMCrossCurrencyBasisSwap:
+    return helper.swap()
+
+
+@xlo.func(
+    help="Get the FX-reset fixing days of a cross-currency basis-swap rate helper.",
+    args={"helper": "The MtMCrossCurrencyBasisSwapRateHelper object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRateHelperFxResetFixingDays(
+    helper: ql.MtMCrossCurrencyBasisSwapRateHelper, trigger=None
+) -> int:
+    return helper.fxResetFixingDays()
+
+
+@xlo.func(
+    help="Get the FX-reset fixing calendar of a cross-currency basis-swap rate helper.",
+    args={"helper": "The MtMCrossCurrencyBasisSwapRateHelper object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRateHelperFxResetFixingCalendar(
+    helper: ql.MtMCrossCurrencyBasisSwapRateHelper, trigger=None
+) -> ql.Calendar:
+    return helper.fxResetFixingCalendar()
 
 
 @xlo.func(
@@ -1536,6 +1668,11 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
         "other_index": "The IBOR index for the other leg (e.g., EURIBOR).",
         "discount_handle": "The yield term structure handle used for discounting.",
         "bootstrap_base_curve": "Flag indicating if the base curve should be bootstrapped.",
+        "use_indexed_coupons": "Whether to use indexed coupons.",
+        "rule": "The date-generation rule.",
+        "payment_lag": "The payment lag in days.",
+        "base_stub_index_selection": "The base-index stub selection.",
+        "other_stub_index_selection": "The other-index stub selection.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1550,6 +1687,11 @@ def qlIborIborBasisSwapRateHelper(
     other_index: ql.IborIndex,
     discount_handle: ql.YieldTermStructureHandle,
     bootstrap_base_curve: bool,
+    use_indexed_coupons: bool = None,
+    rule: qDateGenerationRule = ql.DateGeneration.Backward,
+    payment_lag: int = 0,
+    base_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
+    other_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.IborIborBasisSwapRateHelper:
     return ql.IborIborBasisSwapRateHelper(
@@ -1563,6 +1705,11 @@ def qlIborIborBasisSwapRateHelper(
         other_index,
         discount_handle,
         bootstrap_base_curve,
+        use_indexed_coupons,
+        rule,
+        payment_lag,
+        base_stub_index_selection,
+        other_stub_index_selection,
     )
 
 
@@ -1575,7 +1722,7 @@ def qlIborIborBasisSwapRateHelper(
 )
 def qlIborIborBasisSwapRateHelperSwap(
     ibor_ibor_basis_swap_rate_helper: ql.IborIborBasisSwapRateHelper, trigger=None
-) -> ql.VanillaSwap:
+) -> ql.Swap:
     return ibor_ibor_basis_swap_rate_helper.swap()
 
 
@@ -1591,6 +1738,15 @@ def qlIborIborBasisSwapRateHelperSwap(
         "base_index": "The Overnight index for the base leg (e.g., SOFR, SONIA).",
         "other_index": "The IBOR index for the other leg (e.g., USD-LIBOR, GBP-LIBOR).",
         "discount_handle": "The yield term structure handle used for discounting.",
+        "bootstrap_base_curve": "Whether to bootstrap the base curve.",
+        "payment_lag": "The payment lag in days.",
+        "overnight_payment_frequency": "The overnight-leg payment frequency.",
+        "use_indexed_coupons": "Whether to use indexed coupons.",
+        "rule": "The date-generation rule.",
+        "averaging_method": "The overnight rate averaging method.",
+        "telescopic_value_dates": "Whether to use telescopic value dates.",
+        "basis_on_ibor_leg": "Whether the basis is on the IBOR leg.",
+        "ibor_stub_index_selection": "The IBOR stub index selection.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1604,6 +1760,15 @@ def qlOvernightIborBasisSwapRateHelper(
     base_index: ql.IborIndex,
     other_index: ql.IborIndex,
     discount_handle: ql.YieldTermStructureHandle,
+    bootstrap_base_curve: bool = False,
+    payment_lag: int = 0,
+    overnight_payment_frequency: qFrequency = None,
+    use_indexed_coupons: bool = None,
+    rule: qDateGenerationRule = ql.DateGeneration.Backward,
+    averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    telescopic_value_dates: bool = False,
+    basis_on_ibor_leg: bool = False,
+    ibor_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.OvernightIborBasisSwapRateHelper:
     return ql.OvernightIborBasisSwapRateHelper(
@@ -1616,6 +1781,15 @@ def qlOvernightIborBasisSwapRateHelper(
         base_index,
         other_index,
         discount_handle,
+        bootstrap_base_curve,
+        payment_lag,
+        overnight_payment_frequency,
+        use_indexed_coupons,
+        rule,
+        averaging_method,
+        telescopic_value_dates,
+        basis_on_ibor_leg,
+        ibor_stub_index_selection,
     )
 
 
@@ -1629,5 +1803,195 @@ def qlOvernightIborBasisSwapRateHelper(
 def qlOvernightIborBasisSwapRateHelperSwap(
     overnight_ibor_basis_swap_rate_helper: ql.OvernightIborBasisSwapRateHelper,
     trigger=None,
-) -> ql.VanillaSwap:
+) -> ql.Swap:
     return overnight_ibor_basis_swap_rate_helper.swap()
+
+
+@xlo.func(
+    help="Create a QuantLib OvernightOvernightBasisSwapRateHelper.",
+    args={
+        "basis": "The basis spread quote.",
+        "tenor": "The tenor of the basis swap.",
+        "settlement_days": "The number of settlement days.",
+        "calendar": "The calendar for the swap.",
+        "convention": "The business day convention.",
+        "end_of_month": "Whether to use the end-of-month convention.",
+        "base_index": "The overnight index for the base leg.",
+        "other_index": "The overnight index for the other leg.",
+        "discount_handle": "The discount curve handle.",
+        "bootstrap_base_curve": "Whether to bootstrap the base curve.",
+        "payment_lag": "The payment lag in days.",
+        "payment_frequency": "The payment frequency.",
+        "base_averaging_method": "The averaging method for the base leg.",
+        "other_averaging_method": "The averaging method for the other leg.",
+        "telescopic_value_dates": "Whether to use telescopic value dates.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightOvernightBasisSwapRateHelper(
+    basis: qQuoteHandle,
+    tenor: qPeriod,
+    settlement_days: int,
+    calendar: qCalendar,
+    convention: qBusinessDayConvention,
+    end_of_month: bool,
+    base_index: ql.OvernightIndex,
+    other_index: ql.OvernightIndex,
+    discount_handle: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    bootstrap_base_curve: bool = False,
+    payment_lag: int = 0,
+    payment_frequency: qFrequency = ql.Annual,
+    base_averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    other_averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    telescopic_value_dates: bool = False,
+    trigger=None,
+) -> ql.OvernightOvernightBasisSwapRateHelper:
+    return ql.OvernightOvernightBasisSwapRateHelper(
+        basis,
+        tenor,
+        settlement_days,
+        calendar,
+        convention,
+        end_of_month,
+        base_index,
+        other_index,
+        discount_handle,
+        bootstrap_base_curve,
+        payment_lag,
+        payment_frequency,
+        base_averaging_method,
+        other_averaging_method,
+        telescopic_value_dates,
+    )
+
+
+@xlo.func(
+    help="Return the swap associated with a QuantLib OvernightOvernightBasisSwapRateHelper.",
+    args={"rate_helper": "The QuantLib OvernightOvernightBasisSwapRateHelper."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightOvernightBasisSwapRateHelperSwap(
+    rate_helper: ql.OvernightOvernightBasisSwapRateHelper, trigger=None
+) -> ql.Swap:
+    return rate_helper.swap()
+
+
+@xlo.func(
+    help="Create a QuantLib OvernightIndexedFundingRateHelper.",
+    args={
+        "margin": "The funding margin quote.",
+        "tenor": "The tenor of the funding period.",
+        "settlement_days": "The number of settlement days.",
+        "calendar": "The calendar for the funding period.",
+        "convention": "The business day convention.",
+        "end_of_month": "Whether to use the end-of-month convention.",
+        "overnight_index": "The overnight index.",
+        "payment_tenor": "The payment frequency tenor.",
+        "payment_day_counter": "The payment-leg day counter.",
+        "payment_lag": "The payment lag in days.",
+        "telescopic_value_dates": "Whether to use telescopic value dates.",
+        "rule": "The date-generation rule.",
+        "pillar": "The pillar choice.",
+        "custom_pillar_date": "The custom pillar date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedFundingRateHelper(
+    margin: qQuoteHandle,
+    tenor: qPeriod,
+    settlement_days: int,
+    calendar: qCalendar,
+    convention: qBusinessDayConvention,
+    end_of_month: bool,
+    overnight_index: ql.OvernightIndex,
+    payment_tenor: qPeriod,
+    payment_day_counter: qDayCounter,
+    payment_lag: int = 0,
+    telescopic_value_dates: bool = False,
+    rule: qDateGenerationRule = ql.DateGeneration.Backward,
+    pillar: qPillarChoice = ql.Pillar.LastRelevantDate,
+    custom_pillar_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.OvernightIndexedFundingRateHelper:
+    return ql.OvernightIndexedFundingRateHelper(
+        margin,
+        tenor,
+        settlement_days,
+        calendar,
+        convention,
+        end_of_month,
+        overnight_index,
+        payment_tenor,
+        payment_day_counter,
+        payment_lag,
+        telescopic_value_dates,
+        rule,
+        pillar,
+        custom_pillar_date,
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib OvernightIndexedFundingRateHelper from start and end dates.",
+    args={
+        "margin": "The funding margin quote.",
+        "start_date": "The start date of the funding period.",
+        "end_date": "The end date of the funding period.",
+        "calendar": "The calendar for the funding period.",
+        "convention": "The business day convention.",
+        "end_of_month": "Whether to use the end-of-month convention.",
+        "overnight_index": "The overnight index.",
+        "payment_tenor": "The payment frequency tenor.",
+        "payment_day_counter": "The payment-leg day counter.",
+        "payment_lag": "The payment lag in days.",
+        "telescopic_value_dates": "Whether to use telescopic value dates.",
+        "rule": "The date-generation rule.",
+        "pillar": "The pillar choice.",
+        "custom_pillar_date": "The custom pillar date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedFundingRateHelperForDates(
+    margin: qQuoteHandle,
+    start_date: qDate,
+    end_date: qDate,
+    calendar: qCalendar,
+    convention: qBusinessDayConvention,
+    end_of_month: bool,
+    overnight_index: ql.OvernightIndex,
+    payment_tenor: qPeriod,
+    payment_day_counter: qDayCounter,
+    payment_lag: int = 0,
+    telescopic_value_dates: bool = False,
+    rule: qDateGenerationRule = ql.DateGeneration.Backward,
+    pillar: qPillarChoice = ql.Pillar.LastRelevantDate,
+    custom_pillar_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.OvernightIndexedFundingRateHelper:
+    return ql.OvernightIndexedFundingRateHelper.forDates(
+        margin,
+        start_date,
+        end_date,
+        calendar,
+        convention,
+        end_of_month,
+        overnight_index,
+        payment_tenor,
+        payment_day_counter,
+        payment_lag,
+        telescopic_value_dates,
+        rule,
+        pillar,
+        custom_pillar_date,
+    )
+
+
+@xlo.func(
+    help="Return the swap associated with a QuantLib OvernightIndexedFundingRateHelper.",
+    args={"rate_helper": "The QuantLib OvernightIndexedFundingRateHelper."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedFundingRateHelperSwap(
+    rate_helper: ql.OvernightIndexedFundingRateHelper, trigger=None
+) -> ql.Swap:
+    return rate_helper.swap()

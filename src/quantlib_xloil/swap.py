@@ -29,6 +29,11 @@ QL_SWAP_TYPE = {
     "-1.0": ql.Swap.Receiver,
 }
 
+QL_MTM_CROSS_CURRENCY_BASIS_SWAP_TYPE = {
+    "PAYFXBASECURRENCY": ql.MtMCrossCurrencyBasisSwap.PayFxBaseCurrency,
+    "RECEIVEFXBASECURRENCY": ql.MtMCrossCurrencyBasisSwap.ReceiveFxBaseCurrency,
+}
+
 
 def _qSwapType(swap_type: str | int | float) -> bool:
     if isinstance(swap_type, int):
@@ -70,6 +75,14 @@ def _to_ql_legs(legs) -> tuple[ql.Leg, ...]:
 @xlo.converter()
 def qSwapType(swap_type: str | int | float) -> bool:
     return _qSwapType(swap_type)
+
+def _qMtMCrossCurrencyBasisSwapType(swap_type: str) -> int:
+    return enum_value(swap_type, QL_MTM_CROSS_CURRENCY_BASIS_SWAP_TYPE)
+
+
+@xlo.converter()
+def qMtMCrossCurrencyBasisSwapType(swap_type: str) -> int:
+    return _qMtMCrossCurrencyBasisSwapType(swap_type)
 
 
 @xlo.func(
@@ -798,6 +811,8 @@ def qlMakeVanillaSwap(
         "intermediate_capital_exchange": "Whether to include intermediate capital exchange (default: False).",
         "final_capital_exchange": "Whether to include final capital exchange (default: False).",
         "payment_convention": "The business day convention for payments (default: Following).",
+        "payment_lag": "The payment lag in days (default: 0).",
+        "payment_calendar": "The calendar used to adjust payment dates.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -816,9 +831,11 @@ def qlNonstandardSwap(
     intermediate_capital_exchange: bool = False,
     final_capital_exchange: bool = False,
     payment_convention: qBusinessDayConvention = ql.Following,
+    payment_lag: int = 0,
+    payment_calendar: qCalendar = None,
     trigger=None,
 ) -> ql.NonstandardSwap:
-    return ql.NonstandardSwap(
+    arguments = (
         type,
         to_float_list(fixed_nominal),
         to_float_list(floating_nominal),
@@ -833,7 +850,11 @@ def qlNonstandardSwap(
         intermediate_capital_exchange,
         final_capital_exchange,
         payment_convention,
+        payment_lag,
     )
+    if payment_calendar is None:
+        return ql.NonstandardSwap(*arguments)
+    return ql.NonstandardSwap(*arguments, payment_calendar)
 
 
 @xlo.func(
@@ -996,6 +1017,26 @@ def qlNonstandardSwapFloatingDayCount(
 )
 def qlNonstandardSwapPaymentConvention(swap: ql.NonstandardSwap, trigger=None):
     return first_key(QL_BUSINESSDAYCONVENTION, swap.paymentConvention())
+
+
+@xlo.func(
+    help="Get the payment lag of a nonstandard swap.",
+    args={"swap": "The nonstandard swap object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlNonstandardSwapPaymentLag(swap: ql.NonstandardSwap, trigger=None) -> int:
+    return swap.paymentLag()
+
+
+@xlo.func(
+    help="Get the payment calendar of a nonstandard swap.",
+    args={"swap": "The nonstandard swap object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlNonstandardSwapPaymentCalendar(
+    swap: ql.NonstandardSwap, trigger=None
+) -> ql.Calendar:
+    return swap.paymentCalendar()
 
 
 @xlo.func(
@@ -2790,3 +2831,826 @@ def qlEquityTotalReturnSwapFairMargin(
     swap: ql.EquityTotalReturnSwap, trigger=None
 ) -> float:
     return swap.fairMargin()
+
+
+@xlo.func(
+    help="Create a QuantLib BMASwap.",
+    args={
+        "swap_type": "The payer or receiver type.",
+        "nominal": "The swap nominal.",
+        "libor_schedule": "The LIBOR leg schedule.",
+        "libor_fraction": "The LIBOR fraction.",
+        "libor_spread": "The LIBOR spread.",
+        "libor_index": "The LIBOR index.",
+        "libor_day_count": "The LIBOR leg day counter.",
+        "bma_schedule": "The BMA leg schedule.",
+        "bma_index": "The BMA index.",
+        "bma_day_count": "The BMA leg day counter.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwap(
+    swap_type: qSwapType,
+    nominal: float,
+    libor_schedule: ql.Schedule,
+    libor_fraction: float,
+    libor_spread: float,
+    libor_index: ql.IborIndex,
+    libor_day_count: qDayCounter,
+    bma_schedule: ql.Schedule,
+    bma_index: ql.BMAIndex,
+    bma_day_count: qDayCounter,
+    trigger=None,
+) -> ql.BMASwap:
+    return ql.BMASwap(
+        swap_type,
+        nominal,
+        libor_schedule,
+        libor_fraction,
+        libor_spread,
+        libor_index,
+        libor_day_count,
+        bma_schedule,
+        bma_index,
+        bma_day_count,
+    )
+
+
+@xlo.func(
+    help="Return the LIBOR fraction of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapLiborFraction(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.liborFraction()
+
+
+@xlo.func(
+    help="Return the LIBOR spread of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapLiborSpread(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.liborSpread()
+
+
+@xlo.func(
+    help="Return the nominal of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapNominal(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.nominal()
+
+
+@xlo.func(
+    help="Return the payer or receiver type of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapType(swap: ql.BMASwap, trigger=None) -> str:
+    return first_key(QL_SWAP_TYPE, swap.type())
+
+
+@xlo.func(
+    help="Return the BMA leg of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapBmaLeg(swap: ql.BMASwap, trigger=None) -> ql.Leg:
+    return swap.bmaLeg()
+
+
+@xlo.func(
+    help="Return the LIBOR leg of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapLiborLeg(swap: ql.BMASwap, trigger=None) -> ql.Leg:
+    return swap.liborLeg()
+
+
+@xlo.func(
+    help="Return the LIBOR leg basis-point value of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapLiborLegBPS(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.liborLegBPS()
+
+
+@xlo.func(
+    help="Return the LIBOR leg NPV of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapLiborLegNPV(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.liborLegNPV()
+
+
+@xlo.func(
+    help="Return the fair LIBOR fraction of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapFairLiborFraction(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.fairLiborFraction()
+
+
+@xlo.func(
+    help="Return the fair LIBOR spread of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapFairLiborSpread(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.fairLiborSpread()
+
+
+@xlo.func(
+    help="Return the BMA leg basis-point value of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapBmaLegBPS(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.bmaLegBPS()
+
+
+@xlo.func(
+    help="Return the BMA leg NPV of a QuantLib BMASwap.",
+    args={"swap": "QuantLib BMASwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlBMASwapBmaLegNPV(swap: ql.BMASwap, trigger=None) -> float:
+    return swap.bmaLegNPV()
+
+
+@xlo.func(
+    help="Create a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={
+        "swap_type": "The payer or receiver FX-base-currency type.",
+        "fx_base_nominal": "The nominal of the FX-base-currency leg.",
+        "fx_base_currency": "The currency of the FX-base-currency leg.",
+        "fx_base_schedule": "The schedule of the FX-base-currency leg.",
+        "fx_base_index": "The index of the FX-base-currency leg.",
+        "fx_base_spread": "The spread of the FX-base-currency leg.",
+        "fx_base_gearing": "The gearing of the FX-base-currency leg.",
+        "fx_quote_nominal": "The nominal of the FX-quote-currency leg.",
+        "fx_quote_currency": "The currency of the FX-quote-currency leg.",
+        "fx_quote_schedule": "The schedule of the FX-quote-currency leg.",
+        "fx_quote_index": "The index of the FX-quote-currency leg.",
+        "fx_quote_spread": "The spread of the FX-quote-currency leg.",
+        "fx_quote_gearing": "The gearing of the FX-quote-currency leg.",
+        "is_fx_base_currency_leg_resettable": "Whether the FX-base-currency leg is resettable.",
+        "fx_reset_fixing_days": "The number of FX reset fixing days.",
+        "fx_reset_fixing_calendar": "The FX reset fixing calendar.",
+        "fx_base_payment_lag": "The FX-base-currency leg payment lag.",
+        "fx_quote_payment_lag": "The FX-quote-currency leg payment lag.",
+        "fx_base_payment_convention": "The FX-base-currency leg payment convention.",
+        "fx_quote_payment_convention": "The FX-quote-currency leg payment convention.",
+        "fx_base_compound_spread": "Whether to compound the FX-base-currency leg spread.",
+        "fx_base_lookback_days": "The FX-base-currency leg lookback days.",
+        "fx_base_observation_shift": "Whether to shift FX-base-currency leg observations.",
+        "fx_base_lockout_days": "The FX-base-currency leg lockout days.",
+        "fx_base_averaging_method": "The FX-base-currency leg averaging method.",
+        "fx_quote_compound_spread": "Whether to compound the FX-quote-currency leg spread.",
+        "fx_quote_lookback_days": "The FX-quote-currency leg lookback days.",
+        "fx_quote_observation_shift": "Whether to shift FX-quote-currency leg observations.",
+        "fx_quote_lockout_days": "The FX-quote-currency leg lockout days.",
+        "fx_quote_averaging_method": "The FX-quote-currency leg averaging method.",
+        "telescopic_value_dates": "Whether to use telescopic value dates.",
+        "use_indexed_coupons": "Whether to use indexed coupons.",
+        "fx_base_stub_index_selection": "Index selection for FX-base-currency stub periods.",
+        "fx_quote_stub_index_selection": "Index selection for FX-quote-currency stub periods.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwap(
+    swap_type: qMtMCrossCurrencyBasisSwapType,
+    fx_base_nominal: float,
+    fx_base_currency: qCurrency,
+    fx_base_schedule: ql.Schedule,
+    fx_base_index: ql.IborIndex,
+    fx_base_spread: float,
+    fx_base_gearing: float,
+    fx_quote_nominal: float,
+    fx_quote_currency: qCurrency,
+    fx_quote_schedule: ql.Schedule,
+    fx_quote_index: ql.IborIndex,
+    fx_quote_spread: float,
+    fx_quote_gearing: float,
+    is_fx_base_currency_leg_resettable: bool,
+    fx_reset_fixing_days: int = 0,
+    fx_reset_fixing_calendar: qCalendar = None,
+    fx_base_payment_lag: int = 0,
+    fx_quote_payment_lag: int = 0,
+    fx_base_payment_convention: qBusinessDayConvention = ql.Following,
+    fx_quote_payment_convention: qBusinessDayConvention = ql.Following,
+    fx_base_compound_spread: bool = False,
+    fx_base_lookback_days: int = ql.nullInt(),
+    fx_base_observation_shift: bool = False,
+    fx_base_lockout_days: int = 0,
+    fx_base_averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    fx_quote_compound_spread: bool = False,
+    fx_quote_lookback_days: int = ql.nullInt(),
+    fx_quote_observation_shift: bool = False,
+    fx_quote_lockout_days: int = 0,
+    fx_quote_averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
+    telescopic_value_dates: bool = False,
+    use_indexed_coupons: bool = None,
+    fx_base_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
+    fx_quote_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
+    trigger=None,
+) -> ql.MtMCrossCurrencyBasisSwap:
+    kwargs = {
+        "fxResetFixingDays": fx_reset_fixing_days,
+        "fxBasePaymentLag": fx_base_payment_lag,
+        "fxQuotePaymentLag": fx_quote_payment_lag,
+        "fxBasePaymentConvention": fx_base_payment_convention,
+        "fxQuotePaymentConvention": fx_quote_payment_convention,
+        "fxBaseCompoundSpread": fx_base_compound_spread,
+        "fxBaseLookbackDays": fx_base_lookback_days,
+        "fxBaseObservationShift": fx_base_observation_shift,
+        "fxBaseLockoutDays": fx_base_lockout_days,
+        "fxBaseAveragingMethod": fx_base_averaging_method,
+        "fxQuoteCompoundSpread": fx_quote_compound_spread,
+        "fxQuoteLookbackDays": fx_quote_lookback_days,
+        "fxQuoteObservationShift": fx_quote_observation_shift,
+        "fxQuoteLockoutDays": fx_quote_lockout_days,
+        "fxQuoteAveragingMethod": fx_quote_averaging_method,
+        "telescopicValueDates": telescopic_value_dates,
+        "useIndexedCoupons": use_indexed_coupons,
+        "fxBaseStubIndexSelection": fx_base_stub_index_selection,
+        "fxQuoteStubIndexSelection": fx_quote_stub_index_selection,
+    }
+    if fx_reset_fixing_calendar is not None:
+        kwargs["fxResetFixingCalendar"] = fx_reset_fixing_calendar
+    return ql.MtMCrossCurrencyBasisSwap(
+        swap_type,
+        fx_base_nominal,
+        fx_base_currency,
+        fx_base_schedule,
+        fx_base_index,
+        fx_base_spread,
+        fx_base_gearing,
+        fx_quote_nominal,
+        fx_quote_currency,
+        fx_quote_schedule,
+        fx_quote_index,
+        fx_quote_spread,
+        fx_quote_gearing,
+        is_fx_base_currency_leg_resettable,
+        **kwargs,
+    )
+
+
+@xlo.func(
+    help="Return the type of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapType(swap: ql.MtMCrossCurrencyBasisSwap, trigger=None) -> str:
+    return first_key(QL_MTM_CROSS_CURRENCY_BASIS_SWAP_TYPE, swap.type())
+
+
+@xlo.func(
+    help="Check whether a QuantLib MtMCrossCurrencyBasisSwap pays the FX-base currency.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapPaysFxBaseCurrency(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> bool:
+    return swap.paysFxBaseCurrency()
+
+
+@xlo.func(
+    help="Return the FX-base-currency nominal of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBaseNominal(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fxBaseNominal()
+
+
+@xlo.func(
+    help="Return the FX-base-currency of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBaseCurrency(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Currency:
+    return swap.fxBaseCurrency()
+
+
+@xlo.func(
+    help="Return the FX-base-currency schedule of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBaseSchedule(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Schedule:
+    return swap.fxBaseSchedule()
+
+
+@xlo.func(
+    help="Return the FX-base-currency index of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBaseIndex(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.IborIndex:
+    return swap.fxBaseIndex()
+
+
+@xlo.func(
+    help="Return the FX-base-currency spread of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBaseSpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fxBaseSpread()
+
+
+@xlo.func(
+    help="Return the FX-base-currency gearing of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBaseGearing(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fxBaseGearing()
+
+
+@xlo.func(
+    help="Return the stub index selection for the FX-base leg of a cross-currency swap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBaseStubIndexSelection(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.StubIndexSelection:
+    return swap.fxBaseStubIndexSelection()
+
+
+@xlo.func(
+    help="Return the stub index selection for the FX-quote leg of a cross-currency swap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuoteStubIndexSelection(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.StubIndexSelection:
+    return swap.fxQuoteStubIndexSelection()
+
+
+@xlo.func(
+    help="Return the FX-quote-currency nominal of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuoteNominal(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fxQuoteNominal()
+
+
+@xlo.func(
+    help="Return the FX-quote-currency of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuoteCurrency(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Currency:
+    return swap.fxQuoteCurrency()
+
+
+@xlo.func(
+    help="Return the FX-quote-currency schedule of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuoteSchedule(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Schedule:
+    return swap.fxQuoteSchedule()
+
+
+@xlo.func(
+    help="Return the FX-quote-currency index of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuoteIndex(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.IborIndex:
+    return swap.fxQuoteIndex()
+
+
+@xlo.func(
+    help="Return the FX-quote-currency spread of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuoteSpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fxQuoteSpread()
+
+
+@xlo.func(
+    help="Return the FX-quote-currency gearing of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuoteGearing(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fxQuoteGearing()
+
+
+@xlo.func(
+    help="Return the nominal of the paying leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapPayNominal(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.payNominal()
+
+
+@xlo.func(
+    help="Return the currency of the paying leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapPayCurrency(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Currency:
+    return swap.payCurrency()
+
+
+@xlo.func(
+    help="Return the schedule of the paying leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapPaySchedule(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Schedule:
+    return swap.paySchedule()
+
+
+@xlo.func(
+    help="Return the index of the paying leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapPayIndex(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.IborIndex:
+    return swap.payIndex()
+
+
+@xlo.func(
+    help="Return the spread of the paying leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapPaySpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.paySpread()
+
+
+@xlo.func(
+    help="Return the gearing of the paying leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapPayGearing(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.payGearing()
+
+
+@xlo.func(
+    help="Return the nominal of the receiving leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRecNominal(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.recNominal()
+
+
+@xlo.func(
+    help="Return the currency of the receiving leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRecCurrency(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Currency:
+    return swap.recCurrency()
+
+
+@xlo.func(
+    help="Return the schedule of the receiving leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRecSchedule(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Schedule:
+    return swap.recSchedule()
+
+
+@xlo.func(
+    help="Return the index of the receiving leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRecIndex(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.IborIndex:
+    return swap.recIndex()
+
+
+@xlo.func(
+    help="Return the spread of the receiving leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRecSpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.recSpread()
+
+
+@xlo.func(
+    help="Return the gearing of the receiving leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapRecGearing(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.recGearing()
+
+
+@xlo.func(
+    help=(
+        "Check whether the FX-base-currency leg of a QuantLib "
+        "MtMCrossCurrencyBasisSwap is resettable."
+    ),
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapIsFxBaseCurrencyLegResettable(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> bool:
+    return swap.isFxBaseCurrencyLegResettable()
+
+
+@xlo.func(
+    help="Return the index of the resetting leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapResettingLegIndex(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> int:
+    return swap.resettingLegIndex()
+
+
+@xlo.func(
+    help="Return the index of the constant-notional leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapConstantLegIndex(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> int:
+    return swap.constantLegIndex()
+
+
+@xlo.func(
+    help="Return the resetting leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapResettingLeg(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Leg:
+    return swap.resettingLeg()
+
+
+@xlo.func(
+    help="Return the constant-notional leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapConstantLeg(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Leg:
+    return swap.constantLeg()
+
+
+@xlo.func(
+    help="Return the currency of a leg of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={
+        "swap": "QuantLib MtMCrossCurrencyBasisSwap.",
+        "leg": "The leg index.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapLegCurrency(
+    swap: ql.MtMCrossCurrencyBasisSwap, leg: int, trigger=None
+) -> ql.Currency:
+    return swap.legCurrency(leg)
+
+
+@xlo.func(
+    help="Return the NPV of a QuantLib MtMCrossCurrencyBasisSwap leg in its own currency.",
+    args={
+        "swap": "QuantLib MtMCrossCurrencyBasisSwap.",
+        "leg": "The leg index.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapInCcyLegNPV(
+    swap: ql.MtMCrossCurrencyBasisSwap, leg: int, trigger=None
+) -> float:
+    return swap.inCcyLegNPV(leg)
+
+
+@xlo.func(
+    help="Return the constant-leg notional of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapConstantLegNotional(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.constantLegNotional()
+
+
+@xlo.func(
+    help="Return the FX reset fixing days of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxResetFixingDays(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> int:
+    return swap.fxResetFixingDays()
+
+
+@xlo.func(
+    help="Return the FX reset fixing calendar of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxResetFixingCalendar(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> ql.Calendar:
+    return swap.fxResetFixingCalendar()
+
+
+@xlo.func(
+    help="Return the FX-base-currency payment convention of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxBasePaymentConvention(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> str:
+    return first_key(QL_BUSINESSDAYCONVENTION, swap.fxBasePaymentConvention())
+
+
+@xlo.func(
+    help="Return the FX-quote-currency payment convention of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxQuotePaymentConvention(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> str:
+    return first_key(QL_BUSINESSDAYCONVENTION, swap.fxQuotePaymentConvention())
+
+
+@xlo.func(
+    help="Return the FX reset rates of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxResetRates(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> list[float]:
+    return swap.fxResetRates()
+
+
+@xlo.func(
+    help="Return the FX reset notionals of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFxResetNotionals(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> list[float]:
+    return swap.fxResetNotionals()
+
+
+@xlo.func(
+    help="Return the fair FX-base-currency spread of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFairFxBaseSpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fairFxBaseSpread()
+
+
+@xlo.func(
+    help="Return the fair FX-quote-currency spread of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFairFxQuoteSpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fairFxQuoteSpread()
+
+
+@xlo.func(
+    help="Return the fair paying-leg spread of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFairPaySpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fairPaySpread()
+
+
+@xlo.func(
+    help="Return the fair receiving-leg spread of a QuantLib MtMCrossCurrencyBasisSwap.",
+    args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlMtMCrossCurrencyBasisSwapFairRecSpread(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> float:
+    return swap.fairRecSpread()
+
+
+@xlo.func(
+    help="Create a QuantLib DiscountingMtMCrossCurrencyBasisSwapEngine.",
+    args={
+        "domestic_currency": "The domestic currency.",
+        "domestic_discount_curve": "The domestic discount curve.",
+        "foreign_currency": "The foreign currency.",
+        "foreign_discount_curve": "The foreign discount curve.",
+        "spot_fx": "The spot FX quote.",
+        "include_settlement_date_flows": "Whether to include settlement-date flows.",
+        "settlement_date": "The settlement date.",
+        "npv_date": "The NPV date.",
+        "spot_fx_settle_date": "The spot FX settlement date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlDiscountingMtMCrossCurrencyBasisSwapEngine(
+    domestic_currency: qCurrency,
+    domestic_discount_curve: ql.YieldTermStructureHandle,
+    foreign_currency: qCurrency,
+    foreign_discount_curve: ql.YieldTermStructureHandle,
+    spot_fx: qQuoteHandle,
+    include_settlement_date_flows=None,
+    settlement_date: qDate = ql.Date(),
+    npv_date: qDate = ql.Date(),
+    spot_fx_settle_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.DiscountingMtMCrossCurrencyBasisSwapEngine:
+    return ql.DiscountingMtMCrossCurrencyBasisSwapEngine(
+        domestic_currency,
+        domestic_discount_curve,
+        foreign_currency,
+        foreign_discount_curve,
+        spot_fx,
+        include_settlement_date_flows,
+        settlement_date,
+        npv_date,
+        spot_fx_settle_date,
+    )

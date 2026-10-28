@@ -11,6 +11,10 @@ from quantlib_xloil.settings import (
     qlSettingsSetEvaluationDate,
     qlSettingsSetIncludeReferenceDateEvents,
     qlSettingsSetIncludeTodaysCashFlows,
+    qlObservableSettingsDisableUpdates,
+    qlObservableSettingsEnableUpdates,
+    qlObservableSettingsUpdatesDeferred,
+    qlObservableSettingsUpdatesEnabled,
 )
 
 
@@ -75,3 +79,23 @@ def test_qlSettingsAnchorEvaluationDate_and_ResetEvaluationDate():
 
     finally:
         ql.Settings.instance().evaluationDate = original
+
+
+def test_qlObservableSettings_updates_can_be_disabled_and_enabled():
+    settings = ql.ObservableSettings.instance()
+    try:
+        assert qlObservableSettingsEnableUpdates() is True
+        assert qlObservableSettingsUpdatesEnabled() is True
+        assert qlObservableSettingsUpdatesDeferred() is False
+
+        assert qlObservableSettingsDisableUpdates() is False
+        assert qlObservableSettingsUpdatesEnabled() is False
+        assert qlObservableSettingsUpdatesDeferred() is False
+
+        assert qlObservableSettingsEnableUpdates() is True
+        assert qlObservableSettingsUpdatesEnabled() is True
+
+        assert qlObservableSettingsDisableUpdates(True) is False
+        assert qlObservableSettingsUpdatesDeferred() is True
+    finally:
+        settings.enableUpdates()

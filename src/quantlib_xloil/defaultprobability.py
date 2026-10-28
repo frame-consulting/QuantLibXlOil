@@ -426,6 +426,7 @@ def qlDefaultProbabilityHelperQuoteError(
         "last_period_day_counter": "The day counter for the last period of the CDS.",
         "rebates_accrual": "Whether the CDS accrues rebates.",
         "model": "The pricing model to use for the CDS.",
+        "trade_date": "The trade date of the CDS.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -446,6 +447,7 @@ def qlSpreadCdsHelper(
     last_period_day_counter=None,
     rebates_accrual: bool = True,
     model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.Midpoint,
+    trade_date: qDate = None,
     trigger=None,
 ) -> ql.SpreadCdsHelper:
     if last_period_day_counter is None:
@@ -459,6 +461,7 @@ def qlSpreadCdsHelper(
         "last_period_day_counter": "lastPeriodDayCounter",
         "rebates_accrual": "rebatesAccrual",
         "model": "model",
+        "trade_date": "tradeDate",
     }
 
     kwargs = {}
@@ -505,6 +508,7 @@ def qlSpreadCdsHelper(
         "last_period_day_counter": "The day counter for the last period of the CDS.",
         "rebates_accrual": "Whether the CDS accrues rebates.",
         "model": "The pricing model to use for the CDS.",
+        "trade_date": "The trade date of the CDS.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -527,6 +531,7 @@ def qlUpfrontCdsHelper(
     last_period_day_counter=None,
     rebates_accrual: bool = True,
     model: qCreditDefaultSwapPricingModel = ql.CreditDefaultSwap.Midpoint,
+    trade_date: qDate = None,
     trigger=None,
 ) -> ql.UpfrontCdsHelper:
     if last_period_day_counter is not None:
@@ -539,6 +544,7 @@ def qlUpfrontCdsHelper(
         "last_period_day_counter": "lastPeriodDayCounter",
         "rebates_accrual": "rebatesAccrual",
         "model": "model",
+        "trade_date": "tradeDate",
     }
 
     kwargs = {}

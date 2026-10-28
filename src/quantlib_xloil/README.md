@@ -4,7 +4,7 @@ This folder contains wrapper functions for QuantLib object creation and method c
 
 We follow the file structure of the [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG/tree/master/SWIG) interface specification to ensure transparency what the functions do.
 
-The current implementation includes the functionality of [QuantLib-SWIG](https://github.com/lballabio/QuantLib-SWIG/releases) v1.41 and onwards.
+The underlying Python bindings use QuantLib-SWIG v1.44. Excel wrapper functions expose the project-supported subset of that API.
 
 ## Implementation Guidelines
 

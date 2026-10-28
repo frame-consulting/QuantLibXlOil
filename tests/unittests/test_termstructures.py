@@ -4,7 +4,10 @@ import pytest
 from quantlib_xloil.termstructures import (
     qCompounding,
     qlFlatForward,
+    qlFlatForwardAsObject,
     qlFlatForward2,
+    qlFlatForwardCompounding,
+    qlFlatForwardCompoundingFrequency,
     qlForwardSpreadedTermStructure,
     qlImpliedTermStructure,
     qlCompositeZeroYieldStructure,
@@ -95,6 +98,19 @@ def test_qCompounding_case_insensitive():
     assert qCompounding.__wrapped__("simple") == ql.Simple
     assert qCompounding.__wrapped__("Compounded") == ql.Compounded
     assert qCompounding.__wrapped__("CONTINUOUS") == ql.Continuous
+
+
+def test_flat_forward_compounding_accessors():
+    curve = qlFlatForwardAsObject(
+        qlDate(2024, 1, 2),
+        0.05,
+        qlDayCounter("ACTUAL365FIXED"),
+        qCompounding.__wrapped__("COMPOUNDED"),
+        qFrequency.__wrapped__("SEMIANNUAL"),
+    )
+
+    assert qlFlatForwardCompounding(curve) == "COMPOUNDED"
+    assert qlFlatForwardCompoundingFrequency(curve) == "SEMIANNUAL"
 
 
 def test_qlTermStructure_accessors_and_extrapolation_flags():

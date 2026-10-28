@@ -14,9 +14,17 @@ from .date import _to_date_list
 from .daycounters import qDayCounter
 from .utilities import to_float_list
 
+
+def _to_jump_quote_handles(jumps) -> list[ql.QuoteHandle]:
+    if jumps is None:
+        return []
+    return [ql.QuoteHandle(ql.SimpleQuote(float(jump))) for jump in jumps]
+
+
 QL_INTERPOLATION_TRAITS = (
     "FORWARDRATE",
     "LOGDISCOUNT",
+    "SIMPLEZERORATE",
     "ZERORATE",
 )
 
@@ -38,6 +46,7 @@ QL_INTERPOLATED_CURVES = {
     ("LOGDISCOUNT", "CUBIC"): ql.NaturalLogCubicDiscountCurve,
     ("LOGDISCOUNT", "KRUGER"): ql.KrugerLogDiscountCurve,
     ("LOGDISCOUNT", "LINEAR"): ql.DiscountCurve,
+    ("SIMPLEZERORATE", "LINEAR"): ql.SimpleZeroCurve,
     #
     ("ZERORATE", "CUBIC"): ql.NaturalCubicZeroCurve,
     ("ZERORATE", "LINEAR"): ql.ZeroCurve,
@@ -56,6 +65,8 @@ QL_INTERPOLATED_CURVES = {
         "interpolator": "The interpolation method to use for the curve.",
         "mixed_interpolation_behavior": "The behavior to use for mixed interpolation.",
         "mixed_interpolation_n": "The where to switch interpolation methods.",
+        "jumps": "Optional jump quotes for the curve.",
+        "jump_dates": "Dates corresponding to the jump quotes.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -68,6 +79,8 @@ def qlInterpolatedYieldCurve(
     interpolator: str,
     mixed_interpolation_behavior: str = None,
     mixed_interpolation_n: int = None,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
     if mixed_interpolation_behavior or mixed_interpolation_n:
@@ -92,7 +105,17 @@ def qlInterpolatedYieldCurve(
         raise ValueError(
             f"Interpolation method not implemented for traits '{traits}' and interpolator '{interpolator}'."
         )
-    yts = curve(_dates, _values, daycounter, calendar)
+    if jumps is None and jump_dates is None:
+        yts = curve(_dates, _values, daycounter, calendar)
+    else:
+        yts = curve(
+            _dates,
+            _values,
+            daycounter,
+            calendar,
+            _to_jump_quote_handles(jumps),
+            _to_date_list(jump_dates) if jump_dates is not None else [],
+        )
     return ql.YieldTermStructureHandle(yts)
 
 
@@ -104,6 +127,8 @@ def qlInterpolatedYieldCurve(
         "discounts": "The discount factors corresponding to the dates.",
         "daycounter": "The day count convention to use for the curve.",
         "calendar": "The calendar to use for the curve.",
+        "jumps": "Optional jump quotes for the curve.",
+        "jump_dates": "Dates corresponding to the jump quotes.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -112,8 +137,22 @@ def qlDiscountCurve(
     discounts: xlo.Array(dims=1),
     daycounter: qDayCounter,
     calendar=None,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
+    if jumps is not None or jump_dates is not None:
+        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        return ql.YieldTermStructureHandle(
+            ql.DiscountCurve(
+                _to_date_list(dates),
+                to_float_list(discounts),
+                daycounter,
+                calendar,
+                _to_jump_quote_handles(jumps),
+                _to_date_list(jump_dates) if jump_dates is not None else [],
+            )
+        )
     args = [
         _to_date_list(dates),
         to_float_list(discounts),
@@ -134,6 +173,8 @@ def qlDiscountCurve(
         "forwards": "The forward rates corresponding to the dates.",
         "daycounter": "The day count convention to use for the curve.",
         "calendar": "The calendar to use for the curve.",
+        "jumps": "Optional jump quotes for the curve.",
+        "jump_dates": "Dates corresponding to the jump quotes.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -142,8 +183,22 @@ def qlForwardCurve(
     forwards: xlo.Array(dims=1),
     daycounter: qDayCounter,
     calendar=None,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
+    if jumps is not None or jump_dates is not None:
+        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        return ql.YieldTermStructureHandle(
+            ql.ForwardCurve(
+                _to_date_list(dates),
+                to_float_list(forwards),
+                daycounter,
+                calendar,
+                _to_jump_quote_handles(jumps),
+                _to_date_list(jump_dates) if jump_dates is not None else [],
+            )
+        )
     args = [
         _to_date_list(dates),
         to_float_list(forwards),
@@ -164,6 +219,8 @@ def qlForwardCurve(
         "zerorates": "The zero rates corresponding to the dates.",
         "daycounter": "The day count convention to use for the curve.",
         "calendar": "The calendar to use for the curve.",
+        "jumps": "Optional jump quotes for the curve.",
+        "jump_dates": "Dates corresponding to the jump quotes.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -172,8 +229,22 @@ def qlZeroCurve(
     zerorates: xlo.Array(dims=1),
     daycounter: qDayCounter = ql.Actual365Fixed(),
     calendar=None,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
+    if jumps is not None or jump_dates is not None:
+        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        return ql.YieldTermStructureHandle(
+            ql.ZeroCurve(
+                _to_date_list(dates),
+                to_float_list(zerorates),
+                daycounter,
+                calendar,
+                _to_jump_quote_handles(jumps),
+                _to_date_list(jump_dates) if jump_dates is not None else [],
+            )
+        )
     args = [
         _to_date_list(dates),
         to_float_list(zerorates),
@@ -184,6 +255,118 @@ def qlZeroCurve(
         args.append(calendar)
     yts = ql.ZeroCurve(*args)
     return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a linear interpolated simple zero curve.",
+    args={
+        "dates": "The dates corresponding to the zero yields.",
+        "yields": "The simple zero yields corresponding to the dates.",
+        "daycounter": "The day count convention to use for the curve.",
+        "calendar": "The calendar to use for the curve.",
+        "jumps": "Optional jump quotes for the curve.",
+        "jump_dates": "Dates corresponding to the jump quotes.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSimpleZeroCurve(
+    dates: xlo.Array(dims=1),
+    yields: xlo.Array(dims=1),
+    daycounter: qDayCounter,
+    calendar=None,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.YieldTermStructureHandle:
+    args = [
+        _to_date_list(dates),
+        to_float_list(yields),
+        daycounter,
+    ]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    if jumps is not None or jump_dates is not None:
+        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        return ql.YieldTermStructureHandle(
+            ql.SimpleZeroCurve(
+                args[0],
+                args[1],
+                daycounter,
+                calendar,
+                _to_jump_quote_handles(jumps),
+                _to_date_list(jump_dates) if jump_dates is not None else [],
+            )
+        )
+    return ql.YieldTermStructureHandle(ql.SimpleZeroCurve(*args))
+
+
+@xlo.func(
+    help="Construct an interpolated simple zero curve object.",
+    args={
+        "dates": "The dates corresponding to the zero yields.",
+        "yields": "The simple zero yields corresponding to the dates.",
+        "daycounter": "The day count convention to use for the curve.",
+        "calendar": "The calendar to use for the curve.",
+        "jumps": "Optional jump quotes for the curve.",
+        "jump_dates": "Dates corresponding to the jump quotes.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSimpleZeroCurveAsObject(
+    dates: xlo.Array(dims=1),
+    yields: xlo.Array(dims=1),
+    daycounter: qDayCounter,
+    calendar=None,
+    jumps: xlo.Array(dims=1) = None,
+    jump_dates: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.SimpleZeroCurve:
+    calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+    return ql.SimpleZeroCurve(
+        _to_date_list(dates),
+        to_float_list(yields),
+        daycounter,
+        calendar,
+        _to_jump_quote_handles(jumps),
+        _to_date_list(jump_dates) if jump_dates is not None else [],
+    )
+
+
+@xlo.func(
+    help="Return the dates of an interpolated simple zero curve.",
+    args={"curve": "The interpolated simple zero curve."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSimpleZeroCurveDates(curve: ql.SimpleZeroCurve, trigger=None) -> list[ql.Date]:
+    return curve.dates()
+
+
+@xlo.func(
+    help="Return the times of an interpolated simple zero curve.",
+    args={"curve": "The interpolated simple zero curve."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSimpleZeroCurveTimes(curve: ql.SimpleZeroCurve, trigger=None) -> list[float]:
+    return curve.times()
+
+
+@xlo.func(
+    help="Return the zero-rate data of an interpolated simple zero curve.",
+    args={"curve": "The interpolated simple zero curve."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSimpleZeroCurveData(curve: ql.SimpleZeroCurve, trigger=None) -> list[float]:
+    return curve.data()
+
+
+@xlo.func(
+    help="Return the zero rates of an interpolated simple zero curve.",
+    args={"curve": "The interpolated simple zero curve."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSimpleZeroCurveZeroRates(curve: ql.SimpleZeroCurve, trigger=None) -> list[float]:
+    return curve.zeroRates()
 
 
 @xlo.func(

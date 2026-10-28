@@ -168,6 +168,55 @@ from quantlib_xloil.date import qFrequency, qlDate
 from quantlib_xloil.daycounters import qlDayCounter
 from quantlib_xloil.indexes import qlEuribor, qlSofr, qlSwapIndex, qlSwapSpreadIndex
 from quantlib_xloil.termstructures import qCompounding, qlFlatForward
+from quantlib_xloil.cashflows import (
+    qStubIndexSelectionConvention,
+    qlAsFxResetCoupon,
+    qlAsFxResetNotionalExchange,
+    qlAsOvernightIndexedCouponPricer,
+    qlAsStubIborCoupon,
+    qlDiscountingFxResetPricer,
+    qlDiscountingFxResetPricerConstantLegCurrency,
+    qlDiscountingFxResetPricerFxRate,
+    qlDiscountingFxResetPricerResettableLegCurrency,
+    qlFxReset,
+    qlFxResetConvention,
+    qlFxResetConventionFixingCalendar,
+    qlFxResetConventionFixingDays,
+    qlFxResetConventionReset,
+    qlFxResetConventionValueDate,
+    qlFxResetCoupon,
+    qlFxResetCouponConstantLegNotional,
+    qlFxResetCouponFxReset,
+    qlFxResetCouponFxResetDate,
+    qlFxResetCouponFxResetPricer,
+    qlFxResetCouponFxResetValueDate,
+    qlFxResetCouponSetFxResetPricer,
+    qlFxResetCouponUnderlying,
+    qlFxResetFixingDate,
+    qlFxResetNotionalExchange,
+    qlFxResetNotionalExchangeConstantLegNotional,
+    qlFxResetNotionalExchangeCurrentReset,
+    qlFxResetNotionalExchangeFxResetPricer,
+    qlFxResetNotionalExchangeHasCurrentReset,
+    qlFxResetNotionalExchangeHasPreviousReset,
+    qlFxResetNotionalExchangePreviousReset,
+    qlFxResetNotionalExchangeSetFxResetPricer,
+    qlFxResetValueDate,
+    qlFloatingRateCouponPricer,
+    qlOvernightIndexedCouponPricerCapletVolatility,
+    qlOvernightIndexedCouponPricerEffectiveCapletVolatility,
+    qlOvernightIndexedCouponPricerEffectiveFloorletVolatility,
+    qlOvernightIndexedCouponPricerEffectiveVolatilityInput,
+    qlOvernightIndexedCouponPricerSetCapletVolatility,
+    qlOvernightIndexedCouponPricerSetEffectiveVolatilityInput,
+    qlSetFxResetPricer,
+    qlStubIborCoupon,
+    qlStubIborCouponStubIndexSelection,
+    qlStubIndexSelection,
+    qlStubIndexSelectionConvention,
+    qlStubIndexSelectionEmpty,
+    qlStubIndexSelectionIndices,
+)
 
 
 def _schedule(start: ql.Date, end: ql.Date) -> ql.Schedule:
@@ -721,6 +770,10 @@ def test_ibor_leg_pricer_assignment_smoke():
 
     assert len(leg) > 0
     assert qlSetCouponPricer(leg, pricer) is True
+    assert isinstance(
+        qlFloatingRateCouponPricer(qlAsFloatingRateCoupon(leg[0])),
+        ql.FloatingRateCouponPricer,
+    )
 
 
 # =============================================================================
@@ -3620,3 +3673,130 @@ def test_qlLognormalCmsSpreadPricer_constructor_with_and_without_optionals():
         integration_points=16,
     )
     assert pricer2 is not None
+
+
+def test_stub_index_selection_and_stub_ibor_coupon_wrappers():
+    start = qlDate(2024, 1, 2)
+    end = qlDate(2024, 4, 30)
+    curve = _curve(start, 0.03)
+    indices = [qlEuribor(ql.Period("3M"), curve), qlEuribor(ql.Period("6M"), curve)]
+    selection = qlStubIndexSelection(
+        qStubIndexSelectionConvention.__wrapped__("INTERPOLATED"), indices
+    )
+
+    assert qlStubIndexSelectionEmpty(selection) is False
+    assert qlStubIndexSelectionConvention(selection) == "INTERPOLATED"
+    assert len(qlStubIndexSelectionIndices(selection)) == 2
+
+    coupon = qlStubIborCoupon(
+        end,
+        100.0,
+        start,
+        end,
+        2,
+        selection,
+        qlDayCounter("ACTUAL360"),
+    )
+    assert isinstance(coupon, ql.StubIborCoupon)
+    assert qlAsStubIborCoupon(coupon) is not None
+    assert qlStubIborCouponStubIndexSelection(coupon).empty() is False
+
+    schedule = _schedule(start, qlDate(2025, 1, 2))
+    leg = qlIborLeg(
+        [100.0],
+        schedule,
+        indices[0],
+        with_indexed_coupons=True,
+        stub_index_selection=selection,
+    )
+    assert len(leg) > 0
+
+
+def test_fx_reset_convention_pricer_coupon_and_notional_exchange_wrappers():
+    start = qlDate(2024, 1, 2)
+    fixing_date = qlDate(2024, 1, 2)
+    value_date = qlDate(2024, 1, 4)
+    end = qlDate(2024, 7, 2)
+    convention = qlFxResetConvention(2, qlCalendar("TARGET"))
+    reset = qlFxResetConventionReset(convention, value_date)
+
+    assert qlFxResetConventionFixingDays(convention) == 2
+    assert qlFxResetConventionValueDate(convention, fixing_date) == value_date
+    assert qlFxResetFixingDate(reset) == fixing_date
+    assert qlFxResetValueDate(reset) == value_date
+    assert qlFxResetConventionFixingCalendar(convention) is not None
+
+    curve = _curve(start, 0.03)
+    index = qlEuribor(ql.Period("6M"), curve)
+    underlying = qlIborCoupon(
+        end, 100.0, start, end, 2, index, day_counter=qlDayCounter("ACTUAL360")
+    )
+    coupon = qlFxResetCoupon(underlying, 100.0, reset)
+    exchange = qlFxResetNotionalExchange(
+        end, 100.0, qlFxReset(start, value_date), reset
+    )
+
+    assert qlAsFxResetCoupon(coupon) is not None
+    assert qlFxResetCouponUnderlying(coupon) is not None
+    assert qlFxResetCouponConstantLegNotional(coupon) == pytest.approx(100.0)
+    assert qlFxResetCouponFxReset(coupon).valueDate() == value_date
+    assert qlFxResetCouponFxResetDate(coupon) == fixing_date
+    assert qlFxResetCouponFxResetValueDate(coupon) == value_date
+
+    assert qlAsFxResetNotionalExchange(exchange) is not None
+    assert qlFxResetNotionalExchangeConstantLegNotional(exchange) == pytest.approx(
+        100.0
+    )
+    assert qlFxResetNotionalExchangeHasPreviousReset(exchange) is True
+    assert qlFxResetNotionalExchangeHasCurrentReset(exchange) is True
+    assert qlFxResetNotionalExchangePreviousReset(exchange).valueDate() == value_date
+    assert qlFxResetNotionalExchangeCurrentReset(exchange).valueDate() == value_date
+
+    fx_pricer = qlDiscountingFxResetPricer(
+        ql.EURCurrency(),
+        ql.EURCurrency(),
+        curve,
+        curve,
+        ql.QuoteHandle(ql.SimpleQuote(1.0)),
+        True,
+    )
+    assert qlDiscountingFxResetPricerConstantLegCurrency(fx_pricer) == ql.EURCurrency()
+    assert (
+        qlDiscountingFxResetPricerResettableLegCurrency(fx_pricer) == ql.EURCurrency()
+    )
+    assert qlDiscountingFxResetPricerFxRate(fx_pricer, reset) == pytest.approx(1.0)
+    assert qlFxResetCouponSetFxResetPricer(coupon, fx_pricer) is True
+    assert qlFxResetCouponFxResetPricer(coupon) is not None
+    assert qlFxResetNotionalExchangeSetFxResetPricer(exchange, fx_pricer) is True
+    assert qlFxResetNotionalExchangeFxResetPricer(exchange) is not None
+    assert qlSetFxResetPricer([coupon, exchange], fx_pricer) is True
+
+
+def test_overnight_indexed_coupon_pricer_new_accessors():
+    ref_date = qlDate(2024, 1, 2)
+    vol_structure = ql.ConstantOptionletVolatility(
+        ref_date,
+        qlCalendar("TARGET"),
+        qBusinessDayConvention.__wrapped__("FOLLOWING"),
+        ql.QuoteHandle(ql.SimpleQuote(0.20)),
+        qlDayCounter("ACTUAL365FIXED"),
+    )
+    vol_handle = ql.OptionletVolatilityStructureHandle(vol_structure)
+    pricer = qlBlackCompoundingOvernightIndexedCouponPricer()
+
+    assert isinstance(qlAsOvernightIndexedCouponPricer(pricer), ql.OvernightIndexedCouponPricer)
+    assert qlOvernightIndexedCouponPricerSetCapletVolatility(pricer, vol_handle) is True
+    assert (
+        qlOvernightIndexedCouponPricerCapletVolatility(pricer).currentLink()
+        is not None
+    )
+    assert (
+        qlOvernightIndexedCouponPricerSetEffectiveVolatilityInput(pricer, True) is True
+    )
+    assert qlOvernightIndexedCouponPricerEffectiveVolatilityInput(pricer) is True
+    assert isinstance(
+        qlOvernightIndexedCouponPricerEffectiveCapletVolatility(pricer), float
+    )
+    assert isinstance(
+        qlOvernightIndexedCouponPricerEffectiveFloorletVolatility(pricer), float
+    )

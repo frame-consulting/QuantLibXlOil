@@ -23,10 +23,14 @@ from quantlib_xloil import (
     qlNonstandardSwaptionUnderlyingSwap,
     qlSwaption,
     qlSwaptionAnnuity,
+    qlSwaptionAtmForward,
     qlSwaptionDelta,
     qlSwaptionForwardPrice,
     qlSwaptionSettlementMethod,
     qlSwaptionSettlementType,
+    qlSwaptionStdDev,
+    qlSwaptionStrike,
+    qlSwaptionSwapLength,
     qlSwaptionType,
     qlSwaptionUnderlying,
     qlSwaptionVega,
@@ -154,6 +158,32 @@ def test_swaption_constructor_and_accessors():
 
     underlying = qlSwaptionUnderlying(swaption)
     assert isinstance(underlying, ql.FixedVsFloatingSwap)
+
+
+def test_swaption_engine_result_accessors():
+    _set_eval_date()
+    reference_date, day_counter, risk_free, forecast = _setup_curves()
+    settlement_date = reference_date + ql.Period(2, ql.Days)
+    exercise_date = settlement_date + ql.Period(6, ql.Months)
+    maturity_date = exercise_date + ql.Period(3, ql.Years)
+    index = ql.Euribor3M(forecast)
+    swap = _create_swap(exercise_date, maturity_date, 0.025, 100000.0, index)
+    swaption = qlSwaption(swap, qlEuropeanExercise(exercise_date))
+    volatility = ql.SwaptionVolatilityStructureHandle(
+        ql.ConstantSwaptionVolatility(
+            reference_date, ql.TARGET(), ql.Following, 0.20, day_counter
+        )
+    )
+    engine = qlBlackSwaptionEngine(
+        risk_free, volatility, ql.BlackSwaptionEngine.DiscountCurve
+    )
+    qlInstrumentSetPricingEngine(swaption, engine)
+    qlInstrumentNPV(swaption)
+
+    assert qlSwaptionStrike(swaption) == pytest.approx(0.025)
+    assert qlSwaptionAtmForward(swaption) > 0.0
+    assert qlSwaptionSwapLength(swaption) > 0.0
+    assert qlSwaptionStdDev(swaption) > 0.0
 
 
 def test_swaption_engines_only():
