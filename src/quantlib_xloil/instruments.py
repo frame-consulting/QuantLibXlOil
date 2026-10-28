@@ -1,3 +1,5 @@
+from typing import Optional
+
 import QuantLib as ql
 import xloil as xlo
 
@@ -41,6 +43,26 @@ def qlInstrumentIsExpired(instrument: ql.Instrument, trigger=None) -> bool:
 
 
 @xlo.func(
+    help="Return the valuation date of a QuantLib Instrument.",
+    args={"instrument": "The QuantLib Instrument."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlInstrumentValuationDate(instrument: ql.Instrument, trigger=None) -> ql.Date:
+    return instrument.valuationDate()
+
+
+@xlo.func(
+    help="Return the pricing engine of a QuantLib Instrument.",
+    args={"instrument": "The QuantLib Instrument."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlInstrumentPricingEngine(
+    instrument: ql.Instrument, trigger=None
+) -> Optional[ql.PricingEngine]:
+    return instrument.pricingEngine()
+
+
+@xlo.func(
     help="Set the pricing engine for a QuantLib Instrument.",
     args={
         "instrument": "QuantLib Instrument.",
@@ -54,6 +76,16 @@ def qlInstrumentSetPricingEngine(
     trigger=None,
 ) -> bool:
     instrument.setPricingEngine(engine)
+    return True
+
+
+@xlo.func(
+    help="Force a deep update of a QuantLib LazyObject and its observers.",
+    args={"lazy_object": "The QuantLib LazyObject to update."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlLazyObjectDeepUpdate(lazy_object: ql.LazyObject, trigger=None) -> bool:
+    lazy_object.deepUpdate()
     return True
 
 

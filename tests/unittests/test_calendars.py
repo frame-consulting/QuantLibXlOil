@@ -94,6 +94,11 @@ def test_qlCalendar_new_143_calendars():
         assert qlCalendar(name) is not None
 
 
+def test_qlCalendar_new_144_calendars():
+    for name in ("Malaysia", "Philippines"):
+        assert qlCalendar(name) is not None
+
+
 def test_qlCalendar_missing_calendars():
     for name in (
         "China_ib",

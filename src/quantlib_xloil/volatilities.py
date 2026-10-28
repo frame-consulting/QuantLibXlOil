@@ -1,7 +1,11 @@
 import QuantLib as ql
 import xloil as xlo
 
-from .calendars import qBusinessDayConvention, qCalendar
+from .calendars import (
+    QL_BUSINESSDAYCONVENTION,
+    qBusinessDayConvention,
+    qCalendar,
+)
 from .config import EXCEL_GROUP_NAME
 from .date import qDate, qPeriod, _to_date_list
 from .daycounters import qDayCounter
@@ -12,6 +16,7 @@ from .utilities import (
     UNKNOWN_KEY,
     UNKNOWN_VALUE,
     first_key,
+    to_bool_list,
     to_float_matrix,
     to_float_list,
 )
@@ -46,6 +51,24 @@ def _qVolatilityType(s: str) -> int:
 @xlo.converter()
 def qVolatilityType(s: str) -> int:
     return _qVolatilityType(s)
+
+
+def _to_quote_handle_matrix(values) -> list[list[ql.QuoteHandle]]:
+    if values is None:
+        return []
+    rows = values.tolist() if hasattr(values, "tolist") else values
+    result = []
+    for row_index, row in enumerate(rows):
+        converted_row = []
+        for column_index, value in enumerate(row):
+            try:
+                converted_row.append(qQuoteHandle.__wrapped__(value))
+            except (TypeError, ValueError) as error:
+                raise ValueError(
+                    f"Invalid quote at row {row_index}, column {column_index}: {value!r}"
+                ) from error
+        result.append(converted_row)
+    return result
 
 
 # TODO returner for qVolatilityType
@@ -1501,6 +1524,50 @@ def qlSwaptionVolatilityMatrix(
     return ql.SwaptionVolatilityStructureHandle(vol_ts)
 
 
+@xlo.func(
+    help="Create a QuantLib SwaptionVolatilityMatrix from option and swap tenors.",
+    args={
+        "reference_date": "The reference date for the matrix.",
+        "calendar": "The calendar used for the matrix.",
+        "business_day_convention": "The business-day convention.",
+        "option_tenors": "The option expiry tenors.",
+        "swap_tenors": "The underlying swap tenors.",
+        "vols": "The volatility matrix.",
+        "day_counter": "The day counter.",
+        "flat_extrapolation": "Whether to use flat extrapolation.",
+        "volatility_type": "The volatility type.",
+        "shifts": "The displacement matrix, if applicable.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityMatrixForTenors(
+    reference_date: qDate,
+    calendar: qCalendar,
+    business_day_convention: qBusinessDayConvention,
+    option_tenors: xlo.Array(dims=1),
+    swap_tenors: xlo.Array(dims=1),
+    vols: xlo.Array(dims=2),
+    day_counter: qDayCounter,
+    flat_extrapolation: bool = False,
+    volatility_type: qVolatilityType = ql.ShiftedLognormal,
+    shifts: xlo.Array(dims=2) = None,
+    trigger=None,
+) -> ql.SwaptionVolatilityStructureHandle:
+    vol_ts = ql.SwaptionVolatilityMatrix.forTenors(
+        reference_date,
+        calendar,
+        business_day_convention,
+        [qPeriod.__wrapped__(tenor) for tenor in option_tenors],
+        [qPeriod.__wrapped__(tenor) for tenor in swap_tenors],
+        ql.Matrix(to_float_matrix(vols)),
+        day_counter,
+        flat_extrapolation,
+        volatility_type,
+        ql.Matrix(to_float_matrix(shifts)),
+    )
+    return ql.SwaptionVolatilityStructureHandle(vol_ts)
+
+
 # TODO to test
 @xlo.func(
     help="Creates a SwaptionVolatilityMatrix from dates and lengths.",
@@ -1662,18 +1729,324 @@ def qlSwaptionVolatilityMatrix4(
     return ql.SwaptionVolatilityStructureHandle(vol_ts)
 
 
-# TODO qlSwaptionVolatilityMatrixVolatilityType
+@xlo.func(
+    help="Return the business day convention of a volatility term structure.",
+    args={"volatility": "The volatility term structure."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlVolatilityTermStructureBusinessDayConvention(
+    volatility: ql.VolatilityTermStructure, trigger=None
+) -> str:
+    return first_key(QL_BUSINESSDAYCONVENTION, volatility.businessDayConvention())
 
 
-#
-# TODO Sabr Smile Section
-# TODO SviSmileSection
-# TODO SviInterpolatedSmileSection
-# TODO SwaptionVolatilityCube
-# TODO SabrSwaptionVolatilityCube
-# TODO InterpolatedSwaptionVolatilityCube
-# TODO ConstantYoYOptionletVolatility
-#
+@xlo.func(
+    help="Return the volatility type of an optionlet volatility structure.",
+    args={"volatility": "The optionlet volatility structure."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOptionletVolatilityStructureVolatilityType(
+    volatility: ql.OptionletVolatilityStructure, trigger=None
+) -> str:
+    return first_key(QL_VOLATILITY_TYPE, volatility.volatilityType())
+
+
+@xlo.func(
+    help="Return the displacement of an optionlet volatility structure.",
+    args={"volatility": "The optionlet volatility structure."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOptionletVolatilityStructureDisplacement(
+    volatility: ql.OptionletVolatilityStructure, trigger=None
+) -> float:
+    return volatility.displacement()
+
+
+@xlo.func(
+    help="Return the volatility type of a swaption volatility structure.",
+    args={"volatility": "The swaption volatility structure."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityStructureVolatilityType(
+    volatility: ql.SwaptionVolatilityStructure, trigger=None
+) -> str:
+    return first_key(QL_VOLATILITY_TYPE, volatility.volatilityType())
+
+
+@xlo.func(
+    help="Return the at-the-money strike of a swaption volatility cube.",
+    args={
+        "cube": "The swaption volatility cube.",
+        "option_date": "The option expiry date.",
+        "swap_tenor": "The underlying swap tenor.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityCubeAtmStrike(
+    cube: ql.SwaptionVolatilityCube,
+    option_date: qDate,
+    swap_tenor: qPeriod,
+    trigger=None,
+) -> float:
+    return cube.atmStrike(option_date, swap_tenor)
+
+
+@xlo.func(
+    help="Return the at-the-money volatility structure of a swaption volatility cube.",
+    args={"cube": "The swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityCubeAtmVol(
+    cube: ql.SwaptionVolatilityCube, trigger=None
+) -> ql.SwaptionVolatilityStructureHandle:
+    return cube.atmVol()
+
+
+@xlo.func(
+    help="Return the strike spreads of a swaption volatility cube.",
+    args={"cube": "The swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityCubeStrikeSpreads(
+    cube: ql.SwaptionVolatilityCube, trigger=None
+) -> list[float]:
+    return cube.strikeSpreads()
+
+
+@xlo.func(
+    help="Return the volatility-spread quote matrix of a swaption volatility cube.",
+    args={"cube": "The swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityCubeVolSpreads(
+    cube: ql.SwaptionVolatilityCube, trigger=None
+) -> list[list[ql.QuoteHandle]]:
+    return ql.SwaptionVolatilityCube.volSpreads(cube)
+
+
+@xlo.func(
+    help="Return the base swap index of a swaption volatility cube.",
+    args={"cube": "The swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityCubeSwapIndexBase(
+    cube: ql.SwaptionVolatilityCube, trigger=None
+) -> ql.SwapIndex:
+    return cube.swapIndexBase()
+
+
+@xlo.func(
+    help="Return the short swap index of a swaption volatility cube.",
+    args={"cube": "The swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityCubeShortSwapIndexBase(
+    cube: ql.SwaptionVolatilityCube, trigger=None
+) -> ql.SwapIndex:
+    return cube.shortSwapIndexBase()
+
+
+@xlo.func(
+    help="Return whether the swaption volatility cube uses vega-weighted smile fitting.",
+    args={"cube": "The swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSwaptionVolatilityCubeVegaWeightedSmileFit(
+    cube: ql.SwaptionVolatilityCube, trigger=None
+) -> bool:
+    return cube.vegaWeightedSmileFit()
+
+
+@xlo.func(
+    help="Create a QuantLib InterpolatedSwaptionVolatilityCube.",
+    args={
+        "atm_vol_structure": "The at-the-money swaption volatility structure.",
+        "option_tenors": "Option expiry tenors.",
+        "swap_tenors": "Underlying swap tenors.",
+        "strike_spreads": "Strike spreads.",
+        "vol_spreads": "Volatility spreads by option tenor and strike.",
+        "swap_index": "The base swap index.",
+        "short_swap_index": "The short swap index.",
+        "vega_weighted_smile_fit": "Whether to use vega-weighted smile fitting.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlInterpolatedSwaptionVolatilityCube(
+    atm_vol_structure: ql.SwaptionVolatilityStructureHandle,
+    option_tenors: xlo.Array(dims=1),
+    swap_tenors: xlo.Array(dims=1),
+    strike_spreads: xlo.Array(dims=1),
+    vol_spreads: xlo.Array(dims=2),
+    swap_index: ql.SwapIndex,
+    short_swap_index: ql.SwapIndex,
+    vega_weighted_smile_fit: bool = False,
+    trigger=None,
+) -> ql.InterpolatedSwaptionVolatilityCube:
+    return ql.InterpolatedSwaptionVolatilityCube(
+        atm_vol_structure,
+        [qPeriod.__wrapped__(tenor) for tenor in option_tenors],
+        [qPeriod.__wrapped__(tenor) for tenor in swap_tenors],
+        to_float_list(strike_spreads),
+        _to_quote_handle_matrix(vol_spreads),
+        swap_index,
+        short_swap_index,
+        vega_weighted_smile_fit,
+    )
+
+
+@xlo.func(
+    help=(
+        "Return the volatility-spread matrix for a tenor in an interpolated "
+        "swaption volatility cube."
+    ),
+    args={
+        "cube": "The interpolated swaption volatility cube.",
+        "i": "The option tenor index.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlInterpolatedSwaptionVolatilityCubeVolSpreads(
+    cube: ql.InterpolatedSwaptionVolatilityCube, i: int, trigger=None
+) -> ql.Matrix:
+    return cube.volSpreads(i)
+
+
+@xlo.func(
+    help="Create a QuantLib SabrSwaptionVolatilityCube.",
+    args={
+        "atm_vol_structure": "The at-the-money swaption volatility structure.",
+        "option_tenors": "Option expiry tenors.",
+        "swap_tenors": "Underlying swap tenors.",
+        "strike_spreads": "Strike spreads.",
+        "vol_spreads": "Volatility spreads by option tenor and strike.",
+        "swap_index": "The base swap index.",
+        "short_swap_index": "The short swap index.",
+        "vega_weighted_smile_fit": "Whether to use vega-weighted smile fitting.",
+        "parameters_guess": "Initial SABR parameter guesses.",
+        "is_parameter_fixed": "Flags indicating fixed SABR parameters.",
+        "is_atm_calibrated": "Whether to calibrate the cube to ATM volatilities.",
+        "end_criteria": "Calibration stopping criteria.",
+        "max_error_tolerance": "Maximum calibration error tolerance.",
+        "opt_method": "The optimization method.",
+        "error_accept": "Accepted calibration error.",
+        "use_max_error": "Whether to use maximum error in calibration.",
+        "max_guesses": "Maximum parameter guesses.",
+        "backward_flat": "Whether to use backward-flat interpolation.",
+        "cutoff_strike": "Minimum absolute strike for calibration.",
+        "single_pass_calibration": "Whether to calibrate in a single pass.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSwaptionVolatilityCube(
+    atm_vol_structure: ql.SwaptionVolatilityStructureHandle,
+    option_tenors: xlo.Array(dims=1),
+    swap_tenors: xlo.Array(dims=1),
+    strike_spreads: xlo.Array(dims=1),
+    vol_spreads: xlo.Array(dims=2),
+    swap_index: ql.SwapIndex,
+    short_swap_index: ql.SwapIndex,
+    vega_weighted_smile_fit: bool,
+    parameters_guess: xlo.Array(dims=2) = None,
+    is_parameter_fixed: xlo.Array(dims=1) = None,
+    is_atm_calibrated: bool = False,
+    end_criteria: ql.EndCriteria = None,
+    max_error_tolerance: float = ql.nullDouble(),
+    opt_method: ql.OptimizationMethod = None,
+    error_accept: float = ql.nullDouble(),
+    use_max_error: bool = False,
+    max_guesses: int = 50,
+    backward_flat: bool = False,
+    cutoff_strike: float = 0.0001,
+    single_pass_calibration: bool = False,
+    trigger=None,
+) -> ql.SabrSwaptionVolatilityCube:
+    return ql.SabrSwaptionVolatilityCube(
+        atm_vol_structure,
+        [qPeriod.__wrapped__(tenor) for tenor in option_tenors],
+        [qPeriod.__wrapped__(tenor) for tenor in swap_tenors],
+        to_float_list(strike_spreads),
+        _to_quote_handle_matrix(vol_spreads),
+        swap_index,
+        short_swap_index,
+        vega_weighted_smile_fit,
+        _to_quote_handle_matrix(parameters_guess),
+        to_bool_list(is_parameter_fixed),
+        is_atm_calibrated,
+        end_criteria,
+        max_error_tolerance,
+        opt_method,
+        error_accept,
+        use_max_error,
+        max_guesses,
+        backward_flat,
+        cutoff_strike,
+        single_pass_calibration,
+    )
+
+
+@xlo.func(
+    help="Return the sparse SABR parameter matrix of a swaption volatility cube.",
+    args={"cube": "The SABR swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSwaptionVolatilityCubeSparseSabrParameters(
+    cube: ql.SabrSwaptionVolatilityCube, trigger=None
+) -> ql.Matrix:
+    return cube.sparseSabrParameters()
+
+
+@xlo.func(
+    help="Return the dense SABR parameter matrix of a swaption volatility cube.",
+    args={"cube": "The SABR swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSwaptionVolatilityCubeDenseSabrParameters(
+    cube: ql.SabrSwaptionVolatilityCube, trigger=None
+) -> ql.Matrix:
+    return cube.denseSabrParameters()
+
+
+@xlo.func(
+    help="Return the market volatility matrix of a SABR swaption volatility cube.",
+    args={"cube": "The SABR swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSwaptionVolatilityCubeMarketVolCube(
+    cube: ql.SabrSwaptionVolatilityCube, trigger=None
+) -> ql.Matrix:
+    return cube.marketVolCube()
+
+
+@xlo.func(
+    help="Return the ATM-calibrated volatility matrix of a SABR swaption volatility cube.",
+    args={"cube": "The SABR swaption volatility cube."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSwaptionVolatilityCubeVolCubeAtmCalibrated(
+    cube: ql.SabrSwaptionVolatilityCube, trigger=None
+) -> ql.Matrix:
+    return cube.volCubeAtmCalibrated()
+
+
+@xlo.func(
+    help="Return a SABR smile section from a SABR swaption volatility cube.",
+    args={
+        "cube": "The SABR swaption volatility cube.",
+        "option_tenor": "Option expiry tenor.",
+        "swap_tenor": "Underlying swap tenor.",
+        "extrapolate": "Whether to extrapolate.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSabrSwaptionVolatilityCubeSmileSection(
+    cube: ql.SabrSwaptionVolatilityCube,
+    option_tenor: qPeriod,
+    swap_tenor: qPeriod,
+    extrapolate: bool = False,
+    trigger=None,
+) -> ql.SabrSmileSection:
+    return cube.smileSection(option_tenor, swap_tenor, extrapolate)
+
 
 # Smile Section Creator functions
 
@@ -2086,6 +2459,14 @@ def qlKahaleSmileSection(
         forced_right_index,
     )
 
+
+# TODO qlSwaptionVolatilityMatrixVolatilityType
+#
+# TODO Sabr Smile Section
+# TODO SviSmileSection
+# TODO SviInterpolatedSmileSection
+
+# TODO ConstantYoYOptionletVolatility
 
 #
 # TODO ZABR

@@ -206,19 +206,6 @@ def qlKerkhofSeasonality(
 
 
 @xlo.func(
-    help="Get the observation lag of an inflation term structure.",
-    args={
-        "inflation_term_structure": "The inflation term structure.",
-    },
-    group=EXCEL_GROUP_NAME,
-)
-def qlInflationTermStructureObservationLag(
-    inflation_term_structure: ql.InflationTermStructure, trigger=None
-) -> ql.Period:
-    return inflation_term_structure.observationLag()
-
-
-@xlo.func(
     help="Get the frequency of an inflation term structure.",
     args={
         "inflation_term_structure": "The inflation term structure.",
@@ -255,19 +242,6 @@ def qlInflationTermStructureBaseDate(
     inflation_term_structure: ql.InflationTermStructure, trigger=None
 ) -> ql.Date:
     return inflation_term_structure.baseDate()
-
-
-@xlo.func(
-    help="Check if an inflation term structure has an explicit base date.",
-    args={
-        "inflation_term_structure": "The inflation term structure.",
-    },
-    group=EXCEL_GROUP_NAME,
-)
-def qlInflationTermStructureHasExplicitBaseDate(
-    inflation_term_structure: ql.InflationTermStructure, trigger=None
-) -> bool:
-    return inflation_term_structure.hasExplicitBaseDate()
 
 
 @xlo.func(
@@ -1844,7 +1818,8 @@ def qlBootstrapHelperQuoteError(bootstrap_helper, trigger=None):
         "day_counter": "The day counter.",
         "index": "The zero inflation index.",
         "observation_interpolation": "The observation interpolation type.",
-        "nominal_its": "The nominal yield term structure handle.",
+        "pillar": "The pillar choice.",
+        "custom_pillar_date": "The custom pillar date when using the CustomDate pillar.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -1857,7 +1832,8 @@ def qlZeroCouponInflationSwapHelper(
     day_counter: qDayCounter,
     index: ql.ZeroInflationIndex,
     observation_interpolation: qCPIInterpolationType,
-    nominal_its: ql.YieldTermStructureHandle = None,
+    pillar: qPillarChoice = ql.Pillar.LastRelevantDate,
+    custom_pillar_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.ZeroCouponInflationSwapHelper:
     return ql.ZeroCouponInflationSwapHelper(
@@ -1869,7 +1845,8 @@ def qlZeroCouponInflationSwapHelper(
         day_counter,
         index,
         observation_interpolation,
-        nominal_its,
+        pillar,
+        custom_pillar_date,
     )
 
 

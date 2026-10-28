@@ -6,6 +6,12 @@ from quantlib_xloil.interpolatedyieldcurves import (
     qlDiscountCurve,
     qlForwardCurve,
     qlInterpolatedYieldCurve,
+    qlSimpleZeroCurve,
+    qlSimpleZeroCurveAsObject,
+    qlSimpleZeroCurveData,
+    qlSimpleZeroCurveDates,
+    qlSimpleZeroCurveTimes,
+    qlSimpleZeroCurveZeroRates,
     qlZeroCurve,
 )
 from quantlib_xloil.calendars import qlCalendar
@@ -180,6 +186,57 @@ def test_qlZeroCurve_constructor():
 
     assert isinstance(handle, ql.YieldTermStructureHandle)
     assert handle.currentLink() is not None
+
+
+def test_qlSimpleZeroCurve_constructor():
+    dates = _sample_dates()
+    yields = [0.01, 0.0125, 0.015, 0.0175]
+    daycounter, calendar = _sample_context()
+
+    handle = qlSimpleZeroCurve(dates, yields, daycounter, calendar)
+
+    assert isinstance(handle, ql.YieldTermStructureHandle)
+    assert handle.currentLink() is not None
+    assert handle.zeroRate(dates[2], daycounter, ql.Continuous).rate() > 0.0
+
+
+def test_qlSimpleZeroCurve_accessors_and_jump_constructor():
+    dates = _sample_dates()
+    yields = [0.01, 0.0125, 0.015, 0.0175]
+    daycounter, calendar = _sample_context()
+    curve = qlSimpleZeroCurveAsObject(
+        dates,
+        yields,
+        daycounter,
+        calendar,
+        jumps=[0.999],
+        jump_dates=[qlDate(2025, 7, 2)],
+    )
+
+    assert isinstance(curve, ql.SimpleZeroCurve)
+    assert list(qlSimpleZeroCurveDates(curve)) == dates
+    assert len(qlSimpleZeroCurveTimes(curve)) == len(dates)
+    assert qlSimpleZeroCurveData(curve) == pytest.approx(yields)
+    assert qlSimpleZeroCurveZeroRates(curve) == pytest.approx(yields)
+
+
+def test_qlInterpolatedYieldCurve_supports_simple_zero_traits_and_jumps():
+    dates = _sample_dates()
+    yields = [0.01, 0.0125, 0.015, 0.0175]
+    daycounter, calendar = _sample_context()
+    curve = qlInterpolatedYieldCurve(
+        dates,
+        yields,
+        daycounter,
+        calendar,
+        "SIMPLEZERORATE",
+        "LINEAR",
+        jumps=[0.999],
+        jump_dates=[qlDate(2025, 7, 2)],
+    )
+
+    assert isinstance(curve, ql.YieldTermStructureHandle)
+    assert curve.discount(dates[-1]) > 0.0
 
 
 def test_qlLogCubicSpreadDiscountCurve_constructor():

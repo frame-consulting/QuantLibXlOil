@@ -4,9 +4,9 @@ import xloil as xlo
 
 from .calendars import qCalendar
 from .config import EXCEL_GROUP_NAME
-from .date import qDate, qFrequency
+from .date import QL_FREQUENCY, qDate, qFrequency
 from .daycounters import qDayCounter
-from .utilities import enum_value
+from .utilities import enum_value, first_key
 
 ## TermStructure interface
 
@@ -332,6 +332,48 @@ def qlFlatForward2(
         settlement_days, calendar, forward_rate, daycounter, compounding, frequency
     )
     return ql.YieldTermStructureHandle(yts)
+
+
+@xlo.func(
+    help="Construct a FlatForward object rather than a yield-curve handle.",
+    args={
+        "reference_date": "The reference date for the curve.",
+        "forward_rate": "The forward rate for the curve.",
+        "daycounter": "The day count convention to use for the curve.",
+        "compounding": "The compounding convention to use for the curve.",
+        "frequency": "The frequency to use for the curve.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFlatForwardAsObject(
+    reference_date: qDate,
+    forward_rate: float,
+    daycounter: qDayCounter,
+    compounding: qCompounding = ql.Continuous,
+    frequency: qFrequency = ql.Annual,
+    trigger=None,
+) -> ql.FlatForward:
+    return ql.FlatForward(
+        reference_date, forward_rate, daycounter, compounding, frequency
+    )
+
+
+@xlo.func(
+    help="Return the compounding convention of a FlatForward curve.",
+    args={"curve": "The QuantLib FlatForward object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFlatForwardCompounding(curve: ql.FlatForward, trigger=None) -> str:
+    return first_key(QL_COMPOUNDING, curve.compounding())
+
+
+@xlo.func(
+    help="Return the compounding frequency of a FlatForward curve.",
+    args={"curve": "The QuantLib FlatForward object."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFlatForwardCompoundingFrequency(curve: ql.FlatForward, trigger=None) -> str:
+    return first_key(QL_FREQUENCY, curve.compoundingFrequency())
 
 
 ## Implied term structure

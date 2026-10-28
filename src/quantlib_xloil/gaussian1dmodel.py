@@ -210,6 +210,28 @@ def qlGaussian1dModelForwardRate(
 
 
 @xlo.func(
+    help="Return the compounded rate for an overnight coupon from a Gaussian1d model.",
+    args={
+        "model": "QuantLib Gaussian1dModel object.",
+        "coupon": "Overnight indexed coupon to evaluate.",
+        "reference_date": "Reference date (defaults to today).",
+        "y": "Normalised state variable.",
+        "yts": "Optional handle to the yield term structure.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlGaussian1dModelCompoundedRate(
+    model: ql.Gaussian1dModel,
+    coupon: ql.OvernightIndexedCoupon,
+    reference_date: qDate = ql.Date(),
+    y: float = 0.0,
+    yts: ql.YieldTermStructureHandle = ql.YieldTermStructureHandle(),
+    trigger=None,
+) -> float:
+    return model.compoundedRate(coupon, reference_date, y, yts)
+
+
+@xlo.func(
     help="Return the swap rate for a swap index from a Gaussian1d model.",
     args={
         "model": "QuantLib Gaussian1dModel object.",

@@ -4,6 +4,7 @@ import quantlib_xloil as qlx
 
 
 from quantlib_xloil.indexes import (
+    qlAsSwapSpreadIndex,
     qlEquityIndex,
     qlIborIndex,
     qlIndexAddFixing,
@@ -31,6 +32,7 @@ from quantlib_xloil.indexes import (
     qlBMAIndexForwardingTermStructure,
     qlNibor,
     qlShir,
+    qlSwapSpreadIndex,
     qlZaronia,
 )
 from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
@@ -99,6 +101,13 @@ def test_qlInterestRateIndex_accessors_and_dates():
     assert isinstance(qlInterestRateIndexDayCounter(index), ql.DayCounter)
     assert fixing_date <= computed_value_date
     assert maturity_date > computed_value_date
+
+
+def test_qlAsSwapSpreadIndex_converts_interest_rate_index():
+    swap_index = ql.EuriborSwapIsdaFixA(ql.Period("5Y"))
+    spread_index = qlSwapSpreadIndex("TEST-SPREAD", swap_index, swap_index)
+
+    assert isinstance(qlAsSwapSpreadIndex(spread_index), ql.SwapSpreadIndex)
 
 
 @pytest.mark.parametrize(

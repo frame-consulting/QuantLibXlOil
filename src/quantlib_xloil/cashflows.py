@@ -8,6 +8,7 @@ from .calendars import (
     QL_BUSINESSDAYCONVENTION,
 )
 from .config import EXCEL_GROUP_NAME
+from .currencies import qCurrency
 from .date import _to_date_list, qDate, qFrequency, _qDate
 from .daycounters import qDayCounter
 from .termstructures import qCompounding
@@ -48,9 +49,19 @@ QL_YIELD_CURVE_MODEL = {
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
+QL_STUB_INDEX_SELECTION_CONVENTION = {
+    "CLOSESTINDEX": ql.StubIndexSelection.ClosestIndex,
+    "INTERPOLATED": ql.StubIndexSelection.Interpolated,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
 
 def _qDurationType(duration_type: str) -> int:
     return enum_value(duration_type, QL_DURATION_TYPE)
+
+
+def _qStubIndexSelectionConvention(convention: str) -> int:
+    return enum_value(convention, QL_STUB_INDEX_SELECTION_CONVENTION)
 
 
 def _qRateAveragingType(averaging_type: str) -> int:
@@ -83,6 +94,11 @@ def qTimingAdjustmentType(timing_adjustment_type: str) -> int:
 @xlo.converter()
 def qYieldCurveModel(yield_curve_model: str):
     return _qYieldCurveModel(yield_curve_model)
+
+
+@xlo.converter()
+def qStubIndexSelectionConvention(convention: str) -> int:
+    return _qStubIndexSelectionConvention(convention)
 
 
 @xlo.converter()
@@ -619,6 +635,17 @@ def qlFloatingRateCouponIndex(
     coupon: ql.FloatingRateCoupon, trigger=None
 ) -> ql.InterestRateIndex:
     return coupon.index()
+
+
+@xlo.func(
+    help="Return the pricer assigned to a floating-rate coupon.",
+    args={"coupon": "QuantLib FloatingRateCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFloatingRateCouponPricer(
+    coupon: ql.FloatingRateCoupon, trigger=None
+) -> ql.FloatingRateCouponPricer:
+    return coupon.pricer()
 
 
 @xlo.func(
@@ -1197,6 +1224,17 @@ def qlAsOvernightIndexedCoupon(
 
 
 @xlo.func(
+    help="Cast a floating-rate coupon pricer to OvernightIndexedCouponPricer if possible.",
+    args={"pricer": "QuantLib FloatingRateCouponPricer."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlAsOvernightIndexedCouponPricer(
+    pricer: ql.FloatingRateCouponPricer, trigger=None
+) -> ql.OvernightIndexedCouponPricer:
+    return ql.as_overnight_indexed_coupon_pricer(pricer)
+
+
+@xlo.func(
     help="Cast a CashFlow to CappedFlooredOvernightIndexedCoupon if possible.",
     args={
         "cashflow": "QuantLib CashFlow.",
@@ -1276,6 +1314,132 @@ def qlIborCoupon(
     )
     cpn.setPricer(ql.BlackIborCouponPricer())
     return cpn
+
+
+@xlo.func(
+    help="Create a QuantLib StubIndexSelection.",
+    args={
+        "convention": "Index selection convention.",
+        "indices": "Ibor indices used for stub periods.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlStubIndexSelection(
+    convention: qStubIndexSelectionConvention = ql.StubIndexSelection.ClosestIndex,
+    indices: xlo.Array(dims=1) = None,
+    trigger=None,
+) -> ql.StubIndexSelection:
+    if indices is None:
+        return ql.StubIndexSelection()
+    return ql.StubIndexSelection(convention, to_object_list(indices, ql.IborIndex))
+
+
+@xlo.func(
+    help="Check whether a QuantLib StubIndexSelection is empty.",
+    args={"selection": "QuantLib StubIndexSelection."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlStubIndexSelectionEmpty(selection: ql.StubIndexSelection, trigger=None) -> bool:
+    return selection.empty()
+
+
+@xlo.func(
+    help="Return the convention used by a QuantLib StubIndexSelection.",
+    args={"selection": "QuantLib StubIndexSelection."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlStubIndexSelectionConvention(
+    selection: ql.StubIndexSelection, trigger=None
+) -> str:
+    return first_key(QL_STUB_INDEX_SELECTION_CONVENTION, selection.convention())
+
+
+@xlo.func(
+    help="Return the indices in a QuantLib StubIndexSelection.",
+    args={"selection": "QuantLib StubIndexSelection."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlStubIndexSelectionIndices(
+    selection: ql.StubIndexSelection, trigger=None
+) -> list[ql.IborIndex]:
+    return selection.indices()
+
+
+@xlo.func(
+    help="Create a QuantLib StubIborCoupon.",
+    args={
+        "payment_date": "Payment date.",
+        "nominal": "Nominal amount.",
+        "start_date": "Accrual start date.",
+        "end_date": "Accrual end date.",
+        "fixing_days": "Fixing days.",
+        "stub_index_selection": "Index selection for a stub period.",
+        "gearing": "Coupon gearing.",
+        "spread": "Coupon spread.",
+        "ref_period_start": "Reference period start date.",
+        "ref_period_end": "Reference period end date.",
+        "day_counter": "Day count convention.",
+        "is_in_arrears": "Whether fixing is in arrears.",
+        "ex_coupon_date": "Ex-coupon date.",
+        "fixing_convention": "Fixing convention.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlStubIborCoupon(
+    payment_date: qDate,
+    nominal: float,
+    start_date: qDate,
+    end_date: qDate,
+    fixing_days: int,
+    stub_index_selection: ql.StubIndexSelection,
+    day_counter: qDayCounter,
+    gearing: float = 1.0,
+    spread: float = 0.0,
+    ref_period_start: qDate = ql.Date(),
+    ref_period_end: qDate = ql.Date(),
+    is_in_arrears: bool = False,
+    ex_coupon_date: qDate = ql.Date(),
+    fixing_convention: qBusinessDayConvention = ql.Preceding,
+    trigger=None,
+) -> ql.StubIborCoupon:
+    coupon = ql.StubIborCoupon(
+        payment_date,
+        nominal,
+        start_date,
+        end_date,
+        fixing_days,
+        stub_index_selection,
+        gearing,
+        spread,
+        ref_period_start,
+        ref_period_end,
+        day_counter,
+        is_in_arrears,
+        ex_coupon_date,
+        fixing_convention,
+    )
+    coupon.setPricer(ql.BlackIborCouponPricer())
+    return coupon
+
+
+@xlo.func(
+    help="Return the stub index selection used by an Ibor coupon.",
+    args={"coupon": "QuantLib StubIborCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlStubIborCouponStubIndexSelection(
+    coupon: ql.StubIborCoupon, trigger=None
+) -> ql.StubIndexSelection:
+    return coupon.stubIndexSelection()
+
+
+@xlo.func(
+    help="Cast a cash flow to StubIborCoupon if possible.",
+    args={"cashflow": "QuantLib CashFlow."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlAsStubIborCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.StubIborCoupon:
+    return ql.as_stub_ibor_coupon(cashflow)
 
 
 @xlo.func(
@@ -1605,6 +1769,84 @@ def qlBlackAveragingOvernightIndexedCouponPricer(
     return ql.BlackAveragingOvernightIndexedCouponPricer(
         volatility, effective_volatility_input
     )
+
+
+@xlo.func(
+    help="Set the caplet volatility handle for an overnight indexed coupon pricer.",
+    args={
+        "pricer": "QuantLib OvernightIndexedCouponPricer.",
+        "volatility": "Optionlet volatility handle.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedCouponPricerSetCapletVolatility(
+    pricer: ql.OvernightIndexedCouponPricer,
+    volatility: ql.OptionletVolatilityStructureHandle = ql.OptionletVolatilityStructureHandle(),
+    trigger=None,
+) -> bool:
+    pricer.setCapletVolatility(volatility)
+    return True
+
+
+@xlo.func(
+    help="Return the caplet volatility handle from an overnight indexed coupon pricer.",
+    args={"pricer": "QuantLib OvernightIndexedCouponPricer."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedCouponPricerCapletVolatility(
+    pricer: ql.OvernightIndexedCouponPricer, trigger=None
+) -> ql.OptionletVolatilityStructureHandle:
+    return pricer.capletVolatility()
+
+
+@xlo.func(
+    help="Set whether an overnight indexed coupon pricer uses effective volatility input.",
+    args={
+        "pricer": "QuantLib OvernightIndexedCouponPricer.",
+        "effective_volatility_input": "Whether volatility input is effective volatility.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedCouponPricerSetEffectiveVolatilityInput(
+    pricer: ql.OvernightIndexedCouponPricer,
+    effective_volatility_input: bool,
+    trigger=None,
+) -> bool:
+    pricer.setEffectiveVolatilityInput(effective_volatility_input)
+    return True
+
+
+@xlo.func(
+    help="Return whether an overnight indexed coupon pricer uses effective volatility input.",
+    args={"pricer": "QuantLib OvernightIndexedCouponPricer."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedCouponPricerEffectiveVolatilityInput(
+    pricer: ql.OvernightIndexedCouponPricer, trigger=None
+) -> bool:
+    return pricer.effectiveVolatilityInput()
+
+
+@xlo.func(
+    help="Return the effective caplet volatility from an overnight indexed coupon pricer.",
+    args={"pricer": "QuantLib OvernightIndexedCouponPricer."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedCouponPricerEffectiveCapletVolatility(
+    pricer: ql.OvernightIndexedCouponPricer, trigger=None
+) -> float:
+    return pricer.effectiveCapletVolatility()
+
+
+@xlo.func(
+    help="Return the effective floorlet volatility from an overnight indexed coupon pricer.",
+    args={"pricer": "QuantLib OvernightIndexedCouponPricer."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlOvernightIndexedCouponPricerEffectiveFloorletVolatility(
+    pricer: ql.OvernightIndexedCouponPricer, trigger=None
+) -> float:
+    return pricer.effectiveFloorletVolatility()
 
 
 @xlo.func(
@@ -2277,6 +2519,401 @@ def qlRangeAccrualFloatersCoupon(
 
 
 @xlo.func(
+    help="Create a QuantLib FxReset.",
+    args={
+        "fixing_date": "FX fixing date.",
+        "value_date": "FX value date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxReset(fixing_date: qDate, value_date: qDate, trigger=None) -> ql.FxReset:
+    return ql.FxReset(fixing_date, value_date)
+
+
+@xlo.func(
+    help="Return the fixing date of a QuantLib FxReset.",
+    args={"reset": "QuantLib FxReset."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetFixingDate(reset: ql.FxReset, trigger=None) -> ql.Date:
+    return reset.fixingDate()
+
+
+@xlo.func(
+    help="Return the value date of a QuantLib FxReset.",
+    args={"reset": "QuantLib FxReset."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetValueDate(reset: ql.FxReset, trigger=None) -> ql.Date:
+    return reset.valueDate()
+
+
+@xlo.func(
+    help="Create a QuantLib FxResetConvention.",
+    args={
+        "fixing_days": "FX fixing days.",
+        "fixing_calendar": "Calendar used to determine FX fixing dates.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetConvention(
+    fixing_days: int = 0, fixing_calendar: qCalendar = None, trigger=None
+) -> ql.FxResetConvention:
+    if fixing_calendar is None:
+        return ql.FxResetConvention(fixing_days)
+    return ql.FxResetConvention(fixing_days, fixing_calendar)
+
+
+@xlo.func(
+    help="Create an FX reset from its value date and reset convention.",
+    args={
+        "convention": "QuantLib FxResetConvention.",
+        "value_date": "FX value date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetConventionReset(
+    convention: ql.FxResetConvention, value_date: qDate, trigger=None
+) -> ql.FxReset:
+    return convention.reset(value_date)
+
+
+@xlo.func(
+    help="Return the value date for an FX fixing date.",
+    args={
+        "convention": "QuantLib FxResetConvention.",
+        "fixing_date": "FX fixing date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetConventionValueDate(
+    convention: ql.FxResetConvention, fixing_date: qDate, trigger=None
+) -> ql.Date:
+    return convention.valueDate(fixing_date)
+
+
+@xlo.func(
+    help="Return the number of fixing days in an FX reset convention.",
+    args={"convention": "QuantLib FxResetConvention."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetConventionFixingDays(
+    convention: ql.FxResetConvention, trigger=None
+) -> int:
+    return convention.fixingDays()
+
+
+@xlo.func(
+    help="Return the fixing calendar in an FX reset convention.",
+    args={"convention": "QuantLib FxResetConvention."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetConventionFixingCalendar(
+    convention: ql.FxResetConvention, trigger=None
+) -> ql.Calendar:
+    return convention.fixingCalendar()
+
+
+@xlo.func(
+    help="Create a QuantLib DiscountingFxResetPricer.",
+    args={
+        "constant_leg_currency": "Currency of the constant-notional leg.",
+        "resettable_leg_currency": "Currency of the FX-reset leg.",
+        "constant_leg_curve": "Discount curve for the constant-notional leg.",
+        "resettable_leg_curve": "Discount curve for the FX-reset leg.",
+        "spot_fx": "Spot FX quote.",
+        "spot_is_resettable_per_constant": "Whether spot is resettable currency per constant currency.",
+        "spot_fx_settle_date": "Spot FX settlement date.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlDiscountingFxResetPricer(
+    constant_leg_currency: qCurrency,
+    resettable_leg_currency: qCurrency,
+    constant_leg_curve: ql.YieldTermStructureHandle,
+    resettable_leg_curve: ql.YieldTermStructureHandle,
+    spot_fx: qQuoteHandle,
+    spot_is_resettable_per_constant: bool,
+    spot_fx_settle_date: qDate = ql.Date(),
+    trigger=None,
+) -> ql.DiscountingFxResetPricer:
+    return ql.DiscountingFxResetPricer(
+        constant_leg_currency,
+        resettable_leg_currency,
+        constant_leg_curve,
+        resettable_leg_curve,
+        spot_fx,
+        spot_is_resettable_per_constant,
+        spot_fx_settle_date,
+    )
+
+
+@xlo.func(
+    help="Calculate the FX rate for a reset using a discounting FX reset pricer.",
+    args={
+        "pricer": "QuantLib DiscountingFxResetPricer.",
+        "reset": "QuantLib FxReset.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlDiscountingFxResetPricerFxRate(
+    pricer: ql.DiscountingFxResetPricer, reset: ql.FxReset, trigger=None
+) -> float:
+    return pricer.fxRate(reset)
+
+
+@xlo.func(
+    help="Return the constant-leg currency from a discounting FX reset pricer.",
+    args={"pricer": "QuantLib DiscountingFxResetPricer."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlDiscountingFxResetPricerConstantLegCurrency(
+    pricer: ql.DiscountingFxResetPricer, trigger=None
+) -> ql.Currency:
+    return pricer.constantLegCurrency()
+
+
+@xlo.func(
+    help="Return the resettable-leg currency from a discounting FX reset pricer.",
+    args={"pricer": "QuantLib DiscountingFxResetPricer."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlDiscountingFxResetPricerResettableLegCurrency(
+    pricer: ql.DiscountingFxResetPricer, trigger=None
+) -> ql.Currency:
+    return pricer.resettableLegCurrency()
+
+
+@xlo.func(
+    help="Create a QuantLib FxResetCoupon.",
+    args={
+        "underlying": "Underlying floating-rate coupon.",
+        "constant_leg_notional": "Notional on the constant-notional leg.",
+        "fx_reset": "FX reset applied to the coupon.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCoupon(
+    underlying: ql.FloatingRateCoupon,
+    constant_leg_notional: float,
+    fx_reset: ql.FxReset,
+    trigger=None,
+) -> ql.FxResetCoupon:
+    return ql.FxResetCoupon(underlying, constant_leg_notional, fx_reset)
+
+
+@xlo.func(
+    help="Cast a cash flow to FxResetCoupon if possible.",
+    args={"cashflow": "QuantLib CashFlow."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlAsFxResetCoupon(cashflow: ql.CashFlow, trigger=None) -> ql.FxResetCoupon:
+    return ql.as_fx_reset_coupon(cashflow)
+
+
+@xlo.func(
+    help="Return the underlying floating-rate coupon from an FX-reset coupon.",
+    args={"coupon": "QuantLib FxResetCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCouponUnderlying(
+    coupon: ql.FxResetCoupon, trigger=None
+) -> ql.FloatingRateCoupon:
+    return coupon.underlying()
+
+
+@xlo.func(
+    help="Return the constant-leg notional of an FX-reset coupon.",
+    args={"coupon": "QuantLib FxResetCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCouponConstantLegNotional(coupon: ql.FxResetCoupon, trigger=None) -> float:
+    return coupon.constantLegNotional()
+
+
+@xlo.func(
+    help="Return the FX reset used by an FX-reset coupon.",
+    args={"coupon": "QuantLib FxResetCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCouponFxReset(coupon: ql.FxResetCoupon, trigger=None) -> ql.FxReset:
+    return coupon.fxReset()
+
+
+@xlo.func(
+    help="Return the FX fixing date of an FX-reset coupon.",
+    args={"coupon": "QuantLib FxResetCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCouponFxResetDate(coupon: ql.FxResetCoupon, trigger=None) -> ql.Date:
+    return coupon.fxResetDate()
+
+
+@xlo.func(
+    help="Return the FX value date of an FX-reset coupon.",
+    args={"coupon": "QuantLib FxResetCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCouponFxResetValueDate(coupon: ql.FxResetCoupon, trigger=None) -> ql.Date:
+    return coupon.fxResetValueDate()
+
+
+@xlo.func(
+    help="Return the FX reset pricer assigned to an FX-reset coupon.",
+    args={"coupon": "QuantLib FxResetCoupon."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCouponFxResetPricer(
+    coupon: ql.FxResetCoupon, trigger=None
+) -> ql.FxResetPricer:
+    return coupon.fxResetPricer()
+
+
+@xlo.func(
+    help="Set the FX reset pricer for an FX-reset coupon.",
+    args={
+        "coupon": "QuantLib FxResetCoupon.",
+        "pricer": "QuantLib FxResetPricer.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetCouponSetFxResetPricer(
+    coupon: ql.FxResetCoupon, pricer: ql.FxResetPricer, trigger=None
+) -> bool:
+    coupon.setFxResetPricer(pricer)
+    return True
+
+
+@xlo.func(
+    help="Create a QuantLib FxResetNotionalExchange.",
+    args={
+        "payment_date": "Payment date.",
+        "constant_leg_notional": "Notional on the constant-notional leg.",
+        "previous_reset": "Previous FX reset, if available.",
+        "current_reset": "Current FX reset, if available.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchange(
+    payment_date: qDate,
+    constant_leg_notional: float,
+    previous_reset: ql.FxReset = None,
+    current_reset: ql.FxReset = None,
+    trigger=None,
+) -> ql.FxResetNotionalExchange:
+    return ql.FxResetNotionalExchange(
+        payment_date, constant_leg_notional, previous_reset, current_reset
+    )
+
+
+@xlo.func(
+    help="Cast a cash flow to FxResetNotionalExchange if possible.",
+    args={"cashflow": "QuantLib CashFlow."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlAsFxResetNotionalExchange(
+    cashflow: ql.CashFlow, trigger=None
+) -> ql.FxResetNotionalExchange:
+    return ql.as_fx_reset_notional_exchange(cashflow)
+
+
+@xlo.func(
+    help="Return the constant-leg notional of an FX reset notional exchange.",
+    args={"exchange": "QuantLib FxResetNotionalExchange."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchangeConstantLegNotional(
+    exchange: ql.FxResetNotionalExchange, trigger=None
+) -> float:
+    return exchange.constantLegNotional()
+
+
+@xlo.func(
+    help="Check whether an FX reset notional exchange has a previous reset.",
+    args={"exchange": "QuantLib FxResetNotionalExchange."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchangeHasPreviousReset(
+    exchange: ql.FxResetNotionalExchange, trigger=None
+) -> bool:
+    return exchange.hasPreviousReset()
+
+
+@xlo.func(
+    help="Return the previous FX reset of a notional exchange.",
+    args={"exchange": "QuantLib FxResetNotionalExchange."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchangePreviousReset(
+    exchange: ql.FxResetNotionalExchange, trigger=None
+) -> ql.FxReset:
+    return exchange.previousReset()
+
+
+@xlo.func(
+    help="Check whether an FX reset notional exchange has a current reset.",
+    args={"exchange": "QuantLib FxResetNotionalExchange."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchangeHasCurrentReset(
+    exchange: ql.FxResetNotionalExchange, trigger=None
+) -> bool:
+    return exchange.hasCurrentReset()
+
+
+@xlo.func(
+    help="Return the current FX reset of a notional exchange.",
+    args={"exchange": "QuantLib FxResetNotionalExchange."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchangeCurrentReset(
+    exchange: ql.FxResetNotionalExchange, trigger=None
+) -> ql.FxReset:
+    return exchange.currentReset()
+
+
+@xlo.func(
+    help="Return the FX reset pricer assigned to a notional exchange.",
+    args={"exchange": "QuantLib FxResetNotionalExchange."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchangeFxResetPricer(
+    exchange: ql.FxResetNotionalExchange, trigger=None
+) -> ql.FxResetPricer:
+    return exchange.fxResetPricer()
+
+
+@xlo.func(
+    help="Set the FX reset pricer for a notional exchange.",
+    args={
+        "exchange": "QuantLib FxResetNotionalExchange.",
+        "pricer": "QuantLib FxResetPricer.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlFxResetNotionalExchangeSetFxResetPricer(
+    exchange: ql.FxResetNotionalExchange, pricer: ql.FxResetPricer, trigger=None
+) -> bool:
+    exchange.setFxResetPricer(pricer)
+    return True
+
+
+@xlo.func(
+    help="Set the FX reset pricer for all FX-reset cash flows in a leg.",
+    args={
+        "leg": "Cash-flow leg.",
+        "pricer": "QuantLib FxResetPricer.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlSetFxResetPricer(
+    leg: xlo.Array(dims=1), pricer: ql.FxResetPricer, trigger=None
+) -> bool:
+    ql.setFxResetPricer(to_object_list(leg, ql.CashFlow), pricer)
+    return True
+
+
+@xlo.func(
     help="Set the floating-rate coupon pricer for a leg.",
     args={
         "leg": "Cash-flow leg.",
@@ -2387,6 +3024,7 @@ def qlFixedRateLeg(
         "payment_calendar": "Payment calendar.",
         "payment_lag": "Payment lag.",
         "with_indexed_coupons": "Whether to use indexed coupons.",
+        "stub_index_selection": "Index selection for Ibor stub periods.",
     },
     group=EXCEL_GROUP_NAME,
 )
@@ -2409,6 +3047,7 @@ def qlIborLeg(
     payment_calendar=None,
     payment_lag: int = 0,
     with_indexed_coupons: bool = False,
+    stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ):
     if payment_day_counter is not None:
@@ -2439,6 +3078,7 @@ def qlIborLeg(
         "payment_calendar": "paymentCalendar",
         "payment_lag": "paymentLag",
         "with_indexed_coupons": "withIndexedCoupons",
+        "stub_index_selection": "stubIndexSelection",
     }
 
     kwargs = {}

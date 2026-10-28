@@ -1,6 +1,9 @@
 import pytest
 import QuantLib as ql
 
+import quantlib_xloil.volatilities as volatility_wrappers
+from quantlib_xloil.indexes import qlEuriborSwapIsdaFixA
+
 from quantlib_xloil.volatilities import (
     qlBlackConstantVol,
     qlBlackVolTermStructureBlackForwardVariance,
@@ -63,6 +66,7 @@ from quantlib_xloil.volatilities import (
     qlSwaptionVolatilityStructureVolatility,
     qlSwaptionVolatilityStructureVolatilityFromTime,
     qlSwaptionVolatilityMatrix,
+    qlSwaptionVolatilityMatrixForTenors,
     qVolatilityType,
 )
 from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
@@ -457,6 +461,24 @@ def test_qlSwaptionVolatilityMatrix_creates_handle_and_interpolates():
     assert vol_2y_5y == pytest.approx(vols[1, 1], rel=1e-4)
 
 
+def test_qlSwaptionVolatilityMatrixForTenors_creates_handle():
+    import numpy as np
+
+    handle = qlSwaptionVolatilityMatrixForTenors(
+        reference_date=qlDate(2024, 1, 2),
+        calendar=qlCalendar("TARGET"),
+        business_day_convention=qBusinessDayConvention.__wrapped__("FOLLOWING"),
+        option_tenors=np.array([qlPeriod(1, ql.Years), qlPeriod(2, ql.Years)]),
+        swap_tenors=np.array([qlPeriod(2, ql.Years), qlPeriod(5, ql.Years)]),
+        vols=np.array([[0.20, 0.21], [0.19, 0.20]]),
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+        flat_extrapolation=True,
+        volatility_type=qVolatilityType.__wrapped__("SHIFTEDLOGNORMAL"),
+    )
+
+    assert isinstance(handle, ql.SwaptionVolatilityStructureHandle)
+
+
 # SmileSection property tests
 
 
@@ -612,3 +634,187 @@ def test_qlSplineCubicInterpolatedSmileSection_creates_valid_smile():
     assert qlSmileSectionVolatility(smile, 100.0) == pytest.approx(0.20)
     assert qlSmileSectionMinStrike(smile) == pytest.approx(80.0)
     assert qlSmileSectionMaxStrike(smile) == pytest.approx(120.0)
+
+
+def _swaption_cube_inputs():
+    reference_date = qlDate(2024, 1, 2)
+    curve = ql.YieldTermStructureHandle(
+        ql.FlatForward(reference_date, 0.03, ql.Actual365Fixed())
+    )
+    swap_index = qlEuriborSwapIsdaFixA(ql.Period("5Y"), curve)
+    short_swap_index = qlEuriborSwapIsdaFixA(ql.Period("1Y"), curve)
+    vol_spreads = [
+        [ql.QuoteHandle(ql.SimpleQuote(0.001)) for _ in range(3)]
+        for _ in range(4)
+    ]
+    return (
+        reference_date,
+        _constant_swaption_vol_handle(),
+        swap_index,
+        short_swap_index,
+        vol_spreads,
+    )
+
+
+def test_new_volatility_structure_accessors():
+    optionlet_vol = _constant_optionlet_vol_handle()
+    swaption_vol = _constant_swaption_vol_handle()
+
+    assert (
+        volatility_wrappers.qlVolatilityTermStructureBusinessDayConvention(
+            optionlet_vol
+        )
+        == "FOLLOWING"
+    )
+    assert (
+        volatility_wrappers.qlOptionletVolatilityStructureVolatilityType(
+            optionlet_vol
+        )
+        == "SHIFTEDLOGNORMAL"
+    )
+    assert (
+        volatility_wrappers.qlOptionletVolatilityStructureDisplacement(optionlet_vol)
+        == pytest.approx(0.0)
+    )
+    assert (
+        volatility_wrappers.qlSwaptionVolatilityStructureVolatilityType(swaption_vol)
+        == "SHIFTEDLOGNORMAL"
+    )
+
+
+def test_qlInterpolatedSwaptionVolatilityCube_and_accessors():
+    (
+        reference_date,
+        atm_vol,
+        swap_index,
+        short_swap_index,
+        vol_spreads,
+    ) = _swaption_cube_inputs()
+    evaluation_date = ql.Settings.instance().evaluationDate
+    try:
+        ql.Settings.instance().evaluationDate = reference_date
+        cube = volatility_wrappers.qlInterpolatedSwaptionVolatilityCube(
+            atm_vol,
+            [ql.Period("1Y"), ql.Period("2Y")],
+            [ql.Period("2Y"), ql.Period("5Y")],
+            [-0.01, 0.0, 0.01],
+            vol_spreads,
+            swap_index,
+            short_swap_index,
+            True,
+        )
+
+        assert isinstance(cube, ql.InterpolatedSwaptionVolatilityCube)
+        assert volatility_wrappers.qlSwaptionVolatilityCubeAtmStrike(
+            cube, qlDate(2025, 1, 2), ql.Period("5Y")
+        ) > 0.0
+        assert isinstance(
+            volatility_wrappers.qlSwaptionVolatilityCubeAtmVol(cube),
+            ql.SwaptionVolatilityStructureHandle,
+        )
+        assert volatility_wrappers.qlSwaptionVolatilityCubeStrikeSpreads(
+            cube
+        ) == pytest.approx([-0.01, 0.0, 0.01])
+        assert len(
+            volatility_wrappers.qlSwaptionVolatilityCubeVolSpreads(cube)
+        ) == 4
+        assert isinstance(
+            volatility_wrappers.qlSwaptionVolatilityCubeSwapIndexBase(cube),
+            ql.SwapIndex,
+        )
+        assert isinstance(
+            volatility_wrappers.qlSwaptionVolatilityCubeShortSwapIndexBase(cube),
+            ql.SwapIndex,
+        )
+        assert volatility_wrappers.qlSwaptionVolatilityCubeVegaWeightedSmileFit(
+            cube
+        )
+        assert isinstance(
+            volatility_wrappers.qlInterpolatedSwaptionVolatilityCubeVolSpreads(
+                cube, 0
+            ),
+            ql.Matrix,
+        )
+    finally:
+        ql.Settings.instance().evaluationDate = evaluation_date
+
+
+def test_qlSabrSwaptionVolatilityCube_and_accessors():
+    import numpy as np
+
+    (
+        reference_date,
+        atm_vol,
+        swap_index,
+        short_swap_index,
+        vol_spreads,
+    ) = _swaption_cube_inputs()
+    atm_vol = qlSwaptionVolatilityMatrix(
+        reference_date=reference_date,
+        expiry_dates=np.array(
+            [qlDate(2025, 1, 2), qlDate(2026, 1, 2)]
+        ),
+        lengths=np.array([ql.Period("2Y"), ql.Period("5Y")]),
+        vols=np.array([[0.20, 0.21], [0.19, 0.20]]),
+        day_counter=qlDayCounter("ACTUAL365FIXED"),
+        flat_extrapolation=True,
+        volatility_type=qVolatilityType.__wrapped__("SHIFTEDLOGNORMAL"),
+    )
+    parameter_guesses = [
+        [ql.QuoteHandle(ql.SimpleQuote(value)) for value in (0.2, 0.5, 0.3, -0.2)]
+        for _ in range(4)
+    ]
+    evaluation_date = ql.Settings.instance().evaluationDate
+    try:
+        ql.Settings.instance().evaluationDate = reference_date
+        cube = volatility_wrappers.qlSabrSwaptionVolatilityCube(
+            atm_vol,
+            [ql.Period("1Y"), ql.Period("2Y")],
+            [ql.Period("2Y"), ql.Period("5Y")],
+            [-0.01, 0.0, 0.01],
+            vol_spreads,
+            swap_index,
+            short_swap_index,
+            True,
+            parameters_guess=parameter_guesses,
+            is_parameter_fixed=[True, True, True, True],
+            is_atm_calibrated=False,
+            end_criteria=ql.EndCriteria(100, 10, 1e-8, 1e-8, 1e-8),
+            max_error_tolerance=2.0,
+            opt_method=ql.Simplex(0.01),
+            error_accept=2.0,
+            cutoff_strike=0.0002,
+            single_pass_calibration=True,
+        )
+
+        assert isinstance(cube, ql.SabrSwaptionVolatilityCube)
+        assert isinstance(
+            volatility_wrappers.qlSabrSwaptionVolatilityCubeSparseSabrParameters(
+                cube
+            ),
+            ql.Matrix,
+        )
+        assert isinstance(
+            volatility_wrappers.qlSabrSwaptionVolatilityCubeDenseSabrParameters(
+                cube
+            ),
+            ql.Matrix,
+        )
+        assert isinstance(
+            volatility_wrappers.qlSabrSwaptionVolatilityCubeMarketVolCube(cube),
+            ql.Matrix,
+        )
+        assert isinstance(
+            volatility_wrappers.qlSabrSwaptionVolatilityCubeVolCubeAtmCalibrated(
+                cube
+            ),
+            ql.Matrix,
+        )
+        assert isinstance(
+            volatility_wrappers.qlSabrSwaptionVolatilityCubeSmileSection(
+                cube, ql.Period("1Y"), ql.Period("5Y")
+            ),
+            ql.SabrSmileSection,
+        )
+    finally:
+        ql.Settings.instance().evaluationDate = evaluation_date

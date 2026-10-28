@@ -78,19 +78,27 @@ QL_ANALYTIC_PTD_HESTON_COMPLEX_LOG_FORMULA = {
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
+QL_ANALYTIC_ROUGH_HESTON_APPROXIMATION = {
+    "ADAMSPREDICTORCORRECTOR": ql.AnalyticRoughHestonEngine.AdamsPredictorCorrector,
+    "PADE": ql.AnalyticRoughHestonEngine.Pade,
+    "LIFTED": ql.AnalyticRoughHestonEngine.Lifted,
+    UNKNOWN_KEY: UNKNOWN_VALUE,
+}
+
 
 QL_ANALYTIC_HESTON_ENGINE_INTEGRATION = {
-    "GAUSS_LAGUERRE": ql.AnalyticHestonEngine_Integration.gaussLaguerre,
-    "GAUSS_LEGENDRE": ql.AnalyticHestonEngine_Integration.gaussLegendre,
-    "GAUSS_CHEBYSHEV": ql.AnalyticHestonEngine_Integration.gaussChebyshev,
-    "GAUSS_CHEBYSHEV_2ND": ql.AnalyticHestonEngine_Integration.gaussChebyshev2nd,
-    "GAUSS_LOBATTO": ql.AnalyticHestonEngine_Integration.gaussLobatto,
-    "GAUSS_KRONROD": ql.AnalyticHestonEngine_Integration.gaussKronrod,
-    "SIMPSON": ql.AnalyticHestonEngine_Integration.simpson,
-    "TRAPEZOID": ql.AnalyticHestonEngine_Integration.trapezoid,
-    "DISCRETE_SIMPSON": ql.AnalyticHestonEngine_Integration.discreteSimpson,
-    "DISCRETE_TRAPEZOID": ql.AnalyticHestonEngine_Integration.discreteTrapezoid,
-    "EXP_SINH": ql.AnalyticHestonEngine_Integration.expSinh,
+    "GAUSS_LAGUERRE": ql.FourierIntegration.gaussLaguerre,
+    "GAUSS_LEGENDRE": ql.FourierIntegration.gaussLegendre,
+    "GAUSS_CHEBYSHEV": ql.FourierIntegration.gaussChebyshev,
+    "GAUSS_CHEBYSHEV_2ND": ql.FourierIntegration.gaussChebyshev2nd,
+    "GAUSS_LOBATTO": ql.FourierIntegration.gaussLobatto,
+    "GAUSS_KRONROD": ql.FourierIntegration.gaussKronrod,
+    "SIMPSON": ql.FourierIntegration.simpson,
+    "TRAPEZOID": ql.FourierIntegration.trapezoid,
+    "DISCRETE_SIMPSON": ql.FourierIntegration.discreteSimpson,
+    "DISCRETE_TRAPEZOID": ql.FourierIntegration.discreteTrapezoid,
+    "EXP_SINH": ql.FourierIntegration.expSinh,
+    "TANH_SINH": ql.FourierIntegration.tanhSinh,
     UNKNOWN_KEY: UNKNOWN_VALUE,
 }
 
@@ -225,22 +233,29 @@ def qAnalyticHestonComplexLogFormula(s: str) -> int:
 def _qAnalyticPTDHestonComplexLogFormula(s: str) -> int:
     return enum_value(s, QL_ANALYTIC_PTD_HESTON_COMPLEX_LOG_FORMULA)
 
+def _qAnalyticRoughHestonApproximation(s: str) -> int:
+    return enum_value(s, QL_ANALYTIC_ROUGH_HESTON_APPROXIMATION)
+
 
 @xlo.converter()
 def qAnalyticPTDHestonComplexLogFormula(s: str) -> int:
     return _qAnalyticPTDHestonComplexLogFormula(s)
 
+@xlo.converter()
+def qAnalyticRoughHestonApproximation(s: str) -> int:
+    return _qAnalyticRoughHestonApproximation(s)
 
-def _qAnalyticHestonEngineIntegration(name: str) -> ql.AnalyticHestonEngine_Integration:
+
+def _qAnalyticHestonEngineIntegration(name: str) -> ql.FourierIntegration:
     if name is None:
         return None
     return enum_value(
-        name, QL_ANALYTIC_HESTON_ENGINE_INTEGRATION, ql.AnalyticHestonEngine_Integration
+        name, QL_ANALYTIC_HESTON_ENGINE_INTEGRATION, ql.FourierIntegration
     )
 
 
 @xlo.converter()
-def qAnalyticHestonEngineIntegration(name: str) -> ql.AnalyticHestonEngine_Integration:
+def qAnalyticHestonEngineIntegration(name: str) -> ql.FourierIntegration:
     return _qAnalyticHestonEngineIntegration(name)
 
 
@@ -250,28 +265,34 @@ def _to_analytic_heston_engine_integration(
     rel_tolerance: float,
     abs_tolerance: float,
     max_evaluations: int,
-) -> ql.AnalyticHestonEngine_Integration:
+) -> ql.FourierIntegration:
     if integration_function in (
-        ql.AnalyticHestonEngine_Integration.gaussLaguerre,
-        ql.AnalyticHestonEngine_Integration.gaussLegendre,
-        ql.AnalyticHestonEngine_Integration.gaussChebyshev,
-        ql.AnalyticHestonEngine_Integration.gaussChebyshev2nd,
-        ql.AnalyticHestonEngine_Integration.discreteSimpson,
-        ql.AnalyticHestonEngine_Integration.discreteTrapezoid,
+        ql.FourierIntegration.gaussLaguerre,
+        ql.FourierIntegration.gaussLegendre,
+        ql.FourierIntegration.gaussChebyshev,
+        ql.FourierIntegration.gaussChebyshev2nd,
+        ql.FourierIntegration.discreteSimpson,
+        ql.FourierIntegration.discreteTrapezoid,
     ):
         integration_ = integration_function(integration_order)
     elif integration_function in (
-        ql.AnalyticHestonEngine_Integration.gaussKronrod,
-        ql.AnalyticHestonEngine_Integration.simpson,
-        ql.AnalyticHestonEngine_Integration.trapezoid,
+        ql.FourierIntegration.gaussKronrod,
+        ql.FourierIntegration.simpson,
+        ql.FourierIntegration.trapezoid,
     ):
         integration_ = integration_function(abs_tolerance, max_evaluations)
-    elif integration_function in (ql.AnalyticHestonEngine_Integration.gaussLobatto,):
+    elif integration_function in (ql.FourierIntegration.gaussLobatto,):
         integration_ = integration_function(
             rel_tolerance, abs_tolerance, max_evaluations
         )
-    elif integration_function in (ql.AnalyticHestonEngine_Integration.expSinh,):
-        integration_ = integration_function(rel_tolerance)
+    elif integration_function in (
+        ql.FourierIntegration.expSinh,
+        ql.FourierIntegration.tanhSinh,
+    ):
+        if rel_tolerance is None:
+            integration_ = integration_function()
+        else:
+            integration_ = integration_function(rel_tolerance)
     else:
         raise ValueError("Cannot create integration object.")
     return integration_
@@ -1489,8 +1510,8 @@ def qlPiecewiseTimeDependentHestonModelS0(
 def qlAnalyticHestonEngineIntegrationGaussLaguerre(
     integration_order: int = 128,
     trigger=None,
-) -> ql.AnalyticHestonEngine_Integration:
-    return ql.AnalyticHestonEngine_Integration.gaussLaguerre(integration_order)
+) -> ql.FourierIntegration:
+    return ql.FourierIntegration.gaussLaguerre(integration_order)
 
 
 @xlo.func(
@@ -1501,7 +1522,7 @@ def qlAnalyticHestonEngineIntegrationGaussLaguerre(
     group=EXCEL_GROUP_NAME,
 )
 def qlAnalyticHestonEngineIntegrationNumberOfEvaluations(
-    integration: ql.AnalyticHestonEngine_Integration,
+    integration: ql.FourierIntegration,
     trigger=None,
 ) -> int:
     return integration.numberOfEvaluations()
@@ -1515,7 +1536,7 @@ def qlAnalyticHestonEngineIntegrationNumberOfEvaluations(
     group=EXCEL_GROUP_NAME,
 )
 def qlAnalyticHestonEngineIntegrationIsAdaptive(
-    integration: ql.AnalyticHestonEngine_Integration,
+    integration: ql.FourierIntegration,
     trigger=None,
 ) -> bool:
     return integration.isAdaptiveIntegration()
@@ -1538,7 +1559,7 @@ def qlAnalyticHestonEngineIntegrationAndersenPiterbargIntegrationLimit(
     t: float,
     trigger=None,
 ) -> float:
-    return ql.AnalyticHestonEngine_Integration.andersenPiterbargIntegrationLimit(
+    return ql.FourierIntegration.andersenPiterbargIntegrationLimit(
         c_inf, epsilon, v0, t
     )
 
@@ -1646,6 +1667,152 @@ def qlAnalyticHestonEngineNumberOfEvaluations(
     engine: ql.AnalyticHestonEngine, trigger=None
 ) -> int:
     return engine.numberOfEvaluations()
+
+
+@xlo.func(
+    help="Create a QuantLib RoughHestonModel.",
+    args={
+        "process": "QuantLib Heston process.",
+        "hurst": "Hurst exponent.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModel(
+    process: ql.HestonProcess, hurst: float, trigger=None
+) -> ql.RoughHestonModel:
+    return ql.RoughHestonModel(process, hurst)
+
+
+@xlo.func(
+    help="Return the long-term variance of a QuantLib RoughHestonModel.",
+    args={"model": "QuantLib RoughHestonModel."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModelTheta(model: ql.RoughHestonModel, trigger=None) -> float:
+    return model.theta()
+
+
+@xlo.func(
+    help="Return the mean-reversion speed of a QuantLib RoughHestonModel.",
+    args={"model": "QuantLib RoughHestonModel."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModelKappa(model: ql.RoughHestonModel, trigger=None) -> float:
+    return model.kappa()
+
+
+@xlo.func(
+    help="Return the volatility of variance of a QuantLib RoughHestonModel.",
+    args={"model": "QuantLib RoughHestonModel."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModelSigma(model: ql.RoughHestonModel, trigger=None) -> float:
+    return model.sigma()
+
+
+@xlo.func(
+    help="Return the correlation of a QuantLib RoughHestonModel.",
+    args={"model": "QuantLib RoughHestonModel."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModelRho(model: ql.RoughHestonModel, trigger=None) -> float:
+    return model.rho()
+
+
+@xlo.func(
+    help="Return the initial variance of a QuantLib RoughHestonModel.",
+    args={"model": "QuantLib RoughHestonModel."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModelV0(model: ql.RoughHestonModel, trigger=None) -> float:
+    return model.v0()
+
+
+@xlo.func(
+    help="Return the Hurst exponent of a QuantLib RoughHestonModel.",
+    args={"model": "QuantLib RoughHestonModel."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModelHurst(model: ql.RoughHestonModel, trigger=None) -> float:
+    return model.hurst()
+
+
+@xlo.func(
+    help="Return the Heston process of a QuantLib RoughHestonModel.",
+    args={"model": "QuantLib RoughHestonModel."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlRoughHestonModelProcess(model: ql.RoughHestonModel, trigger=None) -> ql.HestonProcess:
+    return model.process()
+
+
+@xlo.func(
+    help="Create a QuantLib AnalyticRoughHestonEngine.",
+    args={
+        "model": "QuantLib RoughHestonModel.",
+        "integration_order": "Integration order.",
+        "time_steps": "Number of time steps.",
+        "approximation": "Rough Heston approximation.",
+        "n_factors": "Number of factors in the lifted approximation.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlAnalyticRoughHestonEngine(
+    model: ql.RoughHestonModel,
+    integration_order: int = 128,
+    time_steps: int = 256,
+    approximation: qAnalyticRoughHestonApproximation = ql.AnalyticRoughHestonEngine.AdamsPredictorCorrector,
+    n_factors: int = 20,
+    trigger=None,
+) -> ql.AnalyticRoughHestonEngine:
+    return ql.AnalyticRoughHestonEngine(
+        model, integration_order, time_steps, approximation, n_factors
+    )
+
+
+@xlo.func(
+    help="Create a QuantLib AnalyticRoughHestonEngine with a Fourier integration method.",
+    args={
+        "model": "QuantLib RoughHestonModel.",
+        "integration": "Fourier integration method.",
+        "time_steps": "Number of time steps.",
+        "andersen_piterbarg_epsilon": "Andersen-Piterbarg epsilon.",
+        "alpha": "Integration damping parameter.",
+        "approximation": "Rough Heston approximation.",
+        "n_factors": "Number of factors in the lifted approximation.",
+    },
+    group=EXCEL_GROUP_NAME,
+)
+def qlAnalyticRoughHestonEngine2(
+    model: ql.RoughHestonModel,
+    integration: qAnalyticHestonEngineIntegration,
+    integration_order: int = 128,
+    rel_tolerance: float = None,
+    abs_tolerance: float = None,
+    max_evaluations: int = None,
+    time_steps: int = 256,
+    andersen_piterbarg_epsilon: float = 1.0e-25,
+    alpha: float = -0.5,
+    approximation: qAnalyticRoughHestonApproximation = ql.AnalyticRoughHestonEngine.AdamsPredictorCorrector,
+    n_factors: int = 20,
+    trigger=None,
+) -> ql.AnalyticRoughHestonEngine:
+    integration_ = _to_analytic_heston_engine_integration(
+        integration,
+        integration_order,
+        rel_tolerance,
+        abs_tolerance,
+        max_evaluations,
+    )
+    return ql.AnalyticRoughHestonEngine(
+        model,
+        integration_,
+        time_steps,
+        andersen_piterbarg_epsilon,
+        alpha,
+        approximation,
+        n_factors,
+    )
 
 
 @xlo.func(

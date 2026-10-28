@@ -1358,6 +1358,17 @@ def qlSwapSpreadIndex(
 
 
 @xlo.func(
+    help="Convert an interest-rate index to a SwapSpreadIndex.",
+    args={"index": "The QuantLib interest-rate index."},
+    group=EXCEL_GROUP_NAME,
+)
+def qlAsSwapSpreadIndex(
+    index: ql.InterestRateIndex, trigger=None
+) -> ql.SwapSpreadIndex:
+    return ql.as_swap_spread_index(index)
+
+
+@xlo.func(
     help="Forecast the fixing of a QuantLib SwapIndex.",
     args={
         "swap_index": "The swap index for which to forecast the fixing.",

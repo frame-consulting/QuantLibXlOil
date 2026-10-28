@@ -9,9 +9,14 @@ from quantlib_xloil.piecewiseyieldcurve import (
     qlPiecewiseYieldCurveAsYts,
     qlPiecewiseYieldCurveData,
     qlPiecewiseYieldCurveDates,
+    qlPiecewiseYieldCurveFreeze,
+    qlPiecewiseYieldCurveRecalculate,
     qlPiecewiseYieldCurveTimes,
+    qlPiecewiseYieldCurveUnfreeze,
     qlPiecewiseYieldCurveWithJumps,
     qlPiecewiseYieldCurveWithJumpsAsYts,
+    qlGlobalBootstrap,
+    qlGlobalPiecewiseYieldCurveAsYts,
     qlYieldTermStructureHandle,
 )
 from quantlib_xloil.calendars import qBusinessDayConvention, qlCalendar
@@ -126,6 +131,60 @@ def test_qlPiecewiseYieldCurve_validation_errors():
             "LOGDISCOUNT",
             "LINEAR",
             mixed_interpolation_behavior="SPLICE",
+        )
+
+
+def test_qlPiecewiseSimpleZeroCurve_and_global_bootstrap_curve():
+    _set_eval_date()
+    reference_date = qlDate(2024, 1, 2)
+    helpers = _sample_rate_helpers()
+    daycounter = qlDayCounter("ACTUAL365FIXED")
+    simple_curve = qlPiecewiseYieldCurveAsYts(
+        reference_date,
+        helpers,
+        daycounter,
+        "SIMPLEZERORATE",
+        "LINEAR",
+    )
+    assert simple_curve.discount(qlDate(2024, 7, 2)) > 0.0
+    assert qlPiecewiseYieldCurveRecalculate(simple_curve) is True
+    assert qlPiecewiseYieldCurveFreeze(simple_curve) is True
+    assert qlPiecewiseYieldCurveUnfreeze(simple_curve) is True
+
+    bootstrap = qlGlobalBootstrap(
+        accuracy=1e-8,
+        optimizer=ql.Simplex(0.01),
+        end_criteria=ql.EndCriteria(100, 10, 1e-8, 1e-8, 1e-8),
+    )
+    constrained_bootstrap = qlGlobalBootstrap(
+        additional_helpers=[],
+        additional_dates=[],
+        accuracy=1e-8,
+        optimizer=ql.Simplex(0.01),
+        end_criteria=ql.EndCriteria(100, 10, 1e-8, 1e-8, 1e-8),
+    )
+    assert isinstance(constrained_bootstrap, ql.GlobalBootstrap)
+
+    global_curve = qlGlobalPiecewiseYieldCurveAsYts(
+        reference_date,
+        helpers,
+        daycounter,
+        "ZERORATE",
+        "LINEAR",
+        bootstrap,
+    )
+    assert isinstance(global_curve, ql.GlobalPiecewiseLinearZero)
+    assert qlPiecewiseYieldCurveFreeze(global_curve) is True
+    assert qlPiecewiseYieldCurveUnfreeze(global_curve) is True
+    with pytest.raises(ValueError, match="jumps and jump_dates"):
+        qlGlobalPiecewiseYieldCurveAsYts(
+            reference_date,
+            helpers,
+            daycounter,
+            "ZERORATE",
+            "LINEAR",
+            bootstrap,
+            jumps=[0.999],
         )
 
 

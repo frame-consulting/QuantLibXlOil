@@ -87,9 +87,7 @@ from quantlib_xloil.inflation import (
     qlInflationTermStructureBaseDate,
     qlInflationTermStructureBaseRate,
     qlInflationTermStructureFrequency,
-    qlInflationTermStructureHasExplicitBaseDate,
     qlInflationTermStructureHasSeasonality,
-    qlInflationTermStructureObservationLag,
     qlInflationTermStructureSeasonality,
     qlInflationTermStructureSetSeasonality,
     qlInflationYearFraction,
@@ -412,7 +410,6 @@ def test_qlInflationTermStructure_getters_setters():
     index = _zero_inflation_index()
     quote = ql.QuoteHandle(ql.SimpleQuote(0.02))
     index = _zero_inflation_index()
-    ts = ql.YieldTermStructureHandle()
     helper = qlZeroCouponInflationSwapHelper(
         quote=quote,
         lag=qPeriod.__wrapped__("3M"),
@@ -422,7 +419,6 @@ def test_qlInflationTermStructure_getters_setters():
         day_counter=_day_counter(),
         index=index,
         observation_interpolation=qCPIInterpolationType.__wrapped__("ASINDEX"),
-        nominal_its=ts,
     )
 
     curve = qlPiecewiseZeroInflationAsIts(
@@ -434,8 +430,6 @@ def test_qlInflationTermStructure_getters_setters():
     )
 
     assert isinstance(qlInflationTermStructureBaseDate(curve), ql.Date)
-    assert isinstance(qlInflationTermStructureObservationLag(curve), ql.Period)
-    assert isinstance(qlInflationTermStructureHasExplicitBaseDate(curve), bool)
     assert qlInflationTermStructureSeasonality(curve) == None
     assert qlInflationTermStructureFrequency(curve) == "ANNUAL"
 
@@ -724,8 +718,6 @@ def test_qlYoYInflationIndexNeedsForecast():
 def _zeroindexinflationcurve() -> ql.ZeroInflationTermStructureHandle:
     reference_date = ql.Date(1, 1, 2024)
     base_date = ql.Date(1, 1, 2024)
-    ts_yield = qlFlatForward(reference_date, 0.03, _day_counter())
-
     index = _zero_inflation_index()
     index.addFixing(ql.Date(1, 1, 2024), 100.0, forceOverwrite=True)
 
@@ -739,7 +731,6 @@ def _zeroindexinflationcurve() -> ql.ZeroInflationTermStructureHandle:
         day_counter=_day_counter(),
         index=index,
         observation_interpolation=qCPIInterpolationType.__wrapped__("ASINDEX"),
-        nominal_its=ts_yield,
     )
 
     inflation_curve = qlPiecewiseZeroInflation(
@@ -1577,24 +1568,6 @@ def test_qlZeroCouponInflationSwapHelper_without_nominal_ts():
     assert isinstance(helper, ql.ZeroCouponInflationSwapHelper)
 
 
-def test_qlZeroCouponInflationSwapHelper():
-    quote = ql.QuoteHandle(ql.SimpleQuote(0.02))
-    index = _zero_inflation_index()
-    ts = ql.YieldTermStructureHandle()
-    helper = qlZeroCouponInflationSwapHelper(
-        quote=quote,
-        lag=qPeriod.__wrapped__("3M"),
-        maturity=ql.Date(1, 1, 2028),
-        calendar=_calendar(),
-        bdc=qBusinessDayConvention.__wrapped__("MODIFIEDFOLLOWING"),
-        day_counter=_day_counter(),
-        index=index,
-        observation_interpolation=qCPIInterpolationType.__wrapped__("ASINDEX"),
-        nominal_its=ts,
-    )
-    assert isinstance(helper, ql.ZeroCouponInflationSwapHelper)
-
-
 def test_qlZeroCouponInflationSwapHelperSwap():
     quote = ql.QuoteHandle(ql.SimpleQuote(0.02))
     index = _zero_inflation_index()
@@ -1664,7 +1637,6 @@ def test_qlPiecewiseZeroInflation():
     reference_date = ql.Date(1, 1, 2024)
     base_date = ql.Date(1, 10, 2023)
 
-    ts = qlFlatForward(reference_date, 0.03, _day_counter())
     quote = ql.QuoteHandle(ql.SimpleQuote(0.02))
     index = _zero_inflation_index()
     index.addFixing(ql.Date(1, 10, 2023), 100.0, forceOverwrite=True)
@@ -1678,7 +1650,6 @@ def test_qlPiecewiseZeroInflation():
         day_counter=_day_counter(),
         index=index,
         observation_interpolation=qCPIInterpolationType.__wrapped__("ASINDEX"),
-        nominal_its=ts,
     )
 
     curve = qlPiecewiseZeroInflationAsIts(
@@ -1713,8 +1684,6 @@ def test_qlPiecewiseZeroInflation_with_seasonality():
     index = _zero_inflation_index()
     index.addFixing(ql.Date(1, 1, 2024), 100.0, forceOverwrite=True)
 
-    ts_yield = qlFlatForward(reference_date, 0.03, _day_counter())
-
     quote = ql.QuoteHandle(ql.SimpleQuote(0.02))
     helper = qlZeroCouponInflationSwapHelper(
         quote=quote,
@@ -1725,7 +1694,6 @@ def test_qlPiecewiseZeroInflation_with_seasonality():
         day_counter=_day_counter(),
         index=index,
         observation_interpolation=qCPIInterpolationType.__wrapped__("ASINDEX"),
-        nominal_its=ts_yield,
     )
 
     curve = qlPiecewiseZeroInflationAsIts(

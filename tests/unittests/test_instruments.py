@@ -6,6 +6,9 @@ from quantlib_xloil.instruments import (
     qlInstrumentErrorEstimate,
     qlInstrumentIsExpired,
     qlInstrumentNPV,
+    qlInstrumentPricingEngine,
+    qlInstrumentValuationDate,
+    qlLazyObjectDeepUpdate,
     qlStock,
 )
 from quantlib_xloil.ratehelpers import qQuoteHandle
@@ -18,6 +21,10 @@ def test_qlStock_constructor_and_instrument_accessors():
     assert isinstance(stock, ql.Stock)
     assert qlInstrumentNPV(stock) == pytest.approx(123.45)
     assert qlInstrumentIsExpired(stock) is False
+    assert qlInstrumentPricingEngine(stock) is None
+    assert qlLazyObjectDeepUpdate(stock) is True
+    with pytest.raises(RuntimeError, match="valuation date not provided"):
+        qlInstrumentValuationDate(stock)
     with pytest.raises(RuntimeError, match="error estimate not provided"):
         qlInstrumentErrorEstimate(stock)
 
