@@ -73,7 +73,7 @@ xloil.xloil_ribbon,QuantLib_xlOil
 
 Restart Excel and open a blank workbook.
 
-Test the QuantLib functions by entering `=qlVersion()` in an empty cell. This should produce a result like `1.43`.
+Test the QuantLib functions by entering `=qlVersion()` in an empty cell. This should produce a result like `1.44`.
 
 ![image](./docs/source/qlVersion.png)
 
@@ -128,7 +128,7 @@ Current QuantLibXlOil version is specified [here](./src/quantlib_xloil/__about__
 
 We use a major version `0` for the time being until interfaces are well tested, coverage is sufficiently high and our upgrade process to new QuantLib versions works smoothly.
 
-Minor versions are aligned with the QuantLib minor version supported. That is, QuantLibXlOil `v0.41` works with QuantLib `v1.41`, `v0.42` works with `v1.42`, and `v0.43` works with `v1.43`.
+Minor versions are aligned with the QuantLib minor version supported. That is, QuantLibXlOil `v0.41` works with QuantLib `v1.41`, `v0.42` works with `v1.42`, `v0.43` works with `v1.43`, and `v0.44` works with `v1.44`.
 
 QuantLibXlOil patch versions are used to capture bug fixes and new features for a QuantLib version specified by the minor version.
 
