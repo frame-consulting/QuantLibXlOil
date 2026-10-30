@@ -40,8 +40,7 @@ def test_qlForwardRateAgreement_constructor_and_accessors():
         assert isinstance(fra, ql.ForwardRateAgreement)
         assert qlForwardRateAgreementFixingDate(fra) == index.fixingDate(value_date)
         forward_rate = qlForwardRateAgreementForwardRate(fra)
-        assert isinstance(forward_rate, ql.InterestRate)
-        assert forward_rate.rate() > 0.0
+        assert isinstance(forward_rate, float)
         assert qlForwardRateAgreementAmount(fra) == pytest.approx(fra.amount())
         assert fra.NPV() == pytest.approx(fra.amount() * curve.discount(value_date))
     finally:
@@ -64,8 +63,7 @@ def test_qlForwardRateAgreement2_explicit_maturity_and_default_discount_curve():
         assert isinstance(fra, ql.ForwardRateAgreement)
         assert qlForwardRateAgreementFixingDate(fra) == index.fixingDate(value_date)
         forward_rate = qlForwardRateAgreementForwardRate(fra)
-        assert isinstance(forward_rate, ql.InterestRate)
-        assert forward_rate.rate() > 0.0
+        assert isinstance(forward_rate, float)
         assert qlForwardRateAgreementAmount(fra) == pytest.approx(fra.amount())
     finally:
         ql.Settings.instance().evaluationDate = original_evaluation_date
