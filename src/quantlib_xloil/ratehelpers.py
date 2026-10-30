@@ -530,10 +530,12 @@ def qlSwapRateHelper(
     custom_pillar_date: qDate = ql.Date(),
     end_of_month: bool = False,
     with_indexed_coupons: bool = False,
-    float_convention: qBusinessDayConvention = None,
+    float_convention=None,
     trigger=None,
 ) -> ql.SwapRateHelper:
     spread_handle = ql.QuoteHandle(ql.SimpleQuote(spread))
+    if float_convention is not None:
+        float_convention = qBusinessDayConvention.__wrapped__(float_convention)
     return ql.SwapRateHelper(
         rate,
         tenor,
@@ -1253,7 +1255,7 @@ def qlOvernightIndexFutureRateHelperConvexityAdjustment(
 def qlOvernightIndexFutureRateHelperFuture(
     overnight_index_future_rate_helper: ql.OvernightIndexFutureRateHelper,
     trigger=None,
-) -> ql.OvernightIndex:
+) -> ql.OvernightIndexFuture:
     return overnight_index_future_rate_helper.future()
 
 
@@ -1433,10 +1435,28 @@ def qlConstNotionalCrossCurrencySwapRateHelper(
     collateral_on_fixed_leg: bool,
     payment_lag: int = 0,
     use_indexed_coupons: bool = None,
-    float_payment_frequency: qFrequency = None,
+    float_payment_frequency=None,
     float_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.ConstNotionalCrossCurrencySwapRateHelper:
+    if use_indexed_coupons is not None:
+        use_indexed_coupons = bool(use_indexed_coupons)
+    if float_payment_frequency is not None:
+        float_payment_frequency = qFrequency.__wrapped__(float_payment_frequency)
+
+    _KWARGS = {
+        "payment_lag": "paymentLag",
+        "use_indexed_coupons": "useIndexedCoupons",
+        "float_payment_frequency": "floatPaymentFrequency",
+        "float_stub_index_selection": "floatStubIndexSelection",
+    }
+
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.ConstNotionalCrossCurrencySwapRateHelper(
         fixed_rate,
         tenor,
@@ -1449,10 +1469,7 @@ def qlConstNotionalCrossCurrencySwapRateHelper(
         float_index,
         collateral_curve,
         collateral_on_fixed_leg,
-        payment_lag,
-        use_indexed_coupons,
-        float_payment_frequency,
-        float_stub_index_selection,
+        **kwargs,
     )
 
 
@@ -1588,20 +1605,31 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
     payment_lag: int = 0,
     quote_currency_payment_frequency: qFrequency = ql.NoFrequency,
     fx_reset_fixing_days: int = 0,
-    fx_reset_fixing_calendar: qCalendar = None,
+    fx_reset_fixing_calendar=None,
     use_indexed_coupons: bool = None,
     base_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     quote_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.MtMCrossCurrencyBasisSwapRateHelper:
-    optional_arguments = {
-        "fxResetFixingDays": fx_reset_fixing_days,
-        "useIndexedCoupons": use_indexed_coupons,
-        "baseStubIndexSelection": base_stub_index_selection,
-        "quoteStubIndexSelection": quote_stub_index_selection,
-    }
     if fx_reset_fixing_calendar is not None:
-        optional_arguments["fxResetFixingCalendar"] = fx_reset_fixing_calendar
+        fx_reset_fixing_calendar = qCalendar.__wrapped__(fx_reset_fixing_calendar)
+
+    _KWARGS = {
+        "payment_frequency": "paymentFrequency",
+        "payment_lag": "paymentLag",
+        "quote_currency_payment_frequency": "quoteCurrencyPaymentFrequency",
+        "fx_reset_fixing_days": "fxResetFixingDays",
+        "fx_reset_fixing_calendar": "fxResetFixingCalendar",
+        "use_indexed_coupons": "useIndexedCoupons",
+        "base_stub_index_selection": "baseStubIndexSelection",
+        "quote_stub_index_selection": "quoteStubIndexSelection",
+    }
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.MtMCrossCurrencyBasisSwapRateHelper(
         basis,
         tenor,
@@ -1615,10 +1643,7 @@ def qlMtMCrossCurrencyBasisSwapRateHelper(
         is_fx_base_currency_collateral_currency,
         is_basis_on_fx_base_currency_leg,
         is_fx_base_currency_leg_resettable,
-        payment_frequency,
-        payment_lag,
-        quote_currency_payment_frequency,
-        **optional_arguments,
+        **kwargs,
     )
 
 
@@ -1762,7 +1787,7 @@ def qlOvernightIborBasisSwapRateHelper(
     discount_handle: ql.YieldTermStructureHandle,
     bootstrap_base_curve: bool = False,
     payment_lag: int = 0,
-    overnight_payment_frequency: qFrequency = None,
+    overnight_payment_frequency=None,
     use_indexed_coupons: bool = None,
     rule: qDateGenerationRule = ql.DateGeneration.Backward,
     averaging_method: qRateAveragingType = ql.RateAveraging.Compound,
@@ -1771,6 +1796,28 @@ def qlOvernightIborBasisSwapRateHelper(
     ibor_stub_index_selection: ql.StubIndexSelection = ql.StubIndexSelection(),
     trigger=None,
 ) -> ql.OvernightIborBasisSwapRateHelper:
+    if overnight_payment_frequency is not None:
+        overnight_payment_frequency = qFrequency.__wrapped__(
+            overnight_payment_frequency
+        )
+    if use_indexed_coupons is not None:
+        use_indexed_coupons = bool(use_indexed_coupons)
+    _KWARGS = {
+        "payment_lag": "paymentLag",
+        "overnight_payment_frequency": "overnightPaymentFrequency",
+        "use_indexed_coupons": "useIndexedCoupons",
+        "rule": "rule",
+        "averaging_method": "averagingMethod",
+        "telescopic_value_dates": "telescopicValueDates",
+        "basis_on_ibor_leg": "basisOnIborLeg",
+        "ibor_stub_index_selection": "iborStubIndexSelection",
+    }
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.OvernightIborBasisSwapRateHelper(
         basis,
         tenor,
@@ -1782,14 +1829,7 @@ def qlOvernightIborBasisSwapRateHelper(
         other_index,
         discount_handle,
         bootstrap_base_curve,
-        payment_lag,
-        overnight_payment_frequency,
-        use_indexed_coupons,
-        rule,
-        averaging_method,
-        telescopic_value_dates,
-        basis_on_ibor_leg,
-        ibor_stub_index_selection,
+        **kwargs,
     )
 
 

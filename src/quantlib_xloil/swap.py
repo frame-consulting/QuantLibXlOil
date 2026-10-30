@@ -76,6 +76,7 @@ def _to_ql_legs(legs) -> tuple[ql.Leg, ...]:
 def qSwapType(swap_type: str | int | float) -> bool:
     return _qSwapType(swap_type)
 
+
 def _qMtMCrossCurrencyBasisSwapType(swap_type: str) -> int:
     return enum_value(swap_type, QL_MTM_CROSS_CURRENCY_BASIS_SWAP_TYPE)
 
@@ -832,7 +833,7 @@ def qlNonstandardSwap(
     final_capital_exchange: bool = False,
     payment_convention: qBusinessDayConvention = ql.Following,
     payment_lag: int = 0,
-    payment_calendar: qCalendar = None,
+    payment_calendar=None,
     trigger=None,
 ) -> ql.NonstandardSwap:
     arguments = (
@@ -854,6 +855,8 @@ def qlNonstandardSwap(
     )
     if payment_calendar is None:
         return ql.NonstandardSwap(*arguments)
+    else:
+        payment_calendar = qCalendar.__wrapped__(payment_calendar)
     return ql.NonstandardSwap(*arguments, payment_calendar)
 
 
@@ -1065,7 +1068,7 @@ def qlNonstandardSwapFloatingLeg(swap: ql.NonstandardSwap, trigger=None) -> ql.L
     help="Create a QuantLib DiscountingSwapEngine object.",
     args={
         "discount_curve": "The yield term structure for discounting.",
-        "include_settlement_date_flows": "Whether to include settlement date flows (default: False).",
+        "include_settlement_date_flows": "Whether to include settlement date flows.",
         "settlement_date": "The settlement date (default: today).",
         "npv_date": "The NPV date (default: today).",
     },
@@ -1073,16 +1076,25 @@ def qlNonstandardSwapFloatingLeg(swap: ql.NonstandardSwap, trigger=None) -> ql.L
 )
 def qlDiscountingSwapEngine(
     discount_curve: ql.YieldTermStructureHandle,
-    include_settlement_date_flows: bool,
+    include_settlement_date_flows: bool = None,
     settlement_date: qDate = ql.Date(),
     npv_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.DiscountingSwapEngine:
+    _KWARGS = {
+        "include_settlement_date_flows": "includeSettlementDateFlows",
+        "settlement_date": "settlementDate",
+        "npv_date": "npvDate",
+    }
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.DiscountingSwapEngine(
         discount_curve,
-        include_settlement_date_flows,
-        settlement_date,
-        npv_date,
+        **kwargs,
     )
 
 
@@ -2801,22 +2813,31 @@ def qlDiscountingConstNotionalCrossCurrencySwapEngine(
     foreign_currency: qCurrency,
     foreign_discount_curve: ql.YieldTermStructureHandle,
     spot_fx: qQuoteHandle,
-    include_settlement_date_flows=None,
+    include_settlement_date_flows: bool = None,
     settlement_date: qDate = ql.Date(),
     npv_date: qDate = ql.Date(),
     spot_fx_settle_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.DiscountingConstNotionalCrossCurrencySwapEngine:
+    _KWARGS = {
+        "include_settlement_date_flows": "includeSettlementDateFlows",
+        "settlement_date": "settlementDate",
+        "npv_date": "npvDate",
+        "spot_fx_settle_date": "spotFXSettleDate",
+    }
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.DiscountingConstNotionalCrossCurrencySwapEngine(
         domestic_currency,
         domestic_discount_curve,
         foreign_currency,
         foreign_discount_curve,
         spot_fx,
-        include_settlement_date_flows,
-        settlement_date,
-        npv_date,
-        spot_fx_settle_date,
+        **kwargs,
     )
 
 
@@ -3040,7 +3061,7 @@ def qlMtMCrossCurrencyBasisSwap(
     fx_quote_gearing: float,
     is_fx_base_currency_leg_resettable: bool,
     fx_reset_fixing_days: int = 0,
-    fx_reset_fixing_calendar: qCalendar = None,
+    fx_reset_fixing_calendar=None,
     fx_base_payment_lag: int = 0,
     fx_quote_payment_lag: int = 0,
     fx_base_payment_convention: qBusinessDayConvention = ql.Following,
@@ -3078,12 +3099,15 @@ def qlMtMCrossCurrencyBasisSwap(
         "fxQuoteLockoutDays": fx_quote_lockout_days,
         "fxQuoteAveragingMethod": fx_quote_averaging_method,
         "telescopicValueDates": telescopic_value_dates,
-        "useIndexedCoupons": use_indexed_coupons,
         "fxBaseStubIndexSelection": fx_base_stub_index_selection,
         "fxQuoteStubIndexSelection": fx_quote_stub_index_selection,
     }
     if fx_reset_fixing_calendar is not None:
-        kwargs["fxResetFixingCalendar"] = fx_reset_fixing_calendar
+        kwargs["fxResetFixingCalendar"] = qCalendar.__wrapped__(
+            fx_reset_fixing_calendar
+        )
+    if use_indexed_coupons is not None:
+        kwargs["useIndexedCoupons"] = bool(use_indexed_coupons)
     return ql.MtMCrossCurrencyBasisSwap(
         swap_type,
         fx_base_nominal,
@@ -3108,7 +3132,9 @@ def qlMtMCrossCurrencyBasisSwap(
     args={"swap": "QuantLib MtMCrossCurrencyBasisSwap."},
     group=EXCEL_GROUP_NAME,
 )
-def qlMtMCrossCurrencyBasisSwapType(swap: ql.MtMCrossCurrencyBasisSwap, trigger=None) -> str:
+def qlMtMCrossCurrencyBasisSwapType(
+    swap: ql.MtMCrossCurrencyBasisSwap, trigger=None
+) -> str:
     return first_key(QL_MTM_CROSS_CURRENCY_BASIS_SWAP_TYPE, swap.type())
 
 
@@ -3637,20 +3663,29 @@ def qlDiscountingMtMCrossCurrencyBasisSwapEngine(
     foreign_currency: qCurrency,
     foreign_discount_curve: ql.YieldTermStructureHandle,
     spot_fx: qQuoteHandle,
-    include_settlement_date_flows=None,
+    include_settlement_date_flows: bool = None,
     settlement_date: qDate = ql.Date(),
     npv_date: qDate = ql.Date(),
     spot_fx_settle_date: qDate = ql.Date(),
     trigger=None,
 ) -> ql.DiscountingMtMCrossCurrencyBasisSwapEngine:
+    _KWARGS = {
+        "include_settlement_date_flows": "includeSettlementDateFlows",
+        "settlement_date": "settlementDate",
+        "npv_date": "npvDate",
+        "spot_fx_settle_date": "spotFXSettleDate",
+    }
+    kwargs = {}
+    for param_name, kw_name in _KWARGS.items():
+        value = locals()[param_name]
+        if value is not None:
+            kwargs[kw_name] = value
+
     return ql.DiscountingMtMCrossCurrencyBasisSwapEngine(
         domestic_currency,
         domestic_discount_curve,
         foreign_currency,
         foreign_discount_curve,
         spot_fx,
-        include_settlement_date_flows,
-        settlement_date,
-        npv_date,
-        spot_fx_settle_date,
+        **kwargs,
     )

@@ -4,6 +4,7 @@ import xloil as xlo
 from .config import EXCEL_GROUP_NAME
 from .date import qDate
 from .fra import qPosition
+from .options import qMCTraits
 from .utilities import enum_value, to_float_list
 
 
@@ -46,6 +47,8 @@ def qlReplicatingVarianceSwapEngine(
     put_strikes: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.ReplicatingVarianceSwapEngine:
+    # Note call_strikes and put_strikes are not really optional but required.
+    # Default arguments are provided because `dk` is an optional argument.
     call_strikes_ = to_float_list([] if call_strikes is None else call_strikes)
     put_strikes_ = to_float_list([] if put_strikes is None else put_strikes)
     return ql.ReplicatingVarianceSwapEngine(process, dk, call_strikes_, put_strikes_)
@@ -69,14 +72,14 @@ def qlReplicatingVarianceSwapEngine(
 )
 def qlMCVarianceSwapEngine(
     process: ql.GeneralizedBlackScholesProcess,
-    traits: str,
-    time_steps: int = None,
-    time_steps_per_year: int = None,
+    traits: qMCTraits,
+    time_steps: int = ql.nullInt(),
+    time_steps_per_year: int = ql.nullInt(),
     brownian_bridge: bool = False,
     antithetic_variate: bool = False,
-    required_samples: int = None,
-    required_tolerance: float = None,
-    max_samples: int = None,
+    required_samples: int = ql.nullInt(),
+    required_tolerance: float = ql.nullDouble(),
+    max_samples: int = ql.nullInt(),
     seed: int = 0,
     trigger=None,
 ) -> ql.PricingEngine:

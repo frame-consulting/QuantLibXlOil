@@ -107,5 +107,5 @@ def qlForwardRateAgreementFixingDate(
 )
 def qlForwardRateAgreementForwardRate(
     fra: ql.ForwardRateAgreement, trigger=None
-) -> ql.InterestRate:
-    return fra.forwardRate()
+) -> float:
+    return fra.forwardRate().rate()
