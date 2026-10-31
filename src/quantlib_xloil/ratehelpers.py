@@ -15,12 +15,12 @@ QL_BOND_PRICE_TYPE = {
 }
 
 
-def _qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
+def _qBondPriceType(bond_price_type: str) -> ql.BondPrice:
     return enum_value(bond_price_type, QL_BOND_PRICE_TYPE)
 
 
 @xlo.converter()
-def qBondPriceType(bond_price_type: str) -> ql.BondPrice.Type:
+def qBondPriceType(bond_price_type: str) -> ql.BondPrice:
     return _qBondPriceType(bond_price_type)
 
 
