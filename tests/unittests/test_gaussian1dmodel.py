@@ -147,10 +147,26 @@ def test_gaussian1d_model_passthrough_wrappers_with_dummy_model():
     compounded_rate_args = model.calls[8][1]
     swap_rate_args = model.calls[9][1]
     swap_annuity_args = model.calls[10][1]
-    assert isinstance(forward_args[3], ql.IborIndex)
+    assert forward_args == (fixing, reference_date, 0.0)
     assert compounded_rate_args[:3] == (coupon, reference_date, 0.1)
-    assert isinstance(swap_rate_args[4], ql.SwapIndex)
-    assert isinstance(swap_annuity_args[4], ql.SwapIndex)
+    assert swap_rate_args == (fixing, tenor, reference_date, 0.0)
+    assert swap_annuity_args == (fixing, tenor, reference_date, 0.0)
+
+    ibor_index = object()
+    swap_index = object()
+    qlGaussian1dModelForwardRate(
+        model, fixing, reference_date, 0.0, ibor_index=ibor_index
+    )
+    qlGaussian1dModelSwapRate(
+        model, fixing, tenor, reference_date, 0.0, swap_index=swap_index
+    )
+    qlGaussian1dModelSwapAnnuity(
+        model, fixing, tenor, reference_date, 0.0, swap_index=swap_index
+    )
+
+    assert model.calls[-3][1] == (fixing, reference_date, 0.0, ibor_index)
+    assert model.calls[-2][1] == (fixing, tenor, reference_date, 0.0, swap_index)
+    assert model.calls[-1][1] == (fixing, tenor, reference_date, 0.0, swap_index)
 
 
 def test_qlGsr_and_gaussian1d_engine_wrappers():

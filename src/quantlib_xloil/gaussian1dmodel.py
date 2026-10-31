@@ -201,11 +201,11 @@ def qlGaussian1dModelForwardRate(
     fixing: qDate,
     reference_date: qDate = ql.Date(),
     y: float = 0.0,
-    ibor_index: Optional[ql.IborIndex] = None,
+    ibor_index: ql.IborIndex = None,
     trigger=None,
 ) -> float:
     if ibor_index is None:
-        ibor_index = ql.IborIndex.__new__(ql.IborIndex)
+        return model.forwardRate(fixing, reference_date, y)
     return model.forwardRate(fixing, reference_date, y, ibor_index)
 
 
@@ -249,11 +249,11 @@ def qlGaussian1dModelSwapRate(
     tenor: qPeriod,
     reference_date: qDate = ql.Date(),
     y: float = 0.0,
-    swap_index: Optional[ql.SwapIndex] = None,
+    swap_index: ql.SwapIndex = None,
     trigger=None,
 ) -> float:
     if swap_index is None:
-        swap_index = ql.SwapIndex.__new__(ql.SwapIndex)
+        return model.swapRate(fixing, tenor, reference_date, y)
     return model.swapRate(fixing, tenor, reference_date, y, swap_index)
 
 
@@ -275,11 +275,11 @@ def qlGaussian1dModelSwapAnnuity(
     tenor: qPeriod,
     reference_date: qDate = ql.Date(),
     y: float = 0.0,
-    swap_index: Optional[ql.SwapIndex] = None,
+    swap_index: ql.SwapIndex = None,
     trigger=None,
 ) -> float:
     if swap_index is None:
-        swap_index = ql.SwapIndex.__new__(ql.SwapIndex)
+        return model.swapAnnuity(fixing, tenor, reference_date, y)
     return model.swapAnnuity(fixing, tenor, reference_date, y, swap_index)
 
 
