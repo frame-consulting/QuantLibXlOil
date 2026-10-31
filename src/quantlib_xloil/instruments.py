@@ -58,7 +58,7 @@ def qlInstrumentValuationDate(instrument: ql.Instrument, trigger=None) -> ql.Dat
 )
 def qlInstrumentPricingEngine(
     instrument: ql.Instrument, trigger=None
-) -> Optional[ql.PricingEngine]:
+) -> ql.PricingEngine:
     return instrument.pricingEngine()
 
 
