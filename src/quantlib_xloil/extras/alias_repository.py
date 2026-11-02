@@ -49,7 +49,7 @@ def _envelope(alias, obj):
     return e
 
 
-def _set(alias: str, obj):
+def _set(alias: str, obj, allow_type_change):
     alias = _normalised_alias(alias)
     if not alias in _REPOSITORY:
         # create
@@ -57,7 +57,7 @@ def _set(alias: str, obj):
     else:
         current_obj_type = type(_REPOSITORY[alias][_ENV_OBJ])
         new_obj_type = type(obj)
-        if current_obj_type != new_obj_type:
+        if current_obj_type != new_obj_type and not allow_type_change:
             raise TypeError(
                 "Alias {} already exists with current type: {}. Cannot update with new type: {}. Delete the existing alias first or use a different alias.".format(
                     alias, current_obj_type, new_obj_type
@@ -141,11 +141,12 @@ def _clear_repository():
     args={
         "alias": "The alias to set the object under",
         "obj": "The object to set",
+        "allow_type_change": "Allow changing the type of an existing object",
     },
     group=_EXCEL_GROUP_NAME,
 )
-def qlAliasSet(alias: str, obj, trigger=None) -> str:
-    return _set(alias, obj)
+def qlAliasSet(alias: str, obj, allow_type_change: bool = False, trigger=None) -> str:
+    return _set(alias, obj, allow_type_change)
 
 
 @xlo.func(
