@@ -1,5 +1,6 @@
 import QuantLib as ql
 import xloil as xlo
+from typing import Optional, Union
 
 from .calendars import (
     qBusinessDayConvention,
@@ -2557,11 +2558,11 @@ def qlFxResetValueDate(reset: ql.FxReset, trigger=None) -> ql.Date:
     group=EXCEL_GROUP_NAME,
 )
 def qlFxResetConvention(
-    fixing_days: int = 0, fixing_calendar: qCalendar = None, trigger=None
+    fixing_days: int = 0, fixing_calendar=None, trigger=None
 ) -> ql.FxResetConvention:
     if fixing_calendar is None:
         return ql.FxResetConvention(fixing_days)
-    return ql.FxResetConvention(fixing_days, fixing_calendar)
+    return ql.FxResetConvention(fixing_days, qCalendar.__wrapped__(fixing_calendar))
 
 
 @xlo.func(

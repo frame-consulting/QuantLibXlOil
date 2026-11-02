@@ -54,6 +54,8 @@ QL_INTERPOLATED_CURVES = {
 }
 
 
+# Note: mixed_interpolation_behavior and mixed_interpolation_n are not implemented
+# and will raise ValueError if set to any non-None value
 @xlo.func(
     help="Construct an interpolated discount curve from a set of dates and discount factors.",
     args={
@@ -142,7 +144,9 @@ def qlDiscountCurve(
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
     if jumps is not None or jump_dates is not None:
-        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        calendar = (
+            qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        )
         return ql.YieldTermStructureHandle(
             ql.DiscountCurve(
                 _to_date_list(dates),
@@ -188,7 +192,9 @@ def qlForwardCurve(
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
     if jumps is not None or jump_dates is not None:
-        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        calendar = (
+            qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        )
         return ql.YieldTermStructureHandle(
             ql.ForwardCurve(
                 _to_date_list(dates),
@@ -234,7 +240,9 @@ def qlZeroCurve(
     trigger=None,
 ) -> ql.YieldTermStructureHandle:
     if jumps is not None or jump_dates is not None:
-        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        calendar = (
+            qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        )
         return ql.YieldTermStructureHandle(
             ql.ZeroCurve(
                 _to_date_list(dates),
@@ -287,7 +295,9 @@ def qlSimpleZeroCurve(
         calendar = qCalendar.__wrapped__(calendar)
         args.append(calendar)
     if jumps is not None or jump_dates is not None:
-        calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        calendar = (
+            qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        )
         return ql.YieldTermStructureHandle(
             ql.SimpleZeroCurve(
                 args[0],
@@ -322,15 +332,28 @@ def qlSimpleZeroCurveAsObject(
     jump_dates: xlo.Array(dims=1) = None,
     trigger=None,
 ) -> ql.SimpleZeroCurve:
-    calendar = qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
-    return ql.SimpleZeroCurve(
+    args = [
         _to_date_list(dates),
         to_float_list(yields),
         daycounter,
-        calendar,
-        _to_jump_quote_handles(jumps),
-        _to_date_list(jump_dates) if jump_dates is not None else [],
-    )
+    ]
+    if calendar is not None:
+        calendar = qCalendar.__wrapped__(calendar)
+        args.append(calendar)
+    if jumps is not None or jump_dates is not None:
+        calendar = (
+            qCalendar.__wrapped__(calendar) if calendar is not None else ql.Calendar()
+        )
+        return ql.SimpleZeroCurve(
+            args[0],
+            args[1],
+            daycounter,
+            calendar,
+            _to_jump_quote_handles(jumps),
+            _to_date_list(jump_dates) if jump_dates is not None else [],
+        )
+
+    return ql.SimpleZeroCurve(*args)
 
 
 @xlo.func(

@@ -239,6 +239,34 @@ def test_qlInterpolatedYieldCurve_supports_simple_zero_traits_and_jumps():
     assert curve.discount(dates[-1]) > 0.0
 
 
+def test_qlInterpolatedYieldCurve_all_arguments():
+    # Note: mixed_interpolation_behavior and mixed_interpolation_n are not implemented
+    # and will raise ValueError if set to any non-None value
+    dates = _sample_dates()
+    yields = [0.01, 0.0125, 0.015, 0.0175]
+    daycounter, calendar = _sample_context()
+    jumps = [0.999]
+    jump_dates = [qlDate(2025, 7, 2)]
+
+    handle = qlInterpolatedYieldCurve(
+        dates,
+        yields,
+        daycounter,
+        calendar,
+        "SIMPLEZERORATE",
+        "LINEAR",
+        mixed_interpolation_behavior=None,
+        mixed_interpolation_n=None,
+        jumps=jumps,
+        jump_dates=jump_dates,
+        trigger=None,
+    )
+
+    assert isinstance(handle, ql.YieldTermStructureHandle)
+    assert handle.currentLink() is not None
+    assert handle.discount(dates[-1]) > 0.0
+
+
 def test_qlLogCubicSpreadDiscountCurve_constructor():
     reference_date = qlDate(2025, 1, 2)
     base_curve = ql.YieldTermStructureHandle(
