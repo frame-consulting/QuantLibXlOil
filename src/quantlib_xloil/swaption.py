@@ -7,7 +7,7 @@ from .config import EXCEL_GROUP_NAME
 from .date import qDate, qPeriod
 from .daycounters import qDayCounter
 from .ratehelpers import qQuoteHandle
-from .swap import QL_SWAP_TYPE
+from .swap import qSwapType, QL_SWAP_TYPE
 from .utilities import enum_value, first_key, UNKNOWN_KEY, UNKNOWN_VALUE
 from .volatilities import qVolatilityType
 

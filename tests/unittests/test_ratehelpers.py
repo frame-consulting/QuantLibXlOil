@@ -438,6 +438,45 @@ def test_new_cross_currency_and_basis_helper_options():
     assert isinstance(qlOvernightIborBasisSwapRateHelperSwap(overnight_ibor), ql.Swap)
 
 
+def test_stub_index_selection_non_empty():
+    _set_eval_date()
+    curve = ql.YieldTermStructureHandle(
+        ql.FlatForward(qlDate(2024, 1, 2), 0.03, ql.Actual365Fixed())
+    )
+    calendar = qlCalendar("TARGET")
+    convention = qBusinessDayConvention.__wrapped__("MODIFIEDFOLLOWING")
+    base_index = qlUSDLibor(ql.Period("3M"))
+    quote_index = qlEuribor(ql.Period("3M"))
+    quote = qQuoteHandle.__wrapped__(0.001)
+
+    # Create non-empty stub index selection with actual indices
+    # Use QuantLib's StubIndexSelection directly
+    non_empty_stub_selection = ql.StubIndexSelection(
+        ql.StubIndexSelection.ClosestIndex, [base_index, quote_index]
+    )
+
+    # Verify it's not empty
+    assert not non_empty_stub_selection.empty()
+
+    # Use it in helper functions - only on the non-bootstrapped leg
+    # Note: stub index conventions require useIndexedCoupons=True
+    ibor_ibor = qlIborIborBasisSwapRateHelper(
+        quote,
+        ql.Period("1Y"),
+        2,
+        calendar,
+        convention,
+        False,
+        base_index,
+        quote_index,
+        curve,
+        True,  # bootstrapBaseCurve - base curve is being bootstrapped
+        use_indexed_coupons=True,  # required when using stub index selection
+        other_stub_index_selection=non_empty_stub_selection,  # apply stub selection to other (non-bootstrapped) leg
+    )
+    assert isinstance(ibor_ibor, ql.IborIborBasisSwapRateHelper)
+
+
 def test_overnight_and_sofr_future_helpers():
     _set_eval_date()
     quote_95 = ql.QuoteHandle(ql.SimpleQuote(95.0))

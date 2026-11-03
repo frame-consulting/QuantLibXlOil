@@ -1,6 +1,5 @@
 import QuantLib as ql
 import xloil as xlo
-from typing import Optional, Union
 
 from .calendars import (
     qBusinessDayConvention,
@@ -10,7 +9,7 @@ from .calendars import (
 )
 from .config import EXCEL_GROUP_NAME
 from .currencies import qCurrency
-from .date import _to_date_list, qDate, qFrequency, _qDate
+from .date import _to_date_list, qDate, qFrequency
 from .daycounters import qDayCounter
 from .termstructures import qCompounding
 from .utilities import (
