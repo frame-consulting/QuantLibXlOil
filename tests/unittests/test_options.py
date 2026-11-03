@@ -62,10 +62,10 @@ from quantlib_xloil import (
     qlAnalyticHestonEngine,
     qlAnalyticRoughHestonEngine,
     qlAnalyticRoughHestonEngine2,
-    qlAnalyticHestonEngineIntegrationAndersenPiterbargIntegrationLimit,
-    qlAnalyticHestonEngineIntegrationGaussLaguerre,
-    qlAnalyticHestonEngineIntegrationIsAdaptive,
-    qlAnalyticHestonEngineIntegrationNumberOfEvaluations,
+    qlFourierIntegrationAndersenPiterbargIntegrationLimit,
+    qlFourierIntegrationGaussLaguerre,
+    qlFourierIntegrationIsAdaptive,
+    qlFourierIntegrationNumberOfEvaluations,
     qlAnalyticHestonEngineNumberOfEvaluations,
     qlAnalyticHestonHullWhiteEngine,
     qlAnalyticHestonEngineOptimalAlpha,
@@ -385,7 +385,7 @@ def test_heston_analytic_engine_and_helpers_wrappers():
     exercise = qlEuropeanExercise(qlDate(2025, 1, 2))
     option = qlEuropeanOption(payoff, exercise)
 
-    ap_limit = qlAnalyticHestonEngineIntegrationAndersenPiterbargIntegrationLimit(
+    ap_limit = qlFourierIntegrationAndersenPiterbargIntegrationLimit(
         1.0, 1.0e-8, 0.04, 1.0
     )
     assert ap_limit > 0.0

@@ -16,6 +16,7 @@ from quantlib_xloil.piecewiseyieldcurve import (
     qlPiecewiseYieldCurveWithJumps,
     qlPiecewiseYieldCurveWithJumpsAsYts,
     qlGlobalBootstrap,
+    qlGlobalPiecewiseYieldCurve,
     qlGlobalPiecewiseYieldCurveAsYts,
     qlYieldTermStructureHandle,
 )
@@ -275,3 +276,71 @@ def test_qlPiecewiseSpreadYieldCurve_validation_errors():
             "LINEAR",
             mixed_interpolation_behavior="SPLICE",
         )
+
+
+def test_qlGlobalBootstrap_all_arguments_provided():
+    _set_eval_date()
+    calendar = qlCalendar("TARGET")
+    business_day_convention = qBusinessDayConvention.__wrapped__("MODIFIEDFOLLOWING")
+    daycounter = qlDayCounter("ACTUAL360")
+
+    additional_helpers = [
+        qlDepositRateHelper(
+            0.045,
+            ql.Period("1M"),
+            2,
+            calendar,
+            business_day_convention,
+            False,
+            daycounter,
+        ),
+        qlDepositRateHelper(
+            0.048,
+            ql.Period("2M"),
+            2,
+            calendar,
+            business_day_convention,
+            False,
+            daycounter,
+        ),
+    ]
+    additional_dates = [qlDate(2024, 2, 2), qlDate(2024, 3, 2)]
+
+    # Test qlGlobalBootstrap with ALL arguments including non-empty arrays
+    bootstrap = qlGlobalBootstrap(
+        additional_helpers=additional_helpers,
+        additional_dates=additional_dates,
+        accuracy=1e-10,
+        optimizer=ql.LevenbergMarquardt(1e-8, 1e-8, 1e-8),
+        end_criteria=ql.EndCriteria(500, 50, 1e-10, 1e-10, 1e-10),
+        initial_guess=[0.01, 0.015],
+    )
+    assert isinstance(bootstrap, ql.GlobalBootstrap)
+
+
+def test_qlGlobalPiecewiseYieldCurve_all_arguments_provided():
+    _set_eval_date()
+    reference_date = qlDate(2024, 1, 2)
+    instruments = _sample_rate_helpers()
+    curve_daycounter = qlDayCounter("ACTUAL365FIXED")
+
+    bootstrap = qlGlobalBootstrap(
+        accuracy=1e-8,
+        optimizer=ql.Simplex(0.01),
+        end_criteria=ql.EndCriteria(100, 10, 1e-8, 1e-8, 1e-8),
+    )
+
+    # Test qlGlobalPiecewiseYieldCurve with ALL arguments including non-empty arrays
+    curve = qlGlobalPiecewiseYieldCurve(
+        reference_date=reference_date,
+        instruments=instruments,
+        daycounter=curve_daycounter,
+        traits="ZERORATE",
+        interpolator="LINEAR",
+        bootstrap=bootstrap,
+        jumps=[0.998, 0.999],
+        jump_dates=[qlDate(2024, 4, 2), qlDate(2024, 6, 2)],
+    )
+    assert isinstance(curve, ql.YieldTermStructureHandle)
+    assert curve.currentLink() is not None
+    assert curve.discount(qlDate(2024, 7, 2)) > 0.0
