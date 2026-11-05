@@ -134,7 +134,7 @@ class TestSet:
 
     def test_set_new_alias(self):
         """Test setting a new alias."""
-        result = _set("test", {"data": "value"})
+        result = _set("test", {"data": "value"}, False)
 
         assert "TEST" in _REPOSITORY
         assert _REPOSITORY["TEST"][_ENV_ALIAS] == "TEST"
@@ -144,8 +144,8 @@ class TestSet:
 
     def test_set_existing_alias_same_type(self):
         """Test updating an existing alias with same type."""
-        _set("test", {"data": "value1"})
-        result = _set("test", {"data": "value2"})
+        _set("test", {"data": "value1"}, False)
+        result = _set("test", {"data": "value2"}, False)
 
         assert _REPOSITORY["TEST"][_ENV_OBJ] == {"data": "value2"}
         assert _REPOSITORY["TEST"][_ENV_VERSION] == 1
@@ -153,21 +153,30 @@ class TestSet:
 
     def test_set_existing_alias_different_type(self):
         """Test updating an existing alias with different type raises TypeError."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
 
         with pytest.raises(TypeError, match="Alias TEST already exists"):
-            _set("test", ["list", "data"])
+            _set("test", ["list", "data"], False)
+
+    def test_set_existing_alias_different_type_when_allowed(self):
+        _set("test", {"data": "value"}, False)
+
+        result = _set("test", ["list", "data"], True)
+
+        assert _REPOSITORY["TEST"][_ENV_OBJ] == ["list", "data"]
+        assert _REPOSITORY["TEST"][_ENV_VERSION] == 1
+        assert result == "TEST#1"
 
     def test_set_alias_normalization(self):
         """Test that aliass are normalized when set."""
-        _set("  Test  ", {"data": "value"})
+        _set("  Test  ", {"data": "value"}, False)
 
         assert "TEST" in _REPOSITORY
         assert "  Test  " not in _REPOSITORY
 
     def test_set_with_delimiter_in_alias(self):
         """Test setting with delimiter in alias."""
-        result = _set("test#1", {"data": "value"})
+        result = _set("test#1", {"data": "value"}, False)
 
         assert "TEST" in _REPOSITORY
         assert result == "TEST#0"  # Version is 0 for new entry
@@ -186,22 +195,22 @@ class TestGet:
 
     def test_get_existing_alias(self):
         """Test getting an existing alias."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
         result = _get("test")
 
         assert result == {"data": "value"}
 
     def test_get_existing_alias_case_insensitive(self):
         """Test getting with different case."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
         result = _get("TEST")
 
         assert result == {"data": "value"}
 
     def test_get_with_version_suffix(self):
         """Test getting the current version by its versioned alias."""
-        _set("test", {"data": "value1"})
-        _set("test", {"data": "value2"})  # Version becomes 1
+        _set("test", {"data": "value1"}, False)
+        _set("test", {"data": "value2"}, False)  # Version becomes 1
 
         result = _get("test#1")
         assert result == {"data": "value2"}
@@ -216,7 +225,7 @@ class TestGet:
 
     def test_get_nonexistent_version(self):
         """Test getting non-existent version raises KeyError."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
 
         with pytest.raises(KeyError, match="Key .* version .* not found in repository"):
             _get("test#5")
@@ -235,7 +244,7 @@ class TestGetEnvelope:
 
     def test_get_envelope_existing_alias(self):
         """Test getting envelope for existing alias."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
         result = _get_envelope("test")
 
         assert isinstance(result, list)
@@ -254,7 +263,7 @@ class TestGetEnvelope:
 
     def test_get_envelope_nonexistent_version(self):
         """Test getting envelope for non-existent version raises KeyError."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
 
         with pytest.raises(KeyError, match="Key .* version .* not found in repository"):
             _get_envelope("test#5")
@@ -273,7 +282,7 @@ class TestDelete:
 
     def test_delete_existing_alias(self):
         """Test deleting an existing alias."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
         result = _delete("test")
 
         assert result is True
@@ -286,7 +295,7 @@ class TestDelete:
 
     def test_delete_case_insensitive(self):
         """Test deleting with different case."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
         result = _delete("TEST")
 
         assert result is True
@@ -320,8 +329,8 @@ class TestGetRepository:
 
     def test_get_repository_with_items(self):
         """Test getting repository with items."""
-        _set("test1", {"data": "value1"})
-        _set("test2", {"data": "value2"})
+        _set("test1", {"data": "value1"}, False)
+        _set("test2", {"data": "value2"}, False)
 
         result = _get_repository()
 
@@ -352,8 +361,8 @@ class TestClearRepository:
 
     def test_clear_repository(self):
         """Test clearing repository."""
-        _set("test1", {"data": "value1"})
-        _set("test2", {"data": "value2"})
+        _set("test1", {"data": "value1"}, False)
+        _set("test2", {"data": "value2"}, False)
 
         result = _clear_repository()
 
@@ -382,7 +391,7 @@ class TestIntegration:
     def test_full_workflow(self):
         """Test complete workflow: set, get, update, delete."""
         # Set initial value
-        alias1 = _set("myalias", {"value": 42})
+        alias1 = _set("myalias", {"value": 42}, False)
         assert alias1 == "MYALIAS#0"
 
         # Get value
@@ -390,7 +399,7 @@ class TestIntegration:
         assert obj == {"value": 42}
 
         # Update value
-        alias2 = _set("myalias", {"value": 43})
+        alias2 = _set("myalias", {"value": 43}, False)
         assert alias2 == "MYALIAS#1"
 
         # Get updated value
@@ -411,10 +420,10 @@ class TestIntegration:
 
     def test_multiple_objects_different_types(self):
         """Test storing different types of objects."""
-        _set("string_alias", "string_value")
-        _set("int_alias", 42)
-        _set("list_alias", [1, 2, 3])
-        _set("dict_alias", {"nested": "value"})
+        _set("string_alias", "string_value", False)
+        _set("int_alias", 42, False)
+        _set("list_alias", [1, 2, 3], False)
+        _set("dict_alias", {"nested": "value"}, False)
 
         assert _get("string_alias") == "string_value"
         assert _get("int_alias") == 42
@@ -423,21 +432,21 @@ class TestIntegration:
 
     def test_type_mismatch_prevention(self):
         """Test that type mismatches are prevented."""
-        _set("test", "string_value")
+        _set("test", "string_value", False)
 
         # Should be able to update with same type
-        _set("test", "another_string")
+        _set("test", "another_string", False)
 
         # Should not be able to update with different type
         with pytest.raises(TypeError, match="Alias TEST already exists"):
-            _set("test", 42)
+            _set("test", 42, False)
 
         # Original value should still be there
         assert _get("test") == "another_string"
 
     def test_repository_table_structure(self):
         """Test that repository table has correct structure."""
-        _set("test", {"data": "value"})
+        _set("test", {"data": "value"}, False)
 
         repo = _get_repository()
 
@@ -472,7 +481,7 @@ class TestEdgeCases:
 
     def test_empty_string_alias(self):
         """Test empty string alias."""
-        result = _set("", {"data": "value"})
+        result = _set("", {"data": "value"}, False)
         assert result == "#0"
 
         obj = _get("")
@@ -480,17 +489,17 @@ class TestEdgeCases:
 
     def test_alias_with_only_delimiter(self):
         """Test alias that is only delimiter."""
-        result = _set("#", {"data": "value"})
+        result = _set("#", {"data": "value"}, False)
         assert result == "#0"
 
     def test_whitespace_only_alias(self):
         """Test whitespace only alias."""
-        result = _set("   ", {"data": "value"})
+        result = _set("   ", {"data": "value"}, False)
         assert result == "#0"  # Empty after normalization
 
     def test_special_characters_in_alias(self):
         """Test aliass with special characters."""
-        result = _set("test-alias_with.special$chars", {"data": "value"})
+        result = _set("test-alias_with.special$chars", {"data": "value"}, False)
         assert result == "TEST-ALIAS_WITH.SPECIAL$CHARS#0"
 
         obj = _get("test-alias_with.special$chars")
@@ -499,7 +508,7 @@ class TestEdgeCases:
     def test_large_version_numbers(self):
         """Test with large version numbers."""
         for i in range(100):
-            _set("test", {"version": i})
+            _set("test", {"version": i}, False)
 
         # Should be able to get the latest version
         obj = _get("test")
@@ -511,12 +520,12 @@ class TestEdgeCases:
 
     def test_none_object(self):
         """Test storing None object."""
-        _set("none_alias", None)
+        _set("none_alias", None, False)
         obj = _get("none_alias")
         assert obj is None
 
     def test_object_with_none_values(self):
         """Test storing objects with None values."""
-        _set("complex_alias", {"a": None, "b": "value", "c": None})
+        _set("complex_alias", {"a": None, "b": "value", "c": None}, False)
         obj = _get("complex_alias")
         assert obj == {"a": None, "b": "value", "c": None}
