@@ -129,9 +129,9 @@ def test_workbook(excel_app, workbooks_path, file_path):
         for ws in wb.to_com().Sheets:
             ws_name = str(ws.Name)
             if ws_name.upper().startswith("SKIP_ME"):
-                LOGGER.info("Skip worksheet: " + ws_name)
+                LOGGER.info("Skip worksheet: " + file_path + " : " + ws_name)
                 continue
-            LOGGER.info("Test excel worksheet: " + ws_name)
+            LOGGER.info("Test excel worksheet: " + file_path + " : " + ws_name)
             for cell in ws.UsedRange:
                 if cell.HasFormula:
                     cell.Calculate()
