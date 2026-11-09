@@ -26,6 +26,15 @@ Here,
 - `--log-level=INFO` emits all log messages, use `--log-level=WARN` to only show errors (and warnings),
 - `--log-file=log\workbooktests.log` writes the log messages to file.
 
+Individual workbooks can be tested, e.g., via
+
+```
+pytest -o log_cli=true --log-level=INFO --log-file=log\workbooktests.log --wb=test_swap.xlsx tests\workbooktests
+```
+
+Here, the `--wb=<FILENAME>` specifies an individual Excel workbook file name.
+
+
 ## Limitations
 
 We iterate and calculate individual cells. This approach  raises Python exceptions if the workbook contains formulas that span multiple cells. Such formulas are typically displayed as `{=<formula name>}` with enclosing braces `{}`.
