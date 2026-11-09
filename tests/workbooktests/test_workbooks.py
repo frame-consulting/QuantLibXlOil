@@ -93,16 +93,20 @@ def excel_app():
     LOGGER.info("Finished.")
 
 
-# prepare workbook tests
+# select workbook tests
 workbook_dir = _workbooks_path()
 workbook_names = [
     # "test_swap.xlsx",
 ]
 workbook_names = _workbook_file_names()
-test_args = workbook_names
 
 
-@pytest.mark.parametrize("file_path", test_args)
+def pytest_generate_tests(metafunc):
+    if "file_path" in metafunc.fixturenames:
+        file_path = metafunc.config.getoption("--wb")
+        metafunc.parametrize("file_path", [file_path] if file_path else workbook_names)
+
+
 def test_workbook(excel_app, workbooks_path, file_path):
     LOGGER.info(f"Open workbook: {file_path}")
     wb = excel_app.open(workbooks_path + file_path, read_only=True)
