@@ -19,6 +19,7 @@ from quantlib_xloil.date import *
 from quantlib_xloil.daycounters import *
 from quantlib_xloil.defaultprobability import *
 from quantlib_xloil.dividends import *
+from quantlib_xloil.exchangerates import *
 from quantlib_xloil.exercise import *
 from quantlib_xloil.fra import *
 from quantlib_xloil.futures import *
