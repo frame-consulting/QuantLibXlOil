@@ -31,6 +31,7 @@ from quantlib_xloil.indexes import *
 from quantlib_xloil.inflation import *
 from quantlib_xloil.instruments import *
 from quantlib_xloil.localvolatilities import *
+from quantlib_xloil.money import *
 from quantlib_xloil.multicurve import *
 from quantlib_xloil.options import *
 from quantlib_xloil.optimizers import *
