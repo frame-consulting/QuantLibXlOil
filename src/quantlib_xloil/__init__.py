@@ -30,6 +30,7 @@ from quantlib_xloil.interpolatedyieldcurves import *
 from quantlib_xloil.indexes import *
 from quantlib_xloil.inflation import *
 from quantlib_xloil.instruments import *
+from quantlib_xloil.interpolation import *
 from quantlib_xloil.localvolatilities import *
 from quantlib_xloil.money import *
 from quantlib_xloil.multicurve import *
