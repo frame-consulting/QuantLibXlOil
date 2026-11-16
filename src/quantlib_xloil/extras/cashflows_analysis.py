@@ -121,6 +121,10 @@ def __effectiveFloorletVolatility(cf):
     ).effectiveFloorletVolatility()
 
 
+def __constantLegNotional(cf):
+    return ql.as_fx_reset_coupon(cf).constantLegNotional()
+
+
 QL_CASH_FLOW_COLUMN = {
     # Cash flow interface attributes
     "AMOUNT": lambda cf, _: cf.amount(),
@@ -170,6 +174,10 @@ QL_CASH_FLOW_COLUMN = {
     "DAILYCAPFLOOR": lambda cf, _: __dailyCapFloor(cf),
     "EFFECTIVECAPLETVOLATILITY": lambda cf, _: __effectiveCapletVolatility(cf),
     "EFFECTIVEFLOORLETVOLATILITY": lambda cf, _: __effectiveFloorletVolatility(cf),
+    # FX reset coupon-specific attributes
+    "FXRESETDATE": lambda cf, _: ql.as_fx_reset_coupon(cf).fxResetDate(),
+    "FXRESETVALUEDATE": lambda cf, _: ql.as_fx_reset_coupon(cf).fxResetValueDate(),
+    "CONSTANTLEGNOTIONAL": lambda cf, _: __constantLegNotional(cf),
     # Discounted cash flow value
     "DISCOUNTFACTOR": lambda cf, ts: ts.discount(cf.date()),
     "NPV": lambda cf, ts: cf.amount() * ts.discount(cf.date()),
