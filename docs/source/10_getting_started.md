@@ -16,7 +16,7 @@ conda create -n xloil python==3.14
 conda activate xloil
 ```
 
-**NOTE**, the `xlOil` package is currently restricted to Python versions 3.14.x.
+**NOTE**, the `xlOil` package is currently restricted to Python versions `<=3.14.x`.
 
 
 ## Install QuantLibXlOil and Dependencies
