@@ -18,7 +18,8 @@ We support recent versions of QuantLib. See section [Versioning](#versioning).
 
 QuantLibXlOil can be installed via pip.
 
-**Note:** Remove any installation of the classical QuantLib Excel add-in if installed prior to installing QuantLibXlOil.
+> [!NOTE]
+> Remove any installation of the classical QuantLib Excel add-in if installed prior to installing QuantLibXlOil.
 
 
 ### Setup Python Environment
@@ -31,7 +32,7 @@ conda activate xloil
 ```
 
 > [!NOTE]
-> the `xlOil` package is currently restricted to Python versions 3.14.x.
+> The `xlOil` package is currently restricted to Python versions `<=3.14.x`.
 
 
 ### Install QuantLibXlOil and Dependencies
