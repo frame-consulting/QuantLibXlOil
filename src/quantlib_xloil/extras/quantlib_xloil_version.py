@@ -1,3 +1,4 @@
+import sys
 import xloil as xlo
 
 from ..__about__ import __version__
@@ -10,3 +11,11 @@ from ..config import EXCEL_GROUP_NAME
 )
 def qlXlOilVersion(trigger=None) -> str:
     return __version__
+
+
+@xlo.func(
+    help="Get the version of Python.",
+    group=EXCEL_GROUP_NAME,
+)
+def qlPythonVersion(trigger=None) -> str:
+    return sys.version + " | " + sys.executable
