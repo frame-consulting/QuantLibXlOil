@@ -93,12 +93,30 @@ def excel_app():
     LOGGER.info("Finished.")
 
 
+def apply_exclude_filter(workbook_names, exclude_patterns):
+    if not exclude_patterns:
+        return workbook_names
+    filtered_names = []
+    for name in workbook_names:
+        if any(re.search(pattern, name) for pattern in exclude_patterns):
+            LOGGER.info(f"Excluding workbook: {name}")
+        else:
+            filtered_names.append(name)
+    return filtered_names
+
+
 # select workbook tests
 workbook_dir = _workbooks_path()
 workbook_names = [
     # "test_swap.xlsx",
 ]
 workbook_names = _workbook_file_names()
+workbook_names = apply_exclude_filter(
+    workbook_names,
+    exclude_patterns=[
+        r"example_cross_currency_swaps",  # causes Excel to crash when run with other tests
+    ],
+)
 
 
 def pytest_generate_tests(metafunc):
