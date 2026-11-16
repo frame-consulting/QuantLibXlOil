@@ -26,9 +26,13 @@ QuantLibXlOil can be installed via pip.
 We recommend setting up a clean Python environment with [`conda`](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) (or `venv`).
 
 ```
-conda create -n xloil python
+conda create -n xloil python==3.14
 conda activate xloil
 ```
+
+> [!NOTE]
+> the `xlOil` package is currently restricted to Python versions 3.14.x.
+
 
 ### Install QuantLibXlOil and Dependencies
 
