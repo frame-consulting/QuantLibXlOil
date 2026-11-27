@@ -5,6 +5,7 @@ from quantlib_xloil.basketoptions import *
 from quantlib_xloil.barrieroptions import *
 from quantlib_xloil.blackformula import *
 from quantlib_xloil.bonds import *
+from quantlib_xloil.bondfunctions import *
 from quantlib_xloil.calendars import *
 from quantlib_xloil.calibratedmodel import *
 from quantlib_xloil.calibrationhelpers import *
